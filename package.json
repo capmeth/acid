@@ -65,5 +65,10 @@
     },
     "bin": {
         "acid": "./run.js"
+    },
+    "repository": 
+    {
+        "type": "git",
+        "url": "git+https://github.com/capmeth/acid.git"
     }
 }
