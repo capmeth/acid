@@ -1,0 +1,29 @@
+<!--*
+    Renders static docsite links.
+
+    @tags group:nav, region
+-->
+
+<div class="nav-primary region-{ctx.region}">
+  <List items={pages}>
+    {#snippet children({ to, name })}
+      <Link {to} current={context.page === to}>
+        { name }
+      </Link>                    
+    {/snippet}
+  </List>
+</div> 
+
+
+<script module>
+import { context, sinfo, t } from '#frend/lib'
+
+import Link from '../app/Link'
+import List from '../element/List'
+
+let pages = 
+[ 
+    { to: 'home', name: sinfo.root.title }, 
+    { to: 'index', name: t('page-index-title') }
+];
+</script>

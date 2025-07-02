@@ -1,0 +1,29 @@
+<!--*
+	  Error page.
+
+    @tags group:page, no-style
+    @property { object } error
+      The problem that happened.
+-->
+
+{@render main(mainContent)}
+{#snippet mainContent()}
+  <Error {error} />
+{/snippet}
+
+
+<script module>
+import { context, webpage } from '#frend/lib'
+
+import Error from '../element/Error'
+</script>
+
+<script>
+let { error, main } = $props();
+context.page = 'error';
+
+error ||= context.global.error;
+console.error(error);
+
+webpage.setTitle('Error');
+</script>

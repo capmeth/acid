@@ -1,0 +1,49 @@
+<!--*
+	  Component display page.
+
+    @tags group:page, no-style
+    @property { string } sect
+      Name of section on display.
+    @property { string } uid
+      Current component asset on display.
+-->
+
+{@render leader(leaderContent)}
+{#snippet leaderContent()}
+  <Component {uid} />
+{/snippet}
+
+{@render main(mainContent)}
+{#snippet mainContent()}
+  <Article mcid={asset.content} />
+{/snippet}
+
+{@render nav(navContent)}
+{#snippet navContent()}
+  <Primary />
+  <Single {sect} />
+{/snippet}
+
+
+<script module>
+import { context, sinfo, webpage } from '#frend/lib';
+
+import Article from '../element/Article'
+import Component from '../asset/Component'
+import Primary from '../nav/Primary'
+import Single from '../nav/Single'
+</script>
+
+<script>
+let { leader, main, nav, sect, uid } = $props();
+context.page = 'component';
+context.section = sect;
+
+let asset = sinfo.asset(uid);
+context.asset = asset.uid;
+
+if (asset.section.name !== sect) 
+    throw new Error(`Asset ${uid} was not found in the current section.`);
+
+webpage.setTitle(asset.title);
+</script>

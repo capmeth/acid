@@ -1,0 +1,50 @@
+<!--*
+	  Root component for an ACID docsite.
+-->
+
+<div class="app-docsite {route}">
+  <Region name="banner" tag="header">
+    <Title>
+      <Link to="home">{ title }</Link>
+    </Title>
+    <div class="version-info">{ version }</div>
+  </Region>
+  <svelte:boundary {onerror}>
+    <Component {...attrs}>
+      {#snippet nav(content)}
+        <Region name="nav" tag="nav">{@render content()}</Region>
+      {/snippet}
+      {#snippet leader(content)}
+        <Region name="leader" tag="header">{@render content()}</Region>
+      {/snippet}          
+      {#snippet main(content)}
+        <Region name="main" tag="section">{@render content()}</Region>
+      {/snippet}
+      {#snippet trailer(content)}
+        <Region name="trailer" tag="section">{@render content()}</Region>
+      {/snippet}
+    </Component>
+  </svelte:boundary>
+  <Generated />
+</div>
+
+
+<script module>
+import { title, version } from '#config'
+import { context } from '#frend/lib'
+
+import Generated from '../element/Generated'
+import Link from './Link'
+import Region from './Region'
+import Title from '../element/Title'
+</script>
+
+<script>
+let { route, Component, ...attrs } = $props();
+
+let onerror = error =>
+{
+    context.global.error = error;
+    context.router.navTo('error');
+}
+</script>

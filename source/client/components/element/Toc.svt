@@ -1,0 +1,61 @@
+<!--*
+    Renders a table-of-contents (ToC) for the selected item.
+
+    The ToC is generated from all headers appearing within `sel`.
+
+    @tags group:element
+    @property { number } depth
+      ToC header depth (0-6)
+    @property { string } sel
+      Query selector that identifies the element to generate a ToC for.
+-->
+
+{#if tree}
+  <div class="element-toc">
+    {@render multi(tree.heads)}  
+  </div>
+{/if}
+
+{#snippet single({ id, title, heads })}
+  {#if id}
+    <Link title="Scroll to {title}" onclick={e => doClick(e, id)}>
+      { title }
+    </Link>
+  {:else}
+    <span>{ title }</span>
+  {/if}
+  {@render multi(heads)}
+{/snippet}
+
+{#snippet multi(heads)}
+  <List items={heads}>
+    {#snippet children(head)}
+      {@render single(head)}
+    {/snippet}
+  </List>
+{/snippet}
+
+
+<script module>
+import { headerTree } from '#frend/lib'
+
+import Link from '../app/Link'
+import List from './List'
+</script>
+
+<script>
+let { depth, sel } = $props();
+let tree = $state(null);
+
+$effect(() => 
+{
+    let base = document.querySelector(sel);
+    tree = base ? headerTree(base, depth) : null;
+});
+
+let doClick = (evt, id) =>
+{
+    document.getElementById(id)?.scrollIntoView();
+    evt.preventDefault();
+}
+</script>

@@ -1,0 +1,105 @@
+import jsyaml from 'js-yaml'
+import takedown from 'takedown'
+import { is } from '#utils'
+
+
+// HTML attribute regex
+let attrsRe = 
+    /(?<k>[a-z_:][a-z0-9_.:-]*)(?:=(?:(?<v>[^\s"'<=>`]+)|"(?<v>(?:(?!\\").)*?)"|'(?<v>(?:(?!\\').)*?)'))?(?=\s|$)/gi;
+
+/**
+    Converts an attribute string into an object.
+
+    @param { string } string
+      String containing HTML attributes.
+    @return { object }
+      Attributes from `string`.
+*/
+let attrsToObject = string =>
+{
+    let result, attrs = {};
+
+    while (result = attrsRe.exec(string || ''))
+    {
+        let { k: name, v: value } = result.groups;
+        attrs[name] = is(value) ? value : true;
+    }
+
+    return attrs;
+}
+
+
+let langRe = /^([^\s:]*)(?::(\w+))?(?:\s+(.+)$)?/;
+let braceRe = /[{}]+/g;
+
+/*
+    Example file markdown parser.
+
+    - allow YAML-based front-matter
+    - fencedblock converter produces Editor tags (for CoBEs)
+    - root converter creates "Article" component
+    - turn off delousing for fence block content
+*/
+export let tdContent = takedown(
+{
+    convert:
+    {
+        fenceblock: (e, v) =>
+        {
+            e.cid = `cobe-${e.id}`;
+            [ e.lang, e.mode, e.attrs ] = e.info?.match(langRe)?.slice(1) || [];
+            // store details on code block
+            v.blocks[e.cid] = 
+            { 
+                lang: e.lang,
+                code: e.value, 
+                label: attrsToObject(e.attrs).label
+            };
+            // `e.value` is mapped via param (above) so do not insert it here
+            return '<Editor id="{cid}"{? lang="{lang}"?}{? mode="{mode}"?} />';
+        },
+
+        header: '<h{level} id="{id}">{value}</h{level}>\n',
+
+        root: e =>
+        {
+            let file = 
+            `
+                ${e.value.replace(braceRe, '{"$&"}')}
+        
+                <script module>
+                import Editor from '#comps/cobe/Editor'
+                </script>
+            `;
+            
+            return file;
+        }
+    },
+
+    fm:
+    {
+        enabled: true,
+        parser: source => jsyaml.load(source),
+        useConfig: false
+    },
+
+    delouse:
+    {
+        fenceblock: { value: [], info: [ 'htmlEntsToChars', 'unescapePunct' ] }
+    }
+});
+
+/*
+    Code comments markdown parser.
+
+    - no header tags allowed
+    - no thematic breaks allowed
+*/
+export let tdComment = takedown(
+{
+    convert:
+    {
+        divide: '{marks}',
+        header: '<p data-h{level}><strong>{value}</strong></p>',
+    }
+});

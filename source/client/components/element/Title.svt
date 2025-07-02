@@ -1,0 +1,14 @@
+<!--*
+    Renders content as a title.
+
+    @tags group:element, region
+-->
+
+<div class="element-title region-{ctx.region}"> 
+  {@render children()}
+</div>
+
+
+<script>
+let { children } = $props();
+</script>

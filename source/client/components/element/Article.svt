@@ -1,0 +1,33 @@
+<!--*
+    Renders HTML converted markdown document files.
+
+    Nothing is rendered if specified `mcid` is not mapped to a document 
+    component.
+
+    @tags group:element, region
+    @property { string } [mcid]
+      Markdown content id of a pre-generated component.
+-->
+
+{#if Markup}
+  <section class="element-article region-{ctx.region}">
+    <article id={mcid} data-markup>
+      <Markup />
+    </article>
+    {#if children}
+      <aside class="sidebar">
+        {@render children()}
+      </aside>
+    {/if}
+  </section>
+{/if}
+
+
+<script module>
+import * as markdown from '../markdown/index.js'
+</script>
+
+<script>
+let { mcid, children } = $props();
+let Markup = markdown[mcid];
+</script>

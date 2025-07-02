@@ -1,0 +1,36 @@
+<!--*
+    Generates navigation for the assets in a section.
+
+    Nothing is rendered if filtering results in an empty asset list.
+
+    @tags group:nav, no-style
+    @property { string } [children]
+      Content to be rendered with the list.
+    @property { boolean } [hide]
+      Hide the list?
+    @property { ... any } [filters]
+      Remaining properties are asset filters.
+-->
+
+{@render children?.(assets.length, asset.ids.length)}
+<List items={assets} {hide}>
+  {#snippet children(uid)}
+    <Link {uid}>{ sinfo.asset(uid).title }</Link>
+  {/snippet}
+</List>
+
+
+<script module>
+import { naf, sinfo } from '#frend/lib'
+
+import Link from '../app/Link'
+import List from '../element/List'
+
+let { asset } = sinfo;
+</script>
+
+<script>
+let { hide, sort, children, ...filters } = $props();
+let assets = asset.filter(naf(filters));
+if (sort) assets.sort(asset.sort.title);
+</script>

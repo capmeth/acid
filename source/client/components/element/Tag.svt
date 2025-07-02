@@ -1,0 +1,29 @@
+<!--*
+    Renders a descriptive atom for a code entity.
+
+    @tags group:element
+
+    @property { string } name
+      Name of the tag.
+    @property { string } [info]
+      Data for the tag.
+    @property { string } [desc]
+      Explanation of the tag.
+-->
+
+<span class="element-tag {name}" title={desc}>
+  <span class="name">{ name }</span>
+  {#if info}
+    <span class="info">{ info }</span>
+  {/if}
+</span>
+
+
+<script module>
+let repRe = /\{info\}/g;
+</script>
+
+<script>
+let { desc, name, info } = $props();
+desc = desc?.replace(repRe, info || '$&');
+</script>

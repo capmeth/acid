@@ -1,0 +1,65 @@
+<!--*
+    Generates a routing link.
+
+    If `params` contains a "uid", a link to the asset page is generated
+    automatically.
+
+    @tags group:app, region
+
+    @property { string } to
+      Route name.
+    @property { boolean } [current]
+      Is this link related to the current browsing location?
+    @property { string } [title]
+      For the title attribute of the `<a>` tag.  If not specified a default title 
+      (dependent on other props) will be rendered.
+    @property { ...any } [params]
+      Additional parameters for the route.
+-->
+
+<a class="app-link region-{ctx.region} {to}" class:current {href} {title} {onclick}>
+  <span>{@render children()}</span>
+</a>
+
+
+<script module>
+import { context, sinfo } from '#frend/lib'
+</script>
+
+<script>
+let { current, href, onclick, to, title, children, ...args } = $props();
+// convert read-only props rest parameters to read-write
+let params = { ...args };
+
+if (to === 'section')
+{ 
+    // root is a section but displayed by home route
+    if (params.sect === sinfo.root.name) 
+    {
+        to = 'home';
+        title ||= 'Go to home page.';
+        current ??= context.section === 'home';
+    }
+    else
+    {
+        let { title, titlePath } = sinfo(params.sect);
+        title ||= `Go to ${titlePath.join('/')} section.`;
+        current ??= context.section === params.sect;
+    }
+}
+else if (params.uid)
+{
+    let asset = sinfo.asset(params.uid);
+    to = asset.type;
+    title ||= `Go to ${asset.section.titlePath.join('/')}::${asset.title} ${asset.type}.`
+    current ??= context.asset === asset.uid;
+    params.sect = asset.section.name;
+    params.uid = asset.uid;
+}
+else
+{
+    title ||= `Go to ${to} page.`
+}
+
+href ||= to && context.router.toNavLink(to, params) || '##';
+</script>

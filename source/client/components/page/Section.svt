@@ -1,0 +1,59 @@
+<!--*
+	  Section overview page.
+
+    @tags group:page, no-style
+    @property { string } sect
+      Name of section on display.
+-->
+
+{@render leader(leaderContent)}
+{#snippet leaderContent()}
+  <Title>{ section.title }</Title>
+  <Crumbs {sect} />
+{/snippet}
+
+{@render main(mainContent)}
+{#snippet mainContent()}
+  <Article mcid={section.content}>
+    {#snippet children(id)}
+      <Toc depth={section.tocDepth} sel="#{section.content}" />
+    {/snippet}
+  </Article>
+  <Assets {sect} store="groupFilter" />
+{/snippet}
+
+{#if section.sections?.length}
+  {@render trailer(trailerContent)}  
+{/if}
+{#snippet trailerContent()}
+  <Annex {sect} store="groupFilter" />
+{/snippet}
+
+{@render nav(navContent)}
+{#snippet navContent()}
+  <Primary />
+  <Single {sect} />
+{/snippet}
+
+
+<script module>
+import { context, sinfo, webpage } from '#frend/lib'
+
+import Article from '../element/Article'
+import Annex from '../nav/Annex'
+import Assets from '../nav/Assets'
+import Crumbs from '../nav/Crumbs'
+import Primary from '../nav/Primary'
+import Single from '../nav/Single'
+import Title from '../element/Title'
+import Toc from '../element/Toc'
+</script>
+
+<script>
+let { leader, main, nav, sect, trailer } = $props();
+context.page = 'section';
+context.section = sect;
+
+let section = sinfo(sect);
+webpage.setTitle(section.title);
+</script>

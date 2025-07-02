@@ -1,0 +1,8 @@
+
+.element-tag
+{
+    &.group { color: white; background: green; }
+    &.extra-props { color: white; background: brown; }
+    &.no-style { color: white; background: crimson; }
+    &.region { color: white; background: blue; }
+}

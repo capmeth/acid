@@ -1,0 +1,41 @@
+<!--*
+	  Docsite landing page.
+
+    @tags group:page, no-style
+-->
+
+{@render main(mainContent)}
+{#snippet mainContent()}
+  <Article mcid={sinfo.root.content} />
+  <Assets {sect} store="groupFilter" />
+{/snippet}
+
+{@render trailer(trailerContent)}
+{#snippet trailerContent()}
+  <Annex {sect} store="groupFilter" />
+{/snippet}
+
+
+{@render nav(navContent)}
+{#snippet navContent()}
+  <Primary />
+  <Single {sect} />
+{/snippet}
+
+
+<script module>
+import { context, sinfo } from '#frend/lib'
+
+import Annex from '../nav/Annex'
+import Article from '../element/Article'
+import Assets from '../nav/Assets'
+import Primary from '../nav/Primary'
+import Single from '../nav/Single'
+</script>
+
+<script>
+let { main, nav, trailer } = $props();
+context.page = 'home';
+context.section = sinfo.root.name;
+let sect = context.section;
+</script>

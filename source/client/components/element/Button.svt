@@ -1,0 +1,20 @@
+<!--*
+    Clickable element for user interaction.
+
+    An "active" CSS class is added when `active` prop is set.
+
+    @tags group:elements, extra-props:button
+
+    @property { boolean } [active]
+      Is the button in an active state?
+    @property { function } [onclick]
+      Called when button is clicked.
+-->
+
+<button class="element-button" class:active {...attrs} {onclick}>
+  {@render children()}
+</button>
+
+<script>
+let { active, onclick, children, ...attrs } = $props();
+</script>

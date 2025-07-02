@@ -1,0 +1,34 @@
+<!--*
+    Wraps content for toggle-ability.
+
+    @tags group:element, region
+
+    @property { boolean } active
+      Is content currently active?  This property is `$bindable`.
+    @property { string } [store]
+      If set, `active` state will be remembered in localStorage.
+-->
+
+<button class="element-toggle region-{ctx.region} {state}" type="button" {role} onclick={click}>
+  {@render children(active)}
+</button>
+
+
+<script module>
+import { is } from '#utils'
+import { storage } from '#frend/lib'
+</script>
+
+<script>
+let { active = $bindable(), role, store, children } = $props();
+
+// don't use stored value if parent initially sets active state
+if (!is.bool(active) && store) active = storage[store];
+let state = $derived(active ? 'on' : 'off');
+
+let click = () => 
+{
+    active = !active;
+    if (store) storage[store] = active;
+}
+</script>

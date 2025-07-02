@@ -1,0 +1,36 @@
+<!--*
+    Renders content as an unordered list.
+
+    Nothing is rendered if `items` is nullish or of zero length.
+
+    Each element of `items` is passed to `children`, optionally being first 
+    processed by the predicate function (`pred`) and then wrapped in an 
+    `<li>`.
+
+    @tags group:element, region
+
+    @property { snippet } children
+      Passed each item in `items` to render.
+    @property { array } [items]
+      List of items to render.
+    @property { boolean } [hide]
+      Hide the list?
+    @property { function } [pred]
+      A function to "process" each item passed to `children`.
+    @property { string } [what]
+      An indication of *what* is being listed. Used as a classname.
+-->
+
+{#if items?.length}
+  <ul class="element-list region-{ctx.region} {what}" class:hide>
+    {#each items as item (item)}
+      <li class="listitem">
+        {@render children(pred?.(item) || item)}
+      </li>
+    {/each}
+  </ul>  
+{/if}
+
+<script>
+let { hide, items, pred, what = '', children } = $props();
+</script>

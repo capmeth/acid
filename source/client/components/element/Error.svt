@@ -1,0 +1,17 @@
+<!--* 
+    Error display component.
+
+    @tags group:element
+    
+    @property { object } error
+      The error to display.
+-->
+
+<div class="element-error">
+  <p class="name">{ error.name }</p> 
+  <p class="message">{ error }</p>
+</div>
+
+<script>
+let { error } = $props();
+</script>

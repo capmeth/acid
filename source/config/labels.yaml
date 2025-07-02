@@ -1,0 +1,35 @@
+
+article-toc: Table of Contents
+
+asset-count: "{count} of {total} assets listed."
+asset-filters: Filters
+
+cobe-button-copied: Copied!
+cobe-button-copy: Copy
+cobe-button-hide: Hide
+cobe-button-reset: Reset
+cobe-button-show: View
+cobe-button-update: Render
+cobe-copied: Copied to Clipboard!
+cobe-error-prefix: -ERROR-
+
+filter-name: filter by name
+
+label-components: Components
+label-documents: Documents
+label-props: Props
+label-sections: Sections
+
+page-home-title: Homepage
+page-index-title: Asset Index
+page-sitemap-title: Sitemap
+
+no-comments: No comments were found for this {item}.
+no-filters: No filters available.
+
+property-default: "Default:"
+property-values: "Accepts:"
+
+section-menu: Section
+
+site-menu: ""

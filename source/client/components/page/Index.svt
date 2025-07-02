@@ -1,0 +1,49 @@
+<!--*
+    Asset lookup/filtering page.
+
+    @tags group:page, no-style
+-->
+
+{@render leader(leaderContent)}
+{#snippet leaderContent()}
+  <Title>{ title }</Title>
+{/snippet}
+
+{#key filters}
+  {@render main(mainContent)}  
+{/key}
+{#snippet mainContent()}
+  <Assets {...filters} sort>
+    {#snippet children(count, total)}
+      <Label id="asset-count" {count} {total} />
+    {/snippet}
+  </Assets>
+{/snippet}
+
+{@render nav(navContent)}
+{#snippet navContent()}
+  <Primary />
+  <Filters store="index-filters" {onfilter} />
+{/snippet}
+
+
+<script module>
+import { context, t, webpage } from '#frend/lib'
+
+import Assets from '../nav/Assets'
+import Filters from '../element/Filters'
+import Label from '../element/Label'
+import Primary from '../nav/Primary'
+import Title from '../element/Title'
+</script>
+
+<script>
+let { leader, main, nav } = $props();
+context.page = 'index';
+
+let filters = $state();
+let title = t("page-index-title");
+let onfilter = data => filters = data
+
+webpage.setTitle(title);
+</script>

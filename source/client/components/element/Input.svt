@@ -1,0 +1,16 @@
+<!--*
+    Accepts user input.
+
+    @tags group:element, extra-props:input
+    @property { any } [value]
+      Data in the input field. This field is `$bindable`.
+-->
+
+<input class="element-input" {value} {...attrs} oninput={input} />
+
+
+<script>
+let { value = $bindable(), ...attrs } = $props();
+
+let input = evt => value = evt.target.value;
+</script>

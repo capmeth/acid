@@ -1,0 +1,24 @@
+<!--*
+    CoBE rendering container.
+
+    @tags group:cobe, no-style
+    
+    @property { HTMLElenent } display
+      Rendering mount point (bindable).
+-->
+
+<div class="renbox">
+  <div bind:this={display}></div>
+</div>
+
+
+<script>
+let { display = $bindable() } = $props();
+</script>
+
+<style>
+.renbox
+{
+    all: initial !important;
+}
+</style>

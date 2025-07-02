@@ -1,0 +1,38 @@
+<!--*
+    Lets the user move about the docsite.
+
+    This component simply passes routing information to its children.
+
+    @tags group:app
+-->
+
+{#key data}
+  <Docsite {...data} />
+{/key}
+
+
+<script module>
+import { hashRouter, routes } from '#frend/routing'
+import { context } from '#frend/lib';
+
+import Docsite from './Docsite'
+
+let router = hashRouter(routes).start();
+let [ payload ] = router.last('change');
+</script>
+
+<script>
+let { compose } = $props();
+let data = $state(payload);
+
+let handler = payload => data = payload
+
+$effect(() => 
+{
+    router.on('change', handler);
+    return () => router.off('change', handler);
+});
+
+context.router = router;
+context.compose = compose;
+</script>

@@ -1,0 +1,52 @@
+<!--*
+    Renders details about a component property.
+
+    @tags group:element, region
+
+    @property { string } [name] Name of the property.
+    @property { string } [description] Description of the property (this very thing).
+    @property { string } [type] Accepted data type(s) for the property.
+    @property { string } [defaultValue] Default value for the property (if any).
+    @property { boolean } [required] Is the property required?
+    @property { array } [values] List of valid values (enums) for the property.
+-->
+
+<div class="element-property" class:required>
+  <div class="name">{ name }</div>
+  <div class="type">{ type || 'unknown' }</div>
+  <div class="description" data-markup>
+    {#if description}
+      {@html description}
+    {:else}
+      <p>
+        <em><Label id="no-comments" item="property" /></em>
+      </p>
+    {/if}  
+  </div>
+  {#if values?.length}
+    <div class="values">
+      <Label id="property-values" />
+      <List items={values} what="values-list">
+        {#snippet children(value)}
+          <code>{ value }</code>
+        {/snippet}
+      </List>
+    </div>
+  {/if}
+  {#if fallback}
+    <div class="default">
+      <Label id="property-default" />
+      <span>{ fallback }</span>
+    </div>
+  {/if}
+</div>
+
+
+<script module>
+import Label from './Label'
+import List from './List'
+</script>
+
+<script>
+let { name, fallback, description, required, type, values } = $props();
+</script>
