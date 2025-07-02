@@ -34,7 +34,7 @@ jobs:
       - name: install deps
         run: npm ci
       - name: generate docs
-        run: acid -c docsite/acid.config.js
+        run: node run -c docsite/acid.config.js
       - name: setup pages
         uses: actions/configure-pages@v5
       - name: jekyll build
