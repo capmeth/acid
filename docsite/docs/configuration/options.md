@@ -582,30 +582,20 @@ storage: 'local'
 Allows for styling of the docsite.
 
 ```js label="spec"
-style: string | [ ... string ] |
-{
-    /*
-        Array of stylesheets, css files, or built-in styles to use.
-    */
-    sheets: [ ... string ],
-    /*
-        Deeply merge style objects?
-    */
-    merge: true | false
-}
+style: string | [ ... string ]
 ```
 
 Where a string is specified within `style` it can 
 - start with `#` to indicate a built-in theme name
 - start with `file:/` to identify a css theme file
-- be a css theme stylesheet
+- be a css stylesheet
 
 The built-in themes available are
 - #grayscape
 
 When specifying relative file paths, `root` is assumed to be the root path.
 
-Ultimately, all `sheets` are converted to JSON and shallowly merged from left to right to form the final stylesheet.  Set `merge` to deeply merge stylesheet rulesets.
+Ultimately, all `sheets` are converted to JSON and deep merged from left to right to form the final stylesheet.
 
 The final styles are then injected into the internal components based on top-level scope definitions. Any styling not within a scope definition is assumed to be global.
 

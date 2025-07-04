@@ -21,7 +21,6 @@ export default
     parsers: { exts: ".svt", use: "./extensions/ext-jsdoc" },
     hljs: 
     { 
-        aliases: { jsx: 'htm' },
         languages: 'handlebars'
     },
 
@@ -59,5 +58,5 @@ export default
     },
     logger: { level: "test" },
 
-    style: { sheets: [ '#grayscape', 'file:/docsite/acid.style.css' ], merge: true }
+    style: [ '#grayscape', 'file:/docsite/acid.style.css' ]
 }

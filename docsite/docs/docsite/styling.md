@@ -18,13 +18,13 @@ During a docsite build, theme file CSS is processed and divvied out to the appro
 A theme file scope class takes the form
 
 ```css
-.{group}-{name}
+.group-name
 {
     /* component styles */
 }
 ```
 
-where `{name}` is the lower-cased name of the component and `{group}` is the name of the group the component belongs to.  
+where `name` is the lower-cased name of the component and `group` is the name of the group the component belongs to.  
 
 To find out which group a component belongs to, go to its docpage and look for a *group* tag (note that components with the *no-style* tag cannot be styled).
 
@@ -40,7 +40,7 @@ For example, the **Docsite** component can be styled using a `.app-docsite` clas
 }
 ```
 
-Any top-level selector that begins with `.{group}-{name}` (where `{name}` identifies a valid component that can be styled) will have its styles injected into the named component and automatically scoped to it. 
+Any top-level selector that **begins with** a valid `.group-name` will have its styles injected into the named component and automatically scoped to it. 
 
 For instance, the below CSS ruleset would be injected into the **Title** component.
 
@@ -52,9 +52,19 @@ For instance, the below CSS ruleset would be injected into the **Title** compone
 }
 ```
 
-Declarations and rulesets appearing inside a scoped selector are subject to Svelte's component styling rules.
+However, the following would **not** be scoped to the component.
 
-The internal (pseudo-code) structure of ACID components is also in their docpages, and this can be used to determine how to properly construct selectors for internal component styling.
+```css
+.region-banner.element-title
+{
+    font-size: max(24px, 3.5vw);
+    font-weight: 700;
+}
+```
+
+Declarations and rulesets appearing inside a scoped selector are of course subject to Svelte's component styling rules.
+
+The internal (pseudo-code) structure of ACID components can be found in their docpages, and this info can be used to determine how to properly construct selectors for internal component styling.
 
 
 ## Region Styling
@@ -72,7 +82,7 @@ These classes are placed on a component's root element (where applicable) right 
 
 So, to style the docsite header, you would add styles to a `.app-docsite.region-banner` selector.
 
-Note that not all components appear in every region, but any combination of component/region is generally valid (i.e., not going to wind up being a global style).
+Note that not all components appear in every region.
 
 
 ## The `style` option
@@ -108,18 +118,7 @@ To specify multiple stylesheets, use an array.
 style: [ '#grayscape', 'file:/path/to/my/stylesheet.css' ]
 ```
 
-By default, multiple sheets are processed from left to right, with top-level rulesets overwriting the ones in the previous sheet (shallow merging).
-
-An object form is available which also allows to turn on deep-merging.
-
-```js
-style: { sheets: [ '#grayscape', 'file:/path/to/my/stylesheet.css' ], merge: true }
-```
-
-Multiple stylesheets are merged to form a singular one which is then applied to components as described above.
-
-
-- - -
+Multiple sheets are processed from left to right, with later sheet styles being deeply merged atop former ones.  Once a singular stylesheet has been constructed it is then applied to components as described above.
 
 ```handlebars:render label="Scope Classes"
 <ul style="columns:12vw">

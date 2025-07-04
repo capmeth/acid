@@ -19,7 +19,7 @@ let headersWithId = lev => Array(lev).fill().map((...a) => `h${a[1]+1}[id]`).joi
 export default function(element, maxDepth)
 {
     let selector = headersWithId(maxDepth ?? 6);
-    let nodes = selector ? element.querySelectorAll(headersWithId(maxDepth ?? 6)) : [];
+    let nodes = selector && maxDepth > 0 ? element.querySelectorAll(headersWithId(maxDepth)) : [];
 
     if (nodes.length)
     {

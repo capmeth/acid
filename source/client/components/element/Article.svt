@@ -7,6 +7,8 @@
     @tags group:element, region
     @property { string } [mcid]
       Markdown content id of a pre-generated component.
+    @property { number } tocDepth
+      Table of Contents header depth (0-6).  Specify 0 for no ToC.
 -->
 
 {#if Markup}
@@ -14,9 +16,9 @@
     <article id={mcid} data-markup>
       <Markup />
     </article>
-    {#if children}
+    {#if tocDepth > 0}
       <aside class="sidebar">
-        {@render children()}
+        <Toc {tree} />
       </aside>
     {/if}
   </section>
@@ -24,10 +26,21 @@
 
 
 <script module>
+import { headerTree } from '#frend/lib'
 import * as markdown from '../markdown/index.js'
+
+import Toc from './Toc'
 </script>
 
 <script>
-let { mcid, children } = $props();
+let { mcid, tocDepth } = $props();
 let Markup = markdown[mcid];
+
+let tree = $state();
+
+$effect(() => 
+{
+    let base = document.querySelector(`#${mcid}`);
+    tree = base ? headerTree(base, tocDepth) : null;
+});
 </script>

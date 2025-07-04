@@ -14,11 +14,7 @@
 
 {@render main(mainContent)}
 {#snippet mainContent()}
-  <Article mcid={section.content}>
-    {#snippet children(id)}
-      <Toc depth={section.tocDepth} sel="#{section.content}" />
-    {/snippet}
-  </Article>
+  <Article mcid={section.content} tocDepth={section.tocDepth} />
   <Assets {sect} store="groupFilter" />
 {/snippet}
 

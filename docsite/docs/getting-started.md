@@ -9,7 +9,7 @@ Simple instructions to get you started using ACID.
 Install as dev dependency.
 
 ```shell
-npm install acid --save-dev
+npm install @capmeth/acid --save-dev
 ```
 
 You will then need an *acid.config.js* file.  To generate a default one, do

@@ -172,11 +172,11 @@ html, body
     font-family: Palatino, sans-serif;
     font-size: 18px;
     display: grid;
-    grid-template-columns: repeat(5, minmax(min-content, 20vw));
+    grid-template-columns: 20vw repeat(4, fit-content(20vw));
     grid-template-rows: min-content min-content auto auto min-content;
     padding: 8px;
-    min-height: calc(100vh - 16px);
-    min-width: calc(100vw - 16px);
+    min-height: 100vh;
+    width: 100vw;
     --docsite-icon-font: bootstrap-icons;
 
     &::before
@@ -522,6 +522,8 @@ html, body
     {
         background: white;
         padding: 16px;
+        overflow-x: auto;
+        width: 100%;
 
         >.error-message
         {
@@ -555,7 +557,7 @@ html, body
 
     .sidebar
     {
-        flex: 1 0 0;
+        flex: 1 1 0;
         order: 1;
     }
 }

@@ -52,6 +52,7 @@
         "eslint-plugin-svelte": "^3.9.2"
     },
     "imports": {
+        "#docsite/*": "./docsite/*",
         "#node/*": "./source/shared/node/*",
         "#packson": "./package.json",
         "#paths": "./paths.js",

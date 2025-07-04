@@ -1,13 +1,9 @@
 <!--*
-    Renders a table-of-contents (ToC) for the selected item.
-
-    The ToC is generated from all headers appearing within `sel`.
+    Renders a table-of-contents (ToC).
 
     @tags group:element
-    @property { number } depth
-      ToC header depth (0-6)
-    @property { string } sel
-      Query selector that identifies the element to generate a ToC for.
+    @property { object } tree
+      Hierarchical header tree to render.
 -->
 
 {#if tree}
@@ -37,21 +33,12 @@
 
 
 <script module>
-import { headerTree } from '#frend/lib'
-
 import Link from '../app/Link'
 import List from './List'
 </script>
 
 <script>
-let { depth, sel } = $props();
-let tree = $state(null);
-
-$effect(() => 
-{
-    let base = document.querySelector(sel);
-    tree = base ? headerTree(base, depth) : null;
-});
+let { tree } = $props();
 
 let doClick = (evt, id) =>
 {

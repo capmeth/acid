@@ -15,11 +15,7 @@
 
 {@render main(mainContent)}
 {#snippet mainContent()}
-  <Article mcid={asset.content}>
-    {#snippet children(id)}
-      <Toc depth={asset.tocDepth} sel="#{asset.content}" />
-    {/snippet}
-  </Article>
+  <Article mcid={asset.content} tocDepth={asset.tocDepth} />
 {/snippet}
 
 {@render nav(navContent)}
