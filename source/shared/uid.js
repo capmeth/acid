@@ -48,16 +48,6 @@ uid.hash = value => shash(uid(value))
 uid.hex = value => uid.hash(value).toString(16)
 
 /**
-    Generates a unique id (hashed base32 string).
-    
-    @param { any } value
-      Source value from which to generate hash.
-    @return { string }
-      A unique duotrigesimal? value.
-*/
-uid.duo = value => uid.hash(value).toString(32)
-
-/**
     Generates a unique (sequential) string on every call.
 
     @return { string }

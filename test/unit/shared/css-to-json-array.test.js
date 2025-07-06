@@ -5,6 +5,7 @@ test('converts CSS from bare properties', t =>
 {
     let actual = JSON.parse(ctoja(
     `
+        content: "> ";
         background: #4CAF50;
         color: white;
         padding: 10px 0;
@@ -12,6 +13,7 @@ test('converts CSS from bare properties', t =>
 
     let expect = 
     [
+        [ "content", "\"> \"" ],
         [ "background", "#4CAF50" ],
         [ "color", "white" ],
         [ "padding", "10px 0" ]
@@ -75,7 +77,7 @@ test('handles @-rule values and rulesets', t =>
 {
     let actual = JSON.parse(ctoja(
     `
-        @import url(https://cdn.js/cool/npm/library@1.0/index.js);
+        @import url("https://cdn.js/cool/npm/library@1.0/index.js");
 
         /* Keyframes for a fade-in animation */
         @keyframes fadeIn 
@@ -88,7 +90,7 @@ test('handles @-rule values and rulesets', t =>
 
     let expect = 
     [
-        [ "@import", "url(https://cdn.js/cool/npm/library@1.0/index.js)" ],
+        [ "@import", "url(\"https://cdn.js/cool/npm/library@1.0/index.js\")" ],
         [        
             "@keyframes fadeIn",
             [

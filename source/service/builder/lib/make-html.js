@@ -1,4 +1,4 @@
-import { is } from '#utils'
+import { equals, is } from '#utils'
 
 
 let spaceRe = /\s+/
@@ -41,7 +41,7 @@ export default function(config)
         hljs.languages.forEach(lang => scripts.unshift({ src: hljsCdn.lang.replace(repRe, repFn({ ...vars, lang })) }))
         scripts.unshift({ src: hljsCdn.source.replace(repRe, repFn(vars)) });
     }
-    if (is.nonao.notEmpty(importMap))
+    if (is.nonao(importMap) && !equals({}, importMap))
     {
         let { imports, scopes, integrity, ...others } = importMap;
         // convenience to allow imports at top level

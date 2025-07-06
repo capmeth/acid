@@ -3,6 +3,7 @@ import path from 'path'
 
 let paths = { root: import.meta.dirname };
 
+paths.coverage = path.join(paths.root, 'coverage');
 paths.modules = path.join(paths.root, 'node_modules');
 paths.source = path.join(paths.root, 'source');
 paths.temp = path.join(paths.root, 'temp');

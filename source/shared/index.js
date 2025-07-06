@@ -12,7 +12,6 @@
 export { default as cacher } from './cacher.js'
 export { default as confine } from './confine/index.js'
 export { default as ctja } from './css-to-json-array.js'
-// export { default as cssToJsonString } from './css-to-json-string.js'
 export { default as debounce } from './debounce.js'
 export { default as equals } from './equals.js'
 export { default as ident } from './ident.js'

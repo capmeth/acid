@@ -35,7 +35,7 @@ export default function ()
         // look for props
         for (let item of parsed)
         {
-            if (is.string.notBlank(item.name) && item.kind === 'prop')
+            if (is.string(item.name) && item.name !== '' && item.kind === 'prop')
                 data.prop = item;
         }
     }
