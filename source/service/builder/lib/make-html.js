@@ -26,7 +26,7 @@ let hljsCdn =
 */
 export default function(config)
 {
-    let { hljs, importMap, links, metas, scripts, title } = config;
+    let { hljs, importMap, links, output, metas, scripts, title } = config;
 
     // make copies of head content arrays before adding
     links = [ ...(links || []) ];
@@ -50,7 +50,15 @@ export default function(config)
         scripts.unshift({ src: JSON.stringify(importMap, null, 4), type: 'importmap' });
         scripts.unshift({ src: 'https://ga.jspm.io/npm:es-module-shims@2.6.0/dist/es-module-shims.js', async: true });
     } 
-    scripts.push({ src: `import("./acid-docsite.js").then(site => site.default())`, defer: true });
+    scripts.push(
+    { 
+        content: 
+        `
+            let url = new URL("${output.name}-docsite.js", new URL(import.meta.url).origin);
+            import(url).then(site => site.default());
+        `,
+        type: "module"
+    });
 
     let lines = [];
 

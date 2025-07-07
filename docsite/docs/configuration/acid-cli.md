@@ -86,7 +86,7 @@ acid --output-dir <dir>
 acid -o <dir>
 ```
 
-`outputDir` from configuration is used if not specified.
+`output.dir` from configuration is used if not specified.
 
 
 ## `--title`

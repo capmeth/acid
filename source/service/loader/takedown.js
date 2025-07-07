@@ -46,17 +46,11 @@ export let tdContent = takedown(
     {
         fenceblock: (e, v) =>
         {
-            e.cid = `cobe-${e.id}`;
             [ e.lang, e.mode, e.attrs ] = e.info?.match(langRe)?.slice(1) || [];
+            e.label = attrsToObject(e.attrs).label
             // store details on code block
-            v.blocks[e.cid] = 
-            { 
-                lang: e.lang,
-                code: e.value, 
-                label: attrsToObject(e.attrs).label
-            };
-            // `e.value` is mapped via param (above) so do not insert it here
-            return '<Editor id="{cid}"{? lang="{lang}"?}{? mode="{mode}"?} />';
+            v.blocks.push({ id: e.id, lang: e.lang, code: e.value, label: e.label, uid: v.uid });
+            return '<Editor id="{id}"{? label="{label}"?}{? mode="{mode}"?} />';
         },
 
         header: '<h{level} id="{id}">{value}</h{level}>\n',

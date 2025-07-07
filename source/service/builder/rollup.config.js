@@ -6,6 +6,7 @@
 import pluginAlias from '@rollup/plugin-alias'
 import pluginCommonjs from '@rollup/plugin-commonjs'
 import pluginInject from '@rollup/plugin-inject'
+import pluginJson from '@rollup/plugin-json'
 import pluginNodeResolve from '@rollup/plugin-node-resolve'
 import pluginAnalyzer from 'rollup-plugin-analyzer'
 import pluginPostcss from 'rollup-plugin-postcss'
@@ -27,16 +28,18 @@ import virtualFiles from './lib/virtual-files.js'
 
 export default function(config, loaded, styles)
 {
-    let { copy, outputDir, root } = config;
+    let { copy, output, root } = config;
     let { sections, files, blocks } = loaded;
 
-    let outpath = path.join(root, outputDir);
+    let outpath = path.join(root, output.dir);
     let acid = {};
 
     // Input/Output
     acid.input = 
     { 
-        'acid-docsite': path.join(paths.client, 'app.js'),
+        [`${output.name}-docsite`]: path.join(paths.client, 'app.js'),
+        [`${output.name}-examples`]: './examples.json',
+        // TODO: make this input a separate build
         'acid-bundle': path.join(paths.client, 'index.js')
     };
 
@@ -55,8 +58,8 @@ export default function(config, loaded, styles)
     [
         pluginVirtualFile(
         { 
-            'docsite-config': makeConfig(config, sections, blocks),
-            // 'empty-export': 'export default {}',
+            'docsite-config': makeConfig(config, sections),
+            './examples.json': JSON.stringify(blocks),
             './style/main.css': styles.root || '',
             ...files,
             '../markdown/index.js' : makeExports(Object.keys(files)),
@@ -81,6 +84,7 @@ export default function(config, loaded, styles)
             }
         }),
         pluginNodeResolve({ extensions: [ '.css', '.js', '.json', '.svt' ], browser: true }),
+        pluginJson(),
         pluginCommonjs(),
         pluginScopedStyles({ styles }),
         pluginSvelte({ extensions: [ '.svt' ], emitCss: true }), 
@@ -90,7 +94,7 @@ export default function(config, loaded, styles)
             ctx: path.join(paths.client, 'lib', 'context.js')
         }),
         pluginPostcss({ minimize: true }),
-        pluginEmitAsset({ fileName: 'index.html', source: makeHtml(config) }),
+        pluginEmitAsset({ fileName: `${output.name}.html`, source: makeHtml(config) }),
         pluginCopyStuff({ specs: copy, rootpath: root, outpath }),
         pluginAnalyzer({ onAnalysis: logStats, skipFormatted: true })
     ];

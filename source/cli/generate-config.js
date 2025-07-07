@@ -34,8 +34,8 @@ ${hackson.type === 'module' ? 'export default' : 'module.exports ='}
     // name for the docsite
     title: ${jss(config.title)},
 
-    // directory to deploy docsite
-    outputDir: ${jss(config.outputDir)},
+    // generated artifacts location
+    output: ${jss(config.output)},
 
     // root directory of project
     root: ${jss(config.root)},

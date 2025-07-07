@@ -2,13 +2,13 @@
 ```html label="Structure"
 <ul class="nav-single">
   <li class="listitem">
-    <Toggle role="toggle">
+    <Toggle role="switch">
       <Label id="label-sections" />
     </Toggle>
     <Sections />
   </li>
   <li class="listitem">
-    <Toggle role="toggle">
+    <Toggle role="switch">
       <Label id="label-{group}" />
     </Toggle>
     <Assets />

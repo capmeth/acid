@@ -32,7 +32,7 @@ export default function(config)
     {
         let parsers = mod.default; 
         // create storage for parsed code blocks
-        let blocks = tdContent.config.vars.blocks = {};
+        let blocks = tdContent.config.vars.blocks = [];
         
         let all = {}, files = {};
 
@@ -152,7 +152,7 @@ export default function(config)
         {
             let { content, path, ...more } = object;
 
-            let apply = content => 
+            let apply = (content, abspath) => 
             {
                 let fm = tdContent.parseMeta(content);
 
@@ -166,34 +166,20 @@ export default function(config)
                 more.title ||= capitalCase(np.basename(path, np.extname(path)));
                 more.group ||= 'documents';
                 more.type ||= 'document';
+                more.uid ||= uid.hex([ abspath, more.section ]) + '-' + kebabCase(more.title);
 
-                return { ...more, content: tdContent.parse(content).doc };
+                let vars = { uid: more.uid }
+                return { ...more, content: tdContent.parse(content, { vars }).doc };
             }
             // assume content already on the object is markdown
-            if (content) 
-            {
-                let data = apply(content);
-
-                data.uid ||= uid.hex(data.section) + '-' + kebabCase(data.title);
-
-                return data;
-            }
+            if (content) return apply(content, '/content');
 
             if (is.string(path))
             {
                 let abspath = np.resolve(root, path);
                 
                 if (existsSync(abspath))
-                {
-                    return fs.readFile(abspath, { encoding: 'utf8' }).then(content => 
-                    {
-                        let data = apply(content);
-
-                        data.uid ||= uid.hex([ abspath, data.section ]) + '-' + kebabCase(data.title);
-
-                        return data;
-                    });
-                }
+                    return fs.readFile(abspath, 'utf8').then(content => apply(content, abspath));
             }
 
             return more;

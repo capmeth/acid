@@ -12,7 +12,7 @@
   <ul class="nav-single">
     {#if section.sections?.length}
       <li class="listitem">
-        <Toggle bind:active={open.sections} role="toggle">
+        <Toggle bind:active={open.sections} role="switch">
           <Label id="label-sections" />
         </Toggle>
         <Sections {sect} hide={open.sections} />
@@ -21,7 +21,7 @@
     {#each sinfo.asset.groups as group (group)}
       {#if section[group]?.length}
         <li class="listitem">
-          <Toggle bind:active={open[group]} role="toggle">
+          <Toggle bind:active={open[group]} role="switch">
             <Label id="label-{group}" />
           </Toggle>
           <Assets {sect} {group} hide={open[group]} />

@@ -54,7 +54,14 @@
     </div>
     {#if show}
       <div class="entry">
-        <Code bind:code={current} {lang} disabled={copied} {editable} noHighlight={cbe.noHighlight} {onkeydown}>
+        <Code 
+          bind:code={current} 
+          {lang} 
+          disabled={copied} 
+          {editable} 
+          noHighlight={cbe.noHighlight} 
+          {onkeydown}
+        >
           <div class="copied">
             <Label id="cobe-copied" />
           </div>
@@ -67,8 +74,9 @@
 
 <script module>
 import { onMount } from 'svelte'
-import { cobeSpecs, blocks } from '#config'
+import { cobeSpecs } from '#config'
 import { context, dom, sinfo } from '#frend/lib'
+import { ids } from '#frend/lib/code-blocks'
 
 import Button from '../element/Button'
 import Code from './Code'
@@ -100,10 +108,8 @@ let setup = (mode, lang) =>
 </script>
 
 <script>
-let { id, lang, mode } = $props();
-let { compose } = context;
-
-let { code, label } = blocks[id];
+let { id, ...args } = $props();
+let { code, label, lang, mode } = { ...ids[id], ...args };
 
 lang ||= 'default';
 code = code.trim();
@@ -143,7 +149,7 @@ let update = () =>
     if (display && edited)
     {
         error = null;
-        compose(lang, prev = current, display).catch(handleError);
+        context.compose(lang, prev = current, display).catch(handleError);
     }
 }
 let onkeydown = evt =>

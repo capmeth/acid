@@ -144,7 +144,7 @@ Root for relative paths specified in `files` is `root`.
 - an array is the parameter list for `String.prototype.replace` against the relative path. 
   Optionally, **RegExp** constructor parameters can be provided in an array as the first argument.
 
-The resulting filename from `to` is assumed to be relative to `outputDir`.  If `to` is omitted, `null`, or results in the same or an empty string, the file is copied into `outputDir` with its original relative path.  If `to` results in a path that is not inside `outputDir` the file is not copied.
+The resulting filename from `to` is assumed to be relative to `output.dir`.  If `to` is omitted, `null`, or results in the same or an empty string, the file is copied into `output.dir` with its original relative path.  If `to` results in a path that is not inside `output.dir` the file is not copied.
 
 ```js label="default value"
 copy: []
@@ -257,7 +257,7 @@ As a convenience, top-level keys that are not `imports`, `scopes`, or `integrity
 
 ACID will look for a `#bundle` specifier here and import its named exports into a variable named `bundle` for CoBEs.
 
-So if your app's export bundle is named *my-app-bundle.js*, make sure the file gets copied to `outputDir` (you can do this via `copy` setting), and then
+So if your app's export bundle is named *my-app-bundle.js*, make sure the file gets copied to `output.dir` (you can do this via `copy` setting), and then
 
 ```js
 importMap:
@@ -282,9 +282,9 @@ Configures `<link>` tags for the `<head>` tag.
 links: string | object | [ ... string | object ]
 ```
 
-String items in the array are assumed to be stylesheet urls for the `href` attribute and a `rel="stylesheet"` attribute will automatically be added as well.  
+Object properties are directly applied as `<link>` attributes.
 
-Object properties are directly applied as link tag attributes.
+String items are assumed to be stylesheet urls for the `href` attribute and `rel="stylesheet"` will automatically be added as well.  
 
 ```js label="default value"
 links: []
@@ -362,7 +362,7 @@ Configures `<meta>` tags for the `<head>` tag.
 metas: object | [ ... object ]
 ```
 
-Object properties are directly applied as meta tag attributes.
+Object properties are directly applied as `<meta>` attributes.
 
 ```js label="default value"
 metas:
@@ -392,16 +392,43 @@ namespace: 'acid'
 ```
 
 
-## outputDir
+## output
 
-Path to folder where generated docsite files will be written.
+Details where generated artifacts will be placed.
 
 ```js label="spec"
-outputDir: string
+output: string |
+{
+    /**
+        Path where generated docsite files will be written.
+    */
+    dir: string,
+    /**
+        Name/Prefix for docsite generated files.
+    */
+    name: string
+}
 ```
 
+Specifying `output` as a string is the same as specifying `output.dir`.
+
+`output.dir` also serves as root for `httpServer`.
+
+File output includes:
+
+- `{dir}/{name}.html`: docsite html
+- `{dir}/{name}-docsite.js`: docsite javascript
+- `{dir}/{name}-examples.js`: docsite example code
+
+If `name` includes path segments, subfolders will be created under `dir`.
+
+
 ```js label="default value"
-outputDir: 'docs'
+output:
+{
+    dir: 'docs',
+    name: packageJson.name
+}
 ```
 
 
@@ -418,13 +445,9 @@ Root path for the project/library to be documented.
 root: string
 ```
 
-This is the base path for:
-- `outputDir` config option
-- glob file paths in `sections` config option
-- glob file paths in `watch` config option
-- relative `@example` filepaths in JSDoc comments
-
-Default value is the directory from which the current process started.
+This is the base path for 
+- relative file paths specified in config (`sections`, `watch`, etc.)
+- relative `@example` file paths in JSDoc comments
 
 ```js label="default value"
 root: process.cwd()
@@ -454,11 +477,11 @@ Configures `<script>` tags for the `<head>` tag.
 scripts: string | object | [ ... string | object ]
 ```
 
-String items in the array are assumed to be source urls for the `src` attribute.
+Object properties are directly applied as `<script>` attributes.
+
+String items are assumed to be source urls for the `src` attribute.
 
 If `src` contains any whitespace whatsoever, it is assumed to be an inline script.
-
-Object properties are directly applied as script tag attributes.
 
 ```js label="default value"
 scripts: []
@@ -760,7 +783,7 @@ watch: // merges
 
 Some important notes on watch files:
 - *acid.config.js* (or the config file specified in the CLI) is __always__ included, regardless of settings
-- `outputDir` is __always__ excluded, regardless of settings
+- `output.dir` is __always__ excluded, regardless of settings
 - files selected in `sections` are __not__ automatically watched
 
 

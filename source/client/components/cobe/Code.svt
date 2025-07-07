@@ -44,7 +44,7 @@ let highlight = $state(highlighter(lang, noHighlight));
     display: flex;
     position: relative !important;
     margin: 0 !important;
-    overflow: none !important;
+    overflow: hidden !important;
     padding: 0 !important;
 
     &::after 

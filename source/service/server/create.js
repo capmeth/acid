@@ -4,12 +4,12 @@ import path from "node:path"
 import mtype from './mime-types.js'
 
 
-export default function({ outputDir })
+export default function({ output })
 {
     let presponse = url => 
     {
-        if (url.endsWith('/')) url += 'index.html';
-        let file = path.join(outputDir, url);
+        if (url.endsWith('/')) url += `${output.name}.html`;
+        let file = path.join(output.dir, url);
 
         let exists = fs.existsSync(file)
         let ext = path.extname(file).slice(1).toLowerCase();

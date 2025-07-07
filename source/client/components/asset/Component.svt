@@ -26,7 +26,7 @@
   </div>
   {#if properties?.length}
     <div class="properties">
-      <Toggle bind:active={showProps} store="showProps" role="toggle">
+      <Toggle bind:active={showProps} store="showProps" role="switch">
         <Label id="label-props" />
       </Toggle>
       {#if showProps}

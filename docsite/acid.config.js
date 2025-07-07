@@ -12,7 +12,7 @@ export default
     namespace: "metasite",
     title: "Another Component Interface Documenter (ACID)",
 
-    outputDir: "web",
+    output: "web",
     cobeSpecs: 
     [
         { types: "handlebars", use: "./extensions/ext-handlebars", mode: "edit" },

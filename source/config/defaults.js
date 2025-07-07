@@ -119,7 +119,7 @@ config.logger =
 */
 config.metas = 
 [
-    { charset: 'utf8' },
+    { charset: 'utf-8' },
     { name: 'author', content: hackson.author || 'unknown' },
     { name: 'description', content: hackson.description || 'ACID generated docsite.' },
     { name: 'keywords', content: hackson.keywords || 'components, documentation' }
@@ -134,11 +134,18 @@ config.metas =
 config.namespace = 'acid';
 
 /**
-    Folder to put all generated documentation.
+    Details for generated output.
 
-    @type { string }
+    - `dir`: folder where all generated files go
+    - `name`: name/prefix for bundle output file(s)
+
+    @type { object }
 */
-config.outputDir = 'docs';
+config.output = 
+{
+    dir: 'docs',
+    name: hackson.name
+};
 
 /** 
     Source file parsing specs.
@@ -152,11 +159,6 @@ config.parsers =
 
 /** 
     Root path for the project.
-
-    This is the base path for:
-    - glob file paths in `sections`
-    - glob file paths in `watch`
-    - `outputDir`
 
     @type { string }
 */

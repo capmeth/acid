@@ -87,8 +87,8 @@ export default function(config, file, callback)
         [ 
             // omit config file (its looked after separately)
             ...(isFile ? [ file ] : []),
-            // always omit `outputDir`, of course
-            path.join(config.outputDir, '**'),
+            // always omit `output.dir`, of course
+            path.join(config.output.dir, '**'),
         ]);
 
         // derived services

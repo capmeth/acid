@@ -13,7 +13,7 @@
     <!-- component source file comment -->
   </div>
   <div class="properties">
-    <Toggle role="toggle">
+    <Toggle role="switch">
       <Label id="label-props" />
     </Toggle>
     <List what="props-list">

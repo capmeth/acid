@@ -9,9 +9,9 @@ let jss = value => JSON.stringify(value);
     @return { string }
       JS export file.
 */
-export default function(config, sections, blocks)
+export default function(config, sections)
 {
-    let { httpServer, watch } = config;
+    let { httpServer, output, watch } = config;
 
     let lines = [];
     let cfg = proxet({}, name => jss(config[name]));
@@ -20,6 +20,7 @@ export default function(config, sections, blocks)
     lines.push(`import renderExts from '#temp/renderer-exts'`);
 
     lines.push(`export let assetGroups = ${cfg.assetGroups}`);
+    lines.push(`export let bundle = ${jss(output.name)}`);
     lines.push(`export let hljsc = ${cfg.hljs}`);
     lines.push(`export let labels = ${cfg.labels}`);
     lines.push(`export let namespace = ${cfg.namespace}`);
@@ -33,7 +34,6 @@ export default function(config, sections, blocks)
     lines.push(`export let version = ${cfg.version}`);
 
     lines.push(`export let sections = ${jss(sections)}`);
-    lines.push(`export let blocks = ${jss(blocks)}`);
 
     lines.push(`export let ns = (...args) => kebabCase([ namespace, ...args ].join(' '))`);
     lines.push(`export let cobeSpecs = renderExts;`);
