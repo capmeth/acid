@@ -31,6 +31,13 @@ let attrsToObject = string =>
 
 let langRe = /^([^\s:]*)(?::(\w+))?(?:\s+(.+)$)?/;
 let braceRe = /[{}]+/g;
+let pageRe = /^component|document|home|index|section/;
+
+let link = e => 
+{
+    if (pageRe.test(e.href)) e.href = `#/${e.href}`;
+    return '<a href="{href??}"{? title="{title}"?}>{value}</a>';
+}
 
 /*
     Example file markdown parser.
@@ -39,6 +46,7 @@ let braceRe = /[{}]+/g;
     - fencedblock converter produces Editor tags (for CoBEs)
     - root converter creates "Article" component
     - turn off delousing for fence block content
+    - relative links adjusted
 */
 export let tdContent = takedown(
 {
@@ -54,6 +62,8 @@ export let tdContent = takedown(
         },
 
         header: '<h{level} id="{id}">{value}</h{level}>\n',
+
+        link,
 
         root: e =>
         {
@@ -88,6 +98,7 @@ export let tdContent = takedown(
 
     - no header tags allowed
     - no thematic breaks allowed
+    - relative links adjusted
 */
 export let tdComment = takedown(
 {
@@ -95,5 +106,6 @@ export let tdComment = takedown(
     {
         divide: '{marks}',
         header: '<p data-h{level}><strong>{value}</strong></p>',
+        link
     }
 });

@@ -36,6 +36,7 @@ import Single from '../nav/Single'
 <script>
 let { main, nav, trailer } = $props();
 context.page = 'home';
-context.section = sinfo.root.name;
-let sect = context.section;
+
+let sect = sinfo.root.name;
+context.section = sect;
 </script>

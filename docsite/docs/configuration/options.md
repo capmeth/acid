@@ -511,13 +511,9 @@ sections:
 
 All of the properties above are optional.
 
-A hierarchical tree is built by starting at `rootSection` and working down through `sections.*.sections` until each one has a "parent" reference.  
-
-Parent references are only assigned once. A given section cannot be assigned a parent if it already has one assigned, so any section appearing as a child in multiple places will only ever appear as a child of one of those sections in the docsite.
-
-Ultimately, any section that is not `rootSection` nor included in its descendants will be left out of the docsite altogether.
-
 Note that `overview` can alternatively be a path to a markdown file.  Simply prefix the path with `file:/`.
+
+See the [configuration options page](document/docsite-sections) for in-depth details on how this works.
 
 ```js label="default value"
 sections:
@@ -525,7 +521,7 @@ sections:
     root:
     {
         title: 'Overview',
-        overview: 'readme.md',
+        overview: 'file:/readme.md',
         sections: [ 'components' ]
     },
     components:

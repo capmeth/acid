@@ -53,7 +53,6 @@ else if (params.uid)
     to = asset.type;
     title ||= `Go to ${asset.section.titlePath.join('/')}::${asset.title} ${asset.type}.`
     current ??= context.asset === asset.uid;
-    params.sect = asset.section.name;
     params.uid = asset.uid;
 }
 else

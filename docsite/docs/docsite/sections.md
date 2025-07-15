@@ -29,15 +29,17 @@ sections:
 }
 ```
 
-In the above example, `root`, `components`, and `action` are the names (IDs) of the sections.
+In the above example, `root`, `components`, and `action` are the names of the sections.
 
-The `rootSection` config setting is used to define the top-level section
+The `rootSection` config setting is used to define the top-level section.
 
 ```js
 rootSection: 'root'
 ```
 
-No documentation will generate without `rootSection`, and any sections not having `rootSection` as ancestor will be excluded from the docsite.
+No documentation will generate without `rootSection`, as a hierarchical tree is built by starting there and working down through `sections.*.sections` until each one has a "parent" reference. Any sections that do not have `rootSection` as their ultimate ancestor will be excluded from the docsite.
+
+Parent section references are only assigned once. A given section cannot be assigned a parent if it already has one, so any section configured as a child of multiple sections will only ever appear as a child of one of those sections in the docsite.
 
 
 # Section Properties

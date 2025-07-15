@@ -26,25 +26,22 @@
 
 
 <script module>
-import { context, sinfo, tagDetails, webpage } from '#frend/lib'
+import { context, sinfo, webpage } from '#frend/lib'
 
 import Article from '../element/Article'
 import Document from '../asset/Document'
 import Primary from '../nav/Primary'
 import Single from '../nav/Single'
-import Toc from '../element/Toc'
 </script>
 
 <script>
-let { leader, main, nav, sect, uid } = $props();
+let { leader, main, nav, uid } = $props();
 context.page = 'document';
-context.section = sect;
 
 let asset = sinfo.asset(uid);
+let sect = asset.section.name;
+context.section = sect;
 context.asset = asset.uid; 
-
-if (asset.section.name !== sect) 
-    throw new Error(`Asset ${uid} was not found in the current section.`);
 
 webpage.setTitle(asset.title);
 </script>

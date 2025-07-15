@@ -44,7 +44,7 @@ Add the `--watch` flag to the above to serve the site <b style="color:red">hot</
 acid --http-server --watch
 ```
 
-Head to the *Config Quick Reference* section of these docs to see all the config & CLI options!
+Head to the [configuration](section/configure) pages of these docs to see all the config & CLI options!
 
 
 ## Programmatic Access
