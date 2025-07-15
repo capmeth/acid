@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import jsyaml from 'js-yaml'
-import { hackson } from '#node/hosted.js'
+import { hackson } from '#lib/hosted.js'
 import paths from '#paths'
 
 
@@ -88,25 +88,6 @@ config.labels = jsyaml.load(fs.readFileSync(path.join(paths.config, 'labels.yaml
 */
 config.links = [];
 
-/** 
-    Logging control.
-
-    default: `{}`
-
-    @merges
-    @type { object }
-*/
-config.logger =
-{
-    level: 'info',
-    default: null,
-    test: console.debug,
-    info: console.info,
-    warn: console.warn,
-    fail: console.error,
-    noChalk: false
-};
-
 /**
     Array of HTML metatag objects for the docsite.
 
@@ -152,10 +133,7 @@ config.output =
 
     @type { array }
 */
-config.parsers =
-[
-    { exts: '.jsx', use: './extensions/ext-jsdoc' }
-];
+config.parsers = [];
 
 /** 
     Root path for the project.
@@ -255,6 +233,13 @@ config.title = hackson.title;
 config.tocDepth = 3;
 
 /**
+    Converts a file path to an asset id.
+
+    @type { function | string | array }
+*/
+config.toAssetId = '{hex}';
+
+/**
     Resolves the path to an example markdown file.
 
     When a component source file does not specify an `@example` file, this
@@ -265,7 +250,7 @@ config.tocDepth = 3;
     By default, this function looks for a markdown (.md) file in the same 
     folder with the same name as the source file.
 
-    @type { function }
+    @type { function | string | array }
 */
 config.toExampleFile = [ [ '^(.+)\\.[^./]+$' ], '$1.md' ];
 

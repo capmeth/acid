@@ -286,16 +286,18 @@ This is captured for
 
 That is, docsite generation without parsing any code, only JsDoc.
 
-ACID provides a "codeless" JsDoc to JSON parser (docson) that can be configured in *acid.config.js*.
+For many codebases, formal documentation-oriented comments can be pretty sparse.  However, for projects that enforce JsDoc in the code, ACID provides a "codeless" JsDoc to JSON parser.
+
+It is configured as the fallback parser.
 
 ```js
 parsers:
 [
-    { exts: '.jsx', use: '@capmeth/acid/ext-jsdoc' }
+    { types: '*', use: '#exts/jsdoc' }
 ]
 ```
 
-The above sets `.jsx` files to be parsed for information solely based on the comments within.
+You can override this by setting the fallback (`*`) record to something else (if necessary), but otherwise there is no need to set the parser explicitly.
 
 For this to work,
 - it is assumed that each source file implements exactly one component
@@ -305,6 +307,3 @@ For this to work,
 If the selected primary "component" comment has no `@name`, the filename itself is used.
 
 Once the component comment has been identified, all other comments without `@name` and `@kind` will be skipped.  If the component comment cannot be identified, the file itself is skipped.
-
-**3rd-party extensions** \
-Parser extensions, while having the option to use docson to supplement parsing results, may parse things differently. Please refer to their documentation for more information.

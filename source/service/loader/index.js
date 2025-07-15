@@ -2,8 +2,9 @@ import { camelCase, capitalCase, kebabCase } from 'change-case'
 import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import np from 'node:path'
-import globit from '#node/globit.js'
-import { is, uid } from '#utils'
+import globit from '#lib/globit.js'
+import { is, mapExtensions, uid } from '#utils'
+import importer from '../importer/index.js'
 import doxie from './doxie.js'
 import link from './parentization.js'
 import { tdContent } from './takedown.js'
@@ -11,26 +12,14 @@ import { tdContent } from './takedown.js'
 
 export default function(config)
 {
-    let { root, rootSection, toExampleFile, useFilenameOnly } = config;
+    let { parsers, root, rootSection, toAssetId, toExampleFile, useFilenameOnly } = config;
+
+    let promisedParsers = mapExtensions(parsers, importer(root));
 
     let fileRe = /^file:\//;
-    // prep the example file function
-    if (is.array(toExampleFile))
-    {
-        let [ search, replace ] = toExampleFile;
-        if (is.array(search)) search = new RegExp(...search);
-        toExampleFile = string => 
-        { 
-            let example = string.replace(search, replace);
-            // source file and example file cannot be the same
-            return example === string ? null : example;
-        }
-    }
-    if (!is.func(toExampleFile)) toExampleFile = () => null
 
-    return () => import('#temp/parser-exts.js').then(async mod =>
+    return () => promisedParsers.then(async parsers =>
     {
-        let parsers = mod.default; 
         // create storage for parsed code blocks
         let blocks = tdContent.config.vars.blocks = [];
         
@@ -105,11 +94,12 @@ export default function(config)
             if (is.string(path))
             {
                 let abspath = np.resolve(root, path), ext = np.extname(abspath);
+                let parser = { ...parsers['*'], ...parsers[ext] };
 
-                if (parsers[ext]?.use)
+                if (parser.use)
                 {
                     let data = doxie();
-                    await parsers[ext].use(abspath, data);
+                    await parser.use(abspath, data);
 
                     let { example, name, ...others } = data;
                     more = { ...others, ...more, title: name, path: example };
@@ -124,7 +114,8 @@ export default function(config)
                 if (!more.path)
                     more.path = toExampleFile(path);
 
-                more.uid = uid.hex([ abspath, more.section ]) + '-' + kebabCase(more.title);
+                // more.uid = uid.hex([ abspath, more.section ]) + '-' + kebabCase(more.title);
+                more.uid = kebabCase(toAssetId(path));
                 more.group = 'components';
                 more.type = 'component';
 
@@ -166,7 +157,8 @@ export default function(config)
                 more.title ||= capitalCase(np.basename(path, np.extname(path)));
                 more.group ||= 'documents';
                 more.type ||= 'document';
-                more.uid ||= uid.hex([ abspath, more.section ]) + '-' + kebabCase(more.title);
+                // more.uid ||= uid.hex([ abspath, more.section ]) + '-' + kebabCase(more.title);
+                more.uid ||= kebabCase(path ? toAssetId(path) : uid.hex([ more.title, more.section ]));
 
                 let vars = { uid: more.uid }
                 return { ...more, content: tdContent.parse(content, { vars }).doc };

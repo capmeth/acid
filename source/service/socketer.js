@@ -13,9 +13,10 @@ export default function socketer(config)
 
     let enabled = httpServer && watch.enabled;
 
-    log.info(`*** {:magenta:hot-reload} is {:${enabled ? 'whiteBright' : 'gray'}:${enabled ? 'en' : 'dis'}abled} ***`);
     // no web socket needed if http server and watch disabled
     if (!enabled) return (sock.close(), sock);
+
+    log.info(`*** {:magenta:hot-reload} is enabled ***`);
 
     if (sock.port !== port)
     {

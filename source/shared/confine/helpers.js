@@ -21,6 +21,8 @@ let help = (name, value) =>
             case 'lte': return val => value <= val
 
             // normalization helpers
+            case 'to':
+                return func => () => func(value, name)
             case 'toArray': 
                 return more => () => is(value) ? is.array(value) ? value : [ value, ...(more || []) ] : []
             case 'toPlain': 

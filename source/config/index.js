@@ -1,23 +1,23 @@
 import confine from '../shared/confine/index.js'
 import definition from './definition.js'
-import defaults from './defaults.js'
 
 
 /**
-    Returns a proxy of default configuration options, optionally merged with
-    additional configuration objects.
+    Creates an empty configuration proxy object.
 
-    @param { array } options
-      Addtional configuration option objects.
     @return { Proxy }
-      Controlled configuration object.
+      Configuration proxy. 
 */
-export default function (...options)
-{
-    let data = confine(definition);
-    
-    data.config = defaults;
-    options.forEach(option => data.config = option);
+export let make = () => confine(definition)
 
-    return data;
-}
+/**
+    Creates a proxy object and assigns configuration.
+
+    @return { Proxy }
+      Configuration proxy. 
+*/
+export let assign = (...configs) => configs.reduce((m, c) => (m.config = c, m), make())
+
+
+export { default as defaults } from './defaults.js'
+export { default as required } from './required.js'

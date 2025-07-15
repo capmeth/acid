@@ -1,17 +1,24 @@
 ---
-title: Main Config Options
+title: Config File Options
 tocDepth: 2
 cobeMode: static
 ---
 
 
-# Config File Options
+# Config Files
 
-Below are the settings recognized in an *acid.config.js* file.
+A config file can be written in JSON (.json) or YAML (.yml, .yaml) as well as JS, just be sure to use the proper extension.
+
+However, the only config file the ACID CLI looks for is *acid.config.js* at the project root.  If the file is anywhere else, or has any other name or extension, or if you are using the ACID API instead, you will have to specify where your config file is if you wish to use one.
+
+
+# Config Options
+
+Below are the settings recognized in a config file.
 
 Pay attention to the default config settings.  Unless otherwise noted, when no setting is specified then the default(s) will be in effect.  Many options can be unset explicitly with `null`, or for array types, with an empty array.
 
-A `// merges` comment in the type definition of a multi-value config option indicates that the option will merge with the defaults instead of overwriting them when set.
+A `// merges` comment in the type definition of an object-based setting indicates that it will (shallowly) merge with defaults rather than overwrite them.
 
 
 ## cobe
@@ -21,6 +28,14 @@ Default settings for CoBEs.
 ```js label="spec"
 cobe: // merges
 { 
+    /**
+        Compiler plugin to use.
+    */
+    use: string | [ string, ...any ], 
+    /**
+        Default render mode.
+    */
+    mode: "demo" | "edit" | "live" | "render" | "static", 
     /**
         Show editable code blocks by default (modes 'edit' or 'live')?
     */
@@ -32,9 +47,7 @@ cobe: // merges
 }
 ```
 
-Note that "render" and "static" modes will always hide or show the code block, respectively, regardless of `noHide` setting.
-
-For highlighting to work, `hljs` must also be configured properly (which it is, for common languages, by default).
+Take a look at `cobeSpecs` config option for details on these settings.  These defaults can be overridden by the language marker specific settings provided there.
 
 ```js label="default value"
 cobe:
@@ -58,13 +71,13 @@ cobeSpecs:
         */
         types: string | [ ...string ],
         /**
-            Compiler plugin to use.
+            Compiler extension to use.
         */
         use: string | [ string, ...any ], 
         /**
             Default render mode.
         */
-        mode: "edit" | "live" | "render" | "static", 
+        mode: "demo" | "edit" | "live" | "render" | "static", 
         /**
             Show editable code blocks by default (modes 'edit' or 'live')?
         */
@@ -78,19 +91,24 @@ cobeSpecs:
 ]
 ```
 
-Specify language marker(s) ("js", "jsx", "vue", etc.) in `types`.  When a marker appears more than once in the list, it is the last definition given that will apply.
+Specify language marker(s) ("js", "jsx", "vue", etc.) in `types`.  Language markers appearing more than once in the list are merged to form a single record for a given marker.
 
-The settings here are specific to the language types specified and will override any defaults.
+The settings here are specific to the language types specified and will override the defaults from `cobe`.
 
-Use `use` to specify the name of a package (plugin) that will render the code from the block (See plugin documentation).
+Use `use` to specify the module that will render the code from the block (see extension documentation).
 
 Values available for `mode` are:
 - "static": just show the code
-- "render": execute the code and display results
+- "render": only show rendered results
+- "demo": show code and rendered results (no editing)
 - "edit": code editing with on-demand render
 - "live": code editing with immediate render
 
+Note that "render" and "static" modes will always hide or show the code block, respectively, regardless of `noHide` setting.
+
 A code block's `mode` will be forced to "static" if no `use` is set for its language marker (no way to render anything).
+
+`noHighlight` can turn off code highlighting, but for it to work in the first place, `hljs` must also be configured properly for the language specified (common HighlightJs languages are good to go by default).
 
 ```js label="default value"
 cobeSpecs: []
@@ -99,7 +117,7 @@ cobeSpecs: []
 
 ## copy
 
-Glob settings that identify files that need to be copied into `ouputDir`.
+Glob settings for static files that need to be copied into `output.dir`.
 
 ```js label="spec"
 copy:
@@ -135,16 +153,9 @@ copy:
 
 Root for relative paths specified in `files` is `root`.
 
-`to` will evaluate each relative path captured in `files`.
-- a string can be interpolated with information from the relative path
-  - `{dir}` path to the file
-  - `{name}` name of the file (without extension)
-  - `{ext}` file extension
-- a function is passed the relative path and should return a new filepath.
-- an array is the parameter list for `String.prototype.replace` against the relative path. 
-  Optionally, **RegExp** constructor parameters can be provided in an array as the first argument.
+`to` converts filepaths in the same way as `toExampleFile`.
 
-The resulting filename from `to` is assumed to be relative to `output.dir`.  If `to` is omitted, `null`, or results in the same or an empty string, the file is copied into `output.dir` with its original relative path.  If `to` results in a path that is not inside `output.dir` the file is not copied.
+The resulting filename from `to` is assumed to be relative to `output.dir`.  If `to` is omitted, `null`, or results in the same or an empty string, the file is copied into `output.dir` with its original path.  If `to` resolves to a path that is not inside `output.dir` the file will not be copied.
 
 ```js label="default value"
 copy: []
@@ -253,18 +264,7 @@ Module specifier resolution in the browser.
 importMap: object
 ```
 
-As a convenience, top-level keys that are not `imports`, `scopes`, or `integrity` are assumed to be **imports**.
-
-ACID will look for a `#bundle` specifier here and import its named exports into a variable named `bundle` for CoBEs.
-
-So if your app's export bundle is named *my-app-bundle.js*, make sure the file gets copied to `output.dir` (you can do this via `copy` setting), and then
-
-```js
-importMap:
-{
-    "#bundle": "./my-app-bundle.js"
-}
-```
+As a convenience, any top-level entry whose key is not `imports`, `scopes`, or `integrity` is added to **imports**.
 
 For more details on import maps, see the [official documentation](https://html.spec.whatwg.org/multipage/webappapis.html#import-maps).
 
@@ -290,69 +290,6 @@ String items are assumed to be stylesheet urls for the `href` attribute and `rel
 links: []
 ```
 
-## logger
-
-Controls log settings.
-
-```js label="spec"
-logger: //merges
-{
-    /**
-        Sets the lowest security level logger activated.
-    */
-    level: 'test' | 'info' | 'warn' | 'fail' | 'off'
-    /**
-        Default log function
-    */
-    default: function | null,
-    /**
-        Test severity level log function.
-    */
-    test: function | null,
-    /**
-        Information severity level log function.
-    */
-    info: function | null,
-    /**
-        Warning severity level log function.
-    */
-    warn: function | null,
-    /**
-        Error severity level log function.
-    */
-    fail: function | null,
-    /**
-        Turn off colors in log messages?
-    */
-    noChalk: true | false,
-}
-```
-
-The logging levels are ordered as follows: (test, info, warn, fail)
-
-All logging levels after `level` will also be activated (e.g. `level: 'info'` also activates 'warn' and 'fail').
-
-To explicitly disable a severity level logger set it to `null`.  
-
-Setting `default` to `null` forces the use of `console.log`.
-
-If a failure message occurs and "fail" level logging is disabled, a notification will be sent via the default logger.
-
-> This affects only server or build-time logging.  There are no configurable render-time (browser) log settings.
-
-```js label="default value"
-logger:
-{
-    level: 'info',
-    default: null,
-    test: console.debug,
-    info: console.info,
-    warn: console.warn,
-    fail: console.error,
-    noChalk: false
-}
-```
-
 
 ## metas
 
@@ -367,19 +304,16 @@ Object properties are directly applied as `<meta>` attributes.
 ```js label="default value"
 metas:
 [
-    // `author` from package.json (if available)
-    { name: 'author', content: author },
-    // `description` from package.json (if available)
-    { name: 'description', content: description },
-    // `keywords` from package.json (if available)
-    { name: 'keywords', content: keywords },
+    { name: 'author', content: packageJson.author },
+    { name: 'description', content: packageJson.description },
+    { name: 'keywords', content: packageJson.keywords },
 ]
 ```
 
 
 ## namespace
 
-An string used internally to help prevent potential naming collisions.
+A string used internally to help prevent potential naming collisions.
 
 ```js label="spec"
 namespace: string
@@ -412,13 +346,14 @@ output: string |
 
 Specifying `output` as a string is the same as specifying `output.dir`.
 
-`output.dir` also serves as root for `httpServer`.
+`output.dir` also serves as root for the http server.
 
 File output includes:
 
 - `{dir}/{name}.html`: docsite html
 - `{dir}/{name}-docsite.js`: docsite javascript
 - `{dir}/{name}-examples.js`: docsite example code
+- `{dir}/{name}-svelte-render.js`: docsite component compiler
 
 If `name` includes path segments, subfolders will be created under `dir`.
 
@@ -434,7 +369,32 @@ output:
 
 ## parsers
 
-> TODO: Document!
+Specifies how to parse code by source language type.
+
+```js label="spec"
+parsers:
+[
+    { 
+        /**
+            Source file extension(s).
+        */
+        types: string | [ ...string ],
+        /**
+            Parser extension to use.
+        */
+        use: string | [ string, ...any ], 
+    },
+    ...
+]
+```
+
+Specify file extensions (".js", ".jsx", ".svelte", etc.) in `types`.  Extensions appearing more than once in the list are merged to form a single record for that extension.
+
+A "fallback" record can be set by using `types: '*'`. It is otherwise always set to the built-in JsDoc parser.
+
+```js label="default value"
+parsers: []
+```
 
 
 ## root
@@ -447,7 +407,7 @@ root: string
 
 This is the base path for 
 - relative file paths specified in config (`sections`, `watch`, etc.)
-- relative `@example` file paths in JSDoc comments
+- relative `@example` file paths in JsDoc comments
 
 ```js label="default value"
 root: process.cwd()
@@ -479,7 +439,7 @@ scripts: string | object | [ ... string | object ]
 
 Object properties are directly applied as `<script>` attributes.
 
-String items are assumed to be source urls for the `src` attribute.
+A string item is applied as the `src` attribute for the tag.
 
 If `src` contains any whitespace whatsoever, it is assumed to be an inline script.
 
@@ -581,6 +541,42 @@ sections:
 ```
 
 
+## socket
+
+Websocket (server/browser) communication control.
+
+```js label="spec"
+socket:
+{
+    /**
+        Web socket port to use.
+    */
+    port: number,
+    /**
+        Number of times to attempt reconnecting to server.
+    */
+    recoAttempts: number,
+    /**
+        Milliseconds before next reconnect attempt is made.
+    */
+    recoAttemptDelay: number
+}
+```
+
+Websockets make *hot-reload* possible in development, but this has no function unless both `httpServer` *and* `watch` are enabled, as the socket needs something to connect to and a reason to respond, respectively.
+
+Change `port` if you have conflicts on your dev machine.  The other two properties control the frequency in which reconnect attempts are made when a connection is lost (due to server restarts, errors, etc.).
+
+```js label="default vallue"
+socket:
+{
+    port: 3014,
+    recoAttempts: 30,
+    recoAttemptDelay: 1000
+}
+```
+
+
 ## storage
 
 Determines how to store docsite user state.
@@ -664,8 +660,6 @@ Display name for the component library or project.
 title: string
 ```
 
-The default value is `title` from *package.json*.
-
 ```js label="default value"
 title: packageJson.title
 ```
@@ -681,37 +675,70 @@ tocDepth: number
 
 The TOC is generated from header tags (`<h1>`, `<h2>`, ... `<h6>`) appearing in document content.  
 
-This must be an integer between 0 and 6.  As you may have guessed, specifying 0 turns off the TOC completely.
+This must be an integer between 0 and 6.  Specifying 0 turns off the TOC completely.
 
 ```js label="default value"
 tocDepth: 3
 ```
 
-## toExampleFile
 
-Maps a component file to a markdown example file.
+## toAssetId
+
+Generates an asset id from a file path.
 
 ```js label="spec"
-toExampleFile: function | null |
+toAssetId: string | function | null |
 [ 
     string | RegExp | [ string | RegExp, string ], 
     string | function 
 ]
 ```
 
-A function value will be passed the relative path string (from `root`) of a source file.  It should return the relative path to an example file.
+This can be used to make prettier ids (used in URLs) for asset pages.
 
-The array form will execute `String.prototype.replace` against the source file's relative path string, with the added option that **RegExp** constructor parameters can be provided in an array as the first element.
+Filepath conversion works the same as `toExampleFile`, but after conversion the value gets **kebab-cased**.
 
-The below example takes a path like `source/components/layout/Grid.jsx`, and looks for an example file in `example/components/layout/Grid.md`.
+> Care must be taken to ensure that each asset ID will be unique across the docsite as page/content/links might not get rendered or resolved properly otherwise.
 
-```json
-toExampleFile: [ [ "^source[/](.+?)[.][^./]+$" ], "example/$1.md" ]
+```js label="default value"
+toAssetId: '{hex}'
 ```
 
-This setting is used only when the source file **does not** specify `@example` with a filepath in the JsDoc comment.
 
-The default setting returns the same path with the extension changed to ".md".  So, by default, an example file is expected to be found right next to the source file in the same folder with the same name.
+## toExampleFile
+
+Generates the path to an example file from a source file path.
+
+```js label="spec"
+toExampleFile: string | function | null |
+[ 
+    string | RegExp | [ string | RegExp, string ], 
+    string | function 
+]
+```
+
+Source paths evaluated by this setting are relative to `root`.
+
+- a function receives the source path and should return a relative filepath.
+- a string can be interpolated with information from the source path
+  - `{dir}` path to the file
+  - `{name}` name of the file (without extension)
+  - `{ext}` file extension
+  - `{hex}` hex value of a hash of the source path
+- an array is used as the parameter list for `String.prototype.replace` against the source path. 
+  Optionally, **RegExp** constructor parameters can be provided in an array as the first argument.
+
+As an example, the following config
+
+```js
+toExampleFile: [ /^source[/](.+?)[.][^./]+$/, "example/$1.md" ]
+```
+
+could convert `source/components/layout/Grid.jsx` to `example/components/layout/Grid.md`.
+
+This evaluation is skipped for source files specifying `@example` with a filepath in the primary JsDoc comment.
+
+The default looks for an example file with an `.md` extension sitting right next to the source file in the same folder with the same name.
 
 ```js label="default value"
 toExampleFile: [ /^(.+)\.[^./]+$/, '$1.md' ]
@@ -720,7 +747,7 @@ toExampleFile: [ /^(.+)\.[^./]+$/, '$1.md' ]
 
 ## useFilenameOnly
 
-Force use of filename as component name?
+Forces use of filename as component name.
 
 ```js label="spec"
 useFilenameOnly: true | false
@@ -740,8 +767,6 @@ Current version of the component library or project.
 ```js label="spec"
 version: string | null
 ```
-
-The default incorporates `version` from *package.json*.
 
 ```js label="default value"
 version: `ver. ${packageJson.version}`
@@ -782,7 +807,6 @@ watch: // merges
 ```
 
 Some important notes on watch files:
-- *acid.config.js* (or the config file specified in the CLI) is __always__ included, regardless of settings
 - `output.dir` is __always__ excluded, regardless of settings
 - files selected in `sections` are __not__ automatically watched
 
@@ -794,7 +818,7 @@ watch:
     delay: 200,
     files:
     {
-        include: '**/*.jsx',
+        include: '**/*.{js,jsx,md}',
         exclude: 'node_modules/**'
     }
 }

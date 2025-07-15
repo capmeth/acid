@@ -8,14 +8,18 @@ import helpers from './helpers.js'
 
     @param { object } prints
       Blueprints for the restricted object.
+    @param { object } target
+      Target object.
 */
-export default function (prints)
+export default function (prints, target)
 {
+    target ||= is.array(prints) ? [] : {};
+
     /**
         Governs object manipulation to adhere to a set of (blue) `prints`.
 
-        @param { object | array } prints
-          Blueprints for data object construction.
+        @param { object | array | function } object
+          Proxy target object.
         @param { object } at
           Name and path for proxer level.
         @return { Proxy }
@@ -38,7 +42,7 @@ export default function (prints)
                 let spec = { at, target, prop };
                 
                 if (is.func(value)) spec.test = value;
-                if (is.plain(value)) spec = { ...value, ...spec }
+                if (is.plain(value)) spec = { ...value, ...spec };
                 
                 return spec;
             }
@@ -69,10 +73,9 @@ export default function (prints)
                         return (s, d, ...args) => target[prop](s, d, ...verifyAll(target, args, s))
                 }
 
-                if (is.undef(target[prop])) 
-                    target[prop] = useDefault(propSpec(target, prop));
+                if (!is.undef(target[prop])) return target[prop];
 
-                return target[prop];
+                return target[prop] = useDefault(propSpec(target, prop));
             },
 
             set(target, prop, value)
@@ -85,7 +88,7 @@ export default function (prints)
 
     let verify = (spec, value) =>
     {
-        let { at, test } = spec;
+        let { at, prop, target, test } = spec;
 
         let result = is.func(test) ? test(helpers(at.name, value)) : null;
         // throw if validation error message returned
@@ -95,19 +98,17 @@ export default function (prints)
 
         if (is.plain(value))
         {                    
-            let { target, prop } = spec;
-            final = (spec.merge && target[prop]) || proxer({}, spec.at);
+            final = (spec.merge && target[prop]) || proxer({}, at);
             Object.keys(value).forEach(k => final[k] = value[k]);
         }                
         else if (is.array(value))
         {
-            // create new array proxy
-            final = proxer([], spec.at);
+            final = (spec.merge && target[prop]) || proxer([], at);
             final.push(...value);
         }
 
         return final;
     }
 
-    return proxer(is.array(prints) ? [] : {});
+    return proxer(target);
 }

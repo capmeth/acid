@@ -6,9 +6,9 @@ let get = (obj, name) => name.split('.').reduce((o, n) => o[n], obj)
 let lm = { test: '', info: 'cyanBright', warn: 'yellow', fail: 'redBright' };
 let order = [ 'test', 'info', 'warn', 'fail' ];
 
-export default function(config)
+export default function(logger)
 {
-    let { logger, namespace } = config, { noChalk, level } = logger;
+    let { name, noChalk, level } = logger;
 
     let main = logger.default || console.log;
     let levels = (i => i >= 0 ? order.slice(i) : [])(order.indexOf(level))
@@ -45,7 +45,7 @@ export default function(config)
             if (levels.includes(lvl) && logger[lvl])
             {
                 if (lvl === 'fail') msg = `{:${lm[lvl]}:${msg}}`;
-                let string = `${namespace}:{:${lm[lvl]}:${lvl}} - ${msg}`;
+                let string = `${name}:{:${lm[lvl]}:${lvl}} - ${msg}`;
                 return logger[lvl](inter(string));
             }
             else if (lvl === 'fail')

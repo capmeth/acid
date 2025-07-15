@@ -23,13 +23,6 @@ Glob is a string pattern filename matcher.
 All of the multi-file configuration settings use Glob for enhanced file selection. 
 
 
-## [handlebars](https://handlebarsjs.com)
-
-Handlebars is a simple and lightweight templating engine.
-
-Handlebars is used as the built-in renderer for CoBEs.
-
-
 ## [highlightjs](https://highlightjs.org)
 
 HighlightJs is a syntax highlighter for the web.

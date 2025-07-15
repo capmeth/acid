@@ -19,7 +19,8 @@ export default
         [
             'docsite/docs/docsite/sections.md',
             'docsite/docs/docsite/tagging.md',
-            'docsite/docs/docsite/styling.md'
+            'docsite/docs/docsite/styling.md',
+            'docsite/docs/docsite/api.md'
         ],
         sections: 'components'
     },

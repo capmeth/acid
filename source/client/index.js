@@ -5,4 +5,3 @@
 */
 
 export { default as scopes } from './scopes'
-export { default as config } from './config'

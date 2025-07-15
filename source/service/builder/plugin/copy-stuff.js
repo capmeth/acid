@@ -1,7 +1,8 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import globit from '#node/globit.js'
-import { inter, is } from '#utils'
+import globit from '#lib/globit.js'
+import pathTransformer from '#lib/path-transformer.js'
+import { ident } from '#utils'
 
 
 export default function ({ specs, rootpath, outpath })
@@ -17,7 +18,7 @@ export default function ({ specs, rootpath, outpath })
         return Promise.all(specs.map(async spec => 
         {
             let files = await globit(spec.files, rootpath);
-            let toDest = getDestFn(spec.to);
+            let toDest = pathTransformer(spec.to) ?? ident;
             let copies = 0;
 
             await Promise.all(files.map(async file => 
@@ -44,28 +45,4 @@ export default function ({ specs, rootpath, outpath })
     }
 
     return plugin;
-}
-
-let getDestFn = spec =>
-{
-    if (is.func(spec)) return spec;
-    if (is.string(spec)) 
-    {        
-        return str => 
-        {
-            let dir = path.dirname(str);
-            let ext = path.extname(str);
-            let name = path.basename(str, ext);
-
-            return inter(spec, { dir, ext, name });
-        }
-    }
-    if (is.array(spec))
-    {
-        let [ search, replace ] = spec;
-        if (is.array(search)) 
-            search = new RegExp(...[].concat(search));
-        return str => str.replace(search, replace || '')
-    }
-    return str => str
 }

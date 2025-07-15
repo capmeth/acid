@@ -15,13 +15,11 @@ export default
     output: "web",
     cobeSpecs: 
     [
-        { types: "handlebars", use: "./extensions/ext-handlebars", mode: "edit" },
-        // { types: "svelte", use: "acid-render-svelte/renderer", mode: "edit" }
+        { types: [ "svelte", "svt" ], use: "svelte-render", mode: "edit" }
     ],
-    parsers: { exts: ".svt", use: "./extensions/ext-jsdoc" },
     hljs: 
     { 
-        languages: 'handlebars'
+        aliases: { jsx: [ 'svelte', 'svt'] }
     },
 
     sections,
@@ -34,16 +32,12 @@ export default
         "region": "Region aware."
     },
 
+    toAssetId: [ [ "^(?:source[/]client[/]components|docsite[/]docs)[/](.+?)[.][^./]+$" ], "$1" ],
     toExampleFile: [ [ "^source[/]client[/](.+?)[.][^./]+$" ], "docsite/docs/$1.md" ],
 
-    importMap:
-    {
-        "#bundle": "./acid-bundle.js",
-        "svelte": "https://esm.sh/svelte@5.34.7",
-        // "svelte/internal/": "https://esm.sh/svelte@5.34.7/es2022/internal/"
-        "svelte/internal/client": "https://esm.sh/svelte@5.34.7/es2022/internal/client.mjs",
-        "svelte/internal/disclose-version": "https://esm.sh/svelte@5.34.7/es2022/internal/disclose-version.mjs",
-        "svelte/internal/flags/legacy": "https://esm.sh/svelte@5.34.7/es2022/internal/flags/legacy.mjs"
+    importMap: 
+    { 
+        "#bundle": "./site-bundle.js"
     },
 
     httpServerPort: 3005,
@@ -56,7 +50,6 @@ export default
             path.join("docsite", "docs", "**", "*.md")
         ] 
     },
-    logger: { level: "test" },
 
     style: [ '#grayscape', 'file:/docsite/acid.style.css' ]
 }

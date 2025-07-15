@@ -1,8 +1,8 @@
 import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
-import { hackson } from '#node/hosted.js'
+import { hackson } from '#lib/hosted.js'
 import { is } from '#utils'
-import createConfig from '../config/index.js'
+import { assign, defaults } from '../config/index.js'
 
 
 /**
@@ -21,7 +21,7 @@ export default async function (dest, options)
         return void 0;
     }
 
-    let { config } = createConfig(options);
+    let { config } = assign(defaults, options);
     let code = content(config)
 
     return fs.writeFile(dest, code, { encoding: 'utf8' });
@@ -35,7 +35,7 @@ ${hackson.type === 'module' ? 'export default' : 'module.exports ='}
     title: ${jss(config.title)},
 
     // generated artifacts location
-    output: ${jss(config.output)},
+    output: ${format(config.output, 1)},
 
     // root directory of project
     root: ${jss(config.root)},
@@ -55,8 +55,14 @@ ${hackson.type === 'module' ? 'export default' : 'module.exports ='}
     // top level section of docsite
     rootSection: ${jss(config.rootSection)},
 
+    // header level depth for table-of-contents
+    tocDepth: ${jss(config.tocDepth)},
+
     // docsite styling
-    theme: 'grayscape',
+    style: ${jss(config.style)},
+
+    // custom asset tags
+    tagLegend: {},
 
     // http-server: keep false to run from CLI
     httpServer: false,

@@ -17,7 +17,7 @@
     @values edit, live, render, static
 -->
 
-<div {id} class="cobe-editor mode-{cbe.mode} lang-{lang}{classes}">
+<div {id} class="cobe-editor mode-{cbe.mode} lang-{cbe.lang}{classes}">
   {#if label}
     <div class="label">{ label }</div>
   {/if}
@@ -40,7 +40,7 @@
         <Button onclick={toggle}>
           <Label id="cobe-button-{show ? 'hide' : 'show'}" />
         </Button>
-        {#if cbe.use}
+        {#if cbe.use && !cbe.demo}
           {#if cbe.edit}
             <Button disabled={!edited} onclick={update}>
               <Label id="cobe-button-update" />
@@ -56,7 +56,7 @@
       <div class="entry">
         <Code 
           bind:code={current} 
-          {lang} 
+          lang={cbe.lang} 
           disabled={copied} 
           {editable} 
           noHighlight={cbe.noHighlight} 
@@ -93,6 +93,7 @@ let setup = (mode, lang) =>
 {
     let data = { ...cobeSpecs['*'], ...cobeSpecs[lang] };
 
+    data.lang = lang;
     // when rendering function is available behavior mode can be set
     // 1) locally (on info-string of code block)
     // 2) contextually (provided by document front-matter)
@@ -111,16 +112,17 @@ let setup = (mode, lang) =>
 let { id, ...args } = $props();
 let { code, label, lang, mode } = { ...ids[id], ...args };
 
-lang ||= 'default';
 code = code.trim();
 
-let cbe = $state(setup(mode, lang));
+let { compose } = context;
+
+let cbe = $state(setup(mode, lang || 'default'));
 let error = $state(null);
 // for element bindings
 let display = $state();
 let copied = $state(false);
 let copiable = $derived(dom.clipboard.canCopy && current && !copied);
-let editable = $derived(cbe.use && !cbe.static);
+let editable = $derived(cbe.use && !cbe.static && !cbe.demo);
 // code display state w/toggle
 let show = $state(cbe.static || cbe.noHide);
 // code input current and previous state
@@ -149,7 +151,7 @@ let update = () =>
     if (display && edited)
     {
         error = null;
-        context.compose(lang, prev = current, display).catch(handleError);
+        compose(cbe.lang, prev = current, display).catch(handleError);
     }
 }
 let onkeydown = evt =>

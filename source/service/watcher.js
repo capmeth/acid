@@ -1,5 +1,5 @@
 import chokidar from 'chokidar'
-import globit from '#node/globit.js'
+import globit from '#lib/globit.js'
 import { debounce } from '#utils'
 
 
@@ -26,7 +26,7 @@ export default function(config, omits = [])
                 watcher.on('change', bounce);
                 watchers.push(watcher);
 
-                log.test(`added to watch list: ${file}`);
+                log.test(`watching file ${file}`);
             });
 
             log.info(`watching ${files.length} files for changes...`);
@@ -45,5 +45,5 @@ export default function(config, omits = [])
 
     let watching = () => watchers.length > 0
 
-    return { close, start, watching };
+    return { close, enabled, start, watching };
 }

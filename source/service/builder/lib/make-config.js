@@ -1,4 +1,4 @@
-import { proxet } from '#utils'
+import { mapExtensions, proxet } from '#utils'
 
 
 let jss = value => JSON.stringify(value);
@@ -11,13 +11,13 @@ let jss = value => JSON.stringify(value);
 */
 export default function(config, sections)
 {
-    let { httpServer, output, watch } = config;
+    let { cobeSpecs, httpServer, output, watch } = config;
 
     let lines = [];
     let cfg = proxet({}, name => jss(config[name]));
 
     lines.push(`import { kebabCase } from 'change-case'`);
-    lines.push(`import renderExts from '#temp/renderer-exts'`);
+    lines.push(`import { mapExtensions } from '#utils'`);
 
     lines.push(`export let assetGroups = ${cfg.assetGroups}`);
     lines.push(`export let bundle = ${jss(output.name)}`);
@@ -36,7 +36,7 @@ export default function(config, sections)
     lines.push(`export let sections = ${jss(sections)}`);
 
     lines.push(`export let ns = (...args) => kebabCase([ namespace, ...args ].join(' '))`);
-    lines.push(`export let cobeSpecs = renderExts;`);
+    lines.push(`export let cobeSpecs = await mapExtensions(${jss(cobeSpecs)})`);
 
     return lines.join('\n');
 }

@@ -23,38 +23,33 @@ import pluginCopyStuff from './plugin/copy-stuff.js'
 import pluginEmitAsset from './plugin/emit-asset.js'
 import pluginScopedStyles from './plugin/scoped-styles.js'
 import pluginVirtualFile from './plugin/virtual-file.js'
-import virtualFiles from './lib/virtual-files.js'
 
 
 export default function(config, loaded, styles)
 {
     let { copy, output, root } = config;
     let { sections, files, blocks } = loaded;
-
     let outpath = path.join(root, output.dir);
-    let acid = {};
 
-    // Input/Output
-    acid.input = 
+    let main = {};
+
+    main.input = 
     { 
         [`${output.name}-docsite`]: path.join(paths.client, 'app.js'),
         [`${output.name}-examples`]: './examples.json',
-        // TODO: make this input a separate build
-        'acid-bundle': path.join(paths.client, 'index.js')
+        [`${output.name}-svelte-render`]: path.join(paths.extensions, 'svelte.js')
     };
 
-    acid.output =
-    {
-        dir: outpath,
-        format: 'esm',
-        banner: banner(config.title)
+    main.output =
+    { 
+        dir: outpath, 
+        format: 'esm', 
+        banner: banner(config.title) 
     };
 
-    // External
-    acid.external = [ /^https:\/\//, '#bundle' ];
+    main.external = [ 'rollup', /^svelte/ ];
 
-    // Plugins
-    acid.plugins = 
+    main.plugins = 
     [
         pluginVirtualFile(
         { 
@@ -63,7 +58,6 @@ export default function(config, loaded, styles)
             './style/main.css': styles.root || '',
             ...files,
             '../markdown/index.js' : makeExports(Object.keys(files)),
-            ...virtualFiles
         }),
         pluginAlias(
         {
@@ -74,13 +68,6 @@ export default function(config, loaded, styles)
                 '#frend': paths.client, // `#client` conflicts with svelte internals
                 '#temp': paths.temp,
                 '#utils': paths.shared,
-
-                // Something is a bit off when compiling svelte components from
-                // a string as the compiler seems to look for "svelte/internal" 
-                // in the wrong place. This causes rollup to assume it is an 
-                // external dependency.  Here, we re-map it correctly to avoid 
-                // warnings and runtime errors
-                // 'svelte/internal': path.join(paths.root, 'node_modules', 'svelte', 'src', 'internal')
             }
         }),
         pluginNodeResolve({ extensions: [ '.css', '.js', '.json', '.svt' ], browser: true }),
@@ -99,12 +86,10 @@ export default function(config, loaded, styles)
         pluginAnalyzer({ onAnalysis: logStats, skipFormatted: true })
     ];
 
-    // Watch Options
-    acid.watch = { buildDelay: 50 };
+    main.watch = { buildDelay: 50 };
 
-    // Logging
-    acid.logLevel = 'debug';
-    acid.onLog = logHandler;
+    main.logLevel = 'debug';
+    main.onLog = logHandler;
 
-    return acid;
+    return [ main ];
 }

@@ -2,15 +2,14 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 import builder from './builder/index.js'
-import extender from './extender/index.js'
 import loader from './loader/index.js'
-import logger from './logger.js'
 import server from './server/index.js'
 import socketer from './socketer.js'
 import styler from './styler/index.js'
 import watcher from './watcher.js'
 
 import { is } from '#utils'
+import { required } from '../config/index.js'
 
 
 /**
@@ -31,77 +30,59 @@ import { is } from '#utils'
       Configuration options.
     @param { string } file
       Configuration filename (for watch exclusion).
-    @param { function } callback
-      Called when the config file changes.
     @return { object }
       Services object.
 */
-export default function(config, file, callback)
+export default function(config, file)
 {
     let isFile = is.string(file) && fs.existsSync(file);
+    let omits = isFile ? [ file ] : [];
 
-    callback ??= () => void 0
+    required(config);
 
-    global.log = logger(config);
-
-    /*
-        Initializes the backend application and returns a promise that resolves
-        to functions that start and stop the app.
-    */
-    let controller = () =>
+    let run = async bool =>
     {
-        let cwatch = null;
+        if (bool) config.httpServer = true, config.watch = true;
 
-        let { bundle, extend, notify, serve, socket, update, watch } = createServices();
+        let svc = createServices(config, omits);
 
-        let start = async () =>
+        let exec = async () => 
         {
-            if (config.watch.enabled && isFile)
-            {
-                log.info(`watching config file ({:whiteBright:${file}}) for changes...`);
-                cwatch = fs.watch(file, callback);
-            }
-
-            return extend()
-                .then(() => Promise.all([ bundle(), watch.start(update) ]).then(serve.start).then(notify));
+            await Promise.all([ svc.bundle(), svc.watch.start(svc.update) ]).then(svc.serve.start);
         }
 
-        let stop = async () => Promise.all([ serve.stop(), cwatch?.close(), watch.close(), socket.close() ])
-        
-        let isActive = () => serve.serving() || watch.watching()
-
-        return { isActive, start, stop };
+        let stop = async () => 
+        {
+            await Promise.all([ svc.serve.stop(), svc.watch.close(), svc.socket.close() ]);
+        }
+    
+        return exec().then(svc.notify).then(() => stop);
     }
 
-    let createServices = () =>
-    {
-        let service = {};
+    return { run };
+}
 
-        service.build = builder(config);
-        service.extend = extender(config);
-        service.load = loader(config);
-        service.serve = server(config);
-        service.socket = socketer(config);    
-        service.style = styler(config);
-        service.watch = watcher(config,
-        [ 
-            // omit config file (its looked after separately)
-            ...(isFile ? [ file ] : []),
-            // always omit `output.dir`, of course
-            path.join(config.output.dir, '**'),
-        ]);
+function createServices(config, watchOmits)
+{
+    let service = {};
 
-        // derived services
-        service.notify = () => service.socket.send('reload')
-        service.prepare = () => Promise.all([ service.load(), service.style() ])
-        service.bundle = () => service.prepare().then(items => service.build(...items))
-        service.update = () => service.bundle().then(service.notify)
+    watchOmits.push(path.join(config.output.dir, '**'));
 
-        // post initialization ops
-        service.serve.onError(err => log.fail(err));
+    service.build = builder(config);
+    service.load = loader(config);
+    service.serve = server(config);
+    service.socket = socketer(config);    
+    service.style = styler(config);
+    service.watch = watcher(config, watchOmits);
 
-        return service;
-    }
+    // derived services
+    service.notify = () => service.socket.send('reload')
+    service.prepare = () => Promise.all([ service.load(), service.style() ])
+    service.bundle = () => service.prepare().then(items => service.build(...items))
+    service.update = () => service.bundle().then(service.notify)
 
-    return controller();
+    // post initialization ops
+    service.serve.onError(err => log.fail(err));
+
+    return service;
 }

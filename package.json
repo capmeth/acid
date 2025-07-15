@@ -7,8 +7,10 @@
     "license": "MIT",
     "main": "main.js",
     "type": "module",
+    "homepage": "https://capmeth.github.io/acid",
     "private": true,
     "scripts": {
+        "bundle": "rollup -c build/rollup.config.js",
         "lint": "eslint -c lint/eslint.config.js",
         "test": "c8 -c test/c8.config.json ava --config test/ava.config.js"
     },
@@ -22,7 +24,6 @@
         "workbench"
     ],
     "dependencies": {
-        "@rollup/browser": "^4.43.0",
         "@rollup/plugin-alias": "^5.1.1",
         "@rollup/plugin-commonjs": "^28.0.2",
         "@rollup/plugin-inject": "^5.0.5",
@@ -35,7 +36,6 @@
         "commander": "^13.0.0",
         "deepmerge": "^4.3.1",
         "glob": "^11.0.1",
-        "handlebars": "^4.7.8",
         "js-yaml": "^4.1.0",
         "object-path": "^0.11.8",
         "rollup": "^4.43.0",
@@ -55,7 +55,8 @@
     },
     "imports": {
         "#docsite/*": "./docsite/*",
-        "#node/*": "./source/shared/node/*",
+        "#exts/*": "./extensions/*.js",
+        "#lib/*": "./source/shared/lib/*",
         "#packson": "./package.json",
         "#paths": "./paths.js",
         "#source/*": "./source/*",
@@ -63,11 +64,10 @@
         "#utils": "./source/shared/index.js"
     },
     "exports": {
-        ".": "./source/entry.js",
-        "./*": "./extensions/*.js"
+        ".": "./source/entry.js"
     },
     "bin": {
-        "acid": "./run.js"
+        "acid": "./source/cli/main.js"
     },
     "repository": {
         "type": "git",

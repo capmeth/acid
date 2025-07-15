@@ -120,10 +120,11 @@ style: [ '#grayscape', 'file:/path/to/my/stylesheet.css' ]
 
 Multiple sheets are processed from left to right, with later sheet styles being deeply merged atop former ones.  Once a singular stylesheet has been constructed it is then applied to components as described above.
 
-```handlebars:render label="Scope Classes"
-<ul style="columns:12vw">
-  {{#each scopes}}
-    <li><code>{{this}}</code></li>
-  {{/each}}
+```svelte:render label="Scope Classes"
+import { scopes } from '#bundle';
+<ul style:columns="12vw">
+  {#each scopes as scope}
+    <li><code>{ scope }</code></li>
+  {/each}
 </ul>
 ```
