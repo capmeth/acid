@@ -40,6 +40,33 @@ For example, the below will build and start a server on port 3000.
 acid -s 3000
 ```
 
+
+### `--extension`
+
+Apply an extension using a module specifier with optional parameters.
+
+```shell
+acid run --extension react-extension
+```
+```shell
+acid run -e react-extension
+```
+
+Repeat for as many extensions as needed.
+
+```shell
+acid run -e react-extension -e vue-extension
+```
+
+Pass a config parameter to the extension after the `::` (double colon).
+
+```shell
+acid run -e react-extension::"{\"exts\":[\".jsx\"]}"
+```
+
+The parameter will be JSON parsed so remember to quote and format properly.
+
+
 ### `--log-level`
 
 Logging level for the build process.
@@ -77,7 +104,7 @@ If the config file already exists it **will not** be overwritten.
 
 The following options are avaailable to both `acid` sub-commands.
 
-For config settings not specified, defaults will be used (where applicable).
+These cli options will override defaults or anything set in a config file.
 
 
 ### `--config`
@@ -88,10 +115,10 @@ Specifies the location of the acid config file.
 acid --config path/to/acid.config.js
 ```
 ```shell
-acid -c [path]
+acid -c path/to/acid.config.js
 ```
 
-Replace `[path]` with the path to the config file.  The default for this option is *acid.config.js*.
+The default for this option is *acid.config.js*.
 
 
 ### `--help`
@@ -117,7 +144,7 @@ acid --http-server [port]
 acid -s [port]
 ```
 
-If `httpServer` is activated in configuration then this option serves only to specify the port, and if the port is not specified, `httpServerPort` from configuration is used.
+If `httpServer` is activated in configuration then this option serves only to specify the port.
 
 
 ### `--output-dir`

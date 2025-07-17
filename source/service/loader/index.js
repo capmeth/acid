@@ -143,7 +143,7 @@ export default function(config)
         {
             let { content, path, ...more } = object;
 
-            let apply = (content, abspath) => 
+            let apply = (content) => 
             {
                 let fm = tdContent.parseMeta(content);
 
@@ -151,7 +151,7 @@ export default function(config)
                 {
                     if (fm.cobeMode) more.cobeMode = fm.cobeMode;
                     if (fm.title) more.title ||= fm.title;
-                    if (fm.tags) more.tags ||= fm.tags.split(/\s*,\s*/);
+                    if (fm.tags) more.tags ||= is.array(fm.tags) ? fm.tags : fm.tags.split(/\s*,\s*/);
                     if (fm.tocDepth || fm.tocDepth === 0) more.tocDepth = fm.tocDepth;
                 }
                 more.title ||= capitalCase(np.basename(path, np.extname(path)));
@@ -164,14 +164,14 @@ export default function(config)
                 return { ...more, content: tdContent.parse(content, { vars }).doc };
             }
             // assume content already on the object is markdown
-            if (content) return apply(content, '/content');
+            if (content) return apply(content);
 
             if (is.string(path))
             {
                 let abspath = np.resolve(root, path);
                 
                 if (existsSync(abspath))
-                    return fs.readFile(abspath, 'utf8').then(content => apply(content, abspath));
+                    return fs.readFile(abspath, 'utf8').then(apply);
             }
 
             return more;

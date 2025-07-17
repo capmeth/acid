@@ -5,8 +5,9 @@ import rollConfig from './rollup.config.js'
 /**
     Creates a dynamic importer resolved from `root` path.
 
-    This uses rollup to create a module.  As such, it is limited to basic esm
-    and commonjs resolution (js only).
+    The returned function uses rollup to create a module that exports an 
+    absolute path derived from the given module specifier.  That path is
+    then used for a dynamic import.
 
     @param { string } root
       Path from which to resolve imports.
@@ -22,7 +23,7 @@ export default function (root)
         if (!mahjools[spec])
         {
             log.test(`importing extension ${spec}...`);
-            mahjools[spec] = await rollup.gen(rollConfig(root, spec));
+            mahjools[spec] = await rollup.gen(rollConfig(root, spec)).then(mod => import(mod.default));
         }
         return mahjools[spec];
     }

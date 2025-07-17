@@ -66,7 +66,6 @@ export default function(config, loaded, styles)
                 '#comps': path.join(paths.client, 'components'),
                 '#config': 'docsite-config',
                 '#frend': paths.client, // `#client` conflicts with svelte internals
-                '#temp': paths.temp,
                 '#utils': paths.shared,
             }
         }),

@@ -74,7 +74,7 @@
 
 <script module>
 import { onMount } from 'svelte'
-import { cobeSpecs } from '#config'
+import { cobe } from '#config'
 import { context, dom, sinfo } from '#frend/lib'
 import { ids } from '#frend/lib/code-blocks'
 
@@ -91,7 +91,7 @@ let contextMode = () =>
 
 let setup = (mode, lang) => 
 {
-    let data = { ...cobeSpecs['*'], ...cobeSpecs[lang] };
+    let data = { ...cobe['*'], ...cobe[lang] };
 
     data.lang = lang;
     // when rendering function is available behavior mode can be set

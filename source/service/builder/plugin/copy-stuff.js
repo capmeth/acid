@@ -15,15 +15,16 @@ export default function ({ specs, rootpath, outpath })
     {
         if (error) return;
 
-        return Promise.all(specs.map(async spec => 
+        let copies = 0;
+
+        await Promise.all(specs.map(async spec => 
         {
             let files = await globit(spec.files, rootpath);
             let toDest = pathTransformer(spec.to) ?? ident;
-            let copies = 0;
 
             await Promise.all(files.map(async file => 
             {
-                let from = path.join(rootpath, file)
+                let from = path.resolve(rootpath, file)
                 let to = path.resolve(outpath, toDest(file) || file);
                 // do not copy if file is out of bounds
                 if (to.startsWith(outpath))
@@ -39,9 +40,9 @@ export default function ({ specs, rootpath, outpath })
                     log.warn(`copying {:whiteBright:${file}} was skipped as destination is outside ${outpath}`)
                 }
             }));
-
-            if (copies > 0) log.info(`{:whiteBright:${copies} additional file(s)} were copied into ${outpath}`);
         }));
+
+        if (copies > 0) log.info(`{:whiteBright:${copies} additional file(s)} were copied into ${outpath}`);
     }
 
     return plugin;

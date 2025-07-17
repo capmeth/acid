@@ -1,4 +1,4 @@
-import { mapExtensions, proxet } from '#utils'
+import { proxet } from '#utils'
 
 
 let jss = value => JSON.stringify(value);
@@ -11,7 +11,7 @@ let jss = value => JSON.stringify(value);
 */
 export default function(config, sections)
 {
-    let { cobeSpecs, httpServer, output, watch } = config;
+    let { cobe, httpServer, output, watch } = config;
 
     let lines = [];
     let cfg = proxet({}, name => jss(config[name]));
@@ -36,7 +36,7 @@ export default function(config, sections)
     lines.push(`export let sections = ${jss(sections)}`);
 
     lines.push(`export let ns = (...args) => kebabCase([ namespace, ...args ].join(' '))`);
-    lines.push(`export let cobeSpecs = await mapExtensions(${jss(cobeSpecs)})`);
+    lines.push(`export let cobe = await mapExtensions(${jss(cobe)})`);
 
     return lines.join('\n');
 }

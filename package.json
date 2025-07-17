@@ -10,7 +10,7 @@
     "homepage": "https://capmeth.github.io/acid",
     "private": true,
     "scripts": {
-        "bundle": "rollup -c build/rollup.config.js",
+        "bundle": "rollup -c docsite/rollup.config.js",
         "lint": "eslint -c lint/eslint.config.js",
         "test": "c8 -c test/c8.config.json ava --config test/ava.config.js"
     },
@@ -20,6 +20,7 @@
         "generator",
         "jsdoc",
         "markdown",
+        "svelte",
         "ui",
         "workbench"
     ],
@@ -29,7 +30,6 @@
         "@rollup/plugin-inject": "^5.0.5",
         "@rollup/plugin-json": "^6.1.0",
         "@rollup/plugin-node-resolve": "^16.0.0",
-        "@rollup/plugin-replace": "^6.0.2",
         "chalk": "^5.4.1",
         "change-case": "^5.4.4",
         "chokidar": "^4.0.3",
@@ -54,13 +54,11 @@
         "sinon": "^21.0.0"
     },
     "imports": {
-        "#docsite/*": "./docsite/*",
         "#exts/*": "./extensions/*.js",
         "#lib/*": "./source/shared/lib/*",
         "#packson": "./package.json",
         "#paths": "./paths.js",
         "#source/*": "./source/*",
-        "#temp/*": "./temp/*",
         "#utils": "./source/shared/index.js"
     },
     "exports": {

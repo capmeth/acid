@@ -13,7 +13,7 @@ export default
     title: "Another Component Interface Documenter (ACID)",
 
     output: "web",
-    cobeSpecs: 
+    cobe: 
     [
         { types: [ "svelte", "svt" ], use: "svelte-render", mode: "edit" }
     ],

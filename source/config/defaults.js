@@ -20,20 +20,11 @@ let config = {};
 config.assetGroups = [ 'documents', 'components' ];
 
 /**
-    Default CoBE configuration.
-*/
-config.cobe =
-{ 
-    noHide: false,
-    noHighlight: false
-};
-
-/**
     CoBE language-type handling specs.
 
     @type { array }
 */
-config.cobeSpecs = [];
+config.cobe = [];
 
 /**
     HighlightJs configuration.
@@ -112,7 +103,7 @@ config.metas =
     @ignore
     @type { string }
 */
-config.namespace = 'acid';
+config.namespace = 'docsite';
 
 /**
     Details for generated output.

@@ -20,9 +20,8 @@ let hljsCdn =
 */
 export default config =>
 {
-    let { cobe, cobeSpecs, hljs, links, metas, output, parsers, scripts } = config;
+    let { hljs, links, metas, output, parsers, scripts } = config;
 
-    cobeSpecs.unshift({ ...cobe, types: '*' });
     parsers.unshift({ types: '*', use: '#exts/jsdoc' });
 
     if (hljs.theme)

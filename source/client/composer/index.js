@@ -1,23 +1,31 @@
-import { cobeSpecs } from '#config'
-import { is, modulize, rollup } from '#utils'
+import { cobe } from '#config'
+import { importString, is, modulize, rollup } from '#utils'
 import rollConfig from './rollup.config.js'
 
 
 export default async function ()
 {
+    // generate import strings
+    await Promise.all(Object.keys(cobe).map(async lang => 
+    {
+        let { imports } = cobe[lang];
+        imports = await Promise.all(Object.entries({ ...imports }).map(entry => importString(...entry)));
+        cobe[lang].imports = imports.join('\n');
+    }));
+
     return async function(lang, source, el)
     {
-        let { use } = cobeSpecs[lang];
+        let { imports, use } = cobe[lang];
 
         if (source && is.func(use?.render))
         {
             let build = async code => rollup.gen(rollConfig(code, lang, use.config))           
-            return use.render({ source, partition, build, modulize, el });
+            return use.render({ source, partition, imports, build, modulize, el });
         }
     }    
 }
 
-let partRe = /^\s*(?<tmp><.+>)|(?<tmp><.+>)\s*$/s;
+let partRe = /(?:^|\n)\s*(?<tmp><.+)$/s;
 /**
     Converts source to a string object and attaches `template` and `code`
     partitions (if possible).
@@ -30,7 +38,7 @@ let partRe = /^\s*(?<tmp><.+>)|(?<tmp><.+>)\s*$/s;
 let partition = source =>
 {
     let result = source.match(partRe);
-    let template = result ? result.groups.tmp : '';
+    let template = result ? result.groups.tmp.trim() : '';
     let code = result ? source.replace(template, '').trim() : '';
 
     return { code, template };

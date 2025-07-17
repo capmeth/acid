@@ -9,10 +9,10 @@ The docsite allows for markdown code blocks to be rendered to HTML in an interac
 
 A given block could be written in js, vue, react, etc., of course, so we have to tell ACID how to handle the language-type in order to be able to dynamically compile and render components.
 
-We do this via the `cobeSpecs` settings.
+We do this via the `cobe` settings.
 
 ```js:static
-cobeSpecs:
+cobe:
 [
     { types: [ 'js', 'jsx' ], use: [ 'render-ext', [ 10, true ] ], mode: 'static' }
 ]
@@ -94,14 +94,14 @@ Promise rejections in the rendering process will be caught and displayed to the 
 
 # Built-in Svelte Renderer
 
-As ACID is built on Svelte, a dynamic Svelte component renderer is included out-of-the-box (makes sense, right?).
+As ACID is built on Svelte, a dynamic component renderer is included out-of-the-box (makes sense, right?).
 
 It is available as a module named "svelte-render".
 
 In your *acid.config.js* file... you can set it up as a renderer:
 
 ```js
-cobeSpecs:
+cobe:
 [
     { types: [ 'svelte', 'svt' ], use: 'svelte-render', mode: 'edit' }
 ]

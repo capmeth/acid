@@ -10,6 +10,7 @@ let help = (name, value) =>
         {
             case 'and': return (...args) => args.findIndex(x => !x) < 0
             case 'or': return (...args) => args.findIndex(x => x) >= 0
+            case 'not': return arg => !arg
             case 'in': return (...args) => args.findIndex(x => value === x) >= 0
             case 'of': return type => value instanceof type
             case 're': return expr => expr.test(value)

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { Argument, Command, InvalidArgumentError, Option } from 'commander';
+import { Command, InvalidArgumentError, Option } from 'commander';
 import packson from '#packson' with { type: 'json' }
 
 
@@ -10,6 +10,8 @@ export default function (action)
     let optionConfig = new Option('-c, --config [path]', 'path to configuration file')
         .default('acid.config.js');
     let optionOutputDir = new Option('-d, --output-dir <dir>', 'folder to put generated docsite');
+    let optionExtensions = new Option('-e, --extension <ext>', 'extension module specifier and parameters')
+        .argParser(collect());
     let optionLogLevel = new Option('-l, --log-level <lvl>', 'logger severity level');
     let optionOutputName = new Option('-n, --output-name <dir>', 'name/prefix for generated files');
     let optionHttpServer = new Option('-s, --http-server [port]', 'enables docsite server on specified port')
@@ -23,9 +25,10 @@ export default function (action)
     // cmd.name('acid');
 
     cmd.command('run', { isDefault: true })
-        .description('Generates ACID docsite.')
+        .description('Generate ACID docsite.')
         .addOption(optionConfig)
         .addOption(optionOutputDir)
+        .addOption(optionExtensions)
         .addOption(optionLogLevel)
         .addOption(optionOutputName)
         .addOption(optionHttpServer)
@@ -36,7 +39,7 @@ export default function (action)
 
 
     cmd.command('make-config')
-        .description('Generates an ACID config file.')
+        .description('Generate an ACID config file.')
         .addOption(optionConfig)
         .addOption(optionOutputDir)
         .addOption(optionOutputName)
@@ -45,9 +48,6 @@ export default function (action)
         .addOption(optionWatch)
         .addOption(optionTocDepth)
         .action(action.makeConfig);
-
-    // cmd.option('-m, --make-config', 'generate a starter config; use --config to specify target file');
-    // cmd.option('-r, --verify', 'check config file for errors; use --config to specify file location');
 
     cmd.version(`${packson.title} v${packson.version}`, '-v, --version', 'show current version info');
     
@@ -64,3 +64,4 @@ let integerOnly = value =>
     return parsed;
 }
 
+let collect = (array = []) => value => (array.push(value), array)

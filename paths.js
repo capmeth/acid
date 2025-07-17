@@ -7,7 +7,6 @@ paths.coverage = path.join(paths.root, 'coverage');
 paths.extensions = path.join(paths.root, 'extensions');
 paths.modules = path.join(paths.root, 'node_modules');
 paths.source = path.join(paths.root, 'source');
-paths.temp = path.join(paths.root, 'temp');
 paths.test = path.join(paths.root, 'test');
 
 // source paths

@@ -28,13 +28,26 @@ Default mode for for CoBEs embedded in the content.
 cobeMode: demo | edit | live | render | static 
 ```
 
-Unless `static` is forced, only the code block itself can override this.  See config option `cobeSpecs` for more details on CoBE modes.
+Unless `static` is forced, only the code block itself can override this.  See config option `cobe` for more details on CoBE modes.
 
 Example: Set the default CoBE mode to "render" for all code blocks in the file.
 
 ```yaml
 cobeMode: render
 ```
+
+
+## tags
+
+Tags to associate with the document.
+
+```yaml label="spec"
+tags: string | array
+```
+
+Unlike source comment `@tags`, an array can be used here.  Same rules apply.
+
+Please see [tagging docs](document/docsite-tagging) for more details on this.
 
 
 ## title
@@ -90,11 +103,11 @@ let string = "[cobe-mode] is demo, edit, live, render, or static";
 ````
 
 The values available for `cobeMode` are:
-- **static** - just show the code
-- **render**: only show rendered results
 - **demo**: show code and rendered results (no editing)
 - **edit** - code editing with on-demand render
 - **live** - code editing with immediate render
+- **render**: only show rendered results
+- **static** - just show the code
 
 Using the example block above here are examples of each mode.
 

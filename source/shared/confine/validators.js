@@ -2,6 +2,8 @@
 export default
 {
     alphanum: h => h.re(/^[a-z0-9_-]+$/) || h.err('must be alphanumeric (including `_` and `-` characters)'),
+    arrayOrFunctionOrStringOrNull: h => h.or(h.null, h.string, h.func, h.array) ? h.toArray() : 
+        h.err('must be an array or a function or a string or null'),
     arrayOrObject: h => h.object ? h.toArray() : h.err('must be an array or an object'),
     arrayOrObjectOrString: h => h.or(h.string, h.plain, h.array) ? h.toArray() : 
         h.err('must be an array, object, or a string'),
@@ -15,8 +17,11 @@ export default
     functionOrArrayOrNull: h => h.or(h.null, h.func, h.array) || h.err('must be a function or an array or null'),
     functionOrArrayOrStringOrNull: h => h.or(h.null, h.func, h.string, h.array) || 
         h.err('must be a function or an array or a string or null'),
+    functionOrString: h => h.or(h.string, h.func) || h.err('must be a function or a string'),
     zeroPlus: h => h.and(h.number, h.gte(0)) || h.err('must be zero or more'),
     logLevel: h => h.in('fail', 'info', 'off', 'warn', 'test') || h.err('must be a valid enumerated value'),
+    objectOrAny: (...args) => h => h.not(h.undef) ? h.toPlain(...args) : 
+        h.err('cannot be set undefined'),
     objectOrArrayOrString: (...args) => h => h.or(h.string, h.array, h.plain) ? h.toPlain(...args) : 
         h.err('must be an object, array, or a string'),
     objectOrBoolean: (...args) => h => h.or(h.bool, h.plain) ? h.toPlain(...args) : 
@@ -37,6 +42,8 @@ export default
     stringOrNull: h => h.or(h.string, h.null) || h.err('must be a string or null'),
     stringOrObject: h => h.or(h.string, h.plain) || h.err('must be a string or an object'),
     regexOrArrayOrString: h => h.or(h.of(RegExp), h.string, h.array) || 
-        h.err('must be a regular expression, string, or an array'),
+        h.err('must be a regular expression or a string or an array'),
+    regexOrArrayOrStringOrFunctionOrNull: h => h.or(h.of(RegExp), h.string, h.array, h.func, h.null) || 
+        h.err('must be a regular expression or a string or an array or a function or null'),
     unset: h => h.undef || h.err('is not a valid config option')
 }

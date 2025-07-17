@@ -129,3 +129,37 @@ let stop = await app.run(true);
 This activates both the server and watch mode, regardless of config settings.
 
 Note that the `stop` function is always returned regardless of server and watch mode settings.  Calling it will either stop the server if it is running, or do nothing if not.
+
+
+## `app.use()`
+
+Accepts a function that can update or modify configuration settings.
+
+This is the basis for an ACID extension or "plugin".
+
+Here's how it works...
+
+```js
+import acid from '@capmeth/acid'
+import acidReactExt from 'acid-react-extension'
+import acidVueExt from 'acid-vue-extension'
+
+let app = acid();
+
+app.use(acidReactExt, { /* extension config */ });
+app.use(acidVueExt, { /* extension config */ });
+
+app.run();
+```
+
+In the above, `acidReactExt` and `acidVueExt` are functions that accept the current config object, which has defaults, config file settings, and command-line options (if applicable) already loaded.  A second parameter can also be passed, ostensibly as configuration for the extension itself.
+
+The config object itself is a self-managing proxy, so the extension does not need to return anything.
+
+**`extension(config: object, param: any): void`**
+
+Although ACID configuration is not terribly complicated (right?), the idea is that 3rd-party extensions can directly apply their needs to configuration without having to instruct the user how to configure a renderer and/or parser, which URLs to add to scripts, what needs be in the importmaps, etc.  
+
+...Of course, the extension itself may require configuration, so... your mileage may vary.
+
+

@@ -59,10 +59,3 @@ For instance, a "domain" tag with "pricing-data" info would render
 ```
 
 and can be styled via `.element-tag.domain` (*acid.config.js*).
-
-As an example, here's how ACID styles the tags in this documentation.
-
-```handlebars:render
-tc.data = JSON.stringify(bundle.config.style);
-<pre><code>style: {{ data }}</code></pre>
-```
