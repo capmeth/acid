@@ -33,6 +33,10 @@ export default
     number: h => h.number || h.err('must be an number'),
     object: h => h.plain || h.err('must be an object'),
     port: h => h.and(!h.lt(0), !h.gt(65535)) || h.err('must be a valid port number'),
+    regexOrArrayOrString: h => h.or(h.of(RegExp), h.string, h.array) || 
+        h.err('must be a regular expression or a string or an array'),
+    regexOrArrayOrStringOrFunctionOrNull: h => h.or(h.of(RegExp), h.string, h.array, h.func, h.null) || 
+        h.err('must be a regular expression or a string or an array or a function or null'),
     reflags: h => h.or(h.re(/^[dgimsuvy]*$/), h.in(true)) || 
         h.err('must be `true` or contain only regular expression flags'),
     serial: h => h.serial || h.err('must be of serializable type'),
@@ -41,9 +45,6 @@ export default
     stringOrFunction: h => h.or(h.string, h.func) || h.err('must be a string or a function'),
     stringOrNull: h => h.or(h.string, h.null) || h.err('must be a string or null'),
     stringOrObject: h => h.or(h.string, h.plain) || h.err('must be a string or an object'),
-    regexOrArrayOrString: h => h.or(h.of(RegExp), h.string, h.array) || 
-        h.err('must be a regular expression or a string or an array'),
-    regexOrArrayOrStringOrFunctionOrNull: h => h.or(h.of(RegExp), h.string, h.array, h.func, h.null) || 
-        h.err('must be a regular expression or a string or an array or a function or null'),
-    unset: h => h.undef || h.err('is not a valid config option')
+    tag: h => h.re(/^([a-z0-9-]+)(?::([^\s]+))?$/) || h.err('must be a well formed asset tag'),
+    unset: h => h.undef || h.err('is not a valid property')
 }

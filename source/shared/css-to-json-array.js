@@ -3,7 +3,8 @@ import uid from './uid.js'
 
 // not escaped
 let ne = '(?<=(?<!\\\\)(?:\\\\\\\\)*)';
-let quoteRe = new RegExp(`${ne}"((?:${ne}\\\\"|[^"])+)${ne}"`, 'g');
+// let quoteRe = new RegExp(`(${ne}"(?:${ne}\\\\"|[^"])+${ne}")`, 'g');
+let quoteRe = new RegExp(`${ne}"(?:${ne}\\\\"|[^"])+${ne}"|${ne}'(?:${ne}\\\\'|[^'])+${ne}'`, 'g');
 let delimsRe = /[:;{}]/g;
 
 let atRuleRe = /(@\w+)\s+([^;{}]+;)/g;
@@ -39,10 +40,10 @@ export default function (css)
     // 1. remove all comments from the css string
     css = css.replace(commentRe, '');
     // 2. temporarily replace all problematic quoted strings
-    css = css.replace(quoteRe, (m, one) => 
+    css = css.replace(quoteRe, m => 
     {
-        let id = `<<==${uid.hex(one)}==>>`;
-        return one.match(delimsRe) ? (quoteds[id] = one, `"${id}"`) : m;
+        let id = `<<==${uid.hex(m)}==>>`;
+        return m.match(delimsRe) ? (quoteds[id] = jss(m).slice(1, -1), id) : m;
     });
     // 3. insert colons for bodyless at-rules
     css = css.replace(atRuleRe, '$1: $2');
