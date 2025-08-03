@@ -1,7 +1,8 @@
 <!--*
     Filters assets by name, tag, and group.
 
-    @tags group:element, region
+    @tags group:element, page, region
+    
     @property { function } onfilter
       Called with filtering data when filters change.
     @property { boolean } [noTags]
@@ -10,44 +11,39 @@
       Turn off text filtering?
 -->
 
-<div class="element-filters region-{ctx.region}">
-  {#if !noText}
-    <div class="filter text">
-      <Input bind:value={text} placeholder={t('filter-name')} />
-    </div>
-  {/if}
-  <div class="filter groups">
-    <List items={assetGroups}>
-      {#snippet children(group)}
-        <Toggle bind:active={groups[group]} role="checkbox">
-          <Label id="label-{group}" />
-        </Toggle>
-      {/snippet}
-    </List>
-  </div>
-  {#if !noTags && tagnames.length}
-    <div class="filter tags">
-      <List items={tagnames} pred={tagDetails}>
-        {#snippet children({ name, info, desc })}
-          <Toggle bind:active={tags[name]} role="checkbox">
-            <Tag {name} {info} {desc} /> 
-          </Toggle>
-        {/snippet}
-      </List>
-    </div>
-  {/if}
-</div> 
+{#if !noText}
+  <Input bind:value={text} placeholder={t('action-filter-name')} />
+{/if}
+<List items={assetGroups} what="groups-list">
+  {#snippet children(group)}
+    <Toggle bind:active={groups[group]} role="checkbox">
+      <Label id="label-{group}" />
+    </Toggle>
+  {/snippet}
+</List>
+{#if !noTags && tagnames.length}
+  <List items={tagnames} pred={tagDetails} what="tags-list">
+    {#snippet children({ name, info, desc })}
+      <Toggle bind:active={tags[name]} role="checkbox">
+        <Tag {name} {info} {desc} /> 
+      </Toggle>
+    {/snippet}
+  </List>
+{/if}
+<Button action="clear-filters" onclick={clear} />
 
 
 <script module>
 import { storage, t, tagDetails } from '#frend/lib'
 import { assetGroups, tagLegend } from '#config'
 
-import Input from './Input';
-import Label from './Label'
-import List from './List'
-import Tag from './Tag'
-import Toggle from './Toggle'
+import Button from '../element/Button'
+import Input from '../element/Input'
+import Label from '../element/Label'
+import List from '../element/List'
+import Tag from '../element/Tag'
+import Toggle from '../element/Toggle'
+    import { getContext } from 'svelte';
 
 let tagnames = Object.keys(tagLegend);
 
@@ -84,6 +80,8 @@ let stored = toBinder(storage[store]);
 let text = $state(!noText && stored.text || '');
 let tags = $state(!noTags && stored.tags || {}); 
 let groups = $state(stored.groups || {});
+
+let clear = () => (text = '', tags = {}, groups = {})
 
 $effect(() => onfilter(storage[store] = toFilter({ groups, tags, text })));
 </script>

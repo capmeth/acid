@@ -1,0 +1,27 @@
+<!--* 
+    This component exists because `context.region` value is lost when rendering
+    this content directly within a page component.
+
+    @ignore 
+-->
+
+<Card name="filters" store="nav-filters">
+  {#snippet header()}
+    <Title>
+      <Label id="label-filters" />
+    </Title>
+  {/snippet}
+  <Filters store="index-filters" {onfilter} />
+</Card>
+
+
+<script module>
+import Card from '../element/Card'
+import Filters from '../filter/Filters'
+import Label from '../element/Label'
+import Title from '../element/Title'
+</script>
+
+<script>
+let { onfilter } = $props();
+</script>

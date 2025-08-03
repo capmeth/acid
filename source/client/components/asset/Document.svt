@@ -8,26 +8,31 @@
 -->
 
 <div class="asset-document">
-  <Title>{ title }</Title>
-  <Crumbs sect={section.name} />
-  <List items={tags} pred={tagDetails} what="tags-list">
-    {#snippet children(data)}
-      <Tag {...data} />    
-    {/snippet}
-  </List>
+  {#if tags?.length}
+    <Card name="tags" store="document-tags">
+      {#snippet header()}
+        <Label id="label-tags" />          
+      {/snippet}
+      <List items={tags} pred={tagDetails} what="tags-list">
+        {#snippet children(data)}
+          <Tag {...data} />    
+        {/snippet}
+      </List>
+    </Card>
+  {/if}
 </div>
 
 
 <script module>
 import { sinfo, tagDetails } from '#frend/lib'
 
-import Crumbs from '../nav/Crumbs'
+import Card from '../element/Card'
+import Label from '../element/Label'
 import List from '../element/List'
 import Tag from '../element/Tag'
-import Title from '../element/Title'
 </script>
 
 <script>
 let { uid } = $props();
-let { title, section, tags } = sinfo.asset(uid);
+let { tags } = sinfo.asset(uid);
 </script>

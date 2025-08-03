@@ -4,43 +4,24 @@
     Nothing is rendered if specified `mcid` is not mapped to a document 
     component.
 
-    @tags group:element, region
+    @tags group:element, page, region
+
     @property { string } [mcid]
       Markdown content id of a pre-generated component.
-    @property { number } tocDepth
-      Table of Contents header depth (0-6).  Specify 0 for no ToC.
 -->
 
 {#if Markup}
-  <section class="element-article region-{ctx.region}">
-    <article id={mcid} data-markup>
-      <Markup />
-    </article>
-    {#if tocDepth > 0}
-      <aside class="sidebar">
-        <Toc {tree} />
-      </aside>
-    {/if}
-  </section>
+  <article id={mcid} class="element-article page-{ctx.page} region-{ctx.region} markup">
+    <Markup />
+  </article>
 {/if}
 
 
 <script module>
-import { headerTree } from '#frend/lib'
 import * as markdown from '../markdown/index.js'
-
-import Toc from './Toc'
 </script>
 
 <script>
-let { mcid, tocDepth } = $props();
+let { mcid } = $props();
 let Markup = markdown[mcid];
-
-let tree = $state();
-
-$effect(() => 
-{
-    let base = document.querySelector(`#${mcid}`);
-    tree = base ? headerTree(base, tocDepth) : null;
-});
 </script>

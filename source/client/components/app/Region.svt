@@ -1,14 +1,15 @@
 <!--*
     Sets a region id in the context.
 
-    @tags group:app
-    @property { string } name
+    @tags group:app, page
+
+    @property { string } [name]
       Region id
-    @property { string } tag
+    @property { string } [tag="div"]
       HTML tag name to render.
 -->
 
-<svelte:element this={tag} class="app-region region-{name}">
+<svelte:element this={tag} class="app-region page-{ctx.page} region-{name}">
   <div class="liner">
     {@render children()}
   </div>
@@ -18,4 +19,5 @@
 <script>
 let { name, tag, children } = $props();
 ctx.region = name;
+tag ||= 'div'
 </script>

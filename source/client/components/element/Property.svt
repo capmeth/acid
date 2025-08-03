@@ -14,18 +14,18 @@
 <div class="element-property" class:required>
   <div class="name">{ name }</div>
   <div class="type">{ type || 'unknown' }</div>
-  <div class="description" data-markup>
+  <div class="description markup">
     {#if description}
       {@html description}
     {:else}
       <p>
-        <em><Label id="no-comments" item="property" /></em>
+        <em><Label id="msg-no-comments" item="property" /></em>
       </p>
     {/if}  
   </div>
   {#if values?.length}
     <div class="values">
-      <Label id="property-values" />
+      <Label id="label-accept-values" />
       <List items={values} what="values-list">
         {#snippet children(value)}
           <code>{ value }</code>
@@ -35,7 +35,7 @@
   {/if}
   {#if fallback}
     <div class="default">
-      <Label id="property-default" />
+      <Label id="label-default-value" />
       <span>{ fallback }</span>
     </div>
   {/if}

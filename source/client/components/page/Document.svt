@@ -8,20 +8,23 @@
       Current document asset on display.
 -->
 
-{@render leader(leaderContent)}
-{#snippet leaderContent()}
+{@render pageContent({ nav, leader, primary })}
+
+{#snippet leader()}
+  <Title>{ asset.title }</Title>
+  <Crumbs {sect} />
   <Document {uid} />
 {/snippet}
 
-{@render main(mainContent)}
-{#snippet mainContent()}
-  <Article mcid={asset.content} tocDepth={asset.tocDepth} />
+{#snippet primary()}
+  <Article {mcid} />
 {/snippet}
 
-{@render nav(navContent)}
-{#snippet navContent()}
+{#snippet nav()}
+  <Tree />
+  <Content sel="#{mcid}" tocDepth={asset.tocDepth} />
+  <Assets group="documents" />
   <Primary />
-  <Single {sect} />
 {/snippet}
 
 
@@ -29,17 +32,21 @@
 import { context, sinfo, webpage } from '#frend/lib'
 
 import Article from '../element/Article'
+import Assets from '../nav/Assets'
+import Content from '../nav/Content'
+import Crumbs from '../nav/Crumbs'
 import Document from '../asset/Document'
 import Primary from '../nav/Primary'
-import Single from '../nav/Single'
+import Title from '../element/Title'
+import Tree from '../nav/Tree'
 </script>
 
 <script>
-let { leader, main, nav, uid } = $props();
-context.page = 'document';
+let { pageContent, uid } = $props();
 
 let asset = sinfo.asset(uid);
 let sect = asset.section.name;
+let mcid = asset.content;
 context.section = sect;
 context.asset = asset.uid; 
 

@@ -8,20 +8,21 @@
       Current component asset on display.
 -->
 
-{@render leader(leaderContent)}
-{#snippet leaderContent()}
+{@render pageContent({ nav, leader, primary })}
+
+{#snippet leader()}
+  <Title>{ asset.title }</Title>
   <Component {uid} />
 {/snippet}
 
-{@render main(mainContent)}
-{#snippet mainContent()}
+{#snippet primary()}
   <Article mcid={asset.content} />
 {/snippet}
 
-{@render nav(navContent)}
-{#snippet navContent()}
+{#snippet nav()}
+  <Tree />
+  <Assets group="components" />
   <Primary />
-  <Single {sect} />
 {/snippet}
 
 
@@ -29,14 +30,15 @@
 import { context, sinfo, webpage } from '#frend/lib';
 
 import Article from '../element/Article'
+import Assets from '../nav/Assets'
 import Component from '../asset/Component'
 import Primary from '../nav/Primary'
-import Single from '../nav/Single'
+import Title from '../element/Title'
+import Tree from '../nav/Tree'
 </script>
 
 <script>
-let { leader, main, nav, uid } = $props();
-context.page = 'component';
+let { pageContent, uid } = $props();
 
 let asset = sinfo.asset(uid);
 let sect = asset.section.name;

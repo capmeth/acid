@@ -8,37 +8,43 @@
 -->
 
 <div class="asset-component">
-  <Title>{ title }</Title>
-  <Crumbs sect={section.name} />
-  <List items={tags} pred={tagDetails} what="tags-list">
-    {#snippet children(data)}
-      <Tag {...data} />    
+  <Card name="description" store="component-description" markup>
+    {#snippet header()}
+      <Label id="label-description" />         
     {/snippet}
-  </List>
-  <div class="description" data-markup>
     {#if description}
       {@html description}
     {:else}
       <p>
-        <em><Label id="no-comments" item="component" /></em>
+        <em><Label id="msg-no-comments" item="component" /></em>
       </p>
     {/if}  
-  </div>
+  </Card>
+  {#if tags?.length}
+    <Card name="tags" store="component-tags">
+      {#snippet header()}
+        <Label id="label-tags" />          
+      {/snippet}
+      <List items={tags} pred={tagDetails} what="tags-list">
+        {#snippet children(data)}
+          <Tag {...data} />    
+        {/snippet}
+      </List>
+    </Card>
+  {/if}
   {#if properties?.length}
-    <div class="properties">
-      <Toggle bind:active={showProps} store="showProps" role="switch">
-        <Label id="label-props" />
-      </Toggle>
-      {#if showProps}
-        <List items={properties} what="props-list">
-          {#snippet children(prop)}
-            {#if !prop.ignore}
-              <Property {...prop} />
-            {/if}                  
-          {/snippet}
-        </List>
-      {/if}
-    </div>
+    <Card name="props" store="component-props">
+      {#snippet header()}
+        <Label id="label-props" />          
+      {/snippet}
+      <List items={properties} what="props-list">
+        {#snippet children(prop)}
+          {#if !prop.ignore}
+            <Property {...prop} />
+          {/if}                  
+        {/snippet}
+      </List>
+    </Card>
   {/if}  
 </div>
 
@@ -46,18 +52,16 @@
 <script module>
 import { sinfo, tagDetails } from '#frend/lib';
 
-import Crumbs from '../nav/Crumbs'
+import Card from '../element/Card'
 import Label from '../element/Label'
 import List from '../element/List'
 import Property from '../element/Property'
 import Tag from '../element/Tag'
-import Title from '../element/Title'
-import Toggle from '../element/Toggle'
 </script>
 
 <script>
 let { uid } = $props();
 
-let { title, description, props: properties, section, tags } = sinfo.asset(uid);
+let { description, props: properties, tags } = sinfo.asset(uid);
 let showProps = $state();
 </script>

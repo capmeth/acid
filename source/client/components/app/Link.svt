@@ -4,7 +4,7 @@
     If `params` contains a "uid", a link to the asset page is generated
     automatically.
 
-    @tags group:app, region
+    @tags group:app, page, region
 
     @property { string } to
       Route name.
@@ -17,7 +17,7 @@
       Additional parameters for the route.
 -->
 
-<a class="app-link region-{ctx.region} {to}" class:current {href} {title} {onclick}>
+<a class="app-link page-{ctx.page} region-{ctx.region} {to}" class:current {href} {title} {onclick}>
   <span>{@render children()}</span>
 </a>
 
@@ -33,17 +33,18 @@ let params = { ...args };
 
 if (to === 'section')
 { 
+    params.sect = sinfo(params.sect).name;
     // root is a section but displayed by home route
     if (params.sect === sinfo.root.name) 
     {
         to = 'home';
-        title ||= 'Go to home page.';
+        title ||= 'Homepage';
         current ??= context.section === 'home';
     }
     else
     {
-        let { title, titlePath } = sinfo(params.sect);
-        title ||= `Go to ${titlePath.join('/')} section.`;
+        let { titlePath } = sinfo(params.sect);
+        title ||= `section: ${titlePath.slice(1).join('/')}`;
         current ??= context.section === params.sect;
     }
 }
@@ -51,13 +52,13 @@ else if (params.uid)
 {
     let asset = sinfo.asset(params.uid);
     to = asset.type;
-    title ||= `Go to ${asset.section.titlePath.join('/')}::${asset.title} ${asset.type}.`
+    title ||= `${asset.type}: ${asset.section.titlePath.slice(1).join('/')}/${asset.title}`
     current ??= context.asset === asset.uid;
     params.uid = asset.uid;
 }
 else
 {
-    title ||= `Go to ${to} page.`
+    title ||= to;
 }
 
 href ||= to && context.router.toNavLink(to, params) || '##';

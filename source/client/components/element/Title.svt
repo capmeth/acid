@@ -1,10 +1,10 @@
 <!--*
     Renders content as a title.
 
-    @tags group:element, region
+    @tags group:element, page, region
 -->
 
-<div class="element-title region-{ctx.region}"> 
+<div class="element-title page-{ctx.page} region-{ctx.region}"> 
   {@render children()}
 </div>
 

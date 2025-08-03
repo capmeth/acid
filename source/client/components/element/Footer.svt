@@ -1,0 +1,15 @@
+<!--*
+    A footer for the docsite.
+
+    @tags group:element
+-->
+
+{#if footer}
+  <div class="element-footer">
+    {@html footer}
+  </div>
+{/if}
+
+<script module>
+import { footer } from '#config'
+</script>

@@ -2,15 +2,28 @@
     Renders a table-of-contents (ToC).
 
     @tags group:element
-    @property { object } tree
-      Hierarchical header tree to render.
+
+    @property { function } [content]
+      Receives the snippet to render ToC content.
+    @property { string } sel
+      Selector of the root element in which to create a ToC from.
+    @property { number } tocDepth
+      ToC header depth (0-6).  Specify 0 for no ToC.
 -->
 
 {#if tree}
+  {#if content}
+    {@render content(render)}
+  {:else}
+    {@render render()}
+  {/if}
+{/if}
+
+{#snippet render()}
   <div class="element-toc">
     {@render multi(tree.heads)}  
-  </div>
-{/if}
+  </div>  
+{/snippet}
 
 {#snippet single({ id, title, heads })}
   {#if id}
@@ -33,16 +46,29 @@
 
 
 <script module>
+import { headerTree } from '#frend/lib'
+
 import Link from '../app/Link'
 import List from './List'
 </script>
 
 <script>
-let { tree } = $props();
+let { content, sel, tocDepth } = $props();
+let tree = $state();
+
+// Somehow this component's rendering screws with the context.
+// Context must be reset here or it will be wrong in child components.
+ctx.region = ctx.region;
 
 let doClick = (evt, id) =>
 {
     document.getElementById(id)?.scrollIntoView();
     evt.preventDefault();
 }
+
+$effect(() => 
+{
+    let base = document.querySelector(sel);
+    tree = base ? headerTree(base, tocDepth) : null;
+});
 </script>

@@ -1,36 +1,61 @@
 <!--*
-    Generates navigation for the assets in a section.
-
-    Nothing is rendered if filtering results in an empty asset list.
+    Generates asset tree for a section, its parent, and its sub-sections.
 
     @tags group:nav, no-style
-    @property { string } [children]
-      Content to be rendered with the list.
-    @property { boolean } [hide]
-      Hide the list?
-    @property { ... any } [filters]
-      Remaining properties are asset filters.
+
+    @property { string } [sect]
+      Name of the section to be rendered.
 -->
 
-{@render children?.(assets.length, asset.ids.length)}
-<List items={assets} {hide}>
-  {#snippet children(uid)}
-    <Link {uid}>{ sinfo.asset(uid).title }</Link>
-  {/snippet}
-</List>
+{#if hasAssets(section)}
+  <Card name={group} store="nav-{group}">
+    {#snippet header()}
+      <Title>
+        <span>{ t(`label-${group}`) }</span>
+      </Title>
+    {/snippet}
+    {@render listAssets(section[group])}
+    {@render listSections(section.sections)}
+  </Card>
+{/if}
+
+{#snippet listSections(items)}
+  <List {items} {pred} what="sections">
+    {#snippet children(sect)}
+      <Link to="section" {sect}>{ sect.title }</Link>
+      {@render listAssets(sect[group])}
+      {@render listSections(sect.sections)}
+    {/snippet}
+  </List>  
+{/snippet}
+
+{#snippet listAssets(items)}
+  <List {items} pred={sinfo.asset} what="{group}-list">
+    {#snippet children(asset)}
+      <Link uid={asset.uid}>{ asset.title }</Link>
+    {/snippet}
+  </List>
+{/snippet}
 
 
 <script module>
-import { naf, sinfo } from '#frend/lib'
+import { sinfo, t } from '#frend/lib'
 
+import Card from '../element/Card'
 import Link from '../app/Link'
 import List from '../element/List'
-
-let { asset } = sinfo;
+import Title from '../element/Title'
 </script>
 
 <script>
-let { hide, sort, children, ...filters } = $props();
-let assets = asset.filter(naf(filters));
-if (sort) assets.sort(asset.sort.title);
+let { group, sect = sinfo.root.name } = $props();
+let section = sinfo(sect);
+
+let hasAssets = section => !!section[group]?.length || !!section.descendants[group]?.length
+
+let pred = sect =>
+{
+    let section = sinfo(sect);
+    if (hasAssets(section)) return section;
+}
 </script>

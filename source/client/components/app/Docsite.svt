@@ -2,38 +2,55 @@
 	  Root component for an ACID docsite.
 -->
 
-<div class="app-docsite {route}">
-  <Region name="banner" tag="header">
-    <Title>
-      <Link to="home">{ title }</Link>
-    </Title>
-    <div class="version-info">{ version }</div>
-  </Region>
+<div class="app-docsite page-{route}">
+  {#if logo || title || version}
+    <Region name="banner" tag="header">
+      {#if logo}
+        <Link to="home">
+          <img class="logo" src={logo} alt={t('label-logo', { title })} />
+        </Link>
+      {/if}
+      {#if title}
+        <Title>
+          <Link to="home">{ title }</Link>
+        </Title>
+      {/if}
+      {#if version}
+        <div class="version-info">{ version }</div>    
+      {/if}
+    </Region>
+  {/if}
   <svelte:boundary {onerror}>
     <Component {...attrs}>
-      {#snippet nav(content)}
-        <Region name="nav" tag="nav">{@render content()}</Region>
-      {/snippet}
-      {#snippet leader(content)}
-        <Region name="leader" tag="header">{@render content()}</Region>
-      {/snippet}          
-      {#snippet main(content)}
-        <Region name="main" tag="section">{@render content()}</Region>
-      {/snippet}
-      {#snippet trailer(content)}
-        <Region name="trailer" tag="section">{@render content()}</Region>
+      {#snippet pageContent({ nav, leader, primary, trailer })}
+        {#if nav}
+          <Region name="nav" tag="nav">{@render nav()}</Region>
+        {/if}
+        <Region name="main" tag="main">
+          {#if leader}
+            <Region name="leader" tag="header">{@render leader()}</Region>
+          {/if}
+          {#if primary}
+            <Region name="primary" tag="section">{@render primary()}</Region>
+          {/if}
+          {#if trailer}
+            <Region name="trailer" tag="footer">{@render trailer()}</Region>
+          {/if}
+        </Region>
       {/snippet}
     </Component>
   </svelte:boundary>
-  <Generated />
+  <Region name="footer" tag="footer">
+    <Footer />
+  </Region>
 </div>
 
 
 <script module>
-import { title, version } from '#config'
-import { context } from '#frend/lib'
+import { logo, title, version } from '#config'
+import { context, t } from '#frend/lib'
 
-import Generated from '../element/Generated'
+import Footer from '../element/Footer'
 import Link from './Link'
 import Region from './Region'
 import Title from '../element/Title'
@@ -41,6 +58,8 @@ import Title from '../element/Title'
 
 <script>
 let { route, Component, ...attrs } = $props();
+
+context.page = route;
 
 let onerror = error =>
 {
