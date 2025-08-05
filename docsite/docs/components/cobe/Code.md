@@ -7,6 +7,9 @@
   <textarea>
     <!-- code entry overlay -->
   </textarea>           
+  <div class="overlay">
+    <!-- child content goes here -->
+  </div>  
 </div>
 ```
 

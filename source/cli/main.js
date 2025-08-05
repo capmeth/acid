@@ -11,7 +11,7 @@ commander(
 {
     run: data => 
     {
-        let { config, extension, logger, ...options } = parseOptions(data);
+        let { config, use, logger, ...options } = parseOptions(data);
 
         let file = path.resolve(process.cwd(), config);
 
@@ -23,7 +23,7 @@ commander(
 
         if (logger) service.logger(logger);
 
-        let applyExts = app => Promise.all((extension || []).map(ext => 
+        let applyExts = app => Promise.all((use || []).map(ext => 
         {
             let [ spec, param ] = ext.split('::');
             return app.use(spec, JSON.parse(param || null));

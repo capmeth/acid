@@ -1,5 +1,5 @@
 ---
-title: Code Rendering Extensions
+title: Rendering Extensions
 cobeMode: static
 ---
 
@@ -35,11 +35,9 @@ Here is the general idea from the docsite's perspective:
 ```js
 import renderConfig from 'render-ext'
 
-let { render: jsRender, config: jsConfig } = renderConfig([ 10, true ], 'js');
-let { render: jsxRender, config: jsxConfig } = renderConfig([ 10, true ], 'jsx');
+let { render: jsRender } = renderConfig([ 10, true ], 'js');
+let { render: jsxRender } = renderConfig([ 10, true ], 'jsx');
 ```
-
-The returned `config` is a rollup configuration object that can include any plugins necessary for a build step (other options are ignored).  The input (virtual) file name will be `cobe-example.[lang]`, with `[lang]` being the language extension.  The output format is "esm".
 
 The `render` function should have the form:
 
@@ -49,16 +47,18 @@ async function (params: object): void
 
 It is called every time a code block with the associated lang marker needs to be rendered.  The `params` parameter will contain the following:
 
-- `source: string`: raw content from the code block
-- `build: function`: generates a module (rollup bundle)
-- `modulize: function`: "modulizes" a script via a data url
-- `el: HTMLElement`: host or mount element for the component
+- `source` *string*: raw content from the code block
+- `imports` *string*: import statements to be added to the code
+- `modulize` *function*: "modulizes" a script via a data url (async)
+- `el` *HTMLElement*: host or mount element for the component
+- `partition` *function*: can separate template from code in the block
 
 The render function should generally do the following:
 
 1. Modify `source` to construct the proper component export for the framework supported.
-2. Pass the updated source to `build` or `modulize` to generate the code module.
-3. Extract the component from #2 and mount it to `el`.
+2. Insert `imports` where appropriate place to make imported names accessible to the code.
+3. Pass the updated source to `modulize` to generate a code module.
+4. Extract the component from the module and mount it to `el`.
 
 Here's a pseudocode-ish example of a render function.
 
@@ -66,7 +66,7 @@ Here's a pseudocode-ish example of a render function.
 import Framework from 'supported-component-framework';
 import transform from './transform-source-into-component.js';
 
-let render = async ({ source, imports, build, el }) =>
+let render = async ({ source, imports, modulize, el }) =>
 {
     return new Promise((accept, reject) => 
     {
@@ -75,7 +75,9 @@ let render = async ({ source, imports, build, el }) =>
             // #1
             source = transform(source);
             // #2
-            let { default: Component } = await build(source); 
+            source = imports + source;
+            // #3
+            let { default: Component } = await modulize(source); 
             // #3
             Framework.mount(Component, el);
 
@@ -119,10 +121,10 @@ hljs:
 }
 ```
 
-In a markdown code block, you can write a .svelte file as normal (`<style>` blocks currently not supported).
+In a markdown code block, you can write a .svelte file as normal (`<style>` blocks are not supported).
 
 ````md
-```svelte:edit
+```svelte
 <h1 {onclick}> Hello there, { bool ? 'Mark' : 'Fred' }! </h1>
 
 <script>
@@ -135,7 +137,7 @@ let onclick = () => bool = !bool
 Or, you can use the code/template split style.
 
 ````md
-```svelte:edit
+```svelte
 let bool = $state(false);
 let onclick = () => bool = !bool
 <h1 {onclick}> Hello there, { bool ? 'Mark' : 'Fred' }! </h1>

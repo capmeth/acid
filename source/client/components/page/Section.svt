@@ -18,10 +18,6 @@
   <Filtered {sect} store="groupFilter" />
 {/snippet}
 
-<!-- {#snippet trailer()}
-  <Annex {sect} store="groupFilter" />
-{/snippet} -->
-
 {#snippet nav()}
   <Tree />
   <Content sel="#{mcid}" tocDepth={section.tocDepth} />

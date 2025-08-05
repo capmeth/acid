@@ -42,6 +42,7 @@ export default
     serial: h => h.serial || h.err('must be of serializable type'),
     storage: h => h.in('local', 'session', 'none') || h.err('must be a valid enumerated value'),
     string: h => h.string || h.err('must be a string'),
+    stringOrBoolean: h => h.or(h.string, h.boolean) || h.err('must be a string or a boolean'),
     stringOrFunction: h => h.or(h.string, h.func) || h.err('must be a string or a function'),
     stringOrNull: h => h.or(h.string, h.null) || h.err('must be a string or null'),
     stringOrObject: h => h.or(h.string, h.plain) || h.err('must be a string or an object'),

@@ -7,9 +7,7 @@
 {@render pageContent({ nav, leader, primary })}
 
 {#snippet leader()}
-  {#if title}
-    <Title>{ sinfo.root.title }</Title>
-  {/if}
+  <Title>{ sinfo.root.title }</Title>
 {/snippet}
 
 {#snippet primary()}
@@ -27,7 +25,6 @@
 
 
 <script module>
-import { title } from '#config'
 import { context, sinfo } from '#frend/lib'
 
 import Assets from '../nav/Assets'

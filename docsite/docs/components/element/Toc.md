@@ -2,15 +2,15 @@
 ```html label="Structure"
 <aside class="element-toc">
   <List {region}>
-    :if headerId
+    if headerId
       <Link>
         <!-- header text goes here -->
       </Link>
-    :else
+    else
       <span>
         <!-- header text goes here -->
       </span>
-    :endif
+    endif
     ... <!-- each header (nested hierarchy) -->
   </List>
 </aside>

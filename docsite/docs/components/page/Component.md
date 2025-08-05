@@ -1,15 +1,19 @@
 
 ```html label="Structure"
 <region:leader>
-  <Component {uid} /> <!-- from asset group -->
+  <Title>
+    <!-- component name goes here -->
+  </Title>
+  <Component /> <!-- from asset group -->
 </region:leader>
 
-<region:main>
+<region:primary>
   <Article />
-</region:main>
+</region:primary>
 
 <region:nav>
+  <Tree />
+  <Assets group="components" />
   <Primary />
-  <Single />
 </region:nav>
 ```

@@ -10,7 +10,7 @@
       <Label id="label-primary" />
     </Title>
   {/snippet}
-  <List items={pages}>
+  <List items={pages} what="page-list">
     {#snippet children({ to, id, ...vars })}
       <Link {to} current={context.page === to}>
         <Label {id} {...vars} />

@@ -11,7 +11,7 @@
   <Card name={group} store="nav-{group}">
     {#snippet header()}
       <Title>
-        <span>{ t(`label-${group}`) }</span>
+        <Label id="label-{group}" />
       </Title>
     {/snippet}
     {@render listAssets(section[group])}
@@ -42,6 +42,7 @@
 import { sinfo, t } from '#frend/lib'
 
 import Card from '../element/Card'
+import Label from '../element/Label'
 import Link from '../app/Link'
 import List from '../element/List'
 import Title from '../element/Title'

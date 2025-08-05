@@ -1,16 +1,21 @@
 
 ```html label="Structure"
-<region:main>
-  <Article />
-  <Assets />
-</region:main>
+<region:leader>
+  <Title>
+    <!-- home section title -->
+  </Title>
+</region:leader>
 
-<region:trailer>
-  <Annex />
-</region:trailer>
+<region:primary>
+  <Article />
+  <Filtered />
+</region:primary>
 
 <region:nav>
+  <Tree />
+  <Content />
+  <Assets group="documents" />
+  <Assets group="components" />
   <Primary />
-  <Single />
 </region:nav>
 ```

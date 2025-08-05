@@ -32,7 +32,7 @@
 {/if}
 
 {#snippet render()}
-  <ul class="element-list page-{ctx.page} region-{ctx.region} {what}" class:hide>
+  <ul class="element-list page-{ctx.page} region-{ctx.region} {what}">
     {#each items as item (item)}
       {#if !is.undef(item)}
         <li class="listitem">
@@ -49,5 +49,5 @@ import { is } from '#utils'
 </script>
 
 <script>
-let { content, hide, items, pred, what = '', children } = $props();
+let { content, items, pred, what = '', children } = $props();
 </script>

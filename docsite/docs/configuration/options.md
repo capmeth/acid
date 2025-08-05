@@ -79,7 +79,7 @@ cobe:
 ]
 ```
 
-### `*.types`
+****`*.types`****
 
 Specify language marker(s) ("js", "jsx", "vue", etc.) in `types`.  Markers appearing more than once in the list are shallowly merged to form a single record for a given marker.
 
@@ -87,11 +87,11 @@ A `default` type exists, and it is applied to any block that does not specify a 
 
 A "fallback" record can be set by specifying `types: '*'`. If set, it is shallowly merged with the record corresponding to the code block's effective type.
 
-### `*.use`
+****`*.use`****
 
 Use `use` to specify the module that will render the code from the block (see [renderer docs](document/integration-renderers)).
 
-### `*.imports`
+****`*.imports`****
 
 The `imports` setting generates import declarations from browser-accessible module `specifier`s with the exports desired.  These declarations are then added to code blocks provided the renderer in `use` supports inserting them.
 
@@ -109,7 +109,7 @@ Setting `imports.*` to `null` results in a side-effect import declaration.
 
 > Beware of potential naming conflicts as renderers may also apply their own imports to code blocks.
 
-### `*.mode`
+****`*.mode`****
 
 Values available for `mode` are:
 - "static": just show the code
@@ -122,7 +122,7 @@ Note that "render" and "static" modes will always hide or show the code block, r
 
 A code block's `mode` will be forced to "static" if no `use` exists for its language marker (no way to render anything).
 
-### `*.noHighlight`
+****`*.noHighlight`****
 
 Set `noHighlight` to `true` to turn off code highlighting.  This has no effect if highlighting for the block's language-type is not supported or not loaded (see `hljs` option).
 
@@ -167,19 +167,33 @@ copy:
 ]
 ```
 
-### `*.files`
+****`*.files`****
 
 Specify glob patterns to include/exclude files to be copied.  The root directory for relative paths is `root` option.
 
-### `*.to`
+****`*.to`****
+
 `to` converts filepaths in the same way as `toExampleFile`.
 
 The resulting filename from `to` is assumed to be relative to `output.dir`.  If `to` is omitted, `null`, or results in the same or an empty string, the file is copied into `output.dir` with its original path.  If `to` resolves to a path that is not inside `output.dir` the file will not be copied.
 
 
+## footer
+
+Raw HTML content for the site footer.
+
+```js label="default value"
+footer: null
+```
+
+```js label="spec"
+footer: string | null
+```
+
+
 ## hljs
 
-HighlightJs configuration.
+Code highlighting (HighlightJs) configuration.
 
 ```js label="default value"
 hljs:
@@ -190,8 +204,8 @@ hljs:
 ```
 
 ```js label="spec"
-hljs: // merges
-{
+hljs: string |
+{ // merges
     /**
         Language marker aliases.
     */
@@ -220,27 +234,31 @@ hljs: // merges
 }
 ```
 
+Setting a string value is the same as setting `hljs.theme`.
+
 [UNPKG](https://unpkg.com/) is used to pull all highlightjs resources into the browser.
 
-Settings `version` and `theme` are interpolated into a URL to pull CSS.
-
-```
-https://unpkg.com/@highlightjs/cdn-assets@{version}/styles/{theme}.min.css
-```
-
-And the highlightjs code is pulled as:
+The highlightjs code is pulled using
 
 ```
 https://unpkg.com/@highlightjs/cdn-assets@{version}/highlight.min.js
 ```
 
-Each name in `languages` is pulled using (`lang`):
+Where `{version}` s replace with `hljs.version`.
+
+Likewise, URL interpolation is used to pull the CSS.
+
+```
+https://unpkg.com/@highlightjs/cdn-assets@{version}/styles/{theme}.min.css
+```
+
+Additionally, each name in `languages` (if any) is interpolated into a URL as `lang` and pulled as well.
 
 ```
 https://unpkg.com/@highlightjs/cdn-assets@{version}/languages/{lang}.min.js
 ```
 
-Check [this page](https://app.unpkg.com/@highlightjs/cdn-assets) to see what's available.
+Browse [this page](https://app.unpkg.com/@highlightjs/cdn-assets) to see what's available via UNPKG.
 
 
 ## httpServer
@@ -305,25 +323,47 @@ Object properties are directly applied as `<link>` attributes.
 String items are assumed to be stylesheet urls for the `href` attribute and `rel="stylesheet"` will automatically be added as well.  
 
 
+## logo
+
+URL of a representative image for the docsite.
+
+```js label="default value"
+logo: packageJson.logo
+```
+
+```js label="spec"
+logo: string | null
+```
+
+
 ## metas
 
 Configures `<meta>` tags for the `<head>` tag.
 
 ```js label="default value"
-metas:
-[
-    { charset: 'utf-8' },
-    { name: 'author', content: packageJson.author },
-    { name: 'description', content: packageJson.description },
-    { name: 'keywords', content: packageJson.keywords },
-]
+metas: [ { charset: 'utf-8' }, 'author', 'description', 'keywords' ]
 ```
 
 ```js label="spec"
-metas: object | [ ... object ]
+metas: string | object | [ ... string | object ]
 ```
 
 Object properties are directly applied as `<meta>` attributes.
+
+When a string is specified it is assumed to be a *package.json* property and will generate a metatag with `name` and `content` attributes.
+
+For example, the following author property in *package.json*
+
+```js
+"author": "Ada Lovelace"
+```
+
+would produce the following metatag
+
+```js
+<meta name="author" content="Ada Lovelace" />
+```
+
 
 
 ## namespace
@@ -414,7 +454,7 @@ A "fallback" record can be set by using `types: '*'`. The fallback is otherwise 
 
 ## root
 
-Root path for the project/library to be documented.
+Root path for the project containing the files to be documented.
 
 ```js label="default value"
 root: process.cwd()
@@ -660,7 +700,7 @@ tagLegend:
 
 `tagname` should be lowercase alphanumeric (incl. dashes).  A string value is the tag description.
 
-Any tag attached to an asset that is not defined here will not appear in the docsite.
+Any tag attached to an asset that is not defined here will not be available as a filter in the docsite.
 
 
 ## title

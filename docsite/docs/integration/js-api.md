@@ -1,5 +1,5 @@
 ---
-title: API
+title: Javascript API
 ---
 
 
@@ -152,14 +152,10 @@ app.use(acidVueExt, { /* extension config */ });
 app.run();
 ```
 
-In the above, `acidReactExt` and `acidVueExt` are functions that accept the current config object, which has defaults, config file settings, and command-line options (if applicable) already loaded.  A second parameter can also be passed, ostensibly as configuration for the extension itself.
+In the above, `acidReactExt` and `acidVueExt` are functions that accept the current config object, which has defaults and config file settings already loaded.  The config object itself is a self-managing proxy, so the extension does not need to return anything.
 
-The config object itself is a self-managing proxy, so the extension does not need to return anything.
+A second parameter can also be passed, ostensibly as configuration for the extension itself.
 
-**`extension(config: object, param: any): void`**
+Although ACID configuration is not terribly complicated (right?), the idea is that 3rd-party extensions can apply their needs to configuration directly without having to instruct the user how to configure a renderer, which URLs to add to scripts, what needs be in the importmaps, etc.  
 
-Although ACID configuration is not terribly complicated (right?), the idea is that 3rd-party extensions can directly apply their needs to configuration without having to instruct the user how to configure a renderer and/or parser, which URLs to add to scripts, what needs be in the importmaps, etc.  
-
-...Of course, the extension itself may require configuration, so... your mileage may vary.
-
-
+...of course, the extension itself may require configuration, so... mileage may vary.

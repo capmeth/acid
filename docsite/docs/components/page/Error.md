@@ -1,6 +1,10 @@
 
 ```html label="Structure"
-<region:main>
+<region:primary>
   <Error /> <!-- from element group -->
-</region:main>
+</region:primary>
+
+<region:nav>
+  <Primary />
+</region:nav>
 ```

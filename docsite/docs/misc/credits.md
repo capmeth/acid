@@ -1,6 +1,3 @@
----
-tocDepth: 0
----
 
 There's some truly awesome stuff out there in the Javascript world, and I am especially thankful to the authors and contributors of the apps & tools listed here in this document for their contributions to the Javascript playground we all know and love!
 

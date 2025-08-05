@@ -2,22 +2,21 @@
 ```html label="Structure"
 <region:leader>
   <Title>
-    <!-- page title -->
+    <!-- section name goes here -->
   </Title>
   <Crumbs />
 </region:leader>
 
-<region:main>
+<region:primary>
   <Article />
-  <Assets />
-</region:main>
-
-<region:trailer>
-  <Annex />
-</region:trailer>
+  <Filtered />
+</region:primary>
 
 <region:nav>
+  <Tree />
+  <Content />
+  <Assets group="documents" />
+  <Assets group="components" />
   <Primary />
-  <Single />
 </region:nav>
 ```

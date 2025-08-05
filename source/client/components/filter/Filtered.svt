@@ -7,8 +7,6 @@
     
     @property { function } [content]
       Receives the snippet that renders the list of filtered assets.
-    @property { boolean } [hide]
-      Hide the list?
     @property { ... any } [filters]
       Remaining properties are asset filters.
 -->
@@ -20,7 +18,7 @@
 {/if}
 
 {#snippet render()}
-  <List items={assets} {hide}>
+  <List items={assets}>
     {#snippet children(uid)}
       <Link {uid}>{ sinfo.asset(uid).title }</Link>
     {/snippet}
@@ -38,7 +36,7 @@ let { asset } = sinfo;
 </script>
 
 <script>
-let { content, hide, sort, ...filters } = $props();
+let { content, sort, ...filters } = $props();
 let assets = asset.filter(naf(filters));
 if (sort) assets.sort(asset.sort.title);
 </script>

@@ -1,10 +1,9 @@
+---
+cobeMode: static
+---
 
-# Getting Started
 
-Simple instructions to get you started using ACID.
-
-
-## Quick Start
+# Quick Start
 
 Install as dev dependency.
 
@@ -12,42 +11,28 @@ Install as dev dependency.
 npm install @capmeth/acid --save-dev
 ```
 
-You will then need an *acid.config.js* file.  To generate a default one, do
+Now, you need an *acid.config.js* file.  To generate a default one, do
 
 ```shell
 acid --make-config
 ```
 
-The config file is created in the current directory by default.
+The config file is created in the current directory by default.  It is pretty basic, but it's enough to get a docsite build going.
 
-It is pretty basic.  You'll probably want to change some things.  But it's enough to get a docsite build going.
-
-Now you can build the site
-
-```bash
-acid
-```
-
-or build and serve the site
+Now you can build the site,
 
 ```bash
 acid --http-server
 ```
 
-Then you can point your browser to <https://localhost:3010> to see the result.
+and then point your browser to <https://localhost:3010> to see the result.
 
 Simple!
 
-Add the `--watch` flag to the above to serve the site <b style="color:red">hot</b>.
-
-```bash
-acid --http-server --watch
-```
-
-Head to the [configuration](section/configure) pages of these docs to see all the config & CLI options!
+See the [CLI docs](document/configuration-acid-cli) for more details on command-line functionality.
 
 
-## Programmatic Access
+# Programmatic Access
 
 If you wish to operate a docsite from within your own code, do
 
@@ -58,10 +43,10 @@ import config from './acid.config.js'
 // create a docsite instance
 let docsite = acid(config);
 
-// returned function can stop the server (if running)
-let stop = await docsite.run();
-
-await stop();
+// passing `true` starts the server
+let stop = await docsite.run(true);
 ```
 
-Both `run` and `stop` are async functions, with the latter resolving to `undefined` once the request has finished.
+In the above, the returned `stop` function is async and resolves to `undefined` once the server has stopped.
+
+See the [API docs](document/docsite-api) for more details on programmatic functionality.

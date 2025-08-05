@@ -41,27 +41,27 @@ acid -s 3000
 ```
 
 
-### `--extension`
+### `--use`
 
 Apply an extension using a module specifier with optional parameters.
 
 ```shell
-acid run --extension react-extension
+acid run --use react-extension
 ```
 ```shell
-acid run -e react-extension
+acid run -u react-extension
 ```
 
 Repeat for as many extensions as needed.
 
 ```shell
-acid run -e react-extension -e vue-extension
+acid run -u react-extension -u vue-extension
 ```
 
 Pass a config parameter to the extension after the `::` (double colon).
 
 ```shell
-acid run -e react-extension::"{\"exts\":[\".jsx\"]}"
+acid run -u react-extension::"{\"exts\":[\".jsx\"]}"
 ```
 
 The parameter will be JSON parsed so remember to quote and format properly.

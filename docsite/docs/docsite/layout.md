@@ -37,9 +37,7 @@ The `rootSection` config setting is used to define the top-level section.
 rootSection: 'root'
 ```
 
-No documentation will generate without `rootSection`, as a hierarchical tree is built by starting there and working down through `sections.*.sections` until each one has a "parent" reference. Any sections that do not have `rootSection` as their ultimate ancestor will be excluded from the docsite.
-
-Parent section references are only assigned once. A given section cannot be assigned a parent if it already has one, so any section configured as a child of multiple sections will only ever appear as a child of one of those sections in the docsite.
+The docsite will be empty without `rootSection`, as a hierarchical tree is built by starting there and working down through `sections.*.sections` until each one has a "parent" reference. Any defined sections that ultimately do not descend from `rootSection` will be excluded from the docsite.
 
 
 # Section Properties
@@ -96,7 +94,7 @@ Alternatively, this can be the path to a single markdown file.
 overview: 'file:/docs/components/actions.md'
 ```
 
-Note that in the case of specifying a file, you must prefix the path with `file:/`.
+Note here that, in the case of specifying a file, you must prefix the path with `file:/`.
 
 
 ## sections
@@ -107,9 +105,9 @@ Specify the names of the sub-sections for the section.
 sections: [ 'introduction', 'action_components', 'layout_components' ]
 ```
 
-The array form is not necessary if there is only one sub-section.
+The sections specified must exist in the config or they will be skipped in the build process.  
 
-The sections specified must exist in the config or they will be skipped in the build process.  Any sub-section that is included by more than one parent section will only appear as the child of the first parent that claims it (and "first" can be arbitrary, depending on the order in which they get processed).
+Any section that is included by more than one parent section will only ever appear as the child of the first parent that claims it (and "first" can be arbitrary, depending on the order in which they get processed).
 
 
 ## title

@@ -8,12 +8,16 @@
     @property { string } [type] Accepted data type(s) for the property.
     @property { string } [defaultValue] Default value for the property (if any).
     @property { boolean } [required] Is the property required?
+    @property { string | boolean } [deprecated] Deprecation status of property.
     @property { array } [values] List of valid values (enums) for the property.
 -->
 
-<div class="element-property" class:required>
+<div class="element-property" class:required class:deprecated>
   <div class="name">{ name }</div>
   <div class="type">{ type || 'unknown' }</div>
+  {#if deprecated && is.string(deprecated)}
+    <div class="deprecated">{ deprecated }</div>
+  {/if}
   <div class="description markup">
     {#if description}
       {@html description}
@@ -43,10 +47,12 @@
 
 
 <script module>
+import { is } from '#utils'
+
 import Label from './Label'
 import List from './List'
 </script>
 
 <script>
-let { name, fallback, description, required, type, values } = $props();
+let { name, fallback, deprecated, description, required, type, values } = $props();
 </script>

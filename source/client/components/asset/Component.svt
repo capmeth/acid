@@ -7,7 +7,10 @@
       Component asset to display.
 -->
 
-<div class="asset-component">
+<div class="asset-component" class:deprecated>
+  {#if deprecated && is.string(deprecated)}
+    <div class="deprecated">{ deprecated }</div>
+  {/if}
   <Card name="description" store="component-description" markup>
     {#snippet header()}
       <Label id="label-description" />         
@@ -50,7 +53,8 @@
 
 
 <script module>
-import { sinfo, tagDetails } from '#frend/lib';
+import { sinfo, tagDetails } from '#frend/lib'
+import { is } from '#utils'
 
 import Card from '../element/Card'
 import Label from '../element/Label'
@@ -62,6 +66,6 @@ import Tag from '../element/Tag'
 <script>
 let { uid } = $props();
 
-let { description, props: properties, tags } = sinfo.asset(uid);
+let { deprecated, description, props: properties, tags } = sinfo.asset(uid);
 let showProps = $state();
 </script>

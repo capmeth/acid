@@ -6,7 +6,7 @@ cobeMode: static
 
 # Document Level Options
 
-ACID will look for configuration options in markdown document's front-matter.
+ACID will look for configuration options in a markdown document's front-matter.
 
 For ACID, front-matter is parsed as YAML key-value pairs enclosed by standard triple-dash delimiters.
 
@@ -22,7 +22,7 @@ These settings will take precedence over their equivalents (as applicable) in an
 
 ## cobeMode
 
-Default mode for for CoBEs embedded in the content.
+Default mode for CoBEs embedded in the content.
 
 ```yaml label="spec"
 cobeMode: demo | edit | live | render | static 
@@ -30,7 +30,7 @@ cobeMode: demo | edit | live | render | static
 
 Unless `static` is forced, only the code block itself can override this.  See config option `cobe` for more details on CoBE modes.
 
-Example: Set the default CoBE mode to "render" for all code blocks in the file.
+Example: Set the default CoBE mode to "render" for all code blocks in the document.
 
 ```yaml
 cobeMode: render
@@ -58,7 +58,7 @@ Sets the displayed title of the document.
 title: string
 ```
 
-When not specified, the **Capital Cased** name of the file is used (e.g. `getting-started.md` becomes "Getting Started").  This setting is ignored for example files.  Also ignored for `section.*.main` documents when the section already has a `title`.
+When not specified, the **Capital Cased** name of the file is used (e.g. `getting-started.md` becomes "Getting Started").  This setting is ignored for example files.  Also ignored for `section.*.overview` documents when the section already has a `title`.
 
 
 ## tocDepth
@@ -85,6 +85,19 @@ There must be at least one space after the `lang-type` before defining options. 
 let example = "Here's an example of a labeled code block";
 ```
 ````
+
+
+## allow-css
+
+CoBE rendering containers are protected from docsite CSS by default (as long as the proper selectors are used in styling).  If you wish to allow this CSS to affect these containers you can set the `allow-css` attribute.
+
+````md
+``` allow-css
+Code rendered from this block is affected by docsite CSS.
+```
+````
+
+The attribute has no value.  It's mere appearance signifies activation.
 
 
 ## cobe-mode

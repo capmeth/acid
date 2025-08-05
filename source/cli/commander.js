@@ -10,7 +10,7 @@ export default function (action)
     let optionConfig = new Option('-c, --config [path]', 'path to configuration file')
         .default('acid.config.js');
     let optionOutputDir = new Option('-d, --output-dir <dir>', 'folder to put generated docsite');
-    let optionExtensions = new Option('-e, --extension <ext>', 'extension module specifier and parameters')
+    let optionExtensions = new Option('-u, --use <ext>', 'extension module specifier and parameters')
         .argParser(collect());
     let optionLogLevel = new Option('-l, --log-level <lvl>', 'logger severity level');
     let optionOutputName = new Option('-n, --output-name <dir>', 'name/prefix for generated files');
