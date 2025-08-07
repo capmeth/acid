@@ -1,25 +1,37 @@
 
 ```html label="Structure"
-<main class="asset-component">
-  <Title>
-    <!-- title goes here -->
-  </Title>
-  <Crumbs />
+<Title>
+  <!-- component name goes here -->
+</Title>
+<Deprecated />
+<Card name="description" markup>
+  slot:header
+    <Label id="label-description" />         
+  /slot:header
+  if description
+    <!-- html description content goes here -->
+  else
+    <p>
+      <em><Label id="msg-no-comments" item="component" /></em>
+    </p>
+  endif  
+</Card>
+<Card name="tags" markup>
+  slot:header
+    <Label id="label-tags" />         
+  /slot:header
   <List what="tags-list">
     <Tag />
     ... <!-- each component tag -->
   </List>
-  <div class="description" data-markup>
-    <!-- component source file comment -->
-  </div>
-  <div class="properties">
-    <Toggle role="toggle">
-      <Label id="label-props" />
-    </Toggle>
-    <List what="props-list">
-      <Property />
-      ... <!-- each component prop -->
-    </List>
-  </div>
-</main>
+</Card>
+<Card name="props" markup>
+  slot:header
+    <Label id="label-props" />         
+  /slot:header
+  <List what="props-list">
+    <Property />
+    ... <!-- each component prop -->
+  </List>
+</Card>
 ```

@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import jsyaml from 'js-yaml'
-import { hackson } from '#node/hosted.js'
+import { hackson } from '#lib/hosted.js'
 import paths from '#paths'
 
 
@@ -20,20 +20,18 @@ let config = {};
 config.assetGroups = [ 'documents', 'components' ];
 
 /**
-    Default CoBE configuration.
-*/
-config.cobe =
-{ 
-    noHide: false,
-    noHighlight: false
-};
-
-/**
     CoBE language-type handling specs.
 
     @type { array }
 */
-config.cobeSpecs = [];
+config.cobe = [];
+
+/**
+    Footer content for the docsite.
+
+    @type { string }
+*/
+config.footer = null;
 
 /**
     HighlightJs configuration.
@@ -45,20 +43,6 @@ config.hljs =
     theme: 'a11y-light',
     version: '11.11.1'
 }
-
-/**
-    Turn on the HTTP server?
-
-    @type { boolean }
-*/
-config.httpServer = false;
-
-/**
-    Port from which to run doc server.
-
-    @type { integer }
-*/
-config.httpServerPort = 3010;
 
 /**
     The browser import map.
@@ -88,24 +72,12 @@ config.labels = jsyaml.load(fs.readFileSync(path.join(paths.config, 'labels.yaml
 */
 config.links = [];
 
-/** 
-    Logging control.
-
-    default: `{}`
-
-    @merges
-    @type { object }
+/**
+    A link to an image for the project
+    
+    @type { string }.
 */
-config.logger =
-{
-    level: 'info',
-    default: null,
-    test: console.debug,
-    info: console.info,
-    warn: console.warn,
-    fail: console.error,
-    noChalk: false
-};
+config.logo = hackson.logo ?? null;
 
 /**
     Array of HTML metatag objects for the docsite.
@@ -113,17 +85,9 @@ config.logger =
     The default set of meta tags includes a charset of 'utf8', as well as
     author, description, and keywords from package.json.
 
-    Setting this overrides (not merges with) the default value.
-
     @type { array }
 */
-config.metas = 
-[
-    { charset: 'utf8' },
-    { name: 'author', content: hackson.author || 'unknown' },
-    { name: 'description', content: hackson.description || 'ACID generated docsite.' },
-    { name: 'keywords', content: hackson.keywords || 'components, documentation' }
-];
+config.metas = [ { charset: 'utf-8' }, 'author', 'description', 'keywords' ];
 
 /**
     Internal value used to prevent potential naming collisions.
@@ -131,32 +95,31 @@ config.metas =
     @ignore
     @type { string }
 */
-config.namespace = 'acid';
+config.namespace = 'docsite';
 
 /**
-    Folder to put all generated documentation.
+    Details for generated output.
 
-    @type { string }
+    - `dir`: folder where all generated files go
+    - `name`: name/prefix for bundle output file(s)
+
+    @type { object }
 */
-config.outputDir = 'docs';
+config.output = 
+{
+    dir: 'docs',
+    name: hackson.name ?? ''
+};
 
 /** 
     Source file parsing specs.
 
     @type { array }
 */
-config.parsers =
-[
-    { exts: '.jsx', use: './extensions/ext-jsdoc' }
-];
+config.parsers = [];
 
 /** 
     Root path for the project.
-
-    This is the base path for:
-    - glob file paths in `sections`
-    - glob file paths in `watch`
-    - `outputDir`
 
     @type { string }
 */
@@ -203,9 +166,20 @@ config.sections =
 };
 
 /**
+    HTTP server activation and port.
+
+    @type { object }
+*/
+config.server =
+{
+    enabled: false,
+    port: 3010
+}
+
+/**
     For socket communication with browser.
 
-    @type { integer }
+    @type { object }
 */
 config.socket = 
 {
@@ -245,12 +219,19 @@ config.tagLegend = {};
 
     @type { string }
 */
-config.title = hackson.title;
+config.title = hackson.title ?? null;
 
 /**
     Depth level for table of contents menu.
 */
 config.tocDepth = 3;
+
+/**
+    Converts a file path to an asset id.
+
+    @type { function | string | array }
+*/
+config.toAssetId = '{hex}';
 
 /**
     Resolves the path to an example markdown file.
@@ -263,7 +244,7 @@ config.tocDepth = 3;
     By default, this function looks for a markdown (.md) file in the same 
     folder with the same name as the source file.
 
-    @type { function }
+    @type { function | string | array }
 */
 config.toExampleFile = [ [ '^(.+)\\.[^./]+$' ], '$1.md' ];
 
@@ -282,7 +263,7 @@ config.useFilenameOnly = false;
 
     @type { string }
 */
-config.version = `ver. ${hackson.version}`;
+config.version = hackson.version ? `ver. ${hackson.version}` : null;
 
 /** 
     Manages hot-reload for source/document changes.

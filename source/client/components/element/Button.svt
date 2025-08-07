@@ -1,9 +1,7 @@
 <!--*
     Clickable element for user interaction.
 
-    An "active" CSS class is added when `active` prop is set.
-
-    @tags group:elements, extra-props:button
+    @tags group:elements, extra-props:button, page, region
 
     @property { boolean } [active]
       Is the button in an active state?
@@ -11,10 +9,19 @@
       Called when button is clicked.
 -->
 
-<button class="element-button" class:active {...attrs} {onclick}>
-  {@render children()}
+<button class="element-button page-{ctx.page} region-{ctx.region}" class:active {...attrs} {onclick}>
+  {#if action}
+    <Label id="action-{action}" />
+  {:else}
+    {@render children()}
+  {/if}
 </button>
 
+
+<script module>
+import Label from './Label'
+</script>
+
 <script>
-let { active, onclick, children, ...attrs } = $props();
+let { action, active, onclick, children, ...attrs } = $props();
 </script>

@@ -1,5 +1,3 @@
-import is from './is.js'
-
 
 /**
     Creates a proxy with a caching getter.
@@ -26,7 +24,7 @@ export default function proxet(on, func)
 
             let value = func(prop, target);
             // return and assign resulting value (cache)
-            if (!is.undef(value)) return target[prop] = value;   
+            if (typeof value !== 'undefined') return target[prop] = value;   
         },
         // silent fail... no setting allowed!
         set() 

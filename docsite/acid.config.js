@@ -10,20 +10,23 @@ import sections from './sections.js'
 export default
 {
     namespace: "metasite",
-    title: "Another Component Interface Documenter (ACID)",
+    title: "A Component Interface Documenter",
+    logo: 'acid.png',
 
-    outputDir: "web",
-    cobeSpecs: 
+    copy: { files: path.join("source", "images", "acid.png"), to: 'acid.png' },
+
+    output: "web",
+    cobe: 
     [
-        { types: "handlebars", use: "./extensions/ext-handlebars", mode: "edit" },
-        // { types: "svelte", use: "acid-render-svelte/renderer", mode: "edit" }
+        { types: [ "svelte", "svt" ], use: "svelte-render", mode: "edit" }
     ],
-    parsers: { exts: ".svt", use: "./extensions/ext-jsdoc" },
     hljs: 
     { 
-        aliases: { jsx: 'htm' },
-        languages: 'handlebars'
+        aliases: { jsx: [ "svelte", "svt"] },
+        theme: 'kimbie-dark'
     },
+
+    labels: { "page-home-title": "Homepage" },
 
     sections,
 
@@ -31,23 +34,20 @@ export default
     {
         "extra-props": "Unused props are passed to <{info}>.",
         "group": "Belongs to {info} component group.",
-        "no-style": "This component is not themable.",
-        "region": "Region aware."
+        "no-style": "This component cannot be styled.",
+        "page": "Styling can be page specific.",
+        "region": "Styling can be region specific."
     },
 
+    toAssetId: [ [ "^(?:source[/]client[/]components|docsite[/]docs)[/](.+?)[.][^./]+$" ], "$1" ],
     toExampleFile: [ [ "^source[/]client[/](.+?)[.][^./]+$" ], "docsite/docs/$1.md" ],
 
-    importMap:
-    {
-        "#bundle": "./acid-bundle.js",
-        "svelte": "https://esm.sh/svelte@5.34.7",
-        // "svelte/internal/": "https://esm.sh/svelte@5.34.7/es2022/internal/"
-        "svelte/internal/client": "https://esm.sh/svelte@5.34.7/es2022/internal/client.mjs",
-        "svelte/internal/disclose-version": "https://esm.sh/svelte@5.34.7/es2022/internal/disclose-version.mjs",
-        "svelte/internal/flags/legacy": "https://esm.sh/svelte@5.34.7/es2022/internal/flags/legacy.mjs"
+    importMap: 
+    { 
+        "#bundle": "./site-bundle.js"
     },
 
-    httpServerPort: 3005,
+    server: { port: 3005 },
     socket: { port: 3009 },
     watch: 
     { 
@@ -57,7 +57,6 @@ export default
             path.join("docsite", "docs", "**", "*.md")
         ] 
     },
-    logger: { level: "test" },
 
-    style: { sheets: [ '#grayscape', 'file:/docsite/acid.style.css' ], merge: true }
+    style: [ '#acidic', 'file:/docsite/acid.style.css' ]
 }

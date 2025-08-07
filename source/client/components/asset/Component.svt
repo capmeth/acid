@@ -1,63 +1,68 @@
 <!--
 	  Component asset leader.
 
-    @tags group:asset
+    @tags group:asset, no-style
 
     @property { string } uid
       Component asset to display.
 -->
 
-<div class="asset-component">
-  <Title>{ title }</Title>
-  <Crumbs sect={section.name} />
-  <List items={tags} pred={tagDetails} what="tags-list">
-    {#snippet children(data)}
-      <Tag {...data} />    
-    {/snippet}
-  </List>
-  <div class="description" data-markup>
-    {#if description}
-      {@html description}
-    {:else}
-      <p>
-        <em><Label id="no-comments" item="component" /></em>
-      </p>
-    {/if}  
-  </div>
-  {#if properties?.length}
-    <div class="properties">
-      <Toggle bind:active={showProps} store="showProps" role="toggle">
-        <Label id="label-props" />
-      </Toggle>
-      {#if showProps}
-        <List items={properties} what="props-list">
-          {#snippet children(prop)}
-            {#if !prop.ignore}
-              <Property {...prop} />
-            {/if}                  
-          {/snippet}
-        </List>
-      {/if}
-    </div>
+<Title {deprecated}>{ title }</Title>
+<Deprecated message={deprecated} />
+<Card name="description" store="component-description" markup>
+  {#snippet header()}
+    <Label id="label-description" />         
+  {/snippet}
+  {#if description}
+    {@html description}
+  {:else}
+    <p>
+      <em><Label id="msg-no-comments" item="component" /></em>
+    </p>
   {/if}  
-</div>
+</Card>
+{#if tags?.length}
+  <Card name="tags" store="component-tags">
+    {#snippet header()}
+      <Label id="label-tags" />          
+    {/snippet}
+    <List items={tags} pred={tagDetails} what="tags-list">
+      {#snippet children(data)}
+        <Tag {...data} />    
+      {/snippet}
+    </List>
+  </Card>
+{/if}
+{#if properties?.length}
+  <Card name="props" store="component-props">
+    {#snippet header()}
+      <Label id="label-props" />          
+    {/snippet}
+    <List items={properties} what="props-list">
+      {#snippet children(prop)}
+        {#if !prop.ignore}
+          <Property {...prop} />
+        {/if}                  
+      {/snippet}
+    </List>
+  </Card>
+{/if}  
 
 
 <script module>
-import { sinfo, tagDetails } from '#frend/lib';
+import { sinfo, tagDetails } from '#frend/lib'
 
-import Crumbs from '../nav/Crumbs'
+import Card from '../element/Card'
+import Deprecated from '../element/Deprecated'
 import Label from '../element/Label'
 import List from '../element/List'
 import Property from '../element/Property'
 import Tag from '../element/Tag'
 import Title from '../element/Title'
-import Toggle from '../element/Toggle'
 </script>
 
 <script>
 let { uid } = $props();
 
-let { title, description, props: properties, section, tags } = sinfo.asset(uid);
-let showProps = $state();
+let { deprecated, description, props: properties, tags, title } = sinfo.asset(uid);
 </script>

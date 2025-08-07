@@ -2,7 +2,7 @@
 ```html label="Structure"
 <div class="nav-crumbs">
   <span>
-    <Link to="section" {region}>
+    <Link to="section">
       <!-- section title -->
     </Link>
   </span>

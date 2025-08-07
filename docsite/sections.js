@@ -4,29 +4,53 @@ export default
     root:
     {
         overview: 'file:/docsite/docs/index.md',
-        documents:
-        [
-            'docsite/docs/getting-started.md'
-        ],
-        sections: [ 'docsite', 'configure', 'integrate', 'credits' ]
+        sections: 
+        [ 
+            'start', 
+            'layout',
+            'styling',
+            'tagging',
+            'authoring',
+            'configure', 
+            'integrate', 
+            'components', 
+            'credits' 
+        ]
     },
 
-    docsite:
+    start:
     {
-        title: 'The Docsite',
-        overview: 'file:/docsite/docs/docsite/index.md',
-        documents:
-        [
-            'docsite/docs/docsite/sections.md',
-            'docsite/docs/docsite/tagging.md',
-            'docsite/docs/docsite/styling.md'
-        ],
-        sections: 'components'
+        title: 'Getting Started',
+        overview: 'file:/docsite/docs/getting-started.md'
+    },
+
+    authoring:
+    {
+        title: 'Content Authoring Notes',
+        overview: 'file:/docsite/docs/docsite/authoring.md'
+    },
+
+    layout:
+    {
+        title: 'Layout',
+        overview: 'file:/docsite/docs/docsite/layout.md'
+    },
+
+    styling:
+    {
+        title: 'Styling',
+        overview: 'file:/docsite/docs/docsite/styling.md'
+    },
+
+    tagging:
+    {
+        title: 'Tagging',
+        overview: 'file:/docsite/docs/docsite/tagging.md'
     },
 
     configure:
     {
-        title: 'Config Quick Reference',
+        title: 'Configuration',
         overview: 'file:/docsite/docs/configuration/index.md',
         documents:
         [
@@ -48,6 +72,7 @@ export default
         overview: 'file:/docsite/docs/integration/index.md',
         documents:
         [
+            'docsite/docs/integration/js-api.md',
             'docsite/docs/integration/parsers.md',
             'docsite/docs/integration/renderers.md',
             'docsite/docs/integration/test.md',
@@ -60,12 +85,13 @@ export default
         overview: 'file:/docsite/docs/components/index.md',
         sections: 
         [ 
-            'components_element',
+            'components_app',
             'components_page',
-            'components_asset',
-            'components_cobe',
             'components_nav',
-            'components_app'
+            'components_element',
+            'components_cobe',
+            'components_asset',
+            'components_filter'
         ]
     },
 
@@ -97,6 +123,13 @@ export default
         components: 'source/client/components/element/*.svt'
     },
 
+    components_filter:
+    {
+        title: 'Filtering Components',
+        overview: 'Components for filtering asset lists.',
+        components: 'source/client/components/filter/*.svt'
+    },
+
     components_nav:
     {
         title: 'Navigation Components',
@@ -107,7 +140,7 @@ export default
     components_page:
     {
         title: 'Page Components',
-        overview: 'file:/source/client/components/page/index-page.md',
+        overview: 'file:/docsite/docs/components/page/index-page.md',
         components: 'source/client/components/page/*.svt'
     }
 }

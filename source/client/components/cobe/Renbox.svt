@@ -7,13 +7,13 @@
       Rendering mount point (bindable).
 -->
 
-<div class="renbox">
+<div class:renbox>
   <div bind:this={display}></div>
 </div>
 
 
 <script>
-let { display = $bindable() } = $props();
+let { display = $bindable(), renbox } = $props();
 </script>
 
 <style>

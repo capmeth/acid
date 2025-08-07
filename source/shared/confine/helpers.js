@@ -10,6 +10,7 @@ let help = (name, value) =>
         {
             case 'and': return (...args) => args.findIndex(x => !x) < 0
             case 'or': return (...args) => args.findIndex(x => x) >= 0
+            case 'not': return arg => !arg
             case 'in': return (...args) => args.findIndex(x => value === x) >= 0
             case 'of': return type => value instanceof type
             case 're': return expr => expr.test(value)
@@ -21,6 +22,8 @@ let help = (name, value) =>
             case 'lte': return val => value <= val
 
             // normalization helpers
+            case 'to':
+                return func => () => func(value, name)
             case 'toArray': 
                 return more => () => is(value) ? is.array(value) ? value : [ value, ...(more || []) ] : []
             case 'toPlain': 

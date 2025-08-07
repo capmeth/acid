@@ -1,24 +1,26 @@
 ---
-title: Intro
+title: Introducing...
+tocDepth: 0
 ---
 
-# Introducing...
+"A Component Interface Documenter" (ACID) is a highly configurable platform for generating UI component documentation sites (docsites).  Docsite generation is not tied to any component framework and does not require your project to be on any specific build system. With extensions, any type of component can be documented.
 
-Another Component Interface Documenter (ACID) is a highly configurable and easy to use platform for generating UI component documentation sites (docsites).  Docsite generation is not tied to any framework or build system, and with extensions assets from any component framework can be documented.
+&nbsp;&nbsp; ******[Get Started >](section/start)******
 
 Some features of ACID include:
 
-- **Live Code Editing!**  
-  Edit example code in the browser and immediately see results.
-- **Syntax Highlighting!**  
-  Syntax highlighting in code examples.
-- **Component Framework Agnostic!**  
-  Document components built on any framework (with extensions).
-- **Component Filtering!**  
-  Filter components in the library using asset tags.
-- **Hot-Reload in Development!**  
-  Edit document/source files and see updates in the live docsite.
-- **Theme and Update Styling!**  
-  Easily change styles or make a new theme.
+- ******Live Code Editing!******  
+  Edit example code **in the browser** and immediately see results.
+- ******Code Highlighting!******  
+  Language specific **syntax highlighting** for markdown code blocks.
+- ******Framework Agnostic!******  
+  Document components built on **any framework** (with extensions).
+- ******Component Filtering!******  
+  **Quickly find documentation** in your library using tag and name filters.
+- ******Hot-Reload in Development!******  
+  Edit document/source files and **see live updates** in the docsite.
+- ******Theming and Styling!******  
+  **Full CSS control** for modifying or rewriting docsite themes.
 
-ACID is a hobby project inspired by [react-styleguidist](https://www.npmjs.com/package/react-styleguidist).
+**ACID** is a hobby project inspired by [react-styleguidist](https://www.npmjs.com/package/react-styleguidist).
+

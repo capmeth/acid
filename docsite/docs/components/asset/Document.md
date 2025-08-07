@@ -1,13 +1,16 @@
 
 ```html label="Structure"
-<main class="asset-component">
-  <Title>
-    <!-- title goes here -->
-  </Title>
-  <Crumbs />
+<Title>
+  <!-- document title goes here -->
+</Title>
+<Crumbs />
+<Card name="tags" store="document-tags">
+  slot:header
+    <Label id="label-tags" />          
+  /slot:header
   <List what="tags-list">
     <Tag />
-    ... <!-- each component tag -->
+    ... <!-- each document tag -->
   </List>
-</main>
+</Card>
 ```

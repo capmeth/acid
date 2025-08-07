@@ -1,69 +1,52 @@
+---
+cobeMode: static
+---
 
-# Getting Started
 
-Simple instructions to get you started using ACID.
-
-
-## Quick Start
+# Quick Start
 
 Install as dev dependency.
 
 ```shell
-npm install acid --save-dev
+npm install @capmeth/acid --save-dev
 ```
 
-You will then need an *acid.config.js* file.  To generate a default one, do
+Now, you need an *acid.config.js* file.  To generate a default one, do
 
 ```shell
 acid --make-config
 ```
 
-The config file is created in the current directory by default.
+The config file is created in the current directory by default.  It is pretty basic, but it's enough to get a docsite build going.
 
-It is pretty basic.  You'll probably want to change some things.  But it's enough to get a docsite build going.
-
-Now you can build the site
-
-```bash
-acid
-```
-
-or build and serve the site
+Now you can build the site,
 
 ```bash
 acid --http-server
 ```
 
-add `--watch` flag to the above to serve the site <b style="color:red">hot</b>.
-
-```bash
-acid --http-server --watch
-```
-
-If you've elected to serve the site using the default `httpServerPort`, point your browser at <https://localhost:3010>.
+and then point your browser to <https://localhost:3010> to see the result.
 
 Simple!
 
-Head to the config section of these docs to see all the config & CLI options!
+See the [CLI docs](document/configuration-acid-cli) for more details on command-line functionality.
 
 
-## Programmatic Access
+# Programmatic Access
 
 If you wish to operate a docsite from within your own code, do
 
 ```js
 import acid from '@capmeth/acid'
+import config from './acid.config.js'
 
-// create a new docsite instance
-let docsite = acid({ /* config options */ });
+// create a docsite instance
+let docsite = acid(config);
 
-await docsite.start();
-// ... and the docsite is now running
-await docsite.stop();
-// ... and the docsite is now stopped
+// passing `true` starts the server
+let stop = await docsite.run(true);
 ```
 
-Both `start` and `stop` are async functions that resolve to `undefined` once the request has finished.
+In the above, the returned `stop` function is async and resolves to `undefined` once the server has stopped.
 
-If the http server is disabled and no files are being watched (as per configuration), the process ends when `start` resolves (no need to call `stop`).
-
+See the [API docs](document/docsite-api) for more details on programmatic functionality.

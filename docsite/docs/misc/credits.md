@@ -1,6 +1,3 @@
----
-tocDepth: 0
----
 
 There's some truly awesome stuff out there in the Javascript world, and I am especially thankful to the authors and contributors of the apps & tools listed here in this document for their contributions to the Javascript playground we all know and love!
 
@@ -21,13 +18,6 @@ The `acid` CLI tool is made with Commander.
 Glob is a string pattern filename matcher.
 
 All of the multi-file configuration settings use Glob for enhanced file selection. 
-
-
-## [handlebars](https://handlebarsjs.com)
-
-Handlebars is a simple and lightweight templating engine.
-
-Handlebars is used as the built-in renderer for CoBEs.
 
 
 ## [highlightjs](https://highlightjs.org)

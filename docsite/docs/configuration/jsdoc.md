@@ -69,7 +69,7 @@ Identifies the author of a code entity.
 
 This is not currently displayed anywhere in the docsite.
 
-This is captured for
+****Captured for:****
 - components
 
 
@@ -99,18 +99,18 @@ is the same as
 
 Specifies a default value for the code entity.
 
-This is captured for
+****Captured for:****
 - components
 - component props
 
 
 ## @deprecated
 
-Indicates that a given code entity should not be used.
+Indicates that a given code entity should no longer be used.
 
-If provided, the content of this tag should identify an alternative solution.
+The optional content of this tag should describe an alternative solution.
 
-This is captured for
+****Captured for:****
 - components
 - component props
 
@@ -121,11 +121,13 @@ Provides a general description of the code entity.
 
 When a comment starts without a tag, `@description` is assumed be in effect. 
 
-Content will be parsed as markdown, but headers (`h1`, `h2`, etc.) will be suppressed.
+Description content is parsed as markdown, with the following caveats:
+- Front-matter is ignored.
+- Fenced code blocks are rendered as standard HTML (no CoBEs).
+- Header elements are suppressed by converting them to `<div>` tags.
+- Thematic break markers are rendered literally (not converted to `<hr>` tags).
 
-CoBEs are not embedded in descriptions, so code blocks will not have rendering nor highlighting available.
-
-This is captured for
+****Captured for:****
 - components
 - component props
 
@@ -136,7 +138,7 @@ Provides a path to a markdown example file for a code entity.
 
 This should be a relative path from `root` config setting.
 
-This is captured for
+****Captured for:****
 - components
 
 
@@ -146,7 +148,7 @@ Prevents the code entity from appearing in the docsite.
 
 This tag has no content, it need only appear in the comment to be effective.
 
-This is captured for
+****Captured for:****
 - components
 - component props
 
@@ -157,7 +159,7 @@ Marks the comment as being a definition for a specific code entity.
 
 This should be `component` or `prop` (neither value is standard JsDoc).
 
-This is captured for
+****Captured for:****
 - components
 - component props
 
@@ -170,7 +172,7 @@ This is the name that is used to identify the code entity in the docsite.
 
 `@name` is unnecessary when providing a value for `@component` or `@prop`.
 
-This is captured for
+****Captured for:****
 - components
 - component props
 
@@ -203,7 +205,7 @@ Defines a property of a code entity.
 
 Used to define props in a `@component` comment.  Aggregates with `@kind prop` comments to form the full props list for a component.
 
-This is captured for
+****Captured for:****
 - components
 
 
@@ -213,7 +215,7 @@ Indiates that a value for the code entity is mandatory.
 
 This tag has no content, it need only appear in the comment to be effective.
 
-This is captured for
+****Captured for:****
 - component props
 
 
@@ -225,7 +227,7 @@ Unlike `@description`, this gets no markdown conversion treatment.
 
 Also unlike `@description`, it is not currently displayed anywhere in the docsite.
 
-This is captured for
+****Captured for:****
 - components
 - component props
 
@@ -236,7 +238,7 @@ Provides (usually version) information about when the code entity was created.
 
 This is not currently displayed anywhere in the docsite.
 
-This is captured for
+****Captured for:****
 - components
 
 
@@ -260,7 +262,7 @@ A tag has the form `name:info` where
 
 Incorrectly formed tags will not appear in the docsite.  Additionally, tags must also be defined in `tagLegend` in the config in order to appear in the docsite.
 
-This is captured for
+****Captured for:****
 - components
 
 
@@ -270,7 +272,7 @@ Specifies the datatype(s) for the code entity.
 
 Type information (`{}` enclosed data) is not parsed by this or any other tag that accepts it.  It will appear in the docsite as-is.
 
-This is captured for
+****Captured for:****
 - component props
 
 
@@ -278,7 +280,7 @@ This is captured for
 
 Comma-separated list of possible enumerated values for the code entity.
 
-This is captured for
+****Captured for:****
 - component props
 
 
@@ -286,16 +288,18 @@ This is captured for
 
 That is, docsite generation without parsing any code, only JsDoc.
 
-ACID provides a "codeless" JsDoc to JSON parser (docson) that can be configured in *acid.config.js*.
+For many codebases, formal documentation-oriented comments can be pretty sparse.  However, for projects that enforce JsDoc in the code, ACID provides a "codeless" JsDoc to JSON parser.
+
+It is configured as the fallback parser.
 
 ```js
 parsers:
 [
-    { exts: '.jsx', use: '@capmeth/acid/ext-jsdoc' }
+    { types: '*', use: '#exts/jsdoc' }
 ]
 ```
 
-The above sets `.jsx` files to be parsed for information solely based on the comments within.
+You can override this by setting the fallback (`*`) record to something else (if necessary), but otherwise there is no need to set the parser explicitly.
 
 For this to work,
 - it is assumed that each source file implements exactly one component
@@ -305,6 +309,3 @@ For this to work,
 If the selected primary "component" comment has no `@name`, the filename itself is used.
 
 Once the component comment has been identified, all other comments without `@name` and `@kind` will be skipped.  If the component comment cannot be identified, the file itself is skipped.
-
-**3rd-party extensions** \
-Parser extensions, while having the option to use docson to supplement parsing results, may parse things differently. Please refer to their documentation for more information.

@@ -8,47 +8,45 @@
       Current document asset on display.
 -->
 
-{@render leader(leaderContent)}
-{#snippet leaderContent()}
+{@render pageContent({ nav, leader, primary })}
+
+{#snippet leader()}
   <Document {uid} />
 {/snippet}
 
-{@render main(mainContent)}
-{#snippet mainContent()}
-  <Article mcid={asset.content}>
-    {#snippet children(id)}
-      <Toc depth={asset.tocDepth} sel="#{asset.content}" />
-    {/snippet}
-  </Article>
+{#snippet primary()}
+  <Article {mcid} />
 {/snippet}
 
-{@render nav(navContent)}
-{#snippet navContent()}
+{#snippet nav()}
+  <Tree />
+  <Content sel="#{mcid}" tocDepth={asset.tocDepth} />
+  <Assets group="documents" />
   <Primary />
-  <Single {sect} />
 {/snippet}
 
 
 <script module>
-import { context, sinfo, tagDetails, webpage } from '#frend/lib'
+import { context, sinfo, webpage } from '#frend/lib'
 
 import Article from '../element/Article'
+import Assets from '../nav/Assets'
+import Content from '../nav/Content'
+import Crumbs from '../nav/Crumbs'
 import Document from '../asset/Document'
 import Primary from '../nav/Primary'
-import Single from '../nav/Single'
-import Toc from '../element/Toc'
+import Title from '../element/Title'
+import Tree from '../nav/Tree'
 </script>
 
 <script>
-let { leader, main, nav, sect, uid } = $props();
-context.page = 'document';
-context.section = sect;
+let { pageContent, uid } = $props();
 
 let asset = sinfo.asset(uid);
+let sect = asset.section.name;
+let mcid = asset.content;
+context.section = sect;
 context.asset = asset.uid; 
-
-if (asset.section.name !== sect) 
-    throw new Error(`Asset ${uid} was not found in the current section.`);
 
 webpage.setTitle(asset.title);
 </script>

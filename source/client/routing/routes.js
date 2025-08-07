@@ -10,8 +10,8 @@ export default
 [
     { name: 'home', path: '/home', Component: Home },
     { name: 'section', path: '/section/:sect', Component: Section },
-    { name: 'document', path: '/document/:sect/:uid', Component: Document },
-    { name: 'component', path: '/component/:sect/:uid', Component: Component },
+    { name: 'document', path: '/document/:uid', Component: Document },
+    { name: 'component', path: '/component/:uid', Component: Component },
     { name: 'index', path: '/index', Component: Index },
     { name: 'error', path: '/error', Component: Error },
 ];

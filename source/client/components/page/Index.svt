@@ -4,46 +4,53 @@
     @tags group:page, no-style
 -->
 
-{@render leader(leaderContent)}
-{#snippet leaderContent()}
-  <Title>{ title }</Title>
+{@render pageContent({ nav, leader, primary })}
+
+{#snippet leader()}
+  <Title>
+    <Label id="page-index-title" />
+  </Title>
 {/snippet}
 
-{#key filters}
-  {@render main(mainContent)}  
-{/key}
-{#snippet mainContent()}
-  <Assets {...filters} sort>
-    {#snippet children(count, total)}
-      <Label id="asset-count" {count} {total} />
+{#snippet primary()}
+  {#key filters}
+    <Filtered {...filters} sort>
+      {#snippet children(count, total)}
+        <Label id="msg-asset-count" {count} {total} />
+      {/snippet}
+    </Filtered>
+  {/key}
+{/snippet}
+
+{#snippet nav()}
+  <Card name="filters" store="nav-filters">
+    {#snippet header()}
+      <Title>
+        <Label id="label-filters" />
+      </Title>
     {/snippet}
-  </Assets>
-{/snippet}
-
-{@render nav(navContent)}
-{#snippet navContent()}
+    <Filters store="index-filters" {onfilter} />
+  </Card>
   <Primary />
-  <Filters store="index-filters" {onfilter} />
 {/snippet}
 
 
 <script module>
-import { context, t, webpage } from '#frend/lib'
+import { t, webpage } from '#frend/lib'
 
-import Assets from '../nav/Assets'
-import Filters from '../element/Filters'
+import Card from '../element/Card'
+import Filtered from '../filter/Filtered'
+import Filters from '../filter/Filters'
 import Label from '../element/Label'
 import Primary from '../nav/Primary'
 import Title from '../element/Title'
 </script>
 
 <script>
-let { leader, main, nav } = $props();
-context.page = 'index';
+let { pageContent } = $props();
 
 let filters = $state();
-let title = t("page-index-title");
 let onfilter = data => filters = data
 
-webpage.setTitle(title);
+webpage.setTitle(t("page-index-title"));
 </script>

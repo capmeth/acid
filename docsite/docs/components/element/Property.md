@@ -1,27 +1,39 @@
 
 ```html label="Structure"
-<div class="element-property required">
+<div class="element-property required deprecated">
   <div class="name">
     <!-- property name -->
   </div>
   <div class="type">
     <!-- property type or "unknown" -->
   </div>
-  <div class="description" data-markup>
-    <!-- property description -->
+  <Deprecated />
+  <div class="description markup">
+    if description
+      <!-- property description -->
+    else
+      <p>
+        <em><Label id="msg-no-comments" item="property" /></em>
+      </p>
+    endif 
   </div>
   <div class="values">
-    <Label id="property-values" />
-    <List>
-      <code><!-- property enum value --></code>
+    <Label id="label-accept-values" />
+    <List what="values-list">
+      <code>
+        <!-- property enum value -->
+      </code>
       ... <!-- each enum value -->
     </List>
   </div>
   <div class="default">
-    <Label id="property-default" />
-    <span><!-- property default value --></span>
+    <Label id="label-default-value" />
+    <span>
+      <!-- property default value -->
+    </span>
   </div>
 </div>
 ```
 
-- `required` class appears only for mandatory props
+- `required` class appears for mandatory prop
+- `deprecated` class appears for deprecated prop

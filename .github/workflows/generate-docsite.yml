@@ -33,8 +33,10 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - name: install deps
         run: npm ci
+      - name: generate bundle
+        run: npm run bundle
       - name: generate docs
-        run: node run -c docsite/acid.config.js
+        run: node source/cli/main -l test -c docsite/acid.config.js
       - name: setup pages
         uses: actions/configure-pages@v5
       - name: jekyll build

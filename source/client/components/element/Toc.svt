@@ -1,20 +1,29 @@
 <!--*
-    Renders a table-of-contents (ToC) for the selected item.
-
-    The ToC is generated from all headers appearing within `sel`.
+    Renders a table-of-contents (ToC).
 
     @tags group:element
-    @property { number } depth
-      ToC header depth (0-6)
+
+    @property { function } [content]
+      Receives the snippet to render ToC content.
     @property { string } sel
-      Query selector that identifies the element to generate a ToC for.
+      Selector of the root element in which to create a ToC from.
+    @property { number } tocDepth
+      ToC header depth (0-6).  Specify 0 for no ToC.
 -->
 
 {#if tree}
+  {#if content}
+    {@render content(render)}
+  {:else}
+    {@render render()}
+  {/if}
+{/if}
+
+{#snippet render()}
   <div class="element-toc">
     {@render multi(tree.heads)}  
-  </div>
-{/if}
+  </div>  
+{/snippet}
 
 {#snippet single({ id, title, heads })}
   {#if id}
@@ -44,18 +53,22 @@ import List from './List'
 </script>
 
 <script>
-let { depth, sel } = $props();
-let tree = $state(null);
+let { content, sel, tocDepth } = $props();
+let tree = $state();
 
-$effect(() => 
-{
-    let base = document.querySelector(sel);
-    tree = base ? headerTree(base, depth) : null;
-});
+// Somehow this component's rendering screws with the context.
+// Context must be reset here or it will be wrong in child components.
+ctx.region = ctx.region;
 
 let doClick = (evt, id) =>
 {
     document.getElementById(id)?.scrollIntoView();
     evt.preventDefault();
 }
+
+$effect(() => 
+{
+    let base = document.querySelector(sel);
+    tree = base ? headerTree(base, tocDepth) : null;
+});
 </script>

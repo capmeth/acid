@@ -2,8 +2,10 @@ import { camelCase, capitalCase, kebabCase } from 'change-case'
 import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import np from 'node:path'
-import globit from '#node/globit.js'
-import { is, uid } from '#utils'
+import globit from '#lib/globit.js'
+import { is, mapExtensions, uid } from '#utils'
+import importer from '../importer/index.js'
+import docson from './docson.js'
 import doxie from './doxie.js'
 import link from './parentization.js'
 import { tdContent } from './takedown.js'
@@ -11,28 +13,16 @@ import { tdContent } from './takedown.js'
 
 export default function(config)
 {
-    let { root, rootSection, toExampleFile, useFilenameOnly } = config;
+    let { parsers, root, rootSection, toAssetId, toExampleFile, useFilenameOnly } = config;
+
+    let promisedParsers = mapExtensions(parsers, importer(root));
 
     let fileRe = /^file:\//;
-    // prep the example file function
-    if (is.array(toExampleFile))
-    {
-        let [ search, replace ] = toExampleFile;
-        if (is.array(search)) search = new RegExp(...search);
-        toExampleFile = string => 
-        { 
-            let example = string.replace(search, replace);
-            // source file and example file cannot be the same
-            return example === string ? null : example;
-        }
-    }
-    if (!is.func(toExampleFile)) toExampleFile = () => null
 
-    return () => import('#temp/parser-exts.js').then(async mod =>
+    return () => promisedParsers.then(async parsers =>
     {
-        let parsers = mod.default; 
         // create storage for parsed code blocks
-        let blocks = tdContent.config.vars.blocks = {};
+        let blocks = tdContent.config.vars.blocks = [];
         
         let all = {}, files = {};
 
@@ -105,11 +95,12 @@ export default function(config)
             if (is.string(path))
             {
                 let abspath = np.resolve(root, path), ext = np.extname(abspath);
+                let parser = { ...parsers['*'], ...parsers[ext] };
 
-                if (parsers[ext]?.use)
+                if (parser.use)
                 {
                     let data = doxie();
-                    await parsers[ext].use(abspath, data);
+                    await parser.use(abspath, data, docson);
 
                     let { example, name, ...others } = data;
                     more = { ...others, ...more, title: name, path: example };
@@ -124,7 +115,8 @@ export default function(config)
                 if (!more.path)
                     more.path = toExampleFile(path);
 
-                more.uid = uid.hex([ abspath, more.section ]) + '-' + kebabCase(more.title);
+                // more.uid = uid.hex([ abspath, more.section ]) + '-' + kebabCase(more.title);
+                more.uid = kebabCase(toAssetId(path));
                 more.group = 'components';
                 more.type = 'component';
 
@@ -152,7 +144,7 @@ export default function(config)
         {
             let { content, path, ...more } = object;
 
-            let apply = content => 
+            let apply = (content) => 
             {
                 let fm = tdContent.parseMeta(content);
 
@@ -160,40 +152,27 @@ export default function(config)
                 {
                     if (fm.cobeMode) more.cobeMode = fm.cobeMode;
                     if (fm.title) more.title ||= fm.title;
-                    if (fm.tags) more.tags ||= fm.tags.split(/\s*,\s*/);
+                    if (fm.tags) more.tags ||= is.array(fm.tags) ? fm.tags : fm.tags.split(/\s*,\s*/);
                     if (fm.tocDepth || fm.tocDepth === 0) more.tocDepth = fm.tocDepth;
                 }
                 more.title ||= capitalCase(np.basename(path, np.extname(path)));
                 more.group ||= 'documents';
                 more.type ||= 'document';
+                // more.uid ||= uid.hex([ abspath, more.section ]) + '-' + kebabCase(more.title);
+                more.uid ||= kebabCase(path ? toAssetId(path) : uid.hex([ more.title, more.section ]));
 
-                return { ...more, content: tdContent.parse(content).doc };
+                let vars = { uid: more.uid }
+                return { ...more, content: tdContent.parse(content, { vars }).doc };
             }
             // assume content already on the object is markdown
-            if (content) 
-            {
-                let data = apply(content);
-
-                data.uid ||= uid.hex(data.section) + '-' + kebabCase(data.title);
-
-                return data;
-            }
+            if (content) return apply(content);
 
             if (is.string(path))
             {
                 let abspath = np.resolve(root, path);
                 
                 if (existsSync(abspath))
-                {
-                    return fs.readFile(abspath, { encoding: 'utf8' }).then(content => 
-                    {
-                        let data = apply(content);
-
-                        data.uid ||= uid.hex([ abspath, data.section ]) + '-' + kebabCase(data.title);
-
-                        return data;
-                    });
-                }
+                    return fs.readFile(abspath, 'utf8').then(apply);
             }
 
             return more;

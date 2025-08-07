@@ -1,4 +1,4 @@
-import AcidConfigError from '../error/AcidConfigError.js'
+import { AcidROOperationError, AcidValidateError } from '#source/errors.js'
 import is from '../is.js'
 import helpers from './helpers.js'
 
@@ -6,16 +6,31 @@ import helpers from './helpers.js'
 /**
     Constructs a restricted object.
 
+    Use `assign` to intercept values being set on the controlled object.
+    It does not provide control with array mutator operations (push, 
+    splice, unshift, etc.).
+
+    `assign` function will receive
+    - `apply` - pass this function the value to be assigned
+    - `value` - the original value to be assigned
+    - `at` - object with spec `path` and actual `name` for value assignment 
+
+    If `apply` throws, no value was assigned.
+
     @param { object } prints
       Blueprints for the restricted object.
+    @param { funcion } assign
+      Makes final assessment of the value to be assigned.
 */
-export default function (prints)
+export default function (prints, assign)
 {
+    assign ||= (apply, value) => apply(value)
+
     /**
         Governs object manipulation to adhere to a set of (blue) `prints`.
 
-        @param { object | array } prints
-          Blueprints for data object construction.
+        @param { object | array | function } object
+          Proxy target object.
         @param { object } at
           Name and path for proxer level.
         @return { Proxy }
@@ -38,7 +53,7 @@ export default function (prints)
                 let spec = { at, target, prop };
                 
                 if (is.func(value)) spec.test = value;
-                if (is.plain(value)) spec = { ...value, ...spec }
+                if (is.plain(value)) spec = { ...value, ...spec };
                 
                 return spec;
             }
@@ -49,8 +64,19 @@ export default function (prints)
 
         let useDefault = spec => is.undef(spec.default) ? void 0 : verify(spec, spec.default)
 
-        let verifyAll = (target, values, start = 0) => 
-            values.map((value, index) => verify(propSpec(target, start + index), value))
+        let verifyItems = (target, values, start = 0) => 
+        {
+            let reducer = (array, value, index) =>
+            {
+                let spec = propSpec(target, start + index);
+                let apply = value => array.push(verify(spec, value));
+
+                assign(apply, value, spec.at);
+                return array;
+            }
+
+            return values.reduce(reducer, []);
+        }
 
         return new Proxy(object, 
         {
@@ -61,48 +87,56 @@ export default function (prints)
                 // validate elements added to arrays
                 if (is.array(target))
                 {
-                    if (prop === 'push')
-                        return (...args) => target.push(...verifyAll(target, args, target.length))
-                    if (prop === 'unshift')
-                        return (...args) => target.unshift(...verifyAll(target, args, 0))
-                    if (prop === 'splice')
-                        return (s, d, ...args) => target[prop](s, d, ...verifyAll(target, args, s))
+                    switch (prop)
+                    {
+                        case 'copyWithin':
+                        case 'fill':
+                        case 'pop':
+                        case 'reverse':
+                        case 'shift':
+                        case 'sort':
+                            return () => { throw new AcidROOperationError(prop); }
+                        case 'push':
+                            return (...args) => target.push(...verifyItems(target, args, target.length))
+                        case 'splice':
+                            return (s, d, ...args) => target.splice(s, d, ...verifyItems(target, args, s))
+                        case 'unshift':
+                            return (...args) => target.unshift(...verifyItems(target, args, 0))
+                    }
                 }
 
-                if (is.undef(target[prop])) 
-                    target[prop] = useDefault(propSpec(target, prop));
+                if (!is.undef(target[prop])) return target[prop];
 
-                return target[prop];
+                return target[prop] = useDefault(propSpec(target, prop));
             },
 
             set(target, prop, value)
-            {                
-                target[prop] = verify(propSpec(target, prop), value);
+            {
+                let spec = propSpec(target, prop);
+                let apply = value => target[prop] = verify(spec, value);
+
+                assign(apply, value, spec.at);
                 return true;
             }
         });
     }
 
-    let verify = (spec, value) =>
+    let verify = ({ at, merge, prop, target, test }, value) =>
     {
-        let { at, test } = spec;
-
         let result = is.func(test) ? test(helpers(at.name, value)) : null;
         // throw if validation error message returned
-        if (is.string(result)) throw new AcidConfigError(result);
+        if (is.string(result)) throw new AcidValidateError(result);
 
         let final = value = is.func(result) ? result() : value;
 
         if (is.plain(value))
         {                    
-            let { target, prop } = spec;
-            final = (spec.merge && target[prop]) || proxer({}, spec.at);
+            final = (merge && target[prop]) || proxer({}, at);
             Object.keys(value).forEach(k => final[k] = value[k]);
         }                
         else if (is.array(value))
         {
-            // create new array proxy
-            final = proxer([], spec.at);
+            final = (merge && target[prop]) || proxer([], at);
             final.push(...value);
         }
 

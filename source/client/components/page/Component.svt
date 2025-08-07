@@ -8,20 +8,20 @@
       Current component asset on display.
 -->
 
-{@render leader(leaderContent)}
-{#snippet leaderContent()}
+{@render pageContent({ nav, leader, primary })}
+
+{#snippet leader()}
   <Component {uid} />
 {/snippet}
 
-{@render main(mainContent)}
-{#snippet mainContent()}
+{#snippet primary()}
   <Article mcid={asset.content} />
 {/snippet}
 
-{@render nav(navContent)}
-{#snippet navContent()}
+{#snippet nav()}
+  <Tree />
+  <Assets group="components" />
   <Primary />
-  <Single {sect} />
 {/snippet}
 
 
@@ -29,21 +29,19 @@
 import { context, sinfo, webpage } from '#frend/lib';
 
 import Article from '../element/Article'
+import Assets from '../nav/Assets'
 import Component from '../asset/Component'
 import Primary from '../nav/Primary'
-import Single from '../nav/Single'
+import Tree from '../nav/Tree'
 </script>
 
 <script>
-let { leader, main, nav, sect, uid } = $props();
-context.page = 'component';
-context.section = sect;
+let { pageContent, uid } = $props();
 
 let asset = sinfo.asset(uid);
+let sect = asset.section.name;
+context.section = sect;
 context.asset = asset.uid;
-
-if (asset.section.name !== sect) 
-    throw new Error(`Asset ${uid} was not found in the current section.`);
 
 webpage.setTitle(asset.title);
 </script>

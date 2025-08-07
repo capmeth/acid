@@ -5,7 +5,9 @@
 */
 import pluginAlias from '@rollup/plugin-alias'
 import pluginCommonjs from '@rollup/plugin-commonjs'
+import pluginImage from '@rollup/plugin-image'
 import pluginInject from '@rollup/plugin-inject'
+import pluginJson from '@rollup/plugin-json'
 import pluginNodeResolve from '@rollup/plugin-node-resolve'
 import pluginAnalyzer from 'rollup-plugin-analyzer'
 import pluginPostcss from 'rollup-plugin-postcss'
@@ -22,45 +24,41 @@ import pluginCopyStuff from './plugin/copy-stuff.js'
 import pluginEmitAsset from './plugin/emit-asset.js'
 import pluginScopedStyles from './plugin/scoped-styles.js'
 import pluginVirtualFile from './plugin/virtual-file.js'
-import virtualFiles from './lib/virtual-files.js'
 
 
 export default function(config, loaded, styles)
 {
-    let { copy, outputDir, root } = config;
+    let { copy, output, root } = config;
     let { sections, files, blocks } = loaded;
+    let outpath = path.join(root, output.dir);
 
-    let outpath = path.join(root, outputDir);
-    let acid = {};
+    let main = {};
 
-    // Input/Output
-    acid.input = 
+    main.input = 
     { 
-        'acid-docsite': path.join(paths.client, 'app.js'),
-        'acid-bundle': path.join(paths.client, 'index.js')
+        [`${output.name}-docsite`]: path.join(paths.client, 'app.js'),
+        [`${output.name}-examples`]: './examples.json',
+        [`${output.name}-svelte-render`]: path.join(paths.extensions, 'svelte.js')
     };
 
-    acid.output =
-    {
-        dir: outpath,
-        format: 'esm',
-        banner: banner(config.title)
+    main.output =
+    { 
+        dir: outpath, 
+        format: 'esm', 
+        banner: banner(config.title) 
     };
 
-    // External
-    acid.external = [ /^https:\/\//, '#bundle' ];
+    main.external = [ 'rollup', /^svelte/ ];
 
-    // Plugins
-    acid.plugins = 
+    main.plugins = 
     [
         pluginVirtualFile(
         { 
-            'docsite-config': makeConfig(config, sections, blocks),
-            // 'empty-export': 'export default {}',
+            'docsite-config': makeConfig(config, sections),
+            './examples.json': JSON.stringify(blocks),
             './style/main.css': styles.root || '',
             ...files,
             '../markdown/index.js' : makeExports(Object.keys(files)),
-            ...virtualFiles
         }),
         pluginAlias(
         {
@@ -69,19 +67,14 @@ export default function(config, loaded, styles)
                 '#comps': path.join(paths.client, 'components'),
                 '#config': 'docsite-config',
                 '#frend': paths.client, // `#client` conflicts with svelte internals
-                '#temp': paths.temp,
+                '#image': paths.images,
                 '#utils': paths.shared,
-
-                // Something is a bit off when compiling svelte components from
-                // a string as the compiler seems to look for "svelte/internal" 
-                // in the wrong place. This causes rollup to assume it is an 
-                // external dependency.  Here, we re-map it correctly to avoid 
-                // warnings and runtime errors
-                // 'svelte/internal': path.join(paths.root, 'node_modules', 'svelte', 'src', 'internal')
             }
         }),
-        pluginNodeResolve({ extensions: [ '.css', '.js', '.json', '.svt' ], browser: true }),
+        pluginNodeResolve({ extensions: [ '.css', '.js', '.json', '.png', '.svt' ], browser: true }),
+        pluginJson(),
         pluginCommonjs(),
+        pluginImage(),
         pluginScopedStyles({ styles }),
         pluginSvelte({ extensions: [ '.svt' ], emitCss: true }), 
         pluginInject(
@@ -90,17 +83,15 @@ export default function(config, loaded, styles)
             ctx: path.join(paths.client, 'lib', 'context.js')
         }),
         pluginPostcss({ minimize: true }),
-        pluginEmitAsset({ fileName: 'index.html', source: makeHtml(config) }),
+        pluginEmitAsset({ fileName: `${output.name}.html`, source: makeHtml(config) }),
         pluginCopyStuff({ specs: copy, rootpath: root, outpath }),
         pluginAnalyzer({ onAnalysis: logStats, skipFormatted: true })
     ];
 
-    // Watch Options
-    acid.watch = { buildDelay: 50 };
+    main.watch = { buildDelay: 50 };
 
-    // Logging
-    acid.logLevel = 'debug';
-    acid.onLog = logHandler;
+    main.logLevel = 'debug';
+    main.onLog = logHandler;
 
-    return acid;
+    return [ main ];
 }

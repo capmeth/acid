@@ -1,4 +1,4 @@
 
-These components define the different "pages" of a docsite.
+The components in this section define the different "pages" of a docsite.
 
-Page components can use site regions *leader*, *main*, *nav*, and *trailer*.  They are identified in the structure using `<region:xxx>`:
+They are comprised only of "regions" which are represented as `<region:xxx>` tags.

@@ -49,16 +49,32 @@ let getParents = section =>
     return list;
 }
 
+let getDescendants = section =>
+{
+    let data = {};
+    
+    section.sections?.forEach(sect =>
+    {
+        let section = sections[sect], child = getDescendants(section);
+        data.sections = [ ...(data.sections || []), sect, ...(child.sections || []) ];
+        assetGroups.forEach(g => data[g] = [ ...(data[g] || []), ...(section[g] || []), ...(child[g] || []) ]);
+    });
+
+    return data;
+}
+
 let section = cacher(name =>
 {
-    let sect = sections[name.name || name];
+    let id = name.name || name;
+    let sect = sections[id];
 
     let iface = proxet({}, prop => 
     {
         if (prop === 'assets') return assetGroups.reduce((a, g) => [ ...a, ...iface[g] ], []);
-        if (prop === 'name') return name;
+        if (prop === 'descendants') return getDescendants(sect);
+        if (prop === 'name') return id;
         if (prop === 'parents') return getParents(sect);
-        if (prop === 'path') return [ ...iface.parents, name ];
+        if (prop === 'path') return [ ...iface.parents, iface.name ];
         if (prop === 'titlePath') return iface.path.map(parent => sinfo(parent).title);
         if (prop === 'tocDepth') return sect.tocDepth ?? tocDepth;
 

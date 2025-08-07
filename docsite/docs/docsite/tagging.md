@@ -18,9 +18,7 @@ A tag has the form `name:info` where
 - `name` is a lowercase, alphanumeric, and possibly hyphenated value, and
 - `info` is any non-whitespace character except a comma.
 
-Incorrectly formed tags will be omitted from the documentation.
-
-You must define tags in the `tagLegend` setting of *acid.config.js*.
+Incorrectly formed tags will be omitted from the documentation.  You should define tags in the `tagLegend` setting of *acid.config.js* to make them functional in the docsite.
 
 A tag definition is simply a description of the tag:
 
@@ -32,11 +30,9 @@ tagLegend:
 }
 ```
 
-Note that tag `simple` will not be available/shown in the docsite since we didn't define it.
+Use `{info}` in the description to insert tag `info` when displayed in the docsite (as applicable).
 
-Use `{info}` in the description to insert tag `info` when displayed in the docsite.
-
-Tag descriptions are not HTML nor markdown enabled.  They display as-is in the browser.
+Tag descriptions are neither HTML nor markdown enabled.  They display as-is in the browser.
 
 
 ## Tag Styling
@@ -45,7 +41,7 @@ The **Tag** component is responsible for rendering tags.
 
 It applies the tag name as a class on its root element, allowing for customized styling.
 
-For instance, a "domain" tag with "pricing-data" info would render
+For instance, a "domain" tag with "pricing-data" info would render as
 
 ```html
 <span class="element-tag domain">
@@ -58,8 +54,4 @@ For instance, a "domain" tag with "pricing-data" info would render
 </span>
 ```
 
-and can be styled via `.element-tag.domain` (*acid.config.js*)
-
-```js
-style: [ ..., '.element-tag.domain { background-color: blue; color: white; }' ]
-```
+and can be styled via `.element-tag.domain` from the `style` option of *acid.config.js*.

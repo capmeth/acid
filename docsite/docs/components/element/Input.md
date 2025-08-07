@@ -1,4 +1,6 @@
 
 ```html label="Structure"
-<input class="element-input" />
+<div class="element-input page-{page} region-{region}">
+  <input />
+</div>
 ```

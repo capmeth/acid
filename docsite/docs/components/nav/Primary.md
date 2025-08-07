@@ -1,12 +1,17 @@
 
 ```html label="Structure"
-<div class="nav-primary region-{region}">
-  <List>
+<Card name="primary">
+  slot:header
+    <Title>
+      <Label id="label-primary" />
+    </Title>
+  /slot:header
+  <List what="page-list">
     <Link to={name}>
-      <!-- link title -->
+      <Label id="page-{name}-title" />
     </Link>                    
   </List>
-</div> 
+</Card> 
 ```
 
-- `{name}` is a static page name
+- `{name}` is a static page name ("index", "home")

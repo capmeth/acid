@@ -6,33 +6,24 @@
       Name of section on display.
 -->
 
-{@render leader(leaderContent)}
-{#snippet leaderContent()}
+{@render pageContent({ nav, leader, primary })}
+
+{#snippet leader()}
   <Title>{ section.title }</Title>
   <Crumbs {sect} />
 {/snippet}
 
-{@render main(mainContent)}
-{#snippet mainContent()}
-  <Article mcid={section.content}>
-    {#snippet children(id)}
-      <Toc depth={section.tocDepth} sel="#{section.content}" />
-    {/snippet}
-  </Article>
-  <Assets {sect} store="groupFilter" />
+{#snippet primary()}
+  <Article {mcid} />
+  <Filtered {sect} store="groupFilter" />
 {/snippet}
 
-{#if section.sections?.length}
-  {@render trailer(trailerContent)}  
-{/if}
-{#snippet trailerContent()}
-  <Annex {sect} store="groupFilter" />
-{/snippet}
-
-{@render nav(navContent)}
-{#snippet navContent()}
+{#snippet nav()}
+  <Tree />
+  <Content sel="#{mcid}" tocDepth={section.tocDepth} />
+  <Assets group="documents" />
+  <Assets group="components" />
   <Primary />
-  <Single {sect} />
 {/snippet}
 
 
@@ -40,20 +31,21 @@
 import { context, sinfo, webpage } from '#frend/lib'
 
 import Article from '../element/Article'
-import Annex from '../nav/Annex'
 import Assets from '../nav/Assets'
+import Content from '../nav/Content'
+import Filtered from '../filter/Filtered'
 import Crumbs from '../nav/Crumbs'
 import Primary from '../nav/Primary'
-import Single from '../nav/Single'
 import Title from '../element/Title'
-import Toc from '../element/Toc'
+import Tree from '../nav/Tree'
 </script>
 
 <script>
-let { leader, main, nav, sect, trailer } = $props();
-context.page = 'section';
+let { pageContent, sect } = $props();
 context.section = sect;
 
 let section = sinfo(sect);
+let mcid = section.content
+
 webpage.setTitle(section.title);
 </script>

@@ -1,0 +1,34 @@
+<!--*
+    Renders ToC navigation elements.
+
+    All props are passed to **Toc** component.
+
+    @tags group:nav, no-style
+-->
+
+<Toc {...args}>
+  {#snippet content(render)}
+    <Card name="content" store="nav-content">
+      {#snippet header()}
+        <Title>
+          <Label id="label-toc" />
+        </Title>
+      {/snippet}
+      {@render render()}
+    </Card>
+  {/snippet}
+</Toc>
+
+
+<script module>
+import { t } from '#frend/lib'
+
+import Card from '../element/Card'
+import Label from '../element/Label'
+import Title from '../element/Title'
+import Toc from '../element/Toc'
+</script>
+
+<script>
+let { ...args } = $props();
+</script>

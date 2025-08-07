@@ -1,29 +1,37 @@
 <!--*
     Renders static docsite links.
 
-    @tags group:nav, region
+    @tags group:nav
 -->
 
-<div class="nav-primary region-{ctx.region}">
-  <List items={pages}>
-    {#snippet children({ to, name })}
+<Card name="primary" store="nav-primary">
+  {#snippet header()}
+    <Title>
+      <Label id="label-primary" />
+    </Title>
+  {/snippet}
+  <List items={pages} what="page-list">
+    {#snippet children({ to, id, ...vars })}
       <Link {to} current={context.page === to}>
-        { name }
+        <Label {id} {...vars} />
       </Link>                    
     {/snippet}
   </List>
-</div> 
+</Card> 
 
 
 <script module>
-import { context, sinfo, t } from '#frend/lib'
+import { context, sinfo } from '#frend/lib'
 
+import Card from '../element/Card'
+import Label from '../element/Label'
 import Link from '../app/Link'
 import List from '../element/List'
+import Title from '../element/Title'
 
 let pages = 
 [ 
-    { to: 'home', name: sinfo.root.title }, 
-    { to: 'index', name: t('page-index-title') }
+    { to: 'home', id: 'page-home-title', title: sinfo.root.title }, 
+    { to: 'index', id: 'page-index-title' }
 ];
 </script>

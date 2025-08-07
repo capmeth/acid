@@ -4,38 +4,42 @@
     @tags group:page, no-style
 -->
 
-{@render main(mainContent)}
-{#snippet mainContent()}
-  <Article mcid={sinfo.root.content} />
-  <Assets {sect} store="groupFilter" />
+{@render pageContent({ nav, leader, primary })}
+
+{#snippet leader()}
+  <Title>{ sinfo.root.title }</Title>
 {/snippet}
 
-{@render trailer(trailerContent)}
-{#snippet trailerContent()}
-  <Annex {sect} store="groupFilter" />
+{#snippet primary()}
+  <Article {mcid} />
+  <Filtered {sect} store="groupFilter" />
 {/snippet}
 
-
-{@render nav(navContent)}
-{#snippet navContent()}
+{#snippet nav()}
+  <Tree />
+  <Content sel="#{mcid}" tocDepth={sinfo.root.tocDepth} />
+  <Assets group="documents" />
+  <Assets group="components" />
   <Primary />
-  <Single {sect} />
 {/snippet}
 
 
 <script module>
 import { context, sinfo } from '#frend/lib'
 
-import Annex from '../nav/Annex'
-import Article from '../element/Article'
 import Assets from '../nav/Assets'
+import Article from '../element/Article'
+import Content from '../nav/Content'
+import Filtered from '../filter/Filtered'
 import Primary from '../nav/Primary'
-import Single from '../nav/Single'
+import Title from '../element/Title'
+import Tree from '../nav/Tree'
 </script>
 
 <script>
-let { main, nav, trailer } = $props();
-context.page = 'home';
-context.section = sinfo.root.name;
-let sect = context.section;
+let { pageContent } = $props();
+
+let sect = sinfo.root.name;
+context.section = sect;
+let mcid = sinfo.root.content;
 </script>

@@ -1,22 +1,17 @@
 
 ```html label="Structure"
 <region:leader>
-  <Title>
-    <!-- page title -->
-  </Title>
-  <Crumbs />
-  <List what="tags-list">
-    <Tag {...data} />
-    ... <!-- each document tag -->
-  </List>
+  <Document /> <!-- from asset group -->
 </region:leader>
 
-<region:main>
+<region:primary>
   <Article />
-</region:main>
+</region:primary>
 
 <region:nav>
+  <Tree />
+  <Content />
+  <Assets group="documents" />
   <Primary />
-  <Single />
 </region:nav>
 ```

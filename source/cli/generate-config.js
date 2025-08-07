@@ -1,8 +1,8 @@
 import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
-import { hackson } from '#node/hosted.js'
+import { hackson } from '#lib/hosted.js'
 import { is } from '#utils'
-import createConfig from '../config/index.js'
+import { assign, defaults } from '../config/index.js'
 
 
 /**
@@ -21,7 +21,7 @@ export default async function (dest, options)
         return void 0;
     }
 
-    let { config } = createConfig(options);
+    let { config } = assign(defaults, options);
     let code = content(config)
 
     return fs.writeFile(dest, code, { encoding: 'utf8' });
@@ -34,8 +34,8 @@ ${hackson.type === 'module' ? 'export default' : 'module.exports ='}
     // name for the docsite
     title: ${jss(config.title)},
 
-    // directory to deploy docsite
-    outputDir: ${jss(config.outputDir)},
+    // generated artifacts location
+    output: ${format(config.output, 1)},
 
     // root directory of project
     root: ${jss(config.root)},
@@ -55,12 +55,21 @@ ${hackson.type === 'module' ? 'export default' : 'module.exports ='}
     // top level section of docsite
     rootSection: ${jss(config.rootSection)},
 
-    // docsite styling
-    theme: 'grayscape',
+    // header level depth for table-of-contents
+    tocDepth: ${jss(config.tocDepth)},
 
-    // http-server: keep false to run from CLI
-    httpServer: false,
-    httpServerPort: ${jss(config.httpServerPort)}
+    // docsite styling
+    style: ${jss(config.style)},
+
+    // custom asset tags
+    tagLegend: {},
+
+    // http-server: keep disabled to run from CLI
+    server:
+    {
+        enabled: false,
+        port: ${jss(config.server.port)}
+    }
 }
 `
 

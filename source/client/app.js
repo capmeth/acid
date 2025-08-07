@@ -30,5 +30,5 @@ export default async function ()
     if (hrMode) wsreload();
 
     // render the docsite
-    composer().then(compose => mount(App, { target: document.body, props: { compose } }));
+    await composer().then(compose => mount(App, { target: document.body, props: { compose } }));
 }

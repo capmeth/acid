@@ -12,5 +12,6 @@ export default
     performance: 'readonly',
     process: 'readonly',
     setTimeout: 'readonly',
+    URL: 'readonly',
     window: 'readonly'
 }

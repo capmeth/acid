@@ -1,13 +1,13 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import paths from '#paths'
-import ctjs from '#source/shared/css-to-json-string.js'
+import { ctja } from '#utils'
 
 
 let fileRe = /^#|file:\//;
-let jsp = data => JSON.parse(ctjs(data))
+let jsp = data => JSON.parse(ctja(data))
 /**
-    Takes CSS content or loads CSS files and converts them to objects.
+    Takes CSS content or loads CSS files and converts them to arrays.
 
     In `files` array:
     - A string starting with `file:/` is a file relative to `root`.
