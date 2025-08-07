@@ -1,49 +1,41 @@
----
-title: Content Authoring Notes
----
 
-
-ACID uses the [Takedown](https://www.npmjs.com/package/takedown) parser for converting markdown documents and source comments into HTML.  
+ACID uses the [Takedown](https://www.npmjs.com/package/takedown) parser for converting markdown documents into HTML.  
 
 Most HTML generation is left standard, but ACID does manipulate the output on some elements to achieve its feature set.
 
+- **Front-matter is enabled and parsed as YAML**  
+  Some [document-specific config settings](document/configuration-markdown) are available here.
 
-# For Documents
+- **Fenced code blocks are controlled**  
+  These blocks are replaced with [**Editor**](component/cobe-editor) components for code highlighting and editing.
 
-- Front-matter is enabled and parsed as YAML for document-specific config settings.
+- **HTML ids are added to header elements**  
+  This is used for rendering a table of contents (not available for example files).
 
-- Fenced code blocks are replaced with [**Editor**](component/cobe-editor) components for code highlighting and editing.
-
-- HTML ids are added to header elements for table-of-contents rendering.
-
-- Relative hyperlinks known to the docsite are adjusted to allow for easier docsite page linking from within a document.
-
-- Entire document HTML is wrapped in a component for rendering in a document docpage.
-
-
-# For Source Comments
-
-- Front-matter is disabled.
-
-- Fenced code blocks are rendered as converted to HTML.
-
-- Header elements are suppressed by converting them to `<div>` tags.
-
-- Markdown for thematic breaks is rendered literally (not converted to `<hr>`s).
-
-- Hyperlinks get the same treatment as they do with documents.
-
-- No internal components are embedded so document HTML is not wrapped.
+- **Docsite hyperlinks are adjusted**  
+  Relative hyperlinks known to the docsite are adjusted to allow for easier docsite page linking from within a document.
 
 
-# For Component Examples
+# Internal Hyperlinking
 
-- Front-matter is enabled and parsed, but most settings will be overridden by component data.
+Markdown link elements with docsite recognizeable paths are captured and adjusted for linking to pages of the docsite.
 
-- Fenced code blocks are rendered using **Editor** components.
+For instance...
 
-- HTML ids are added to header elements but a table-of-contents is not available.
+We can link to [this page](section/authoring). \
+We can link to [the home page](home).
 
-- Hyperlinks get the same treatment as they do with documents.
+```md
+We can link to [this page](section/authoring).
+We can link to [the home page](home).
+```
 
-- Entire document HTML is wrapped in a component for rendering in a component docpage.
+Relative links that the docsite understands include:
+
+- `home`
+- `section/[name]`: where `[name]` is the name of a section
+- `component/[id]`: where `[id]` is the asset id of a component
+- `document/[id]`: where `[id]` is the asset id of a document
+- the name of any other non-parameterized route in the docsite
+
+Asset ID generation is controlled by the `toAssetId` config option.

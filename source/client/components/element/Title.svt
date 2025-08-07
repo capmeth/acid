@@ -2,13 +2,16 @@
     Renders content as a title.
 
     @tags group:element, page, region
+
+    @property { boolean } [deprecated]
+      Should the thing this title references no longer be used?
 -->
 
-<div class="element-title page-{ctx.page} region-{ctx.region}"> 
+<div class="element-title page-{ctx.page} region-{ctx.region}" class:deprecated> 
   {@render children()}
 </div>
 
 
 <script>
-let { children } = $props();
+let { deprecated, children } = $props();
 </script>

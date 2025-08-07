@@ -1,9 +1,6 @@
 
 ```html label="Structure"
 <region:leader>
-  <Title>
-    <!-- component name goes here -->
-  </Title>
   <Component /> <!-- from asset group -->
 </region:leader>
 

@@ -27,6 +27,7 @@
     "dependencies": {
         "@rollup/plugin-alias": "^5.1.1",
         "@rollup/plugin-commonjs": "^28.0.2",
+        "@rollup/plugin-image": "^3.0.3",
         "@rollup/plugin-inject": "^5.0.5",
         "@rollup/plugin-json": "^6.1.0",
         "@rollup/plugin-node-resolve": "^16.0.0",
@@ -37,7 +38,6 @@
         "deepmerge": "^4.3.1",
         "glob": "^11.0.1",
         "js-yaml": "^4.1.0",
-        "object-path": "^0.11.8",
         "rollup": "^4.43.0",
         "rollup-plugin-analyzer": "^4.0.0",
         "rollup-plugin-postcss": "^4.0.2",

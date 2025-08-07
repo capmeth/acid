@@ -11,8 +11,6 @@
 {@render pageContent({ nav, leader, primary })}
 
 {#snippet leader()}
-  <Title>{ asset.title }</Title>
-  <Crumbs {sect} />
   <Document {uid} />
 {/snippet}
 

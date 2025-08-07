@@ -12,6 +12,7 @@ paths.test = path.join(paths.root, 'test');
 // source paths
 paths.client = path.join(paths.source, 'client');
 paths.config = path.join(paths.source, 'config');
+paths.images = path.join(paths.source, 'images');
 paths.node = path.join(paths.source, 'node');
 paths.shared = path.join(paths.source, 'shared');
 paths.service = path.join(paths.source, 'service');

@@ -7,11 +7,7 @@
   <div class="type">
     <!-- property type or "unknown" -->
   </div>
-  if deprecated
-    <div class="deprecated">
-      <!-- deprecation message -->
-    </div>
-  endif
+  <Deprecated />
   <div class="description markup">
     if description
       <!-- property description -->

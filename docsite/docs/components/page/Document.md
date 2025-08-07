@@ -1,10 +1,6 @@
 
 ```html label="Structure"
 <region:leader>
-  <Title>
-    <!-- document title goes here -->
-  </Title>
-  <Crumbs {sect} />
   <Document /> <!-- from asset group -->
 </region:leader>
 

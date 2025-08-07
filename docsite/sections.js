@@ -10,6 +10,7 @@ export default
             'layout',
             'styling',
             'tagging',
+            'authoring',
             'configure', 
             'integrate', 
             'components', 
@@ -21,6 +22,12 @@ export default
     {
         title: 'Getting Started',
         overview: 'file:/docsite/docs/getting-started.md'
+    },
+
+    authoring:
+    {
+        title: 'Content Authoring Notes',
+        overview: 'file:/docsite/docs/docsite/authoring.md'
     },
 
     layout:

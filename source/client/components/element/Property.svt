@@ -12,12 +12,10 @@
     @property { array } [values] List of valid values (enums) for the property.
 -->
 
-<div class="element-property" class:required class:deprecated>
-  <div class="name">{ name }</div>
+<div class="element-property" class:required>
+  <div class="name" class:deprecated>{ name }</div>
   <div class="type">{ type || 'unknown' }</div>
-  {#if deprecated && is.string(deprecated)}
-    <div class="deprecated">{ deprecated }</div>
-  {/if}
+  <Deprecated message={deprecated} />
   <div class="description markup">
     {#if description}
       {@html description}
@@ -47,8 +45,7 @@
 
 
 <script module>
-import { is } from '#utils'
-
+import Deprecated from './Deprecated'
 import Label from './Label'
 import List from './List'
 </script>

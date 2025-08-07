@@ -1,38 +1,40 @@
 <!--
 	  Document asset leader.
 
-    @tags group:asset
+    @tags group:asset, no-style
 
     @property { string } uid
       Document asset to display.
 -->
 
-<div class="asset-document">
-  {#if tags?.length}
-    <Card name="tags" store="document-tags">
-      {#snippet header()}
-        <Label id="label-tags" />          
+<Title>{ title }</Title>
+<Crumbs sect={section.name} />
+{#if tags?.length}
+  <Card name="tags" store="document-tags">
+    {#snippet header()}
+      <Label id="label-tags" />          
+    {/snippet}
+    <List items={tags} pred={tagDetails} what="tags-list">
+      {#snippet children(data)}
+        <Tag {...data} />    
       {/snippet}
-      <List items={tags} pred={tagDetails} what="tags-list">
-        {#snippet children(data)}
-          <Tag {...data} />    
-        {/snippet}
-      </List>
-    </Card>
-  {/if}
-</div>
+    </List>
+  </Card>
+{/if}
 
 
 <script module>
 import { sinfo, tagDetails } from '#frend/lib'
 
 import Card from '../element/Card'
+import Crumbs from '../nav/Crumbs'
 import Label from '../element/Label'
 import List from '../element/List'
 import Tag from '../element/Tag'
+import Title from '../element/Title'
 </script>
 
 <script>
 let { uid } = $props();
-let { tags } = sinfo.asset(uid);
+let { section, tags, title } = sinfo.asset(uid);
 </script>

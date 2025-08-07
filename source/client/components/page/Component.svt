@@ -11,7 +11,6 @@
 {@render pageContent({ nav, leader, primary })}
 
 {#snippet leader()}
-  <Title>{ asset.title }</Title>
   <Component {uid} />
 {/snippet}
 
@@ -33,7 +32,6 @@ import Article from '../element/Article'
 import Assets from '../nav/Assets'
 import Component from '../asset/Component'
 import Primary from '../nav/Primary'
-import Title from '../element/Title'
 import Tree from '../nav/Tree'
 </script>
 

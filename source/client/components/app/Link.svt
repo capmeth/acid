@@ -17,7 +17,7 @@
       Additional parameters for the route.
 -->
 
-<a class="app-link page-{ctx.page} region-{ctx.region} {to}" class:current {href} {title} {onclick}>
+<a class="app-link page-{ctx.page} region-{ctx.region} {to}" class:current class:deprecated {href} {title} {onclick}>
   <span>{@render children()}</span>
 </a>
 
@@ -30,6 +30,7 @@ import { context, sinfo } from '#frend/lib'
 let { current, href, onclick, to, title, children, ...args } = $props();
 // convert read-only props rest parameters to read-write
 let params = { ...args };
+let deprecated = $state(false);
 
 if (to === 'section')
 { 
@@ -53,6 +54,7 @@ else if (params.uid)
     let asset = sinfo.asset(params.uid);
     to = asset.type;
     title ||= `${asset.type}: ${asset.section.titlePath.slice(1).join('/')}/${asset.title}`
+    deprecated ||= !!asset.deprecated;
     current ??= context.asset === asset.uid;
     params.uid = asset.uid;
 }

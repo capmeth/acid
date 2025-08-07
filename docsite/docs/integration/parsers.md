@@ -50,8 +50,6 @@ It will receive the following parameters:
 2. `data`: a proxied data object in which to store parsed information
 3. `parse`: a specialized JsDoc parser
 
-The return value is ignored.
-
 The parsing function should populate `data` with as many of the following properties as possible.
 
 - `name` *string*: name of the component

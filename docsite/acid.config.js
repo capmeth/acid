@@ -10,7 +10,10 @@ import sections from './sections.js'
 export default
 {
     namespace: "metasite",
-    title: "Another Component Interface Documenter (ACID)",
+    title: "A Component Interface Documenter",
+    logo: 'acid.png',
+
+    copy: { files: path.join("source", "images", "acid.png"), to: 'acid.png' },
 
     output: "web",
     cobe: 
@@ -19,8 +22,11 @@ export default
     ],
     hljs: 
     { 
-        aliases: { jsx: [ 'svelte', 'svt'] }
+        aliases: { jsx: [ "svelte", "svt"] },
+        theme: 'kimbie-dark'
     },
+
+    labels: { "page-home-title": "Homepage" },
 
     sections,
 
@@ -28,8 +34,9 @@ export default
     {
         "extra-props": "Unused props are passed to <{info}>.",
         "group": "Belongs to {info} component group.",
-        "no-style": "This component is not themable.",
-        "region": "Region aware."
+        "no-style": "This component cannot be styled.",
+        "page": "Styling can be page specific.",
+        "region": "Styling can be region specific."
     },
 
     toAssetId: [ [ "^(?:source[/]client[/]components|docsite[/]docs)[/](.+?)[.][^./]+$" ], "$1" ],
@@ -51,5 +58,5 @@ export default
         ] 
     },
 
-    style: [ '#grayscape', 'file:/docsite/acid.style.css' ]
+    style: [ '#acidic', 'file:/docsite/acid.style.css' ]
 }
