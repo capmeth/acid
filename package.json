@@ -1,7 +1,7 @@
 {
     "name": "@capmeth/acid",
     "version": "0.0.1",
-    "description": "Another Component Interface Documenter",
+    "description": "A Component Interface Documenter",
     "title": "ACID",
     "author": "Ben Captison",
     "license": "MIT",

@@ -5,3 +5,4 @@ coverage
 temp
 web
 *.log
+*-old.*
