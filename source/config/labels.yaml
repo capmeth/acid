@@ -1,35 +1,35 @@
 
-article-toc: Table of Contents
+# action labels
+action-clear-filters: Clear Filters
+action-copied: Copied!
+action-copy: Copy
+action-filter-name: filter by name
+action-hide: Code
+action-reset: Reset
+action-show: Code
+action-update: Render
 
-asset-count: "{count} of {total} assets listed."
-asset-filters: Filters
-
-cobe-button-copied: Copied!
-cobe-button-copy: Copy
-cobe-button-hide: Hide
-cobe-button-reset: Reset
-cobe-button-show: View
-cobe-button-update: Render
-cobe-copied: Copied to Clipboard!
-cobe-error-prefix: -ERROR-
-
-filter-name: filter by name
-
+# general labels
+label-accept-values: "Accepts:"
 label-components: Components
+label-default-value: "Default:"
+label-deprecated: DEPRECATED
+label-description: Description
 label-documents: Documents
+label-error: "ERROR:"
+label-filters: Filters
+label-logo: Project Logo
+label-primary: Site
 label-props: Props
 label-sections: Sections
+label-tags: Tags
+label-toc: Table of Contents
 
-page-home-title: Homepage
+# page names
+page-home-title: "{title}"
 page-index-title: Asset Index
-page-sitemap-title: Sitemap
 
-no-comments: No comments were found for this {item}.
-no-filters: No filters available.
-
-property-default: "Default:"
-property-values: "Accepts:"
-
-section-menu: Section
-
-site-menu: ""
+# messages/alerts
+msg-asset-count: "{count} of {total} assets listed."
+msg-copied: Copied to Clipboard!
+msg-no-comments: No comments were found for this {item}.

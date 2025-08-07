@@ -22,6 +22,8 @@ export default config =>
 {
     let { hljs, links, metas, output, parsers, scripts } = config;
 
+    output.name ||= 'index';
+
     parsers.unshift({ types: '*', use: '#exts/jsdoc' });
 
     if (hljs.theme)

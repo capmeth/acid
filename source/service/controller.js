@@ -36,7 +36,7 @@ export default function(config, file)
     {
         let data = assign(config, ...users, required);
 
-        if (bool) data.config = { httpServer: true, watch: true };
+        if (bool) data.config = { server: true, watch: true };
 
         let svc = createServices(data.config, omits);
 

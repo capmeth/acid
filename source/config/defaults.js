@@ -27,6 +27,13 @@ config.assetGroups = [ 'documents', 'components' ];
 config.cobe = [];
 
 /**
+    Footer content for the docsite.
+
+    @type { string }
+*/
+config.footer = null;
+
+/**
     HighlightJs configuration.
 
     @type { object }
@@ -36,20 +43,6 @@ config.hljs =
     theme: 'a11y-light',
     version: '11.11.1'
 }
-
-/**
-    Turn on the HTTP server?
-
-    @type { boolean }
-*/
-config.httpServer = false;
-
-/**
-    Port from which to run doc server.
-
-    @type { integer }
-*/
-config.httpServerPort = 3010;
 
 /**
     The browser import map.
@@ -80,22 +73,21 @@ config.labels = jsyaml.load(fs.readFileSync(path.join(paths.config, 'labels.yaml
 config.links = [];
 
 /**
+    A link to an image for the project
+    
+    @type { string }.
+*/
+config.logo = hackson.logo ?? null;
+
+/**
     Array of HTML metatag objects for the docsite.
 
     The default set of meta tags includes a charset of 'utf8', as well as
     author, description, and keywords from package.json.
 
-    Setting this overrides (not merges with) the default value.
-
     @type { array }
 */
-config.metas = 
-[
-    { charset: 'utf-8' },
-    { name: 'author', content: hackson.author || 'unknown' },
-    { name: 'description', content: hackson.description || 'ACID generated docsite.' },
-    { name: 'keywords', content: hackson.keywords || 'components, documentation' }
-];
+config.metas = [ { charset: 'utf-8' }, 'author', 'description', 'keywords' ];
 
 /**
     Internal value used to prevent potential naming collisions.
@@ -116,7 +108,7 @@ config.namespace = 'docsite';
 config.output = 
 {
     dir: 'docs',
-    name: hackson.name
+    name: hackson.name ?? ''
 };
 
 /** 
@@ -174,9 +166,20 @@ config.sections =
 };
 
 /**
+    HTTP server activation and port.
+
+    @type { object }
+*/
+config.server =
+{
+    enabled: false,
+    port: 3010
+}
+
+/**
     For socket communication with browser.
 
-    @type { integer }
+    @type { object }
 */
 config.socket = 
 {
@@ -216,7 +219,7 @@ config.tagLegend = {};
 
     @type { string }
 */
-config.title = hackson.title;
+config.title = hackson.title ?? null;
 
 /**
     Depth level for table of contents menu.
@@ -260,7 +263,7 @@ config.useFilenameOnly = false;
 
     @type { string }
 */
-config.version = `ver. ${hackson.version}`;
+config.version = hackson.version ? `ver. ${hackson.version}` : null;
 
 /** 
     Manages hot-reload for source/document changes.

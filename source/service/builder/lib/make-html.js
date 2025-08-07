@@ -53,14 +53,12 @@ export default function(config)
     return lines.join('\n');
 }
 
-// let toMetas = (list, lines) => list.forEach(item => lines.push(`  <meta ${toAttrs(item)} />`))
-
 let toMetas = (list, lines) => 
 {
     list.forEach(item => 
     {
-        if (is.string(item) && hackson[item])
-            lines.push(`  <meta name="${item}" content="${hackson[item]}" />`);
+        if (is.string(item))
+            hackson[item] && lines.push(`  <meta name="${item}" content="${hackson[item]}" />`);
         else
             lines.push(`  <meta ${toAttrs(item)} />`);
     });

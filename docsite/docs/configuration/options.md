@@ -204,8 +204,8 @@ hljs:
 ```
 
 ```js label="spec"
-hljs: string |
-{ // merges
+hljs: string | // merges
+{
     /**
         Language marker aliases.
     */
@@ -261,34 +261,6 @@ https://unpkg.com/@highlightjs/cdn-assets@{version}/languages/{lang}.min.js
 Browse [this page](https://app.unpkg.com/@highlightjs/cdn-assets) to see what's available via UNPKG.
 
 
-## httpServer
-
-Starts the http server.
-
-```js label="default value"
-httpServer: false
-```
-
-```js label="spec"
-httpServer: true | false
-```
-
-For hot-reloading, `watch` option must also be enabled.
-
-
-## httpServerPort
-
-Port number where http server listens for requests.
-
-```js label="default value"
-httpServerPort: 3010
-```
-
-```js label="spec"
-httpServerPort: number
-```
-
-
 ## importMap
 
 Module specifier resolution in the browser.
@@ -304,6 +276,34 @@ importMap: object
 See the [official documentation](https://html.spec.whatwg.org/multipage/webappapis.html#import-maps) for details on how to configure importmaps.
 
 As a convenience, any top-level entry whose key is not `imports`, `scopes`, or `integrity` is added to **imports**.
+
+
+## labels
+
+Literal string content used by ACID.
+
+```svelte:render label="default value" allow-css
+import { labels } from '#bundle';
+<pre>
+  labels:
+  { JSON.stringify(labels, null, 4) }
+</pre>
+```
+
+```js label="spec"
+labels: // merges
+{
+    /**
+        String content for a label id.
+    */
+    [id]: string,
+    ...
+}
+```
+
+The defaults represent the full set of strings used in a docsite and they can be changed as necessary.
+
+Labels display as-is and are neither HTML nor markdown enabled.
 
 
 ## links
@@ -394,7 +394,7 @@ output:
 ```
 
 ```js label="spec"
-output: string |
+output: string | // merges
 {
     /**
         Path where generated docsite files will be written.
@@ -589,7 +589,38 @@ All of the properties above are optional.
 
 Note that `overview` can alternatively be a path to a markdown file.  Simply prefix the path with `file:/`.
 
-See the [sections page](document/docsite-sections) for in-depth details on how this works.
+See [this page](section/layout) for more details on how this works.
+
+
+## server
+
+Configures the HTTP server.
+
+```js label="default value"
+server:
+{
+    enabled: false,
+    port: 3010
+}
+```
+
+```js label="spec"
+server: true | false | // merges
+{
+    /**
+        Enable HTTP server?
+    */
+    enabled: true | false,
+    /**
+        Port number where HTTP server listens for requests.
+    */
+    port: number
+}
+```
+
+Specifying a boolean is the same as setting `server.enabled`.
+
+For hot-reloading, `watch` option must also be enabled.
 
 
 ## socket
@@ -606,7 +637,7 @@ socket:
 ```
 
 ```js label="spec"
-socket:
+socket: number | // merges
 {
     /**
         Web socket port to use.
@@ -622,6 +653,8 @@ socket:
     recoAttemptDelay: number
 }
 ```
+
+Specifying a number is the same as setting `socket.port`.
 
 This option essentially defines *hot-reload* for the docsite, but has no effect unless both `httpServer` *and* `watch` are enabled, as the socket needs something to connect to and a reason to respond, respectively.
 
@@ -685,7 +718,7 @@ tagLegend: {}
 ```
 
 ```js label="spec"
-tagLegend:
+tagLegend: // merges
 {
     [tagname]: string |
     {
@@ -844,12 +877,12 @@ watch:
 ```
 
 ```js label="spec"
-watch: // merges
+watch: true | false | // merges
 {
     /*
         Activate watch features?
     */
-    on: true | false,
+    enabled: true | false,
     /*
         Milliseconds to wait after a change before rebuilding site.
     */
@@ -871,6 +904,8 @@ watch: // merges
     }
 }
 ```
+
+Specifying a boolean is the same as setting `watch.enabled`.
 
 Some important notes on watch files:
 - `output.dir` is __always__ excluded, regardless of settings

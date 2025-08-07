@@ -9,9 +9,9 @@ let sock = voidSock;
 */
 export default function socketer(config)
 {
-    let { httpServer, socket: { port }, watch } = config;
+    let { server, socket: { port }, watch } = config;
 
-    let enabled = httpServer && watch.enabled;
+    let enabled = server.enabled && watch.enabled;
 
     // no web socket needed if http server and watch disabled
     if (!enabled) return (sock.close(), sock);

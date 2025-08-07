@@ -23,7 +23,7 @@ acid run
 Optionally, a server can be started and files watched for changes.
 
 ```shell
-acid run --http-server --watch
+acid run --server --watch
 ```
 
 The config file to use can be specified using the `--config` option:
@@ -133,20 +133,6 @@ acid -h
 ```
 
 
-### `--http-server`
-
-Enables the dev http server and, optionally, the port it will listen on.
-
-```shell
-acid --http-server [port]
-```
-```shell
-acid -s [port]
-```
-
-If `httpServer` is activated in configuration then this option serves only to specify the port.
-
-
 ### `--output-dir`
 
 Specifies the location to put the generated docsite.
@@ -168,6 +154,20 @@ acid --output-name <name>
 ```shell
 acid -n <name>
 ```
+
+### `--server`
+
+Enables the dev http server and, optionally, the port it will listen on.
+
+```shell
+acid --server [port]
+```
+```shell
+acid -s [port]
+```
+
+If `server` is enabled in configuration then this option serves only to specify the port.
+
 
 ### `--title`
 

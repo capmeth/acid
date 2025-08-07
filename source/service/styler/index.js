@@ -18,7 +18,15 @@ export default function(config)
     let artoo = (target, value) =>
     {
         if (!is.nonao(target)) target = {};
-        value.forEach(([ key, val ]) => target[key] = is.array(val) ? artoo(target[key], val) : val);
+        
+        value.forEach(([ key, val ]) => 
+        {
+            // merge values under same selector
+            if (is.array(val)) val = artoo(target[key], val);            
+            // CSS directives do not merge
+            target[key] = key.startsWith('@') ? [ ...(target[key] || []), val ] : val;
+        });
+        
         return target;
     }
 
@@ -36,6 +44,6 @@ export default function(config)
             data[scope] = artoo(data[scope], [ pair ]);
         });
 
-        return proxet({}, sid => data[sid] ? jsToCss(data[sid]) : null);
+        return proxet({}, sid => data[sid] ? jsToCss(data[sid], sid === 'root') : null);
     }
 }

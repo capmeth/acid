@@ -4,12 +4,12 @@
 */
 export default function (options)
 {
-    let { httpServer, logLevel, outputDir, outputName, ...rest } = options;
+    let { logLevel, outputDir, outputName, server, ...rest } = options;
 
-    if (Object.hasOwn(options, 'httpServer'))
+    if (Object.hasOwn(options, 'server'))
     {
-        rest.httpServer = true;
-        if (httpServer !== true) rest.httpServerPort = httpServer;
+        rest.server = { enabled: true };
+        if (server !== true) rest.server.port = server;
     }
 
     let output = {};

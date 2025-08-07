@@ -5,6 +5,7 @@
 */
 import pluginAlias from '@rollup/plugin-alias'
 import pluginCommonjs from '@rollup/plugin-commonjs'
+import pluginImage from '@rollup/plugin-image'
 import pluginInject from '@rollup/plugin-inject'
 import pluginJson from '@rollup/plugin-json'
 import pluginNodeResolve from '@rollup/plugin-node-resolve'
@@ -66,12 +67,14 @@ export default function(config, loaded, styles)
                 '#comps': path.join(paths.client, 'components'),
                 '#config': 'docsite-config',
                 '#frend': paths.client, // `#client` conflicts with svelte internals
+                '#image': paths.images,
                 '#utils': paths.shared,
             }
         }),
-        pluginNodeResolve({ extensions: [ '.css', '.js', '.json', '.svt' ], browser: true }),
+        pluginNodeResolve({ extensions: [ '.css', '.js', '.json', '.png', '.svt' ], browser: true }),
         pluginJson(),
         pluginCommonjs(),
+        pluginImage(),
         pluginScopedStyles({ styles }),
         pluginSvelte({ extensions: [ '.svt' ], emitCss: true }), 
         pluginInject(

@@ -64,9 +64,12 @@ ${hackson.type === 'module' ? 'export default' : 'module.exports ='}
     // custom asset tags
     tagLegend: {},
 
-    // http-server: keep false to run from CLI
-    httpServer: false,
-    httpServerPort: ${jss(config.httpServerPort)}
+    // http-server: keep disabled to run from CLI
+    server:
+    {
+        enabled: false,
+        port: ${jss(config.server.port)}
+    }
 }
 `
 

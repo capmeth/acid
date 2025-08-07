@@ -1,3 +1,4 @@
+import { camelCase } from 'change-case'
 import jsyaml from 'js-yaml'
 import takedown from 'takedown'
 import { is } from '#utils'
@@ -22,7 +23,7 @@ let attrsToObject = string =>
     while (result = attrsRe.exec(string || ''))
     {
         let { k: name, v: value } = result.groups;
-        attrs[name] = is(value) ? value : true;
+        attrs[camelCase(name)] = is(value) ? value : true;
     }
 
     return attrs;
@@ -55,13 +56,13 @@ export let tdContent = takedown(
         fenceblock: (e, v) =>
         {
             [ e.lang, e.mode, e.attrs ] = e.info?.match(langRe)?.slice(1) || [];
-            e.label = attrsToObject(e.attrs).label
+            let attrs = attrsToObject(e.attrs);
             // store details on code block
-            v.blocks.push({ id: e.id, lang: e.lang, code: e.value, label: e.label, uid: v.uid });
-            return '<Editor id="{id}"{? label="{label}"?}{? mode="{mode}"?} />';
+            v.blocks.push({ id: e.id, lang: e.lang, code: e.value, uid: v.uid, ...attrs });
+            return '<Editor id="{id}"{? mode="{mode}"?} />';
         },
 
-        header: '<h{level} id="{id}">{value}</h{level}>\n',
+        header: '<h{level} id="{id}" class="hx">{value}</h{level}>\n',
 
         link,
 

@@ -3,21 +3,21 @@ import create from './create.js'
 
 export default function(config)
 {
-    let { httpServer, httpServerPort, title } = config;
+    let { server: { enabled, port }, title } = config;
     let server = create(config);
 
     let onError = fn => server.on('error', fn)
 
     let start = async () => 
     {
-        if (!httpServer) return;
+        if (!enabled) return;
 
-        return new Promise(accept => server.listen(httpServerPort, accept)).then(() => 
+        return new Promise(accept => server.listen(port, accept)).then(() => 
         {
             showbanner();
             
             let theTitle = `{:greenBright:${title}}`;
-            let thePort = `{:whiteBright:${httpServerPort}}`;
+            let thePort = `{:whiteBright:${port}}`;
 
             log(`the ${theTitle} docsite server is now listening on port ${thePort}.\n`);
         });

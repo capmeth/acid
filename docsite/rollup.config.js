@@ -1,5 +1,6 @@
 import pluginNodeResolve from '@rollup/plugin-node-resolve'
 import pluginVirtualFile from '#source/service/builder/plugin/virtual-file.js'
+import pluginYaml from '#source/service/builder/plugin/yaml.js'
 import scopes from '#source/service/styler/scopes.js'
 
 
@@ -20,8 +21,10 @@ export default
             './index.js': 
             `
                 export let scopes = ${JSON.stringify(scopes)};
+                export { default as labels } from '#source/config/labels.yaml'
             `
         }),
-        pluginNodeResolve({ extensions: [ '.js' ], browser: true }),
+        pluginNodeResolve({ extensions: [ '.js', '.yaml' ], browser: true }),
+        pluginYaml()
     ]
 }

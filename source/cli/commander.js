@@ -14,7 +14,7 @@ export default function (action)
         .argParser(collect());
     let optionLogLevel = new Option('-l, --log-level <lvl>', 'logger severity level');
     let optionOutputName = new Option('-n, --output-name <dir>', 'name/prefix for generated files');
-    let optionHttpServer = new Option('-s, --http-server [port]', 'enables docsite server on specified port')
+    let optionServer = new Option('-s, --server [port]', 'enables docsite server on specified port')
         .argParser(integerOnly);
     let optionTitle = new Option('-t, --title <str>', 'title for the docsite');
     let optionWatch = new Option('-w, --watch', 'watch files for changes to trigger rebuild');
@@ -31,7 +31,7 @@ export default function (action)
         .addOption(optionExtensions)
         .addOption(optionLogLevel)
         .addOption(optionOutputName)
-        .addOption(optionHttpServer)
+        .addOption(optionServer)
         .addOption(optionTitle)
         .addOption(optionWatch)
         .addOption(optionTocDepth)
@@ -43,7 +43,7 @@ export default function (action)
         .addOption(optionConfig)
         .addOption(optionOutputDir)
         .addOption(optionOutputName)
-        .addOption(optionHttpServer)
+        .addOption(optionServer)
         .addOption(optionTitle)
         .addOption(optionWatch)
         .addOption(optionTocDepth)

@@ -1,3 +1,5 @@
+import { is } from '#utils'
+
 
 /*
     Custom JSDoc to JSON (docson) parser
@@ -53,8 +55,9 @@ let divideTags = (source, target) =>
     {
         // default `tag` to "description" for comment open without tag
         let { tag = 'description', spec = '' } = match.groups;
-        // only push data from understood tags
-        Object.assign(target, procs[alias[tag] || tag]?.(spec));
+
+        let data = procs[alias[tag] || tag]?.(spec);
+        is.func(data) ? data(target) : Object.assign(target, data);
     }
 
     return target;
@@ -115,7 +118,7 @@ let procs =
         @return { object }
           - `deprecated`: details about why the thing is no longer useful
     */
-    deprecated: spec => ({ deprecated: spec }),
+    deprecated: spec => ({ deprecated: spec || true }),
     /**
         @return { object }
           - `description`: how to use the thing
@@ -160,7 +163,6 @@ let procs =
           - `license`: license for the thing
     */
     license: spec => ({ license: spec }),
-
     /**
         @return { object }
           - `name`: name of the thing
@@ -189,9 +191,16 @@ let procs =
         let [ type, rest ] = caps(typeDescRe, spec);
         let [ param, description ] = caps(paramDescRe, rest);
         let [ name, fallback ] = caps(nameDefvalRe, param);
-        let required = !isOptionalRe.test(param);
 
-        return { prop: { name, type, description, fallback, required } };
+        let prop = {};
+        
+        prop.name = name;
+        if (description) prop.description = description;
+        if (type) prop.type = type;
+        if (fallback) prop.fallback = fallback;
+        prop.required = !isOptionalRe.test(param);
+
+        return t => t.prop = [ ...t.prop || [], prop ];
     },
     /**
         @return { object }
@@ -266,4 +275,4 @@ let procs =
     @return { object | Proxy }
       Updated `target` object.
 */
-export default (comment, target) => divideTags(stripMarkers(comment), target)
+export default (comment, target = {}) => divideTags(stripMarkers(comment), target)

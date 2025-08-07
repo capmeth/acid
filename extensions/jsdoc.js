@@ -1,7 +1,5 @@
 import fs from 'node:fs/promises'
 import { is } from '#utils'
-import docson from '../source/service/loader/docson.js'
-import doxie from '../source/service/loader/doxie.js'
 
 
 /*
@@ -12,20 +10,20 @@ export default function ()
     // captures JsDoc comments in Js and HTML form.
     let commentRe = /(?<=^|\n)\s*\/\*\*[^*].*?\*\/|<!--\*.+?-->\s*(?=\n|$)/gs;
 
-    return async (file, data) =>
+    return async (file, data, docson) =>
     {
         let source = await fs.readFile(file, { encoding: 'utf8' });
         let result, parsed = [];
         
-        while (result = commentRe.exec(source)) 
-            parsed.push(docson(result[0], doxie()));
+        // parse all comments in source
+        while (result = commentRe.exec(source)) parsed.push(docson(result[0]));
 
         // find the component related comment
         let mainComment = 
             parsed.find(item => item.kind === 'component') ||
             parsed.find(item => !item.kind);
         
-        // stop here if there is no component comment
+        // abort here if there is no component comment
         if (!mainComment) return;
 
         parsed.splice(parsed.indexOf(mainComment), 1);
@@ -36,7 +34,7 @@ export default function ()
         for (let item of parsed)
         {
             if (is.string(item.name) && item.name !== '' && item.kind === 'prop')
-                data.prop = item;
+                data.prop = item;            
         }
     }
 }

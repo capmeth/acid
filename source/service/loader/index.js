@@ -5,6 +5,7 @@ import np from 'node:path'
 import globit from '#lib/globit.js'
 import { is, mapExtensions, uid } from '#utils'
 import importer from '../importer/index.js'
+import docson from './docson.js'
 import doxie from './doxie.js'
 import link from './parentization.js'
 import { tdContent } from './takedown.js'
@@ -99,7 +100,7 @@ export default function(config)
                 if (parser.use)
                 {
                     let data = doxie();
-                    await parser.use(abspath, data);
+                    await parser.use(abspath, data, docson);
 
                     let { example, name, ...others } = data;
                     more = { ...others, ...more, title: name, path: example };

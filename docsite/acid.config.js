@@ -47,7 +47,7 @@ export default
         "#bundle": "./site-bundle.js"
     },
 
-    httpServerPort: 3005,
+    server: { port: 3005 },
     socket: { port: 3009 },
     watch: 
     { 
