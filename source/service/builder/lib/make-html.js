@@ -42,7 +42,7 @@ export default function(config)
     if (scripts.length) toScripts(scripts, lines);
 
     lines.push(`  <script type="module">`);
-    lines.push(`  let url = new URL("${output.name}-docsite.js", new URL(import.meta.url).origin);`);
+    lines.push(`  let url = new URL("${output.name}-docsite.js", new URL(import.meta.url));`);
     lines.push(`  import(url).then(site => site.default());`)
     lines.push(`  </script>`);
 
