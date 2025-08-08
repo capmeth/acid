@@ -108,7 +108,7 @@ config.namespace = 'docsite';
 config.output = 
 {
     dir: 'docs',
-    name: hackson.name ?? ''
+    name: 'index'
 };
 
 /** 

@@ -389,7 +389,7 @@ Details where generated artifacts will be placed.
 output:
 {
     dir: 'docs',
-    name: packageJson.name
+    name: 'index'
 }
 ```
 
