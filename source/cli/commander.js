@@ -7,8 +7,7 @@ export default function (action)
 {
     let cmd = new Command();
 
-    let optionConfig = new Option('-c, --config [path]', 'path to configuration file')
-        .default('acid.config.js');
+    let optionConfig = new Option('-c, --config [path]', 'path to configuration file');
     let optionOutputDir = new Option('-d, --output-dir <dir>', 'folder to put generated docsite');
     let optionExtensions = new Option('-u, --use <ext>', 'extension module specifier and parameters')
         .argParser(collect());

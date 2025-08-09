@@ -85,11 +85,9 @@ export default
     'config.sections.*.sections': { test: test.arrayOrString, default: [] },
     'config.sections.*.sections.*': test.string,
     'config.sections.*.title': test.string,
-
     'config.server': { test: test.objectOrBoolean('enabled'), default: {}, merge: true },
     'config.server.enabled': test.boolean,
     'config.server.port': test.port,
-
     'config.socket': { test: test.objectOrNumber('port'), default: {}, merge: true },
     'config.socket.*': test.unset,
     'config.socket.port': test.port,

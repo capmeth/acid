@@ -202,7 +202,7 @@ config.storage = 'local';
 
     @type { object }
 */
-config.style = '#grayscape';
+config.style = '#acidic';
 
 /** 
     Descriptions for tag `name`'s used by the components.
@@ -280,7 +280,7 @@ config.version = hackson.version ? `ver. ${hackson.version}` : null;
 config.watch =
 {
     enabled: false,
-    delay: 200,
+    delay: 1000,
     files:
     {
         include: path.join('**', '*.{js,jsx,md}'),

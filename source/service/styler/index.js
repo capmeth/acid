@@ -10,7 +10,6 @@ export default function(config)
 
     let sheetsPromise = loadCss(style, root)
         .then(list => list.reduce((a, x) => [ ...a, ...x ]), []);
-        // TODO: might need to sort here (for at-rules)
     
     /**
         Merge key/value arrays into objects

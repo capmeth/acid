@@ -13,15 +13,16 @@ commander(
     {
         let { config, use, logger, ...options } = parseOptions(data);
 
-        let file = path.resolve(process.cwd(), config);
+        if (logger) service.logger(logger);
 
-        if (!existsSync(file))
+        let fname = config || 'acid.config.js';
+        let file = path.resolve(process.cwd(), fname);
+        // if specified file does not exist it is an error
+        if (config && !existsSync(file))
         {
             console.error(`File ${file} does not exist`);
             return void 0;
         }
-
-        if (logger) service.logger(logger);
 
         let applyExts = app => Promise.all((use || []).map(ext => 
         {
@@ -35,7 +36,7 @@ commander(
     makeConfig: data =>
     {
         let { config, ...options } = parseOptions(data);
-        let file = path.resolve(process.cwd(), config);
+        let file = path.resolve(process.cwd(), config || 'acid.config.js');
 
         return generateConfig(file, options);
     }

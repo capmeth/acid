@@ -40,5 +40,5 @@ import Title from '../element/Title'
 
 <script>
 let { sect = sinfo.root.name } = $props();
-let { sections, title } = sinfo(sect);
+let { sections } = sinfo(sect);
 </script>

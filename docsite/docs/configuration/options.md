@@ -867,7 +867,7 @@ Manages automatic docsite rebuilds on file changes.
 watch:
 {
     enabled: false,
-    delay: 200,
+    delay: 1000,
     files:
     {
         include: '**/*.{js,jsx,md}',

@@ -7,7 +7,7 @@ export default
         sections: 
         [ 
             'start', 
-            'layout',
+            'structure',
             'styling',
             'tagging',
             'authoring',
@@ -30,10 +30,10 @@ export default
         overview: 'file:/docsite/docs/docsite/authoring.md'
     },
 
-    layout:
+    structure:
     {
-        title: 'Layout',
-        overview: 'file:/docsite/docs/docsite/layout.md'
+        title: 'Site Structure',
+        overview: 'file:/docsite/docs/docsite/structure.md'
     },
 
     styling:

@@ -12,7 +12,7 @@ import service from "./service/index.js"
     @return { object }
       Application service interface.
 */
-let acid = options => service(options)
+let acid = options => service.sync(options)
 
 acid.logger = service.logger;
 

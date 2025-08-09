@@ -3,7 +3,7 @@ cobeMode: static
 ---
 
 
-# Quick Start
+# Install
 
 Install as dev dependency.
 
@@ -11,25 +11,49 @@ Install as dev dependency.
 npm install @capmeth/acid --save-dev
 ```
 
-Now, you need an *acid.config.js* file.  To generate a default one, do
+# Quick Start
+
+A site can be generated without any configuration.
+
+From your project root, do
 
 ```shell
-acid --make-config
+acid -s
 ```
 
-The config file is created in the current directory by default.  It is pretty basic, but it's enough to get a docsite build going.
+and then point your browser to <https://localhost:3010> to see the docsite.
 
-Now you can build the site,
+Content will be generated if there is a *readme.md* file or JsDoc-commented *.jsx* component files in the project.
 
-```bash
-acid --http-server
+Pretty basic, but hey, you're only a couple minutes in and you have a docsite already!
+
+
+# Quick Start with Config
+
+To generate a default config file, do
+
+```shell
+acid make-config
 ```
 
-and then point your browser to <https://localhost:3010> to see the result.
+It is created as *acid.config.js* in the current directory by default, or you can specify where you want the file.
 
-Simple!
+```shell
+acid make-config -c path/to/config-files/acid.config.js
+```
 
-See the [CLI docs](document/configuration-acid-cli) for more details on command-line functionality.
+And then build and serve the site
+
+```shell
+acid -s
+```
+
+Remember to use the `-c` parameter in the command above if you placed your config file elsewhere.
+
+This gets you about the same results as not using a config file if you didn't make any changes to it.
+
+- See the [CLI docs](document/configuration-acid-cli) for more details on command-line functionality.
+- See the [config options docs](document/configuration-options) for config file options and their defaults.
 
 
 # Programmatic Access

@@ -15,6 +15,8 @@ import { assign, defaults } from '../config/index.js'
 */
 export default async function (dest, options)
 {
+    if (!dest) dest = 'acid.config.js';
+ 
     if (existsSync(dest))
     {
         console.error(`File ${dest} already exists.`);
@@ -31,45 +33,52 @@ let content = config =>
 `
 ${hackson.type === 'module' ? 'export default' : 'module.exports ='}
 {
-    // name for the docsite
+    /*
+        Display name for the docsite.
+    */
     title: ${jss(config.title)},
 
-    // generated artifacts location
+    /*
+        Location of generated docsite artifacts.
+    */
     output: ${format(config.output, 1)},
 
-    // root directory of project
-    root: ${jss(config.root)},
+    /*
+        <meta> tags for <head> tag
+        Strings items pull from package.json to generate name/content tags
+    */
+    metas: ${jss(config.metas)},
 
-    // meta-tags for html <head> tag
-    metas:
-    [
-        { charset: 'utf8' },
-        { name: 'author', content: ${jss(hackson.author || 'unknown')} },
-        { name: 'description', content: ${jss(hackson.description || 'ACID generated docsite.')} },
-        { name: 'keywords', content: ${jss(hackson.keywords || 'components, documentation')} }
-    ],
-
-    // docsite information structure
+    /*
+        Docsite organizational structure.
+    */
     sections: ${format(config.sections, 1)},
 
-    // top level section of docsite
+    /*
+        Top level docsite section.
+    */
     rootSection: ${jss(config.rootSection)},
 
-    // header level depth for table-of-contents
+    /*
+        Default header level depth for table-of-contents.
+    */ 
     tocDepth: ${jss(config.tocDepth)},
 
-    // docsite styling
+    /*
+        Docsite styling.
+    */
     style: ${jss(config.style)},
 
-    // custom asset tags
+    /*
+        Asset tag descriptions.
+    */
     tagLegend: {},
 
-    // http-server: keep disabled to run from CLI
-    server:
-    {
-        enabled: false,
-        port: ${jss(config.server.port)}
-    }
+    /*
+        Dev http-server.
+        Keep this disabled to activate from CLI.
+    */
+    server: ${format(config.server, 1)}
 }
 `
 

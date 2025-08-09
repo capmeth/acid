@@ -28,6 +28,8 @@ export default
 
     labels: { "page-home-title": "Homepage" },
 
+    links: { href: "acid.png", rel: "icon", type: "image/x-icon" },
+
     sections,
 
     tagLegend: 

@@ -1,7 +1,7 @@
 
 # Sections
 
-In *acid.config.js*, `sections` defines the navigtional hierarchy of the site.  Assets to be included in the site are also specified here.
+The config option `sections` defines the navigtional hierarchy of the site as well as the assets to be included in the site.
 
 ```js
 sections:

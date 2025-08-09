@@ -20,13 +20,13 @@ import getLogger from '../logging/index.js'
     @param { object } cliopts
       Additional configuration options (usually from CLI).
     @return { object | promise }
-      Is or resolves to an object with
+      Resolves to an object with
       - `start` (func): start the app
       - `extend` (func): extend the app
 */
-let service = (options, cliopts) =>
+let service = async (options, cliopts) =>
 {
-    let merge = data => cliopts ? assign(defaults, data, cliopts).config : data;
+    let merge = data => assign(defaults, data || {}, cliopts || {}).config
     let serve = config => controller(merge(config), options)
     
     if (is.string(options) && fs.existsSync(options)) 
@@ -34,6 +34,8 @@ let service = (options, cliopts) =>
 
     return is.nonao(options) ? serve(options) : serve();
 }
+
+service.sync = config => controller(assign(defaults, config || {}).config)
 
 service.logger = config => global.log = getLogger(config)
 service.logger();
