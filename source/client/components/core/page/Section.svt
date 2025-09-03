@@ -1,0 +1,32 @@
+<!--*
+	  Section overview page.
+
+    @property { any } site
+      Data from **Docsite** component.
+    @property { string } sect
+      Name of section on display.
+-->
+
+<Section 
+  title={section.title}
+  sect={section.name}
+  mcid={section.content}
+  tocDepth={section.tocDepth}
+  {site}
+/>
+
+
+<script module>
+import { context, sinfo, webpage } from '#frend/lib'
+
+import Section from '#custom/page/Section'
+</script>
+
+<script>
+let { sect, site } = $props();
+
+let section = sinfo(sect);
+
+context.section = section.name;
+webpage.setTitle(section.title);
+</script>

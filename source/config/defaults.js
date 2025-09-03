@@ -27,6 +27,22 @@ config.assetGroups = [ 'documents', 'components' ];
 config.cobe = [];
 
 /**
+    Allows use of alternative presentational components.
+
+    These are `group-name` elements mapped to svelte component filepaths.
+
+    @type { object }
+*/
+config.components = {};
+
+/**
+    Build fle copy.
+
+    @type { array }
+*/
+config.copy = [];
+
+/**
     Footer content for the docsite.
 
     @type { string }
@@ -87,7 +103,17 @@ config.logo = hackson.logo ?? null;
 
     @type { array }
 */
-config.metas = [ { charset: 'utf-8' }, 'author', 'description', 'keywords' ];
+config.metas = 
+[ 
+    { charset: 'utf-8' }, 
+    'author', 
+    'description', 
+    'keywords', 
+    'og:title=title', 
+    'og:description=description',
+    'og:url=homepage',
+    'og:image=logo'
+];
 
 /**
     Internal value used to prevent potential naming collisions.

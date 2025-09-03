@@ -1,0 +1,49 @@
+<!--*
+	  Renders UI for a document page.
+
+    @tags inject:page-document, custom:page/Document
+
+    @property { string } [mcid]
+      Markdown Content ID for document content.
+    @property { object } site
+      Data from **Docsite** component.
+    @property { array } tags
+      List of tags associated with the document.
+    @property { string } title
+      Document name.
+    @property { number } tocDepth
+      ToC header depth level for `mcid` content.
+-->
+
+<div class="page-document">
+  <main>
+    <div class="leader">
+      <div class="title">{ title }</div>
+      <Crumbs {sect} />
+      <Tags items={tags} />
+    </div>
+    <div class="content">
+      <Article {mcid} />
+    </div>
+  </main>
+  <nav>
+    {@render site.tree()}
+    {@render site.toc(mcid, tocDepth)}
+    {@render site.tree('documents')}
+  </nav>
+</div>
+
+
+<script module>
+import Article from '#shared/common/Article'
+import Crumbs from '#shared/common/Crumbs'
+import Tags from '#shared/common/Tags'
+</script>
+
+<script>
+let { mcid, sect, site, tags, title, tocDepth } = $props();
+</script>
+
+<style>
+/* @inject #page-document */
+</style>

@@ -8,6 +8,7 @@
     "main": "main.js",
     "type": "module",
     "homepage": "https://capmeth.github.io/acid",
+    "logo": "https://capmeth.github.io/acid/acid.png",
     "private": true,
     "scripts": {
         "bundle": "rollup -c docsite/rollup.config.js",

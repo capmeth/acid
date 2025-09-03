@@ -18,7 +18,7 @@ Below are the settings recognized in a config file.
 
 Pay attention to the default config settings.  Unless otherwise noted, when no setting is specified then the default(s) will be in effect.  Many options can be unset explicitly with `null`, or for array types, with an empty array.
 
-A `// merges` comment in the type definition of an object-based setting indicates that it will (shallowly) merge with defaults rather than overwrite them.
+A `// merges` comment in the type definition (`spec`) of an object-based setting indicates that it will (shallowly) merge with defaults rather than overwrite them.  Custom type names are prefixed with a `@` and are detailed below under the *Custom Datatypes* heading.
 
 
 ## cobe
@@ -33,44 +33,44 @@ cobe: []
 cobe:
 [
     { 
-        /**
+        /*
             Code block language marker(s).
         */
         types: string | [ ...string ],
-        /**
+        /*
             Compiler extension to use.
         */
         use: string | [ string, ...any ], 
-        /**
+        /*
             Import declarations to generate for CoBE blocks.
         */
         imports:
         {
-            /**
+            /*
                 Module `specifier` mapped to imports.
             */
             [specifier]: string | function | RegExp | null |
             {
-                /**
+                /*
                     Specifies the default or namespace import.
                 */
                 default: string,
-                /**
+                /*
                     Filters for named imports.
                 */
                 names: string | function | RegExp
             },
             ...
         },
-        /**
+        /*
             Default render mode.
         */
         mode: "demo" | "edit" | "live" | "render" | "static", 
-        /**
+        /*
             Show editable code blocks by default (modes 'edit' or 'live')?
         */
         noHide: true | false,
-        /**
+        /*
             Turn off code highlighting?
         */
         noHighlight: true | false
@@ -127,6 +127,47 @@ A code block's `mode` will be forced to "static" if no `use` exists for its lang
 Set `noHighlight` to `true` to turn off code highlighting.  This has no effect if highlighting for the block's language-type is not supported or not loaded (see `hljs` option).
 
 
+## components
+
+Replace internal presentational components.
+
+```js label="default value"
+components: {}
+```
+
+```js label="spec"
+components: // merges
+{
+    /*
+        Filename of replacement component.
+    */
+    [name]: string | null,
+    ...
+}
+```
+
+The `[name]` should take the form `group/Component` where `Component` is the proper name of the component and `group` must be one of the custom component groups (currently only "main" or "page").
+
+Relative filepaths are based on `root` config option.
+
+For example, if you have a custom component at *src/components/Docsite.svelte* that you want to use in place of the internal root **Docsite** component, do
+
+```js
+components:
+{
+    'main/Docsite': 'src/components/Docsite'
+}
+```
+
+The docsite build can resolve *.svelte* and *.svt* extensions automatically, so the extension is not required.
+
+Setting a value to `null` or an empty string has the same effect as omitting it - the default internal component will be used.
+
+TODO: Documentation link for more information!
+
+> If you add a `<style>` tag to a custom component, it will NOT be themable via config `style` option (no CSS will be injected).
+
+
 ## copy
 
 Glob settings for static files that need to be copied into `output.dir`.
@@ -139,43 +180,22 @@ copy: []
 copy:
 [
     { 
-        /**
-            Glob patterns selecting files to include in the copy list, 
-            or an object specifying include/exclude.
+        /*
+            Files to include for copying.
         */
-        files: string | [ ... string ] |
-        {
-            /**
-                Glob patterns selecting files to include in the copy list.
-            */
-            include: string | [ ... string ],
-            /**
-                Glob patterns selecting files to exclude from those included in the copy list.
-            */
-            exclude: string | [ ... string ]
-        },
-        /**
+        files: @globfiles,
+        /*
             Destination for the copied files.
         */
-        to: string | function | null |
-        [ 
-            string | RegExp | [ string | RegExp, string ], 
-            string | function 
-        ]
+        to: @repath
     },
     ...
 ]
 ```
 
-****`*.files`****
+The resulting filename(s) from `to` are assumed to be relative to `output.dir`.  
 
-Specify glob patterns to include/exclude files to be copied.  The root directory for relative paths is `root` option.
-
-****`*.to`****
-
-`to` converts filepaths in the same way as `toExampleFile`.
-
-The resulting filename from `to` is assumed to be relative to `output.dir`.  If `to` is omitted, `null`, or results in the same or an empty string, the file is copied into `output.dir` with its original path.  If `to` resolves to a path that is not inside `output.dir` the file will not be copied.
+If `to` is omitted, `null`, or results in the same or an empty string, the file is copied into `output.dir` using its original path.  If `to` resolves to a path that is not inside `output.dir` the file will not be copied.
 
 
 ## footer
@@ -206,12 +226,12 @@ hljs:
 ```js label="spec"
 hljs: string | // merges
 {
-    /**
+    /*
         Language marker aliases.
     */
     aliases: // merges
     {
-        /**
+        /*
             Aliases to be added.
 
             `[name]` is the name or an existing alias of the targeted language.
@@ -219,15 +239,15 @@ hljs: string | // merges
         [name]: string | [ ... string ],
         ...
     }
-    /**
+    /*
         Additional names of languages to load.
     */
     languages: string | [ ... string ]
-    /**
+    /*
         Name (filename) of a CSS theme.
     */
     theme: string | null,
-    /**
+    /*
         Version of hljs to use.
     */
     version: string
@@ -270,7 +290,7 @@ importMap: {}
 ```
 
 ```js label="spec"
-importMap: object
+importMap: object // merges
 ```
 
 See the [official documentation](https://html.spec.whatwg.org/multipage/webappapis.html#import-maps) for details on how to configure importmaps.
@@ -293,7 +313,7 @@ import { labels } from '#bundle';
 ```js label="spec"
 labels: // merges
 {
-    /**
+    /*
         String content for a label id.
     */
     [id]: string,
@@ -341,7 +361,17 @@ logo: string | null
 Configures `<meta>` tags for the `<head>` tag.
 
 ```js label="default value"
-metas: [ { charset: 'utf-8' }, 'author', 'description', 'keywords' ]
+metas: 
+[ 
+    { charset: 'utf-8' }, 
+    'author', 
+    'description', 
+    'keywords', 
+    'og:title=title', 
+    'og:description=description',
+    'og:url=homepage',
+    'og:image=logo'
+]
 ```
 
 ```js label="spec"
@@ -350,20 +380,32 @@ metas: string | object | [ ... string | object ]
 
 Object properties are directly applied as `<meta>` attributes.
 
-When a string is specified it is assumed to be a *package.json* property and will generate a metatag with `name` and `content` attributes.
+Where a string is specified (`name`), a *package.json* property is assumed.  When `name=prop` is specified, `name` is the "meta-name" and `prop` is the key in *package.json*.
 
-For example, the following author property in *package.json*
+By default a `name`/`content` attribute pair will be applied.  However, if the meta-name contains a colon(`:`) then this becomes a `property`/`content` pair instead.
+
+For example, the following settings in *package.json*,
 
 ```js
+"title": "Cardano App",
 "author": "Ada Lovelace"
 ```
 
-would produce the following metatag
+along with this config setting
 
 ```js
-<meta name="author" content="Ada Lovelace" />
+metas: [ { charset: 'utf-8' }, 'author', 'og:title=title' ]
 ```
 
+produces the tags
+
+```html
+<meta charset="utf-8" />
+<meta name="author" content="Ada Lovelace" />
+<meta property="og:title" content="Cardano App" />
+```
+
+Note that tags being sourced from *package.json* are added only if the file has a non-nullish value for them.
 
 
 ## namespace
@@ -396,11 +438,11 @@ output:
 ```js label="spec"
 output: string | // merges
 {
-    /**
+    /*
         Path where generated docsite files will be written.
     */
     dir: string,
-    /**
+    /*
         Name/Prefix for docsite generated files.
     */
     name: string
@@ -434,11 +476,11 @@ parsers: []
 parsers:
 [
     { 
-        /**
+        /*
             Source file extension(s).
         */
         types: string | [ ...string ],
-        /**
+        /*
             Parser extension to use.
         */
         use: string | [ string, ...any ], 
@@ -522,7 +564,7 @@ sections:
         components: 
         { 
             include: '**/*.jsx', 
-            exclude: 'node_modules/**'
+            exclude: 'node_modules/*'
         }
     }
 }
@@ -534,7 +576,7 @@ sections:
     /*
         A name for the section (must be alphanumeric incl. underscores and dashes).
     */
-    [name]:
+    [name]: string |
     {
         /*
             Display name for the section. If not provided, `name` will be used.
@@ -545,35 +587,13 @@ sections:
         */
         overview: string,
         /*
-            Glob patterns selecting markdown files to include in the section, 
-            or an object specifying include/exclude.
+            Markdown files to include for the section.
         */
-        documents: string | [ ... string ] |
-        {
-            /*
-                Glob patterns selecting markdown files to include.
-            */
-            include: string | [ ... string ],
-            /*
-                Glob patterns selecting markdown files to exclude from those included.
-            */
-            exclude: string | [ ... string ]
-        }
+        documents: @globfiles,
         /*
-            Glob patterns selecting component source files to include in the section, 
-            or an object specifying include/exclude.
+            Component files to include for the section.
         */
-        components: string | [ ... string ] |
-        {
-            /*
-                Glob patterns selecting component source files to include.
-            */
-            include: string | [ ... string ],
-            /*
-                Glob patterns selecting component source files to exclude from those included.
-            */
-            exclude: string | [ ... string ]
-        },
+        components: @globfiles,
         /*
             Names of sections that will be children of this section (sub-sections).
         */
@@ -587,9 +607,11 @@ sections:
 
 All of the properties above are optional.
 
+Specifying a string for `[name]` is the same as specifying the object form with `overview`.
+
 Note that `overview` can alternatively be a path to a markdown file.  Simply prefix the path with `file:/`.
 
-See [this page](section/layout) for more details on how this works.
+See [this page](section/structure) for more details on how this works.
 
 
 ## server
@@ -607,11 +629,11 @@ server:
 ```js label="spec"
 server: true | false | // merges
 {
-    /**
+    /*
         Enable HTTP server?
     */
     enabled: true | false,
-    /**
+    /*
         Port number where HTTP server listens for requests.
     */
     port: number
@@ -639,15 +661,15 @@ socket:
 ```js label="spec"
 socket: number | // merges
 {
-    /**
+    /*
         Web socket port to use.
     */
     port: number,
-    /**
+    /*
         Number of times to attempt reconnecting to server.
     */
     recoAttempts: number,
-    /**
+    /*
         Milliseconds before next reconnect attempt is made.
     */
     recoAttemptDelay: number
@@ -722,7 +744,7 @@ tagLegend: // merges
 {
     [tagname]: string |
     {
-        /**
+        /*
             Description for the tag.
         */
         desc: string
@@ -777,18 +799,14 @@ toAssetId: '{hex}'
 ```
 
 ```js label="spec"
-toAssetId: string | function | null |
-[ 
-    string | RegExp | [ string | RegExp, string ], 
-    string | function 
-]
+toAssetId: @repath
 ```
 
 This can be used to make prettier ids (used in URLs) for asset pages.
 
-Filepath conversion works the same as `toExampleFile`, but after conversion the value gets **kebab-cased**.
+Resulting filepaths are **kebab-cased** for id generation.
 
-> Care should be taken to ensure that each asset ID will be unique across the docsite as page/content/links might not get rendered or resolved properly otherwise.
+> Care should be taken to ensure that each asset id will be unique across the docsite as page/content/links might not get rendered or resolved properly otherwise.
 
 
 ## toExampleFile
@@ -800,35 +818,12 @@ toExampleFile: [ /^(.+)\.[^./]+$/, '$1.md' ]
 ```
 
 ```js label="spec"
-toExampleFile: string | function | null |
-[ 
-    string | RegExp | [ string | RegExp, string ], 
-    string | function 
-]
+toExampleFile: @repath
 ```
-
-Source paths evaluated by this setting are relative to `root`.
-
-- a function receives the source path and should return a relative filepath.
-- a string can be interpolated with information from the source path
-  - `{dir}` - path to the file
-  - `{name}` - name of the file (without extension)
-  - `{ext}` - file extension
-  - `{hex}` - hex value hash of the source path
-- an array is used as the parameter list for `String.prototype.replace` against the source path. 
-  Optionally, **RegExp** constructor parameters can be provided in an array as the first argument.
-
-As an example, the following config
-
-```js
-toExampleFile: [ /^source[/](.+?)[.][^./]+$/, "example/$1.md" ]
-```
-
-will convert `source/components/layout/Grid.jsx` to `example/components/layout/Grid.md`.
 
 This evaluation is skipped for source files specifying `@example` with a filepath in the primary JsDoc comment.
 
-The default looks for an example file with an `.md` extension sitting right next to the source file in the same folder with the same name.
+The default setting looks for an example with a *.md* extension at the exact same path.  E.g., an example file for `path/to/Component.jsx` would be looked for at `path/to/Component.md`.
 
 
 ## useFilenameOnly
@@ -871,7 +866,7 @@ watch:
     files:
     {
         include: '**/*.{js,jsx,md}',
-        exclude: 'node_modules/**'
+        exclude: 'node_modules/*'
     }
 }
 ```
@@ -888,20 +883,9 @@ watch: true | false | // merges
     */
     delay: number,
     /*
-        Glob patterns selecting files to include on watch list, 
-        or an object specifying include/exclude.
+        Files to include on watchlist.
     */
-    files: string | [ ... string ] |
-    {
-        /*
-            Glob patterns selecting files to include on watch list.
-        */
-        include: string | [ ... string ],
-        /*
-            Glob patterns selecting files to exclude from those included on watch list.
-        */
-        exclude: string | [ ... string ]
-    }
+    files: @globfiles
 }
 ```
 
@@ -912,3 +896,65 @@ Some important notes on watch files:
 - files selected in `sections` __are not__ automatically watched
 
 Also note that changes in a watched config file __will not__ be reflected in a hot-rebuild (for now).
+
+
+# Custom Datatypes
+
+Custom types (`@` prefixed type names) are detailed below.
+
+
+## `@globfiles`
+
+Glob pattern configurations for including files.
+
+```js label="typedef"
+@globfiles = string | [ ... string ] |
+{
+    /*
+        Glob pattern(s) for selecting files to be included.
+    */
+    include: string | [ ... string ],
+    /*
+        Glob pattern(s) selecting files to be excluded from the files selected for inclusion.
+    */
+    exclude: string | [ ... string ]
+}
+```
+
+Specifying `@globfiles` as a string or an array is the same as specifying `@globfiles.include`.
+
+The `root` config option is used to resolve relative filepath globs.
+
+
+## `@repath`
+
+Converts filepaths from one form to another.
+
+```js label="typedef"
+@repath = string | function | null |
+[ 
+    string | RegExp | [ string | RegExp, string ], 
+    string | function 
+]
+```
+
+The `root` config option is used to resolve relative source paths.
+
+- A function value receives the source path and should return a target filepath.
+- A string value can be interpolated with information from the source path
+  - `{dir}` - directory path to the file
+  - `{name}` - name of the file (w/o extension)
+  - `{ext}` - file extension
+  - `{hex}` - hexadecimal value of the hash of the full source path
+- An array value is used as parameters for `String.prototype.replace` against the source path. \
+  Optionally, **RegExp** constructor parameters can be provided in an array as the first argument.
+
+For example, the following value
+
+```js
+[ /^source[/](.+?)[.][^./]+$/, "example/$1.md" ]
+```
+
+would convert `source/components/layout/Grid.jsx` to `example/components/layout/Grid.md`.
+
+See the docs for the referencing config option to understand how the output filepaths are used.

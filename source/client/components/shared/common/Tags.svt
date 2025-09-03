@@ -1,0 +1,32 @@
+<!--*
+	  Displays a list of tags.
+
+    Nothing is rendered if `items` is nullish or empty.
+
+    @tags conditional, delegate
+
+    @property { array } items
+      List of tags to be rendered.
+    @property { string } [type='tags']
+      A type for the internal **List** component.
+    @property { snippet } [use]
+      Passed a snippet that renders the content of this component.
+-->
+
+<List {items} pred={tagDetails} {type} {use}>
+  {#snippet children(args)}
+    <Tag {...args} /> 
+  {/snippet}
+</List>  
+
+
+<script module>
+import { tagDetails } from '#frend/lib'
+
+import List from './List'
+import Tag from '#custom/main/Tag'
+</script>
+
+<script>
+let { items, type = 'tags', use } = $props();
+</script>

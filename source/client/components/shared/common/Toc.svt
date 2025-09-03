@@ -1,0 +1,61 @@
+<!--*
+    Renders a table-of-contents (ToC).
+
+    Nothing is rendered unless there is at least one header element with an id
+    within `tocDepth` range descending from the node identified by `sel`.
+
+    @tags conditional, delegate
+
+    @property { snippet } each
+      Passed details for each header link.
+    @property { string } sel
+      Selector identifying the root element in which to create a ToC from.
+    @property { number } tocDepth
+      ToC header depth (0-6).  Specify 0 for no ToC.
+    @property { string } [type='toc']
+      A type for the internal **List** components.
+    @property { snippet } [use]
+      Passed a snippet that renders the content of this component.
+-->
+
+<When test={tree} {use}>
+  {@render multi(tree.heads)}
+</When>
+
+{#snippet single({ id, title, heads })}
+  {@render each({ id, title, onclick: e => doClick(e, id) })}
+  {@render multi(heads)}
+{/snippet}
+
+{#snippet multi(heads)}
+  <List items={heads} {type}>
+    {#snippet children(head)}
+      {@render single(head)}
+    {/snippet}
+  </List>
+{/snippet}
+
+
+<script module>
+import { headerTree } from '#frend/lib'
+
+import List from './List'
+import When from './When'
+</script>
+
+<script>
+let { each, sel, tocDepth, type = 'toc', use } = $props();
+let tree = $state();
+
+let doClick = (evt, id) =>
+{
+    document.getElementById(id)?.scrollIntoView();
+    evt.preventDefault();
+}
+
+$effect(() => 
+{
+    let base = document.querySelector(sel);
+    tree = base ? headerTree(base, tocDepth) : null;
+});
+</script>

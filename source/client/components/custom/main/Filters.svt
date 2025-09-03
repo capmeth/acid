@@ -1,0 +1,40 @@
+<!--*
+    Renders UI for user filter criteria input.
+
+    @tags inject:main-filters, custom:main/Filters
+
+    @property { function } clearFilters
+      Call to clear all current filter settings.
+    @property { snippet } groupFilter
+      Group filter input UI.
+    @property { snippet } tagFilter
+      Tag filter input UI.
+    @property { snippet } textFilter
+      Text filter input UI.
+-->
+
+<div class="main-filters">
+  <div class="text">
+    {@render textFilter()}
+  </div>
+  <div class="group">
+    {@render groupFilter('flex')}
+  </div>
+  <div class="tag">
+    {@render tagFilter('flex')}
+  </div>
+  <Button action="clear_filters" onclick={clearFilters} />
+</div>
+
+
+<script module>
+import Button from '#shared/helper/Button'
+</script>
+
+<script>
+let { clearFilters, groupFilter, tagFilter, textFilter } = $props();
+</script>
+
+<style>
+/* @inject #main-filters */
+</style>

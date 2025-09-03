@@ -1,0 +1,71 @@
+<!--*
+    Renders UI for a Code Block Editor (CoBE) component.
+
+    The snippets `controls`, `entry`, and `stage` may or may not exist 
+    depending on the `mode` currently in play.
+
+    You must add the "hljs" CSS class to a parent or ancestor of wherever 
+    `entry` is rendered in order to get the proper background theme.
+    
+    @tags cobe, inject:main-editor, custom:main/Editor
+
+    @property { snippet } [controls]
+      Renders the editor button controls block.
+    @property { boolean } copied
+      Has code been copied to clipboard?
+    @property { boolean } edited
+      Is current code different from current render?
+    @property { snippet } [entry]
+      Renders the code input block.
+    @property { object } [error]
+      Error thrown by current render.
+    @property { string } id
+      Id of the code block to render.
+    @property { string } [label]
+      A label for the editor.
+    @property { string } [lang]
+      Language type of the code block.
+    @property { string } mode
+      Rendering mode for the editor.
+    @property { boolean } shifted
+      Is current code different from original code?
+    @property { snippet } [stage]
+      Renders the rendering block.
+-->
+
+<div 
+  {id}
+  class="main-editor mode-{mode} lang-{lang}"
+  class:labeled={label}
+  class:shifted
+  class:edited
+  class:copied
+  class:failed={error}
+>
+  {#if label}
+    <div class="label">{ label }</div>
+  {/if}
+  {#if stage}
+    <div class="stage">
+      {@render stage()}
+      {#if error}
+        <div class="error">{ error }</div>
+      {/if}
+    </div>
+  {/if}
+  {#if controls}
+    <div class="controls">{@render controls()}</div>
+  {/if}
+  {#if entry}
+    <div class="entry hljs">{@render entry()}</div>
+  {/if}
+</div>
+
+
+<script>
+let { controls, copied, edited, entry, error, id, label, lang, mode, shifted, stage } = $props();
+</script>
+
+<style>
+/* @inject #main-editor */
+</style>

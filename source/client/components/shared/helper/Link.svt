@@ -1,0 +1,84 @@
+<!--*
+    Generates a routing link.
+
+    When `to` is an object the component looks for (in precedence order):
+    1. `uid` for an asset
+    2. `name` for a section
+    3. `to` for a page name
+
+    If `title` is not specified a default is generated when `to` is set.
+
+    @tags inject:helper-link, extra-props:a
+
+    @property { snippet } children
+      Child content.
+    @property { snippet } class
+      Additional CSS classes for the anchor tag.
+    @property { string } [href]
+      URL to link to.  This is ignored if `to` is set.
+    @property { string } [title]
+      Title attribute value for the link.
+    @property { string | object } [to]
+      Page name or entity object to generate a link for.
+    @property { string } value
+      Link content when `children` not present.
+-->
+
+<a class={['helper-link', ...classes, klass]} {href} {title} {...args}>
+  {#if children}
+    {@render children()}
+  {:else}
+    <span>{ value }</span>
+  {/if}
+</a>
+
+
+<script module>
+import { is } from '#utils'
+import { context, sinfo } from '#frend/lib'
+</script>
+
+<script>
+let { class: klass, href, to, title, value, children, ...args } = $props();
+
+let x = is.string(to) ? { to } : { ...to };
+let classes = [];
+
+if (x.name) // link to a section page
+{
+    let section = sinfo(x.name);
+    classes.push(`to-section`);
+    if (context.section === section.name) classes.push({ current: true });
+    href = context.url(section);
+    title ||= section.name === sinfo.root.name ? t('msg_goto_page', { title: 'home' }) : 
+        `section: ${section.titlePath.slice(1).join('/')}`;
+    if (!children) value ||= section.title;
+}
+else if (x.uid) // link to an asset page
+{
+    let asset = sinfo.asset(x.uid);
+    classes.push(`to-${asset.type}`);
+    if (asset.deprecated) classes.push('deprecated');
+    if (context.asset === asset.uid) classes.push({ current: true });
+    href = context.url(asset);
+    title ||= `${asset.type}: ${asset.section.titlePath.slice(1).join('/')}/${asset.title}`;
+    if (!children) value ||= asset.title;
+}
+else if (x.to) // link to a static page
+{
+    classes.push(`to-${x.to}`);
+    if (context.page === x.to) classes.push({ current: true });
+    href = context.url(x.to);
+    title ||= t('msg_goto_page', { title: x.to });
+    if (!children) value ||= t(`page_${x.to}_title`);
+}
+else // link to a non-routed page
+{
+    classes.push(`to-other`);
+    href ||= '##'
+}
+</script>
+
+<style>
+/* @inject #helper-link */
+</style>

@@ -1,0 +1,23 @@
+<!--*
+    Displays description HTML content.
+
+    Default content is rendered if `value` is nullish or empty.
+
+    @property { string } value
+      HTML description content.
+    @property { string } type
+      Indicates type of description.
+-->
+
+<Markup {type} empty={!value}>
+  {@html value}
+</Markup>
+
+
+<script module>
+import Markup from '#custom/main/Markup'
+</script>
+
+<script>
+let { type, value } = $props();
+</script>

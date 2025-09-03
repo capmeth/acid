@@ -23,7 +23,7 @@ export default function(sections, root)
     {
         let section = sections[name];
 
-        log.test(`linking section ${name}...`);
+        log.test(`linking section {:white:${name}}...`);
     
         if (is.nonao(section))
         {

@@ -1,0 +1,26 @@
+<!--*
+    Conditionally renders content.
+
+    Nothing is rendered if `test` is falsey.
+
+    @property { snippet } children
+      Content to be rendered.
+    @property { param } param
+      Additional parameter passed to `children` or `use`.
+    @property { boolean } test
+      Should the content be rendered?      
+    @property { snippet } [use]
+      Passed the `children` snippet.
+-->
+
+{#if test}
+  {#if use}
+    {@render use(children, param)}
+  {:else}
+    {@render children(param)}
+  {/if}
+{/if}
+
+<script>
+let { param, test, use, children } = $props();
+</script>

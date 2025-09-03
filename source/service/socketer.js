@@ -16,7 +16,7 @@ export default function socketer(config)
     // no web socket needed if http server and watch disabled
     if (!enabled) return (sock.close(), sock);
 
-    log.info(`*** {:magenta:hot-reload} is enabled ***`);
+    log.info(`{:red:hot-reload} is enabled`);
 
     if (sock.port !== port)
     {

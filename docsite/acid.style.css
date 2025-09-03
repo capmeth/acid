@@ -5,127 +5,32 @@
     --acid-color-accent: #5371FF;
     --acid-color-break: #EFD4C4BE;
     --acid-color-component: #F98495;
-    --acid-color-document: #EA1334;
+    --acid-color-document: #e25b88;
     --acid-color-logo: #B80F29;
 
     --acid-color-darkest: #26030A;
 }
 
-.app-docsite
+#-helper-active
 {
-    &::before
+    &.hint-nav
     {
-        background: #500612;
-    }
+        background-color: #B80F2966;
 
-    .version-info
-    {
-        color: var(--acid-color-accent);
-        font-size: 1.1vw;
-        position: absolute;
-        top: 15vh;
-        left: 13vw;
-        z-index: -1;
+        .content { border-top: 2px solid var(--acid-color-accent); }
+
+        &.hover { background-color: #B80F29; }
     }
 }
 
-.markup
+#-helper-button
 {
-    code
-    {
-        color: #C084B6;
-    }
-
-    blockquote
-    {
-        background-color: #26030A;
-        color: #FFFFFFBB;
-    }
+    &:hover:not(:disabled) { color: var(--acid-color-darkest); }
 }
 
-.app-region.region-banner
+#-helper-toggle
 {
-    padding-top: 3vh;
-}
-
-.app-link
-{
-    &.component span
-    {
-        color: #E2B3C2;
-    }
-
-    &.document span
-    {
-        color: #E2B3C2;
-    }
-}
-.app-link.region-banner
-{
-    &:hover, &:focus { filter: none; }
-}
-
-.cobe-editor
-{
-    .label
-    {
-        background: #33000077;
-    }
-}
-
-.element-button
-{
-    &:hover:not(:disabled)
-    {
-        color: var(--acid-color-darkest);
-    }
-}
-
-.element-card.region-nav, .element-card.page-index
-{
-    background-color: #B80F2966;
-
-    .content 
-    { 
-        border-top: 2px solid var(--acid-color-accent);
-    }
-
-    &.hover { background-color: #B80F29; }
-}
-
-.element-tag
-{
-    &.group { color: white; background: green; }
-    &.extra-props { color: black; background: silver; }
-    &.no-style { color: black; background: yellow; }
-    &.page { color: white; background: purple; }
-    &.region { color: white; background: blue; }
-}
-
-.element-title.region-banner
-{
-    display: none;
-}
-
-.element-title.region-leader
-{
-    color: var(--acid-color-logo);
-    font-family: Lemon, serif;
-    letter-spacing: -2px;
-    text-shadow: -.5px .5px 0 white, -1px 1px 3px black;
-}
-
-.element-title.region-leader.page-component
-{
-    color: #AC5B67;
-    font-family: var(--acid-font-family-text);
-    letter-spacing: normal;
-    text-shadow: var(--acid-text-shadow-default);
-}
-
-.element-toggle
-{
-    &.role-checkbox
+    &.hint-checkbox
     {
         &.active 
         { 
@@ -135,13 +40,92 @@
     }
 }
 
-.nav-crumbs
+#-main-docsite
 {
-    :global
+    &::before { background: #500612; }
+
+    .banner
     {
-        a
+        padding-top: 3vh;
+
+        .logo
+        {
+            :global(.helper-link)
+            {
+                &:hover, &:focus { filter: none; }
+            }
+        }
+
+        .title { display: none; }
+
+        .version
+        {
+            color: var(--acid-color-accent);
+            font-size: 1.1vw;
+            position: absolute;
+            bottom: 5vw;
+            left: 13vw;
+            z-index: -1;
+        }
+    }
+}
+
+#-main-editor
+{
+    .label { background: #33000077; }
+}
+
+#-main-list
+{
+    &.type-crumbs
+    {
+        .listitem
         {
             color: var(--acid-color-accent);
         }
     }
+}
+
+#-main-markup
+{
+    :global
+    {
+        code { color: #C084B6; }
+
+        blockquote
+        {
+            background-color: #26030A;
+            color: #FFFFFFBB;
+        }
+    }
+}
+
+#-main-tag
+{
+    &.cobe { color: gold; background: black; }
+    &.conditional { color: white; background: darkblue; }
+    &.custom { color: white; background: green; }
+    &.delegate { color: white; background: saddlebrown; }
+    &.extra-props { color: white; background: blueviolet; }
+    &.inject { color: white; background: blue; }
+    &.uses { color: white; background: darkgreen; }
+}
+
+#-page-catalog,
+#-page-document,
+#-page-home,
+#-page-section
+{
+    main .leader .title
+    {
+        color: var(--acid-color-logo);
+        font-family: Lemon, serif;
+        letter-spacing: -2px;
+        text-shadow: -.5px .5px 0 white, -1px 1px 3px black;
+    }
+}
+
+#-page-component
+{
+    main .leader .title { color: #AC5B67; }
 }

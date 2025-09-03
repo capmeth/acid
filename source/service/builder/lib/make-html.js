@@ -2,7 +2,8 @@ import { hackson } from '#lib/hosted.js'
 import { is } from '#utils'
 
 
-let spaceRe = /\s+/
+let spaceRe = /\s+/;
+let ogRe = /^og:/;
 /**
     Generates the docsite html page.
 
@@ -58,9 +59,23 @@ let toMetas = (list, lines) =>
     list.forEach(item => 
     {
         if (is.string(item))
-            hackson[item] && lines.push(`  <meta name="${item}" content="${hackson[item]}" />`);
+        {            
+            let [ attr, key = attr ] = item.split('=');
+
+            if (is(hackson[key]))
+            {
+                let data = 
+                { 
+                    [attr.indexOf(':') < 0 ? 'name' : 'property']: attr,
+                    content: hackson[key] 
+                }
+                lines.push(`  <meta ${toAttrs(data)} />`);
+            }
+        }
         else
+        {
             lines.push(`  <meta ${toAttrs(item)} />`);
+        }
     });
 }
 

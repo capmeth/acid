@@ -1,0 +1,27 @@
+<!--*
+	  Docsite landing page.
+
+    @property { any } site
+      Data from **Docsite** component.
+-->
+
+<Home 
+  sect={root.name}
+  title={root.title}
+  mcid={root.content}
+  tocDepth={root.tocDepth}
+  {site}
+/>
+
+<script module>
+import { context, sinfo } from '#frend/lib'
+
+import Home from '#custom/page/Home'
+</script>
+
+<script>
+let { site } = $props();
+
+let { root } = sinfo;
+context.section = root.name;
+</script>

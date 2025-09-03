@@ -26,7 +26,7 @@ export default function(config, omits = [])
                 watcher.on('change', bounce);
                 watchers.push(watcher);
 
-                log.test(`watching file ${file}`);
+                log.test(`watching file {:white:${file}}`);
             });
 
             log.info(`watching ${files.length} files for changes...`);

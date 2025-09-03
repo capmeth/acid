@@ -73,7 +73,7 @@ export let tdContent = takedown(
                 ${e.value.replace(braceRe, '{"$&"}')}
         
                 <script module>
-                import Editor from '#comps/cobe/Editor'
+                import Editor from '#Editor'
                 </script>
             `;
             

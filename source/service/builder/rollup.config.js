@@ -21,6 +21,7 @@ import makeConfig from './lib/make-config.js'
 import makeExports from './lib/make-exports.js'
 import makeHtml from './lib/make-html.js'
 import pluginCopyStuff from './plugin/copy-stuff.js'
+import pluginCustomSwap from './plugin/custom-swap.js'
 import pluginEmitAsset from './plugin/emit-asset.js'
 import pluginScopedStyles from './plugin/scoped-styles.js'
 import pluginVirtualFile from './plugin/virtual-file.js'
@@ -48,7 +49,7 @@ export default function(config, loaded, styles)
         banner: banner(config.title) 
     };
 
-    main.external = [ 'rollup', /^svelte/ ];
+    main.external = [ /^svelte/ ];
 
     main.plugins = 
     [
@@ -64,23 +65,27 @@ export default function(config, loaded, styles)
         {
             entries:
             {
-                '#comps': path.join(paths.client, 'components'),
                 '#config': 'docsite-config',
                 '#frend': paths.client, // `#client` conflicts with svelte internals
                 '#image': paths.images,
+                '#shared': path.join(paths.client, 'components', 'shared'),
                 '#utils': paths.shared,
+
+                '#Editor': path.join(paths.client, 'components', 'core', 'base', 'Editor'),
             }
         }),
-        pluginNodeResolve({ extensions: [ '.css', '.js', '.json', '.png', '.svt' ], browser: true }),
+        pluginCustomSwap({ root, map: config.components }),
+        pluginNodeResolve({ extensions: [ '.css', '.js', '.json', '.png', '.svelte', '.svt' ], browser: true }),
         pluginJson(),
         pluginCommonjs(),
         pluginImage(),
         pluginScopedStyles({ styles }),
-        pluginSvelte({ extensions: [ '.svt' ], emitCss: true }), 
+        pluginSvelte({ extensions: [  '.svelte', '.svt' ], emitCss: true }), 
         pluginInject(
         {
-            include: path.join(paths.client, 'components', '**', '*.svt'),
-            ctx: path.join(paths.client, 'lib', 'context.js')
+            include: path.join('**', '*.{svelte,svt}'),
+            ctx: path.join(paths.client, 'lib', 'context.js'),
+            t: path.join(paths.client, 'lib', 't.js')
         }),
         pluginPostcss({ minimize: true }),
         pluginEmitAsset({ fileName: `${output.name}.html`, source: makeHtml(config) }),

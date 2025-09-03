@@ -1,5 +1,4 @@
 import { on } from 'svelte/events'
-import Error from '../components/page/Error'
 import eventer from '../lib/eventer'
 
 
@@ -65,9 +64,6 @@ export default function(routes)
 
             return { route: name, Component, ...params };
         }
-
-        let message = `No page found at ${spath}`;
-        return { Component: Error, code: 404, message }
     }
 
     let toNavLink = (name, params) =>

@@ -1,0 +1,46 @@
+<!--*
+    Provides header/content container with active/inactive state toggle.
+
+    Clicking the header will toggle the state. This can be used for an 
+    expand/collapse container, for example.
+
+    @tags inject:helper-active
+
+    @property { snippet } children
+      Renders collapsible content.
+    @property { snippet } [header]
+      Renders clickable content (to trigger expand/collapse).
+    @property { string } [hint="active"]
+      Styling hint (as classname "hint-{hint}").
+    @property { string } [store]
+      Passed to internal **Toggle** component.
+-->
+
+<div class="helper-active hint-{hint}" class:active class:hover>
+  {#if header}
+    <Toggle bind:active bind:hover hint="switch" {store}>
+      {@render header(active)}
+    </Toggle>
+  {/if}
+  <div class="content">
+    {@render children()}
+  </div>
+</div>
+
+
+<script module>
+import Toggle from './Toggle'
+</script>
+
+<script>
+let { header, hint = 'active', store, children } = $props();
+
+if (store) store = `active-${store}`;
+
+let active = $state(header ? void 0 : true);
+let hover = $state();
+</script>
+
+<style>
+/* @inject #helper-active */
+</style>

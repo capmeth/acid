@@ -1,4 +1,4 @@
-import { rollup } from '#utils'
+import rollup from '#lib/rollup.js'
 import rollConfig from './rollup.config.js'
 
 

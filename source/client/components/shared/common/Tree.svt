@@ -1,0 +1,70 @@
+<!--*
+    Generates section/asset link tree for a section and its sub-sections.
+
+    When not specified, `sect` defaults to the configured `rootSection`.
+
+    When `group` is specified, nothing is rendered if section `sect` has no 
+    child or descendant assets in the group. Descendant sections will also be
+    omitted for not having the same.  If `group` is not specified, the full
+    section descendant tree is rendered without assets.
+
+    @tags conditional, delegate
+
+    @property { snippet } each
+      Passed each section and asset for render.
+    @property { string } [group]
+      Asset group to render the tree for.
+    @property { string } [sect]
+      Name of the section to be rendered.
+    @property { string } [type='tree']
+      A type for the internal **List** components.
+    @property { snippet } [use]
+      Passed a snippet that renders the content of this component.
+-->
+
+<When {test} {use}>
+  {@render listAssets(section[group])}
+  {@render listSections(section.sections)}  
+</When>
+
+{#snippet listSections(items)}
+  <List {items} {filter} pred={sinfo} {type}>
+    {#snippet children(sect)}
+      {@render each(sect, 'section')}
+      {@render listAssets(sect[group])}
+      {@render listSections(sect.sections)}
+    {/snippet}
+  </List>  
+{/snippet}
+
+{#snippet listAssets(items)}
+  {#if !isSections}
+    <List {items} pred={sinfo.asset} {type}>
+      {#snippet children(asset)}
+        {@render each(asset, asset.type)}
+      {/snippet}
+    </List>
+  {/if}
+{/snippet}
+
+
+<script module>
+import { sinfo } from '#frend/lib'
+
+import List from './List'
+import When from './When'
+</script>
+
+<script>
+let { each, group, sect, type = 'tree', use } = $props();
+
+group ||= 'sections';
+
+let hasAssets = section => !!section[group]?.length || !!section.descendants[group]?.length
+
+let isSections = group === 'sections';
+let section = sinfo(sect || sinfo.root.name);
+let test = isSections ? !!section.sections?.length : hasAssets(section);
+
+let filter = sect => isSections || hasAssets(sinfo(sect))
+</script>

@@ -11,7 +11,6 @@ export default
 {
     namespace: "metasite",
     title: "A Component Interface Documenter",
-    logo: 'acid.png',
 
     copy: { files: path.join("source", "images", "acid.png"), to: 'acid.png' },
 
@@ -26,19 +25,19 @@ export default
         theme: 'kimbie-dark'
     },
 
-    labels: { "page-home-title": "Homepage" },
-
     links: { href: "acid.png", rel: "icon", type: "image/x-icon" },
 
     sections,
 
     tagLegend: 
     {
+        "cobe": "Part of the CoBE component family.",
+        "conditional": "No render output when certain condition(s) fail.",
+        "custom": "Replaceable component (id: {info}).",
+        "delegate": "Passes content snippet to `use` snippet prop.",
         "extra-props": "Unused props are passed to <{info}>.",
-        "group": "Belongs to {info} component group.",
-        "no-style": "This component cannot be styled.",
-        "page": "Styling can be page specific.",
-        "region": "Styling can be region specific."
+        "inject": "Injects #{info} CSS from theme.",
+        "uses": "Uses custom component (id: {info})."
     },
 
     toAssetId: [ [ "^(?:source[/]client[/]components|docsite[/]docs)[/](.+?)[.][^./]+$" ], "$1" ],
@@ -55,10 +54,15 @@ export default
     { 
         files: 
         [
-            path.join("source", "client", "**", "*.{js,svt}"),
+            path.join("source", "client", "components", "**", "*.svt"),
+            path.join("source", "client", "**", "*.js"),
             path.join("docsite", "docs", "**", "*.md")
         ] 
     },
 
-    style: [ '#acidic', 'file:/docsite/acid.style.css' ]
+    style: 
+    [ 
+        '#acidic',
+        'file:/docsite/acid.style.css' 
+    ]
 }

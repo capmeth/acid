@@ -38,8 +38,6 @@ export default config =>
 
     config.importMap =
     {
-        "rollup": "https://unpkg.com/@rollup/browser/dist/es/rollup.browser.js",
-
         "svelte": "https://esm.sh/svelte@5.34.7",
         "svelte/animate": "https://esm.sh/svelte@5.34.7/animate",
         "svelte/attachments": "https://esm.sh/svelte@5.34.7/attachments",

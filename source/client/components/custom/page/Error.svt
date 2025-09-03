@@ -1,0 +1,23 @@
+<!--*
+	  Renders UI for the error page.
+
+    @tags inject:page-error, custom:page/Error
+
+    @property { object } error
+      The problem that happened.
+-->
+
+<div class="page-error">
+  <div class="details">
+    <p class="name">{ error.name }</p> 
+    <p class="message">{ error }</p>
+  </div>
+</div>
+
+<script>
+let { error } = $props();
+</script>
+
+<style>
+/* @inject #page-error */
+</style>

@@ -1,0 +1,42 @@
+<!--*
+    Renders content as a list.
+
+    Nothing is rendered if `items` is nullish or of zero length.
+
+    Each element of `items` that passes `filter` is passed to `children`, 
+    optionally being first processed by the function `pred`.
+
+    The `type` prop indicates intended formatting
+    - `list`: normal page layout
+    - `tree`: hierarchical (usually involves multiple lists)
+
+    @tags uses:main/List, conditional, delegate
+
+    @property { function } [filter]
+      Filters `items` for inclusion (falsey return value excludes item).
+    @property { array } [items]
+      List of items to render.
+    @property { function } [pred]
+      A function to "process" each item passed to `children`.
+    @property { string } [type="list"]
+      A layout hint for the list being rendered.
+    @property { snippet } [use]
+      Passed a snippet that renders the content of this component.
+-->
+
+<When test={items?.length} {use}>
+  <List items={aiter(items, pred, filter)} {type} {...args} />
+</When>
+
+
+<script module>
+import { aiter, is } from '#utils'
+
+import List from '#custom/main/List'
+import When from './When'
+</script>
+
+<script>
+let { filter, items, pred, type = 'list', use, ...args } = $props();
+filter ||= item => !is.undef(item)
+</script>

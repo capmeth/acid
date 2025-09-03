@@ -1,0 +1,36 @@
+<!--*
+    Renders UI for a list container block.
+
+    @tags inject:main-list, custom:main/List
+
+    @property { snippet } children
+      Passed each item in `items`.      
+    @property { boolean } delim
+      Insert delimiter items?
+    @property { iterable } items
+      List content.
+    @property { string } type
+      List layout hint.
+-->
+
+<ul class="main-list type-{type}">
+  {#each items as item, index (item)}
+    <li class="listitem">
+      {@render children(item)}
+    </li>
+    {#if delim && index < items.length - 1}
+      <li class="delimiter"></li>
+    {/if}
+  {/each}
+</ul>  
+
+
+<script>
+let { delim, items, type, children } = $props();
+// need to have an array for delimiting
+if (delim) items = Array.from(items);
+</script>
+
+<style>
+/* @inject #main-list */
+</style>

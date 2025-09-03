@@ -1,0 +1,24 @@
+<!--*
+	  Error page.
+
+    @property { any } site
+      Data from **Docsite** component.
+    @property { object } error
+      The problem that happened.
+-->
+
+<Error {error} {site} />
+
+
+<script module>
+import { webpage } from '#frend/lib'
+
+import Error from '#custom/page/Error'
+</script>
+
+<script>
+let { error, site } = $props();
+console.error(error);
+
+webpage.setTitle('Error');
+</script>

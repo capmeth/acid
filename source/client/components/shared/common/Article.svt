@@ -1,0 +1,32 @@
+<!--*
+    Displays converted markdown document files.
+
+    Nothing is rendered if specified `mcid` is not mapped to a document 
+    component.
+
+    @tags conditional, delegate
+
+    @property { string } [mcid]
+      Markdown content id of a pre-generated component.
+    @property { snippet } [use]
+      Passed a snippet that renders the content of this component.
+-->
+
+<When test={Marked} {use}>
+  <Markup id={mcid} el="article" type="article">
+    <Marked />
+  </Markup>
+</When>
+
+
+<script module>
+import * as markdown from '../markdown/index.js'
+
+import Markup from '#custom/main/Markup'
+import When from './When'
+</script>
+
+<script>
+let { mcid, use } = $props();
+let Marked = markdown[mcid];
+</script>

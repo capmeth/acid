@@ -1,0 +1,23 @@
+<!--*
+    Captures user text input.
+
+    @tags inject:helper-input, extra-props:input
+
+    @property { string } [hint="input"]
+      Styling hint (as classname "hint-{hint}").
+    @property { any } [value]
+      Data in the input field. This field is `$bindable`.
+-->
+
+<input class="helper-input hint-{hint}" {value} {...attrs} oninput={input} />
+
+
+<script>
+let { hint = 'input', value = $bindable(), ...attrs } = $props();
+
+let input = evt => value = evt.target.value;
+</script>
+
+<style>
+/* @inject #helper-input */
+</style>

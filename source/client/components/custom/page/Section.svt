@@ -1,0 +1,49 @@
+<!--*
+	  Renders UI for a section overview page.
+
+    @tags inject:page-section, custom:page/Section
+
+    @property { string } [mcid]
+      Markdown Content ID for document content.
+    @property { string } sect
+      Name of the section on display.
+    @property { object } site
+      Data from **Docsite** component.
+    @property { string } title
+      Title for the page.
+    @property { number } tocDepth
+      ToC header depth level for `mcid` content.
+-->
+
+<div class="page-section">
+  <main>
+    <div class="leader">
+      <div class="title">{ title }</div>
+      <Crumbs {sect} />
+    </div>
+    <div class="content">
+      <Article {mcid} />
+      {@render site.assets({ sect })}
+    </div>
+  </main>
+  <nav>
+    {@render site.tree()}
+    {@render site.toc(mcid, tocDepth)}
+    {@render site.tree('documents')}
+    {@render site.tree('components')}
+  </nav>
+</div>
+
+
+<script module>
+import Article from '#shared/common/Article'
+import Crumbs from '#shared/common/Crumbs'
+</script>
+
+<script>
+let { mcid, sect, site, title, tocDepth } = $props();
+</script>
+
+<style>
+/* @inject #page-section */
+</style>

@@ -1,0 +1,27 @@
+<!--*
+    Displays parent section hierarchy as breadcrumb links.
+
+    @property { string } sect
+      Name of the section to list hierarchy for.
+    @property { string } [type='crumbs']
+      A type for the internal **List** component.
+-->
+
+<List {items} pred={sinfo} {type} {use} delim>
+  {#snippet children(section)}
+    <Link to={section}>{ section.title }</Link>
+  {/snippet}
+</List>  
+
+
+<script module>
+import { sinfo } from '#frend/lib'
+
+import Link from '../helper/Link'
+import List from './List'
+</script>
+
+<script>
+let { sect, type = 'crumbs', use } = $props();
+let items = [ ...sinfo(sect).parents, sect ];
+</script>

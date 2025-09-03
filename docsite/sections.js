@@ -13,7 +13,9 @@ export default
             'authoring',
             'configure', 
             'integrate', 
-            'components', 
+            'comps_core', 
+            'comps_shared', 
+            'comps_custom', 
             'credits' 
         ]
     },
@@ -79,68 +81,24 @@ export default
         ]
     },
 
-    components:
+    comps_core:
     {
-        title: 'Components',
-        overview: 'file:/docsite/docs/components/index.md',
-        sections: 
-        [ 
-            'components_app',
-            'components_page',
-            'components_nav',
-            'components_element',
-            'components_cobe',
-            'components_asset',
-            'components_filter'
-        ]
+        title: 'Core Components',
+        overview: 'file:/docsite/docs/components/core/index.md',
+        components: 'source/client/components/core/**/*.svt'
     },
 
-    components_app:
+    comps_custom:
     {
-        title: 'App Components',
-        overview: 'Components that form the core of a docsite.',
-        components: 'source/client/components/app/*.svt'
+        title: 'Custom Components',
+        overview: 'file:/docsite/docs/components/custom/index.md',
+        components: 'source/client/components/custom/**/*.svt'
     },
 
-    components_asset:
+    comps_shared:
     {
-        title: 'Asset Components',
-        overview: 'Components that provide asset details.',
-        components: 'source/client/components/asset/*.svt'
-    },
-
-    components_cobe:
-    {
-        title: 'CoBE Components',
-        overview: 'Components that render code blocks.',
-        components: 'source/client/components/cobe/*.svt'
-    },
-
-    components_element:
-    {
-        title: 'Basic Components',
-        overview: 'Components that do menial tasks.',
-        components: 'source/client/components/element/*.svt'
-    },
-
-    components_filter:
-    {
-        title: 'Filtering Components',
-        overview: 'Components for filtering asset lists.',
-        components: 'source/client/components/filter/*.svt'
-    },
-
-    components_nav:
-    {
-        title: 'Navigation Components',
-        overview: 'Components that let you move about the site.',
-        components: 'source/client/components/nav/*.svt'
-    },
-
-    components_page:
-    {
-        title: 'Page Components',
-        overview: 'file:/docsite/docs/components/page/index-page.md',
-        components: 'source/client/components/page/*.svt'
+        title: 'Shared Components',
+        overview: 'file:/docsite/docs/components/shared/index.md',
+        components: 'source/client/components/shared/**/*.svt'
     }
 }

@@ -24,26 +24,26 @@ All of the multi-file configuration settings use Glob for enhanced file selectio
 
 HighlightJs is a syntax highlighter for the web.
 
-Code highlighting in the docsite is managed by HighlightJs.
+Code highlighting in docsite code blocks is managed by HighlightJs.
 
 
 ## [js-yaml](https://www.npmjs.com/package/js-yaml)
 
 An excellent YAML parser.
 
-JsYaml parses markdown front-matter and makes ".yaml" config files possible.
+JsYaml parses markdown front-matter and makes *.yaml* config files possible.
 
 
 ## [rollup](https://rollupjs.org)
 
 Rollup is an amazing web-bundling platform.
 
-Rollup is used to assemble all docsite assets into a functioning website.
+Rollup is used in several ways, but mainly to assemble docsite assets into a functioning website.
 
 
 ## [svelte](https://svelte.dev)
 
-Svelte is an learning curve agnostic (mostly) UI component platform for building web applications.
+Svelte is a learning curve agnostic (mostly) UI component platform for building web applications.
 
 Generated docsites are built on the Svelte platform.
 
@@ -52,7 +52,7 @@ Generated docsites are built on the Svelte platform.
 
 Takedown is a custom CommonMark-compliant markdown parser built primarily for ACID.
 
-All markdown files and code entity descriptions are processed through Takedown.
+Markdown files and code entity descriptions are processed through Takedown.
 
 
 # Development Stack
@@ -78,7 +78,7 @@ ESLint keeps tabs on potential problems in ACID code.
 
 Node is the ubiquitous Javascript development platform.
 
-The foundation of the ACID application.
+Node provides the foundation for building and developing the ACID application.
 
 
 ## [npm](http://www.npmjs.com)

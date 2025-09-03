@@ -1,0 +1,23 @@
+<!--*
+    Provides a clickable element for user interaction.
+
+    @tags inject:helper-button, extra-props:button
+
+    @property { string } action
+      Label id as `action_{action}`.
+    @property { string } [hint="button"]
+      Styling hint.
+-->
+
+<button class="helper-button hint-{hint} action_{action}" {...attrs}>
+  { t(`action_${action}`) }
+</button>
+
+
+<script>
+let { action, hint = 'button', ...attrs } = $props();
+</script>
+
+<style>
+/* @inject #helper-button */
+</style>

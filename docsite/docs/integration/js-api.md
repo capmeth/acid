@@ -152,7 +152,22 @@ app.use(acidVueExt, { /* extension config */ });
 app.run();
 ```
 
-In the above, `acidReactExt` and `acidVueExt` are functions that accept the current config object, which has defaults and config file settings already loaded.  The config object itself is a self-managing proxy, so the extension does not need to return anything.
+In the above, `acidReactExt` and `acidVueExt` are functions that accept the current config object, which will have defaults and config file settings (and also any previously applied extension settings) already loaded.  The config object itself is a self-managing proxy, so the extension does not need to return anything.
+
+Alternatively, a module specifier can be used directly as long as the *default* export is the expected function.
+
+So, the above example could also be written as
+
+```js
+import acid from '@capmeth/acid'
+
+let app = acid();
+
+app.use('acid-react-extension', { /* extension config */ });
+app.use('acid-vue-extension', { /* extension config */ });
+
+app.run();
+```
 
 A second parameter can also be passed, ostensibly as configuration for the extension itself.
 

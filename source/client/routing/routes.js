@@ -1,9 +1,9 @@
-import Component from '../components/page/Component'
-import Document from '../components/page/Document'
-import Error from '../components/page/Error'
-import Home from '../components/page/Home'
-import Index from '../components/page/Index'
-import Section from '../components/page/Section'
+import Catalog from '../components/core/page/Catalog'
+import Component from '../components/core/page/Component'
+import Document from '../components/core/page/Document'
+// import Error from '../components/core/page/Error'
+import Home from '../components/core/page/Home'
+import Section from '../components/core/page/Section'
 
 
 export default
@@ -12,6 +12,6 @@ export default
     { name: 'section', path: '/section/:sect', Component: Section },
     { name: 'document', path: '/document/:uid', Component: Document },
     { name: 'component', path: '/component/:uid', Component: Component },
-    { name: 'index', path: '/index', Component: Index },
-    { name: 'error', path: '/error', Component: Error },
+    { name: 'catalog', path: '/catalog', Component: Catalog },
+    // { name: 'error', path: '/error', Component: Error },
 ];

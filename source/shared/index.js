@@ -9,6 +9,7 @@
     External dependencies are ok.
 */
 
+export { default as aiter } from './aiter.js'
 export { default as cacher } from './cacher.js'
 export { default as confine } from './confine/index.js'
 export { default as ctja } from './css-to-json-array.js'
@@ -24,5 +25,4 @@ export { default as modulize } from './modulize.js'
 export { default as proxet } from './proxet.js'
 export { default as remowned } from './remowned.js'
 export { default as rescape } from './rescape.js'
-export { default as rollup } from './rollup.js'
 export { default as uid } from './uid.js'

@@ -1,0 +1,36 @@
+<!--*
+	  Component display page.
+
+    @property { any } site
+      Data from **Docsite** component.
+    @property { string } uid
+      Id of component asset to display.
+-->
+
+<Component 
+  title={asset.title}
+  sect={asset.section.name}
+  mcid={asset.content}
+  description={asset.description}
+  deprecated={asset.deprecated}
+  props={asset.props}
+  tags={asset.tags}
+  {site}
+/>
+
+
+<script module>
+import { context, sinfo, webpage } from '#frend/lib';
+
+import Component from '#custom/page/Component'
+</script>
+
+<script>
+let { uid, site } = $props();
+
+let asset = sinfo.asset(uid);
+
+context.section = asset.section.name;
+context.asset = asset.uid; 
+webpage.setTitle(asset.title);
+</script>

@@ -1,0 +1,34 @@
+<!--*
+	  Document page.
+
+    @property { any } site
+      Data from **Docsite** component.
+    @property { string } uid
+      Id of document asset to display.
+-->
+
+<Document 
+  title={asset.title}
+  sect={asset.section.name}
+  mcid={asset.content}
+  tags={asset.tags}
+  tocDepth={asset.tocDepth}
+  {site}
+/>
+
+
+<script module>
+import { context, sinfo, webpage } from '#frend/lib'
+
+import Document from '#custom/page/Document'
+</script>
+
+<script>
+let { uid, site } = $props();
+
+let asset = sinfo.asset(uid);
+
+context.section = asset.section.name;
+context.asset = asset.uid; 
+webpage.setTitle(asset.title);
+</script>

@@ -1,4 +1,4 @@
-import { rollup } from '#utils'
+import rollup from '#lib/rollup.js'
 import rollConfig from './rollup.config.js'
 
 
@@ -22,7 +22,7 @@ export default function (root)
     {
         if (!mahjools[spec])
         {
-            log.test(`importing extension ${spec}...`);
+            log.test(`importing extension {:white:${spec}}...`);
             mahjools[spec] = await rollup.gen(rollConfig(root, spec)).then(mod => import(mod.default));
         }
         return mahjools[spec];

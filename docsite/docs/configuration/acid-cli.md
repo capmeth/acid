@@ -155,6 +155,15 @@ acid --output-name <name>
 acid -n <name>
 ```
 
+### `--root-section`
+
+Identifies the top-level section for the docsite.
+
+```shell
+acid --root-section <name>
+```
+
+
 ### `--server`
 
 Enables the dev http server and, optionally, the port it will listen on.

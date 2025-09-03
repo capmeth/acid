@@ -3,8 +3,7 @@ import uid from './uid.js'
 
 // not escaped
 let ne = '(?<=(?<!\\\\)(?:\\\\\\\\)*)';
-// let quoteRe = new RegExp(`(${ne}"(?:${ne}\\\\"|[^"])+${ne}")`, 'g');
-let quoteRe = new RegExp(`${ne}"(?:${ne}\\\\"|[^"])+${ne}"|${ne}'(?:${ne}\\\\'|[^'])+${ne}'`, 'g');
+let quoteRe = new RegExp(`${ne}"(?:${ne}\\\\"|[^"])*${ne}"|${ne}'(?:${ne}\\\\'|[^'])*${ne}'`, 'g');
 let delimsRe = /[:;{}]/g;
 
 let atRuleRe = /(@\w+)\s+([^;{}]+;)/g;

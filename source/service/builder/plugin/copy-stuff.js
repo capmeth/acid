@@ -31,7 +31,7 @@ export default function ({ specs, rootpath, outpath })
                 {
                     return fs.cp(from, to, { recursive: true }).then(() => 
                     {
-                        log.test(`copied {:whiteBright:${file}} to ${to}`);
+                        log.test(`copied {:white:${file}} to {:white:${to}}`);
                         copies ++;
                     });
                 }

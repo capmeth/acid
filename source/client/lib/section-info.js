@@ -63,18 +63,19 @@ let getDescendants = section =>
     return data;
 }
 
-let section = cacher(name =>
+let getSection = cacher(name =>
 {
-    let id = name.name || name;
-    let sect = sections[id];
+    let sect = sections[name];
 
-    let iface = proxet({}, prop => 
+    if (!sect) return void 0;
+
+    let iface = proxet({ name }, prop => 
     {
         if (prop === 'assets') return assetGroups.reduce((a, g) => [ ...a, ...iface[g] ], []);
         if (prop === 'descendants') return getDescendants(sect);
-        if (prop === 'name') return id;
         if (prop === 'parents') return getParents(sect);
         if (prop === 'path') return [ ...iface.parents, iface.name ];
+        if (prop === 'sect') return name;
         if (prop === 'titlePath') return iface.path.map(parent => sinfo(parent).title);
         if (prop === 'tocDepth') return sect.tocDepth ?? tocDepth;
 
@@ -91,11 +92,13 @@ let section = cacher(name =>
     return iface;
 });
 
-section.asset = cacher(uid =>
+let getAsset = cacher(uid =>
 {
-    let asset = assets[uid.uid || uid];
+    let asset = assets[uid];
 
-    let iface = proxet({}, prop => 
+    if (!asset) return void 0;
+
+    let iface = proxet({ uid }, prop => 
     {
         if (prop === 'section') return sinfo(asset.section);
         if (prop === 'hasTag') return name => iface.tagNames.includes(name)
@@ -119,6 +122,9 @@ section.asset = cacher(uid =>
     return iface;
 });
 
+
+let section = ref => getSection(ref.name || ref)
+section.asset = ref => getAsset(ref.uid || ref)
 section.asset.filter = assetFilter;
 section.asset.groups = assetGroups;
 section.asset.sort = assetSort;

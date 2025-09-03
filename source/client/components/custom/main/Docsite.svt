@@ -1,0 +1,107 @@
+<!--*
+    Renders UI for root docsite component.
+
+    Prop `children` can be passed a single parameter when rendering, and
+    that parameter becomes the `site` prop of the current page component.
+
+    @tags inject:main-docsite, custom:main/Docsite
+
+    @property { snippet } children
+      Docsite content. Any value passed here is provided to page component.
+    @property { string } logo
+      URL of docsite image logo.
+    @property { string } title
+      Docsite title.
+    @property { string } version
+      Version information string.
+-->
+
+<div class="main-docsite">
+  <header class="banner">
+    {#if logo}
+      <div class="logo">
+        <Link to="home">
+          <img class="logo" src={logo} alt="docsite logo" />
+        </Link>
+      </div>
+    {/if}
+    {#if title}
+      <div class="title">
+        <Link to="home">{ title }</Link>
+      </div>
+    {/if}
+    {#if version}
+      <div class="version">{ version }</div>
+    {/if} 
+    <div class="links">
+      <Link to="home" />
+      <Link to="catalog" />
+    </div>
+  </header>
+  {@render children({ assets, toc, tree })}
+</div>
+
+{#snippet assets(filters)}
+  <Assets {...filters} type="columns">
+    {#snippet children(asset)}
+      <Link class="annex-link" to={asset} />
+    {/snippet}
+  </Assets> 
+{/snippet}
+
+{#snippet toc(id, tocDepth, hint = 'nav')}
+  <Toc sel="#{id}" {tocDepth} each={tocItem}>
+    {#snippet use(render)}
+      <Active {hint} store="toc">
+        {#snippet header()}
+          <div class="{hint}-title">{ t.label_toc }</div>
+        {/snippet}
+        {@render render()}
+      </Active>
+    {/snippet}
+  </Toc>  
+{/snippet}
+
+{#snippet tree(group = 'sections', hint = 'nav')}
+  <Tree {group} each={treeItem}>
+    {#snippet use(render)}
+      <Active {hint} store={group}>
+        {#snippet header()}
+          <div class="{hint}-title">{ t(`label_${group}`) }</div>
+        {/snippet}
+        {@render render()}
+      </Active>
+    {/snippet}
+  </Tree>
+{/snippet}
+
+{#snippet tocItem({ id, title, onclick })}
+  {#if id}
+    <Link class="type-toc" title={t('msg_scrollto', { name: title })} {onclick}>
+      <span>{ title }</span>
+    </Link>
+  {:else}
+    <span>{ title }</span>
+  {/if}
+{/snippet}
+
+{#snippet treeItem(entity)}
+  <Link to={entity} />
+{/snippet}
+
+
+<script module>
+import Active from '#shared/helper/Active'
+import Assets from '#shared/common/Assets'
+import Link from '#shared/helper/Link'
+import Toc from '#shared/common/Toc'
+import Tree from '#shared/common/Tree'
+</script>
+
+<script>
+let { logo, title, version, children } = $props();
+</script>
+
+<style>
+/* @inject #main-docsite */
+</style>

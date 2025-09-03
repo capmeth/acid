@@ -1,0 +1,52 @@
+<!--*
+    Renders UI for a component prop.
+
+    @tags inject:main-prop, custom:main/Prop
+
+    @property { string } name Name of the property.
+    @property { snippet } description Description of the property.
+    @property { string } type Accepted data type(s) for the property.
+    @property { snippet } [fallback] Default value for the property.
+    @property { boolean } [required] Is the property required?
+    @property { boolean } [deprecated] Is the property deprecated?
+    @property { snippet } [message] Status message for the property.
+    @property { snippet } [values] List of valid values (enums) for the property.
+-->
+
+<div class="main-prop" class:required>
+  <div class="name" class:deprecated>{ name }</div>
+  <div class="type">{ type }</div>
+  {#if deprecated}
+    <div class="deprecation">{ deprecated }</div>
+  {/if}
+  <div class="desc">
+    <Description type="prop" value={description} />
+  </div>
+  {#if values}
+    <div class="values">
+      <List items={values}>
+        {#snippet children(value)}
+          <code>{ value }</code>
+        {/snippet}
+      </List>
+    </div>
+  {/if}
+  {#if fallback}
+    <div class="default">
+      <code>{ fallback }</code>
+    </div>
+  {/if}
+</div>
+
+
+<script module>
+import Description from '#shared/common/Description'
+</script>
+
+<script>
+let { name, deprecated, description, fallback, required, type, values } = $props();
+</script>
+
+<style>
+/* @inject #main-prop */
+</style>

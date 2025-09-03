@@ -1,0 +1,75 @@
+<!--*
+	  Renders UI for a component page.
+
+    @tags inject:page-component, custom:page/Component
+
+    @property { string } [mcid]
+      Markdown Content ID for example content.
+    @property { object } site
+      Data from **Docsite** component.
+    @property { array } tags
+      List of tags associated with the component.
+    @property { string } title
+      Component name.
+-->
+
+<div class="page-component">
+  <main>
+    <div class="leader">
+      <div class="title" class:deprecated>{ title }</div>
+      {#if deprecated}
+        <div class="deprecation">{ deprecated }</div>
+      {/if}
+      <Active hint="sector" store="asset-description">
+        {#snippet header()}
+          <div class="sector-title">{ t.label_description }</div>
+        {/snippet}
+        <Description type="component" value={description} />
+      </Active>
+      <Tags items={tags}>
+        {#snippet use(render)}
+          <Active hint="sector" store="asset-tags">
+            {#snippet header()}
+              <div class="sector-title">{ t.label_tags }</div>
+            {/snippet}
+            {@render render()}
+          </Active>
+        {/snippet}
+      </Tags>
+      <Props items={props} type="dual">
+        {#snippet use(render)}
+          <Active hint="sector" store="asset-props">
+            {#snippet header()}
+              <div class="sector-title">{ t.label_props }</div>
+            {/snippet}
+            {@render render()}
+          </Active>
+        {/snippet}
+      </Props>
+    </div>
+    <div class="content">
+      <Article {mcid} />
+    </div>
+  </main>
+  <nav>
+    {@render site.tree()}
+    {@render site.tree('components')}
+  </nav>
+</div>
+
+
+<script module>
+import Active from '#shared/helper/Active'
+import Article from '#shared/common/Article'
+import Description from '#shared/common/Description'
+import Props from '#shared/common/Props'
+import Tags from '#shared/common/Tags'
+</script>
+
+<script>
+let { deprecated, description, mcid, props, site, tags, title } = $props();
+</script>
+
+<style>
+/* @inject #page-component */
+</style>

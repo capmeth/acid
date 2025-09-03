@@ -85,8 +85,10 @@ A document's display name (title) is determined by the value of `title` in the f
 A short description of the section.
 
 ```js
-overview: "Components that allow for user interaction."
+overview: 'Components that allow for user interaction.'
 ```
+
+The content will be parsed as markdown.
 
 Alternatively, this can be the path to a single markdown file.
 
@@ -94,7 +96,32 @@ Alternatively, this can be the path to a single markdown file.
 overview: 'file:/docs/components/actions.md'
 ```
 
-Note here that, in the case of specifying a file, you must prefix the path with `file:/`.
+A filepath must be prefixed with `file:/` or it is assumed to be raw content.
+
+This is the "default" property for a section, which means that you can specify it directly as the value of the section itself.
+
+For example,
+
+```js
+sections:
+{
+    content_authoring:
+    {
+        overview: 'file:/docs/content-authoring.md'
+    }
+}
+```
+
+is the same as
+
+```js
+sections:
+{
+    content_authoring: 'file:/docs/content-authoring.md'
+}
+```
+
+The above case of course means that no additional configuration for the section is possible.
 
 
 ## sections
@@ -107,7 +134,7 @@ sections: [ 'introduction', 'action_components', 'layout_components' ]
 
 The sections specified must exist in the config or they will be skipped in the build process.  
 
-Any section that is included by more than one parent section will only ever appear as the child of the first parent that claims it (and "first" can be arbitrary, depending on the order in which they get processed).
+Any section that is included by more than one parent section will only ever appear as the child of the first parent that claims it (and "first" may be arbitrary, depending on the order in which they get processed).
 
 
 ## title

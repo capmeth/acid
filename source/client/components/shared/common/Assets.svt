@@ -1,0 +1,40 @@
+<!--*
+    Generates navigation for the assets in a section.
+
+    Nothing is rendered if filtering results in an empty asset list.
+
+    @property { snippet } children
+      Sort assets alphabetically by title?
+    @property { boolean } sort
+      Sort assets alphabetically by title?
+    @property { function } type
+      A type for the **List** component.
+    @property { ...any } [filters]
+      All additional properties are used as asset filters.
+-->
+
+<When test={true} {use} param={{ assets }}>
+  <List items={assets} pred={asset} {type} {children} />
+</When>
+
+
+<script module>
+import { naf, sinfo } from '#frend/lib'
+
+import List from './List'
+import When from './When'
+
+let { asset } = sinfo;
+</script>
+
+<script>
+let { sort, type, use, children, ...filters } = $props();
+
+let assets = $state([]);
+
+$effect(() => 
+{
+    assets = asset.filter(naf(filters));
+    if (sort) assets.sort(asset.sort.title);
+});
+</script>

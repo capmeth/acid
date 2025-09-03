@@ -1,7 +1,6 @@
-import { toScopeId } from '#source/service/styler/scopes.js'
 
-
-let styleRe = /<style>(.+?)<\/style>/s;
+// TODO: make sure this matches only within <style> tag
+let injectRe = /\/\*\s*@inject\s+(#[\w-]+)\s*\*\//g;
 
 /*
     Uses transform to add Svelte component CSS (in `<style>`).
@@ -14,12 +13,22 @@ export default function ({ styles })
 
     plugin.transform = function(source, id)
     {
-        let scopeId = toScopeId(id), style = styles[scopeId];
-        // don't change styles for already styled components
-        if (style && !styleRe.test(source))
+        if (injectRe.test(source))
         {
-            log.info(`injecting styles for scope ${scopeId}...`);
-            return source + `<style>\n${style}</style>\n`;                
+            return source.replace(injectRe, (match, sid) => 
+            {
+                if (styles[sid])
+                {
+                    log.test(() => 
+                    {
+                        let temp = id.split('/').slice(-3).join('/');
+                        return `injecting styles {:white:${sid}} into {:white:${temp}}...`
+                    });
+                    return styles[sid];
+                }
+
+                return match;
+            });
         }
 
         return null;

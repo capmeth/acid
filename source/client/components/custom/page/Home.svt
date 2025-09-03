@@ -1,0 +1,47 @@
+<!--*
+	  Renders UI for the docsite landing page.
+
+    @tags inject:page-home, custom:page/Home
+
+    @property { string } [mcid]
+      Markdown Content ID for document content.
+    @property { string } sect
+      Name of the docsite root section.
+    @property { object } site
+      Data from **Docsite** component.
+    @property { string } title
+      Title for the page.
+    @property { number } tocDepth
+      ToC header depth level for `mcid` content.
+-->
+
+<div class="page-home">
+  <main>
+    <div class="leader">
+      <div class="title">{ title }</div>
+    </div>
+    <div class="content">
+      <Article {mcid} />
+      {@render site.assets({ sect })}
+    </div>
+  </main>
+  <nav>
+    {@render site.tree()}
+    {@render site.toc(mcid, tocDepth)}
+    {@render site.tree('documents')}
+    {@render site.tree('components')}
+  </nav>
+</div>
+
+
+<script module>
+import Article from '#shared/common/Article'
+</script>
+
+<script>
+let { mcid, sect, site, title, tocDepth } = $props();
+</script>
+
+<style>
+/* @inject #page-home */
+</style>
