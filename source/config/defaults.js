@@ -43,13 +43,6 @@ config.components = {};
 config.copy = [];
 
 /**
-    Footer content for the docsite.
-
-    @type { string }
-*/
-config.footer = null;
-
-/**
     HighlightJs configuration.
 
     @type { object }

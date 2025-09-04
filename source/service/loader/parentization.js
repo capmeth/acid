@@ -29,7 +29,7 @@ export default function(sections, root)
         {
             if (name !== root && is(linked[name]))
             {
-                log.warn(`section ${name} is already linked to ${linked[name].parent}, skipping`);                
+                log.warn(`section {:yellowBright:${name}} already linked to {:yellowBright:${linked[name].parent}}, skipping`);                
             }
             else
             {
@@ -47,7 +47,7 @@ export default function(sections, root)
         }
         else
         {
-            log.warn(`section ${name} does not exist or is invalid, skipping`);
+            log.warn(`section {:yellowBright:${name}} does not exist or is invalid, skipping`);
         }
 
         return false;

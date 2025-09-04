@@ -4,7 +4,7 @@
     When a value for `store` is provided, the toggle state is written to and 
     read from browser storage, if activated in config.
 
-    @tags inject:helper-toggle
+    @tags inject:#helper-toggle
 
     @property { boolean } active
       Is content currently active?  This property is `$bindable`.

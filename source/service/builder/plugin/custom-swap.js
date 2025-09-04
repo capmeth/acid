@@ -24,7 +24,7 @@ export default function ({ root, map })
             if (map[cid])
             {
                 file = path.resolve(root, map[cid]);
-                log.info(`replacing {:whiteBright:${cid}} component with ${file}...`);
+                log.info(`replacing {:cyanBright:${cid}} component with {:cyanBright:${file}}...`);
             }
             
             // additional resolution needed (extension)

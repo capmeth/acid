@@ -8,7 +8,7 @@
 
     If `title` is not specified a default is generated when `to` is set.
 
-    @tags inject:helper-link, extra-props:a
+    @tags inject:#helper-link, extra-props:a
 
     @property { snippet } children
       Child content.

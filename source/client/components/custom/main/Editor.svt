@@ -7,7 +7,7 @@
     You must add the "hljs" CSS class to a parent or ancestor of wherever 
     `entry` is rendered in order to get the proper background theme.
     
-    @tags cobe, inject:main-editor, custom:main/Editor
+    @tags cobe, inject:#main-editor, custom:main/Editor
 
     @property { snippet } [controls]
       Renders the editor button controls block.

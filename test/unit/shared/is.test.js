@@ -1,4 +1,4 @@
-import is from "#source/shared/is.js";
+import is from "#source/utils/is.js";
 
 
 test('verifies a value as not being null or undefined', t => t.true(is('valid')));

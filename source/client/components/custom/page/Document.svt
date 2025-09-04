@@ -1,7 +1,7 @@
 <!--*
 	  Renders UI for a document page.
 
-    @tags inject:page-document, custom:page/Document
+    @tags inject:#page-document, custom:page/Document
 
     @property { string } [mcid]
       Markdown Content ID for document content.

@@ -1,7 +1,7 @@
 <!--*
 	  Renders UI for the error page.
 
-    @tags inject:page-error, custom:page/Error
+    @tags inject:#page-error, custom:page/Error
 
     @property { object } error
       The problem that happened.

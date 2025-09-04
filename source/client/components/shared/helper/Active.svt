@@ -4,7 +4,7 @@
     Clicking the header will toggle the state. This can be used for an 
     expand/collapse container, for example.
 
-    @tags inject:helper-active
+    @tags inject:#helper-active
 
     @property { snippet } children
       Renders collapsible content.

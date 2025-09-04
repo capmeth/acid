@@ -37,12 +37,13 @@ export default function ({ specs, rootpath, outpath })
                 }
                 else
                 {
-                    log.warn(`copying {:whiteBright:${file}} was skipped as destination is outside ${outpath}`)
+                    log.warn(`copying {:yellowBright:${file}} was skipped as destination is outside {:yellowBright:${outpath}}`)
                 }
             }));
         }));
 
-        if (copies > 0) log.info(`{:whiteBright:${copies} additional file(s)} were copied into ${outpath}`);
+        if (copies > 0) 
+            log.info(`{:cyanBright:${copies} additional file(s)} were copied into {:cyanBright:${outpath}}`);
     }
 
     return plugin;

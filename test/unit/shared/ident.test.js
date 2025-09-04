@@ -1,4 +1,4 @@
-import ident from "#source/shared/ident.js";
+import ident from "#source/utils/ident.js";
 
 
 test('returns the same value passed', t => {

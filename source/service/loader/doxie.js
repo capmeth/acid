@@ -6,8 +6,11 @@ import { tdComment } from './takedown.js'
 
 /*
     Returns a Proxy for building a component data file.
+
+    @param { string } id
+      Identifier for validation error reporting.
 */
-export default function ()
+export default function (id)
 {
     let data = confine(component, (apply, value, at) => 
     {
@@ -26,7 +29,7 @@ export default function ()
         catch (err)
         {
             if (!(err instanceof AcidValidateError)) throw err;
-            log.warn(`${at.name} skipped: ${err.message}`);
+            log.warn(`${at.name} in ${id} skipped: {:yellowBright:${err.message}}`);
         }
     });
 

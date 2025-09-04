@@ -1,7 +1,7 @@
 <!--*
     Captures user text input.
 
-    @tags inject:helper-input, extra-props:input
+    @tags inject:#helper-input, extra-props:input
 
     @property { string } [hint="input"]
       Styling hint (as classname "hint-{hint}").

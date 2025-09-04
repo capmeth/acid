@@ -1,7 +1,7 @@
 <!--*
     Renders UI for a list container block.
 
-    @tags inject:main-list, custom:main/List
+    @tags inject:#main-list, custom:main/List
 
     @property { snippet } children
       Passed each item in `items`.      

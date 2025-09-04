@@ -1,7 +1,7 @@
 <!--*
     Renders UI for user filter criteria input.
 
-    @tags inject:main-filters, custom:main/Filters
+    @tags inject:#main-filters, custom:main/Filters
 
     @property { function } clearFilters
       Call to clear all current filter settings.

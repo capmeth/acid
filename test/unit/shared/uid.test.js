@@ -1,4 +1,4 @@
-import uid from "#source/shared/uid.js";
+import uid from "#source/utils/uid.js";
 
 
 test('generates same id for the same input', t => 

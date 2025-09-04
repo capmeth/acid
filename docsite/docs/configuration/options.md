@@ -163,9 +163,7 @@ The docsite build can resolve *.svelte* and *.svt* extensions automatically, so 
 
 Setting a value to `null` or an empty string has the same effect as omitting it - the default internal component will be used.
 
-TODO: Documentation link for more information!
-
-> If you add a `<style>` tag to a custom component, it will NOT be themable via config `style` option (no CSS will be injected).
+Visit [Custom Components](section/comps_custom) page for more details on how this works.
 
 
 ## copy
@@ -196,19 +194,6 @@ copy:
 The resulting filename(s) from `to` are assumed to be relative to `output.dir`.  
 
 If `to` is omitted, `null`, or results in the same or an empty string, the file is copied into `output.dir` using its original path.  If `to` resolves to a path that is not inside `output.dir` the file will not be copied.
-
-
-## footer
-
-Raw HTML content for the site footer.
-
-```js label="default value"
-footer: null
-```
-
-```js label="spec"
-footer: string | null
-```
 
 
 ## hljs
@@ -678,7 +663,7 @@ socket: number | // merges
 
 Specifying a number is the same as setting `socket.port`.
 
-This option essentially defines *hot-reload* for the docsite, but has no effect unless both `httpServer` *and* `watch` are enabled, as the socket needs something to connect to and a reason to respond, respectively.
+This option essentially defines *hot-reload* for the docsite, but has no effect unless both `server` *and* `watch` are enabled, as the socket needs something to connect to and a reason to respond, respectively.
 
 Change `port` if you have conflicts on your dev machine.  The other two properties control the frequency in which the browser attempts to reconnect with the server when a connection is lost (due to server restarts, errors, etc.).
 
@@ -720,13 +705,11 @@ Where a string is specified within `style` it can
 - be a css stylesheet
 
 The built-in themes available are
-- #grayscape
+- #acidic
 
 When specifying relative file paths, `root` is assumed to be the root path.
 
-Ultimately, all `sheets` are converted to JSON and deep merged from left to right to form the final stylesheet.
-
-The final styles are then injected into the internal components based on top-level scope definitions. Any styling not within a scope definition is assumed to be global.
+All `sheets` are converted to JSON and deep merged from left to right to form the final stylesheet.  The final styles are then injected into the internal components based on top-level scope definitions. Any styling not within a scope definition is assumed to be global.
 
 Please see the [styling documentation](document/docsite-styling) for a more extensive explanation.
 
@@ -787,7 +770,7 @@ The ToC is generated from header tags (`<h1>`, `<h2>`, ... `<h6>`) appearing in 
 
 This must be an integer between 0 and 6.  Specifying 0 turns off the TOC completely.
 
-This is not available for component example files.
+By default, this is not available for component example files.
 
 
 ## toAssetId

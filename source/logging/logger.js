@@ -3,8 +3,11 @@ import chalk from 'chalk'
 
 let chalkRe = /\{:([a-z.]+?)?:((?:(?!\{:[a-z.]+?:.+?\}).)+?)\}/gi;
 let get = (obj, name) => name.split('.').reduce((o, n) => o[n], obj)
-let lm = { test: 'gray', info: 'cyanBright', warn: 'yellow', fail: 'redBright' };
 let order = [ 'test', 'info', 'warn', 'fail' ];
+
+// colors and emphasis colors
+let lm = { test: 'gray', info: 'cyan', warn: 'yellow', fail: 'redBright' };
+// let em = { test: 'white', info: 'cyanBright', warn: 'yellowBright', fail: 'bold' }
 
 export default function(logger)
 {

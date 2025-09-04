@@ -1,4 +1,4 @@
-import aiter from "#source/shared/aiter.js";
+import aiter from "#source/utils/aiter.js";
 
 
 let items = [ 1000, 2000, 3000, 4000, 5000 ];

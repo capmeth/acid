@@ -1,4 +1,4 @@
-import equals from "#source/shared/equals.js";
+import equals from "#source/utils/equals.js";
 
 
 test('compares two strings for equality', t => 

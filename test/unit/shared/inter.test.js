@@ -1,4 +1,4 @@
-import inter from "#source/shared/inter.js";
+import inter from "#source/utils/inter.js";
 
 
 let string = 'The quick brown {animal} jumped over the {adjective} dog.';

@@ -41,10 +41,10 @@ The **Tag** component is responsible for rendering tags.
 
 It applies the tag name as a class on its root element, allowing for customized styling.
 
-For instance, a "domain" tag with "pricing-data" info would render as
+For instance, a "domain" tag with "pricing-data" info would render as follows.
 
 ```html
-<span class="element-tag domain">
+<span class="main-tag domain">
   <span class="name">
     domain
   </span>
@@ -54,4 +54,4 @@ For instance, a "domain" tag with "pricing-data" info would render as
 </span>
 ```
 
-and can be styled via `.element-tag.domain` from the `style` option of *acid.config.js*.
+You can style this component using `#main-tag` (`style` config option) or, as it is a custom component, replace it altogether using `main/Tag` (`components` config option).

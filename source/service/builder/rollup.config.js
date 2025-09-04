@@ -24,6 +24,7 @@ import pluginCopyStuff from './plugin/copy-stuff.js'
 import pluginCustomSwap from './plugin/custom-swap.js'
 import pluginEmitAsset from './plugin/emit-asset.js'
 import pluginScopedStyles from './plugin/scoped-styles.js'
+import pluginByImporter from './plugin/by-importer.js'
 import pluginVirtualFile from './plugin/virtual-file.js'
 
 
@@ -65,14 +66,21 @@ export default function(config, loaded, styles)
         {
             entries:
             {
-                '#config': 'docsite-config',
-                '#frend': paths.client, // `#client` conflicts with svelte internals
-                '#image': paths.images,
                 '#shared': path.join(paths.client, 'components', 'shared'),
-                '#utils': paths.shared,
-
-                '#Editor': path.join(paths.client, 'components', 'core', 'base', 'Editor'),
             }
+        }),
+        pluginByImporter(
+        {
+            paths: [ paths.client ],
+            use: pluginAlias(
+            {
+                entries:
+                {
+                    '#config': 'docsite-config',
+                    '#frend': paths.client, // `#client` conflicts with svelte internals
+                    '#utils': paths.utils
+                }
+            })
         }),
         pluginCustomSwap({ root, map: config.components }),
         pluginNodeResolve({ extensions: [ '.css', '.js', '.json', '.png', '.svelte', '.svt' ], browser: true }),

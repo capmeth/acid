@@ -10,10 +10,10 @@ Most HTML generation is left standard, but ACID does manipulate the output on so
   These blocks are replaced with [**Editor**](component/cobe-editor) components for code highlighting and editing.
 
 - **HTML ids are added to header elements**  
-  This is used for rendering a table of contents (not available for example files).
+  This is used for rendering a table of contents.
 
 - **Docsite hyperlinks are adjusted**  
-  Relative hyperlinks known to the docsite are adjusted to allow for easier docsite page linking from within a document.
+  Relative hyperlinks for docsite routes are adjusted for easier page linking from within a document.
 
 
 # Internal Hyperlinking

@@ -36,7 +36,7 @@ export default
         "custom": "Replaceable component (id: {info}).",
         "delegate": "Passes content snippet to `use` snippet prop.",
         "extra-props": "Unused props are passed to <{info}>.",
-        "inject": "Injects #{info} CSS from theme.",
+        "inject": "Injects {info} CSS from theme files.",
         "uses": "Uses custom component (id: {info})."
     },
 

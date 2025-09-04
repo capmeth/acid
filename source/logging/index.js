@@ -1,4 +1,4 @@
-import confine from '../shared/confine/index.js'
+import confine from '../utils/confine/index.js'
 import definition from './definition.js'
 import defaults from './defaults.js'
 import logger from './logger.js'

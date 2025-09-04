@@ -285,7 +285,7 @@
         display: flex;
         border-radius: 6px;
         outline-offset: -8px;
-        padding: 6px;
+        padding: 2px;
 
         &:hover 
         { 
@@ -674,8 +674,8 @@
     display: inline-flex;
     align-items: center;
     column-gap: 4px;
-    margin: 6px 8px;
-    padding: 0.2em 8px 0.4em 8px;
+    margin: 4px;
+    padding: 0.2em 10px 0.4em 10px;
 
     .name { font-weight: bold; }
 

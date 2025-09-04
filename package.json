@@ -56,11 +56,11 @@
     },
     "imports": {
         "#exts/*": "./extensions/*.js",
-        "#lib/*": "./source/shared/lib/*",
+        "#lib/*": "./source/lib/*",
         "#packson": "./package.json",
         "#paths": "./paths.js",
         "#source/*": "./source/*",
-        "#utils": "./source/shared/index.js"
+        "#utils": "./source/utils/index.js"
     },
     "exports": {
         ".": "./source/entry.js"

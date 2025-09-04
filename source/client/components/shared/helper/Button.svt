@@ -1,7 +1,7 @@
 <!--*
     Provides a clickable element for user interaction.
 
-    @tags inject:helper-button, extra-props:button
+    @tags inject:#helper-button, extra-props:button
 
     @property { string } action
       Label id as `action_{action}`.

@@ -1,4 +1,4 @@
-import test from '../shared/confine/validators.js'
+import test from '../utils/confine/validators.js'
 
 
 export default
@@ -35,7 +35,6 @@ export default
     'config.copy.*.to.*': test.unset,
     'config.copy.*.to.0': test.regexOrArrayOrString,
     'config.copy.*.to.1': test.functionOrString,  
-    'config.footer': test.stringOrNull,
     'config.hljs': { test: test.objectOrString('theme'), default: {}, merge: true },
     'config.hljs.*': test.unset,
     'config.hljs.aliases': { test: test.object, default: {}, merge: true },

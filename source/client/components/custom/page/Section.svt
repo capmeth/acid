@@ -1,7 +1,7 @@
 <!--*
 	  Renders UI for a section overview page.
 
-    @tags inject:page-section, custom:page/Section
+    @tags inject:#page-section, custom:page/Section
 
     @property { string } [mcid]
       Markdown Content ID for document content.

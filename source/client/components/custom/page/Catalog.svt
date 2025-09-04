@@ -1,7 +1,7 @@
 <!--*
     Renders UI for the asset lookup/filtering page.
 
-    @tags inject:page-catalog, custom:page/Catalog
+    @tags inject:#page-catalog, custom:page/Catalog
 
     @property { string } title
       Title for the page.

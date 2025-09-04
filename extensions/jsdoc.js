@@ -1,5 +1,4 @@
 import fs from 'node:fs/promises'
-import { is } from '#utils'
 
 
 /*
@@ -33,7 +32,7 @@ export default function ()
         // look for props
         for (let item of parsed)
         {
-            if (is.string(item.name) && item.name !== '' && item.kind === 'prop')
+            if (typeof item.name === 'string' && item.name !== '' && item.kind === 'prop')
                 data.prop = item;            
         }
     }

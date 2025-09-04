@@ -1,4 +1,4 @@
-import rescape from "#source/shared/rescape.js";
+import rescape from "#source/utils/rescape.js";
 
 
 test('escapes regular expression special characters', t => 

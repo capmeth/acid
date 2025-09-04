@@ -1,4 +1,4 @@
-import remowned from "#source/shared/remowned.js";
+import remowned from "#source/utils/remowned.js";
 
 
 test('removes all owned properties from an object', t => 

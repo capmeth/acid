@@ -1,8 +1,9 @@
-import { camelCase, capitalCase, kebabCase } from 'change-case'
+import { capitalCase, kebabCase, pascalCase } from 'change-case'
 import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import np from 'node:path'
 import globit from '#lib/globit.js'
+import paths from '#paths'
 import { is, mapExtensions, uid } from '#utils'
 import importer from '../importer/index.js'
 import docson from './docson.js'
@@ -15,6 +16,7 @@ export default function(config)
 {
     let { parsers, root, rootSection, toAssetId, toExampleFile, useFilenameOnly } = config;
 
+    let articlesPath = np.join(paths.components, 'articles');
     let promisedParsers = mapExtensions(parsers, importer(root));
 
     let fileRe = /^file:\//;
@@ -34,8 +36,9 @@ export default function(config)
                 
                 if (is(content))
                 {
-                    item.content = 'Article' + camelCase(uid);
-                    files[`./${item.content}.svt`] = content;
+                    item.content = pascalCase(`Article_${uid}`);
+                    let filepath = np.join(paths.components, 'articles', `${item.content}.svt`);
+                    files[filepath] = content;
                 }
             }
 
@@ -99,7 +102,7 @@ export default function(config)
 
                 if (parser.use)
                 {
-                    let data = doxie();
+                    let data = doxie(path);
                     await parser.use(abspath, data, docson);
 
                     let { example, name, ...others } = data;
@@ -158,7 +161,6 @@ export default function(config)
                 more.title ||= capitalCase(np.basename(path, np.extname(path)));
                 more.group ||= 'documents';
                 more.type ||= 'document';
-                // more.uid ||= uid.hex([ abspath, more.section ]) + '-' + kebabCase(more.title);
                 more.uid ||= kebabCase(path ? toAssetId(path) : uid.hex([ more.title, more.section ]));
 
                 let vars = { uid: more.uid }
@@ -181,7 +183,7 @@ export default function(config)
         let sections = link(config.sections, rootSection);
         let sectionKeys = Object.keys(sections);
 
-        log.info(`${sectionKeys.length} section(s) included in docsite`);
+        log.info(`{:cyanBright:${sectionKeys.length} section(s)} included in docsite`);
 
         return Promise.all(sectionKeys.map(reducer)).then(() => ({ sections: all, files, blocks }));
     })

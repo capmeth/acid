@@ -8,7 +8,7 @@
     - `component` for component descriptions
     - `prop` for component prop descriptions
 
-    @tags inject:main-markup, custom:main/Markup
+    @tags inject:#main-markup, custom:main/Markup
 
     @property { snippet } children
       HTML content.

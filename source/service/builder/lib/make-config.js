@@ -21,7 +21,6 @@ export default function(config, sections)
 
     lines.push(`export let assetGroups = ${cfg.assetGroups}`);
     lines.push(`export let bundle = ${jss(output.name)}`);
-    lines.push(`export let footer = ${cfg.footer}`);
     lines.push(`export let hljsc = ${cfg.hljs}`);
     lines.push(`export let labels = ${cfg.labels}`);
     lines.push(`export let logo = ${cfg.logo}`);

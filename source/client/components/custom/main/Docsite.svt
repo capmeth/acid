@@ -4,7 +4,7 @@
     Prop `children` can be passed a single parameter when rendering, and
     that parameter becomes the `site` prop of the current page component.
 
-    @tags inject:main-docsite, custom:main/Docsite
+    @tags inject:#main-docsite, custom:main/Docsite
 
     @property { snippet } children
       Docsite content. Any value passed here is provided to page component.

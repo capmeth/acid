@@ -14,10 +14,11 @@ paths.client = path.join(paths.source, 'client');
 paths.config = path.join(paths.source, 'config');
 paths.images = path.join(paths.source, 'images');
 paths.node = path.join(paths.source, 'node');
-paths.shared = path.join(paths.source, 'shared');
 paths.service = path.join(paths.source, 'service');
+paths.utils = path.join(paths.source, 'utils');
 
 // additional paths
+paths.components = path.join(paths.client, 'components');
 paths.themes = path.join(paths.service, 'styler', 'themes');
 
 export default paths;

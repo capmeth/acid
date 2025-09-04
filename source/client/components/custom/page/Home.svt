@@ -1,7 +1,7 @@
 <!--*
 	  Renders UI for the docsite landing page.
 
-    @tags inject:page-home, custom:page/Home
+    @tags inject:#page-home, custom:page/Home
 
     @property { string } [mcid]
       Markdown Content ID for document content.

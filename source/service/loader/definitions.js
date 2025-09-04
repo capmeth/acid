@@ -1,4 +1,4 @@
-import test from '#source/shared/confine/validators.js'
+import test from '../../utils/confine/validators.js'
 
 
 export let component =

@@ -1,7 +1,7 @@
 <!--*
 	  Renders UI for a component page.
 
-    @tags inject:page-component, custom:page/Component
+    @tags inject:#page-component, custom:page/Component
 
     @property { string } [mcid]
       Markdown Content ID for example content.

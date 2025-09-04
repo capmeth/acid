@@ -29,7 +29,7 @@ export default function(config, omits = [])
                 log.test(`watching file {:white:${file}}`);
             });
 
-            log.info(`watching ${files.length} files for changes...`);
+            log.info(`watching {:cyanBright:${files.length} files} for changes...`);
         });
     }
 

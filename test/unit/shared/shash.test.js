@@ -1,4 +1,4 @@
-import shash from '#source/shared/shash.js'
+import shash from '#source/utils/shash.js'
 
 
 let obj =

@@ -1,7 +1,7 @@
 <!--*
     Renders UI for a component prop.
 
-    @tags inject:main-prop, custom:main/Prop
+    @tags inject:#main-prop, custom:main/Prop
 
     @property { string } name Name of the property.
     @property { snippet } description Description of the property.

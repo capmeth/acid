@@ -1,4 +1,4 @@
-import ctoja from '#source/shared/css-to-json-array.js'
+import ctoja from '#source/utils/css-to-json-array.js'
 
 
 test('converts CSS from bare properties', t => 
