@@ -3,17 +3,15 @@
 
     Nothing is rendered if `items` is nullish or empty.
 
-    @tags conditional, delegate, uses:main/Tag
+    @tags conditional, delegate, extra-props:List, uses:main/Tag
 
     @property { array } items
       List of tags to be rendered.
     @property { string } [type='tags']
       A type for the internal **List** component.
-    @property { snippet } [use]
-      Passed a snippet that renders the content of this component.
 -->
 
-<List {items} pred={tagDetails} {type} {use}>
+<List {items} pred={tagDetails} {type} {...args}>
   {#snippet children(args)}
     <Tag {...args} /> 
   {/snippet}
@@ -28,5 +26,5 @@ import Tag from '#custom/main/Tag'
 </script>
 
 <script>
-let { items, type = 'tags', use } = $props();
+let { items, type = 'tags', ...args } = $props();
 </script>

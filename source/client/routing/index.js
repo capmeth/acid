@@ -8,20 +8,20 @@ export let router = hashRouter(routes);
 
 export let toUrl = param =>
 {
-    let { sect, to, uid } = is.nonao(param) ? param : { to: param };
+    let { name, to, uid } = is.nonao(param) ? param : { to: param };
 
-    if (uid && !sect)
+    if (uid && !name)
     {
         let asset = sinfo.asset(uid);
         return router.toNavLink(asset.type, { uid });
     }
 
-    if (sect)
+    if (name)
     {
-        if (sect === sinfo.root.name)
+        if (name === sinfo.root.name)
             return router.toNavLink('home');
         else
-            return router.toNavLink('section', { sect });
+            return router.toNavLink('section', { name });
     }
 
     return router.toNavLink(to);    

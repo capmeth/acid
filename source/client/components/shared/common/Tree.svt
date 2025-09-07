@@ -63,7 +63,7 @@ group ||= 'sections';
 let hasAssets = section => !!section[group]?.length || !!section.descendants[group]?.length
 
 let isSections = group === 'sections';
-let section = sinfo(sect || sinfo.root.name);
+let section = sect ? sinfo(sect) : sinfo.root;
 let test = isSections ? !!section.sections?.length : hasAssets(section);
 
 let filter = sect => isSections || hasAssets(sinfo(sect))

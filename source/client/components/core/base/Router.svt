@@ -6,15 +6,14 @@
 
 {#key data}
   {@const { Component, route, ...props } = data}
-  <Docsite page={error ? 'error' : route}>
+  <Docsite page={route}>
     {#snippet children(site)}
-      {#if error}
-        <Error {...props} {error} />
-      {:else}
-        <svelte:boundary {onerror}>
-          <Component {...props} {site} />
-        </svelte:boundary>
-      {/if}
+      <svelte:boundary>
+        <Component {...props} {site} />
+        {#snippet failed(error)}
+          <Error {site} {error} />
+        {/snippet}
+      </svelte:boundary>
     {/snippet}
   </Docsite>
 {/key}
@@ -37,12 +36,8 @@ let [ payload ] = router.last('change');
 
 <script>
 let data = $state(payload);
-let error = $state();
 
 let handler = payload => data = payload
-let onerror = err => error = err
-
-$effect(() => console.log('FIX ERROR PAGE !!\n', error))
 
 $effect(() => 
 {

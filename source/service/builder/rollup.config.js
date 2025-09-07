@@ -31,15 +31,19 @@ import pluginVirtualFile from './plugin/virtual-file.js'
 export default function(config, loaded, styles)
 {
     let { copy, output, root } = config;
-    let { sections, files, blocks } = loaded;
+    let { sections, assets, files, blocks } = loaded;
     let outpath = path.join(root, output.dir);
+
+    let virtual = file => path.join(paths.client, 'virtual', file)
+
+    log.info(`output directory is {:cyanBright:${outpath}}`);
 
     let main = {};
 
     main.input = 
     { 
         [`${output.name}-docsite`]: path.join(paths.client, 'app.js'),
-        [`${output.name}-examples`]: './examples.json',
+        [`${output.name}-examples`]: virtual('examples.json'),
         [`${output.name}-svelte-render`]: path.join(paths.extensions, 'svelte.js')
     };
 
@@ -54,13 +58,17 @@ export default function(config, loaded, styles)
 
     main.plugins = 
     [
-        pluginVirtualFile(
-        { 
-            'docsite-config': makeConfig(config, sections),
-            './examples.json': JSON.stringify(blocks),
-            './style/main.css': styles.root || '',
-            ...files,
-            '../markdown/index.js' : makeExports(Object.keys(files)),
+        pluginByImporter(
+        {
+            paths: [ paths.client ],
+            use: pluginVirtualFile(
+            { 
+                [virtual('config.js')]: makeConfig(config, sections, assets),
+                [virtual('examples.json')]: JSON.stringify(blocks),
+                [virtual('markdown.js')] : makeExports(Object.keys(files)),
+                [virtual('style.css')]: styles.root || '',
+                ...files
+            })
         }),
         pluginAlias(
         {
@@ -76,7 +84,7 @@ export default function(config, loaded, styles)
             {
                 entries:
                 {
-                    '#config': 'docsite-config',
+                    '#config': virtual('config.js'),
                     '#frend': paths.client, // `#client` conflicts with svelte internals
                     '#utils': paths.utils
                 }

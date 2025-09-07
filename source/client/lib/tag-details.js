@@ -5,7 +5,7 @@ import { inter, is } from '#utils'
 export default function (tag)
 {
     let [ name, info ] = tag.split(':');
-    let { desc } = tagLegend[name]
+    let { desc } = tagLegend[name] || { desc: 'Unknown' };
 
     if (!is.nullish(info)) desc = inter(desc, { info });
 

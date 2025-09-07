@@ -9,8 +9,8 @@
 
 <Section 
   title={section.title}
-  sect={section.name}
-  mcid={section.content}
+  section={section.name}
+  mcid={section.mcid}
   tocDepth={section.tocDepth}
   {site}
 />
@@ -23,9 +23,9 @@ import Section from '#custom/page/Section'
 </script>
 
 <script>
-let { sect, site } = $props();
+let { name, site } = $props();
 
-let section = sinfo(sect);
+let section = sinfo(name);
 
 context.section = section.name;
 webpage.setTitle(section.title);

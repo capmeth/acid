@@ -11,7 +11,7 @@ export default
             'styling',
             'tagging',
             'authoring',
-            'configure', 
+            'reference', 
             'integrate', 
             'comps_core', 
             'comps_shared', 
@@ -50,16 +50,17 @@ export default
         overview: 'file:/docsite/docs/docsite/tagging.md'
     },
 
-    configure:
+    reference:
     {
-        title: 'Configuration',
-        overview: 'file:/docsite/docs/configuration/index.md',
+        title: 'Quick Reference',
+        overview: 'file:/docsite/docs/reference/index.md',
         documents:
         [
-            'docsite/docs/configuration/options.md',
-            'docsite/docs/configuration/markdown.md',
-            'docsite/docs/configuration/jsdoc.md',
-            'docsite/docs/configuration/acid-cli.md'
+            'docsite/docs/reference/js-api.md',
+            'docsite/docs/reference/options.md',
+            'docsite/docs/reference/markdown.md',
+            'docsite/docs/reference/jsdoc.md',
+            'docsite/docs/reference/acid-cli.md'
         ]
     },
 
@@ -71,13 +72,13 @@ export default
 
     integrate:
     {
+        title: 'Integration',
         overview: 'file:/docsite/docs/integration/index.md',
         documents:
         [
-            'docsite/docs/integration/js-api.md',
             'docsite/docs/integration/parsers.md',
             'docsite/docs/integration/renderers.md',
-            'docsite/docs/integration/test.md',
+            'docsite/docs/integration/components.md',
         ]
     },
 

@@ -1,7 +1,7 @@
 import chalk from 'chalk'
 
 
-let chalkRe = /\{:([a-z.]+?)?:((?:(?!\{:[a-z.]+?:.+?\}).)+?)\}/gi;
+let chalkRe = /\{:([a-z.]+?)?:((?:(?!\{:[a-z.]+?:.+?\}).)+?)\}/gsi;
 let get = (obj, name) => name.split('.').reduce((o, n) => o[n], obj)
 let order = [ 'test', 'info', 'warn', 'fail' ];
 

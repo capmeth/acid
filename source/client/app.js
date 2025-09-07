@@ -1,4 +1,4 @@
-import './style/main.css'
+import '#frend/virtual/style.css'
 
 import { mount } from 'svelte';
 import { hljsc, hrMode } from '#config';

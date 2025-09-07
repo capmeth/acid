@@ -1,14 +1,13 @@
 /**
-    Shared Utilities
+    Module Utilities
     ---------------------------------------------------------------------------
-    A utility module must
+    A module must
     - not depend on (import) any other code in the project outside of their 
       peers right here in this folder.
     - be able to work on either the server or the client (browser).
 
     External dependencies are ok.
 */
-
 export { default as aiter } from './aiter.js'
 export { default as cacher } from './cacher.js'
 export { default as confine } from './confine/index.js'
@@ -26,3 +25,12 @@ export { default as proxet } from './proxet.js'
 export { default as remowned } from './remowned.js'
 export { default as rescape } from './rescape.js'
 export { default as uid } from './uid.js'
+
+
+/**
+    Shorthand Utilities
+    ---------------------------------------------------------------------------
+    Wrappers of existing functionality for ease of use.
+*/
+export let jss = value => JSON.stringify(value)
+

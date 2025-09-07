@@ -3,14 +3,14 @@
     ---------------------------------------------------------------------------
     Derived information interface for docsite sections.
 */
-import { assetGroups, rootSection, sections, tocDepth } from '#config'
+import { assets, assetTypes, rootSection, sections, tocDepth } from '#config'
 import { cacher, proxet } from '#utils'
-import assets from './asset-map'
 
+let assetGroups = Object.values(assetTypes).map(v => v.plural);
 
 let assetSort = proxet({}, prop => 
 {
-    return (a, b) => 
+    return (a, b) =>
     {
         a = sinfo.asset(a)[prop];
         b = sinfo.asset(b)[prop];
@@ -23,13 +23,13 @@ let assetMatch = ({ groups, sects, tags, text }) => id =>
 {
     let asset = sinfo.asset(id);
     // asset title must include string
-    if (!asset.title.toLowerCase().includes(text)) return false;
+    if (text?.length && !asset.title.toLowerCase().includes(text.toLowerCase())) return false;
     // asset must be of one of selected types
-    if (groups.length && groups.findIndex(grp => asset.group === grp) < 0) return false;
+    if (groups?.length && groups.findIndex(grp => asset.group === grp) < 0) return false;
     // asset must be in one of selected sections
-    if (sects.length && sects.findIndex(sect => asset.section.name === sect) < 0) return false;
+    if (sects?.length && sects.findIndex(sect => asset.section === sect) < 0) return false;
     // asset must include all of the selected tags
-    if (tags.findIndex(tag => !asset.hasTag(tag)) >= 0) return false;
+    if (tags?.length && tags.findIndex(tag => !asset.hasTag(tag)) >= 0) return false;
     // good to go!
     return true;
 }
@@ -53,10 +53,10 @@ let getDescendants = section =>
 {
     let data = {};
     
-    section.sections?.forEach(sect =>
+    section.sections?.forEach(name =>
     {
-        let section = sections[sect], child = getDescendants(section);
-        data.sections = [ ...(data.sections || []), sect, ...(child.sections || []) ];
+        let section = sinfo(name), child = getDescendants(section);
+        data.sections = [ ...(data.sections || []), name, ...(child.sections || []) ];
         assetGroups.forEach(g => data[g] = [ ...(data[g] || []), ...(section[g] || []), ...(child[g] || []) ]);
     });
 
@@ -65,28 +65,25 @@ let getDescendants = section =>
 
 let getSection = cacher(name =>
 {
-    let sect = sections[name];
+    let { assets, parent, ...section } = sections[name];
 
-    if (!sect) return void 0;
-
-    let iface = proxet({ name }, prop => 
+    let iface = proxet({ name, assets, parent }, prop => 
     {
-        if (prop === 'assets') return assetGroups.reduce((a, g) => [ ...a, ...iface[g] ], []);
-        if (prop === 'descendants') return getDescendants(sect);
-        if (prop === 'parents') return getParents(sect);
+        if (prop === 'descendants') return getDescendants(iface);
+        if (prop === 'parents') return getParents(iface);
         if (prop === 'path') return [ ...iface.parents, iface.name ];
         if (prop === 'sect') return name;
         if (prop === 'titlePath') return iface.path.map(parent => sinfo(parent).title);
-        if (prop === 'tocDepth') return sect.tocDepth ?? tocDepth;
+        if (prop === 'tocDepth') return section.tocDepth ?? tocDepth;
 
         if (assetGroups.includes(prop))
         {
-            let assets = sect[prop] || [];
-            // documents not auto-sorted as their order might be important to user
-            return prop === 'documents' ? assets : assets.sort(assetSort.title);
+            let items = assets.filter(assetMatch({ groups: [ prop ] }));
+            // documents not auto-sorted as their order might be important
+            return prop === 'documents' ? items : items.sort(assetSort.title);
         }
 
-        return sect[prop];
+        return section[prop];
     });
 
     return iface;
@@ -94,15 +91,12 @@ let getSection = cacher(name =>
 
 let getAsset = cacher(uid =>
 {
-    let asset = assets[uid];
+    let { section, ...asset } = assets[uid];
 
-    if (!asset) return void 0;
-
-    let iface = proxet({ uid }, prop => 
+    let iface = proxet({ uid, section }, prop => 
     {
-        if (prop === 'section') return sinfo(asset.section);
+        if (prop === 'group') return assetTypes[asset.tid].plural;
         if (prop === 'hasTag') return name => iface.tagNames.includes(name)
-        if (prop === 'parents') return iface.section.path;
         if (prop === 'tags') return asset.tags || [];
         if (prop === 'tagNames') 
         {
@@ -115,6 +109,7 @@ let getAsset = cacher(uid =>
             return iface.tags.reduce(reducer, []);
         }
         if (prop === 'tocDepth') return asset.tocDepth ?? tocDepth;
+        if (prop === 'type') return assetTypes[asset.tid].singular;
 
         return asset[prop];
     });
@@ -124,27 +119,32 @@ let getAsset = cacher(uid =>
 
 
 let section = ref => getSection(ref.name || ref)
-section.asset = ref => getAsset(ref.uid || ref)
+section.asset = (ref, expectType) => 
+{
+    let asset = getAsset(ref.uid || ref);
+
+    if (expectType && asset.type !== expectType)
+        throw new Error(`A ${asset.type} asset cannot be used where a ${expectType} asset is expected.`);
+
+    return asset;
+}
+
 section.asset.filter = assetFilter;
 section.asset.groups = assetGroups;
 section.asset.sort = assetSort;
 
 
-let skeys = Object.keys(sections);
-
 let sinfo = proxet(section, prop => 
 {
-    if (prop === 'assets') return assetGroups.reduce((a, g) => [ ...a, ...sinfo[g] ], []);
+    if (prop === 'assets') return Object.keys(assets);
     if (prop === 'root') return sinfo(rootSection);
 
-    if (assetGroups.includes(prop))
+    if (assetGroups.includes(prop)) 
     {
-        let assets = skeys.reduce((a, k) => [ ...a, ...sinfo(k)[prop] ], []);
-        // documents not auto-sorted as their order might be important to user
-        return prop === 'documents' ? assets : assets.sort(assetSort.title);
+        let items = assets.filter(assetMatch({ groups: [ prop ] }));
+        // documents not auto-sorted as their order might be important
+        return prop === 'documents' ? items : items.sort(assetSort.title);
     }
 });
-
-section.asset.ids = sinfo.assets.map(a => a.uid); // deprecate
 
 export default sinfo

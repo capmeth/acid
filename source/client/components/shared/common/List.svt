@@ -10,7 +10,7 @@
     - `list`: normal page layout
     - `tree`: hierarchical (usually involves multiple lists)
 
-    @tags uses:main/List, conditional, delegate
+    @tags conditional, delegate, uses:main/List
 
     @property { function } [filter]
       Filters `items` for inclusion (falsey return value excludes item).

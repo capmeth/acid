@@ -19,11 +19,11 @@
   <main>
     <div class="leader">
       <div class="title">{ title }</div>
-      <Crumbs {sect} />
+      <Crumbs sect={section} />
     </div>
     <div class="content">
       <Article {mcid} />
-      {@render site.assets({ sect })}
+      {@render site.assets({ sect: section })}
     </div>
   </main>
   <nav>
@@ -41,7 +41,7 @@ import Crumbs from '#shared/common/Crumbs'
 </script>
 
 <script>
-let { mcid, sect, site, title, tocDepth } = $props();
+let { mcid, section, site, title, tocDepth } = $props();
 </script>
 
 <style>

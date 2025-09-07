@@ -19,7 +19,7 @@
   <main>
     <div class="leader">
       <div class="title">{ title }</div>
-      <Crumbs {sect} />
+      <Crumbs sect={section} />
       <Tags items={tags} />
     </div>
     <div class="content">
@@ -41,7 +41,7 @@ import Tags from '#shared/common/Tags'
 </script>
 
 <script>
-let { mcid, sect, site, tags, title, tocDepth } = $props();
+let { mcid, section, site, tags, title, tocDepth } = $props();
 </script>
 
 <style>

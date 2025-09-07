@@ -3,7 +3,7 @@
     
     A workbench for component code editing and rendering.
 
-    @tags cobe
+    @tags cobe, uses:main/Editor
 
     @property { string } [id]
       Id of the code block to render.
@@ -15,7 +15,7 @@
     @prop mode
     @description Rendering mode for CoBE.
     @type { string }
-    @values edit, live, render, static
+    @values "edit", "live", "render", "static"
 -->
 
 <Editor 

@@ -24,7 +24,7 @@
   </div>
   {#if values}
     <div class="values">
-      <List items={values}>
+      <List items={values} delim>
         {#snippet children(value)}
           <code>{ value }</code>
         {/snippet}
@@ -41,6 +41,7 @@
 
 <script module>
 import Description from '#shared/common/Description'
+import List from '#shared/common/List'
 </script>
 
 <script>

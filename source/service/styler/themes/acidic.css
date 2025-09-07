@@ -19,6 +19,7 @@
     --acid-color-link: #E2B3C2; /* pinkie */
     --acid-color-text: #EFD4C4; /* almond */
     --acid-color-textie: #EFD4C4BE;
+    --acid-color-code: #767cff;
 
     --acid-caret-color-cobe: #EFD4C4;
 
@@ -484,8 +485,18 @@
 
     &.type-dual
     {
-        columns: 2 450px;
+        columns: 3 410px;
         column-gap: 48px;
+        column-fill: balance;
+    }
+
+    &.type-list
+    {
+        display: inline-flex;
+        flex-wrap: wrap;
+        gap: 8px;
+
+        .delimiter { &::before { content: '|'; } }
     }
 
     &.type-flex
@@ -511,7 +522,6 @@
         {
             margin-left: 1em; 
         }
-
     }
 }
 
@@ -587,6 +597,8 @@
             ol, ul { margin: 0 0 0 12px; }
         }
 
+        ul { list-style-type: disc; }
+
         *:first-child { margin-top: 0; }
     }
 
@@ -612,10 +624,21 @@
 
     .default
     {
-        border-top: 1px dotted #333;
-        font-size: 70%;
+        background: #ffffff11;
+        display: flex;
+        align-items: center;
+        column-gap: 8px;
         grid-column: 1 / -1;
-        padding: 4px 8px;
+        padding: 4px 12px;
+
+        code { color: var(--acid-color-code); }
+
+        &::before 
+        { 
+            content: 'default:';
+            font-size: 70%;
+            line-height: 1em;
+        }
     }
 
     .deprecation
@@ -657,10 +680,21 @@
 
     .values
     {
-        border-top: 1px dotted #333;
-        font-size: 70%;
+        background: #ffffff11;
+        display: flex;
+        align-items: center;
+        column-gap: 8px;
         grid-column: 1 / -1;
-        padding: 4px 8px;
+        padding: 4px 12px;
+
+        code { color: var(--acid-color-code); }
+
+        &::before 
+        { 
+            content: 'accepts:';
+            font-size: 70%;
+            line-height: 1em;
+        }
     }
 }
 
@@ -756,23 +790,27 @@
 
 #-page-error
 {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    padding: 24px;
+    display: contents;
 
-    .details
+    main
     {
+        background-color: #11111122;
+        grid-column: 2 / 3;    
+        grid-row: 1 / 4;
+        overflow-y: auto;
+        padding: 1vw 2vw 4vw 2vw;
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center;
         text-align: center;
         
         .message
         {
             color: crimson;
+            font-family: var(--acid-font-family-code);
             font-size: 160%;
+            width: 70%;
         }
 
         .name

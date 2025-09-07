@@ -105,9 +105,13 @@ export default function (prints, assign)
                     }
                 }
 
-                if (!is.undef(target[prop])) return target[prop];
+                if (is.undef(target[prop]))
+                {
+                    let defval = useDefault(propSpec(target, prop));
+                    if (!is.undef(defval)) target[prop] = defval;
+                }
 
-                return target[prop] = useDefault(propSpec(target, prop));
+                return target[prop];
             },
 
             set(target, prop, value)

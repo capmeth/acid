@@ -13,11 +13,15 @@ let config = {};
 
 
 /**
-    Included asset groups.
+    Included asset types.
 
     @type { array }
 */
-config.assetGroups = [ 'documents', 'components' ];
+config.assetTypes = 
+{
+    doc: { plural: 'documents', singular: 'document' },
+    cmp: { plural: 'components', singular: 'component' }
+};
 
 /**
     CoBE language-type handling specs.

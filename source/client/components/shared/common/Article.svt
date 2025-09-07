@@ -4,7 +4,7 @@
     Nothing is rendered if specified `mcid` is not mapped to a document 
     component.
 
-    @tags conditional, delegate
+    @tags conditional, delegate, uses:main/Markup
 
     @property { string } [mcid]
       Markdown content id of a pre-generated component.
@@ -20,7 +20,7 @@
 
 
 <script module>
-import * as markdown from '../markdown/index.js'
+import * as markdown from '#frend/virtual/markdown.js'
 
 import Markup from '#custom/main/Markup'
 import When from './When'

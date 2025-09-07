@@ -9,7 +9,7 @@ import Section from '../components/core/page/Section'
 export default
 [
     { name: 'home', path: '/home', Component: Home },
-    { name: 'section', path: '/section/:sect', Component: Section },
+    { name: 'section', path: '/section/:name', Component: Section },
     { name: 'document', path: '/document/:uid', Component: Document },
     { name: 'component', path: '/component/:uid', Component: Component },
     { name: 'catalog', path: '/catalog', Component: Catalog },

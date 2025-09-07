@@ -1,6 +1,8 @@
 <!--*
     Filters assets by name, tag, and group.
 
+    @tags uses:main/Filters, uses:main/Tag
+
     @property { function } onfilter
       Called with filtering data when filters change.
     @property { boolean } [noTags]
@@ -11,7 +13,7 @@
 
 <Filters {clearFilters}>
   {#snippet groupFilter(type)}
-    <List items={assetGroups} {type}>
+    <List items={sinfo.groups} {type}>
       {#snippet children(group)}
         <Toggle bind:active={groups[group]} hint="checkbox">
           { t(`label_${group}`) }
@@ -35,8 +37,8 @@
 
 
 <script module>
-import { storage, tagDetails } from '#frend/lib'
-import { assetGroups, tagLegend } from '#config'
+import { sinfo, storage, tagDetails } from '#frend/lib'
+import { tagLegend } from '#config'
 
 import Filters from '#custom/main/Filters'
 import Input from '#shared/helper/Input'

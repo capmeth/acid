@@ -22,7 +22,7 @@
     </div>
     <div class="content">
       <Article {mcid} />
-      {@render site.assets({ sect })}
+      {@render site.assets({ sect: section })}
     </div>
   </main>
   <nav>
@@ -39,7 +39,7 @@ import Article from '#shared/common/Article'
 </script>
 
 <script>
-let { mcid, sect, site, title, tocDepth } = $props();
+let { mcid, section, site, title, tocDepth } = $props();
 </script>
 
 <style>

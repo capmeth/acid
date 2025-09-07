@@ -8,10 +8,10 @@
 -->
 
 <div class="page-error">
-  <div class="details">
+  <main>
     <p class="name">{ error.name }</p> 
     <p class="message">{ error }</p>
-  </div>
+  </main>
 </div>
 
 <script>

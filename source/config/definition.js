@@ -5,8 +5,11 @@ export default
 {
     'config': { test: test.object, default: {}, merge: true },
     'config.*': test.unset,
-    'config.assetGroups': { test: test.arrayOrString, default: [] },
-    'config.assetGroups.*': test.string,
+    'config.assetTypes': { test: test.object, default: {} },
+    'config.assetTypes.*': test.object,
+    'config.assetTypes.*.*': test.unset,
+    'config.assetTypes.*.plural': test.string,
+    'config.assetTypes.*.singular': test.string,
     'config.cobe': { test: test.arrayOrObject, default: [] },
     'config.cobe.*': test.object,
     'config.cobe.*.*': test.unset,

@@ -57,11 +57,12 @@ if (x.name) // link to a section page
 else if (x.uid) // link to an asset page
 {
     let asset = sinfo.asset(x.uid);
+    let section = sinfo(asset.section);
     classes.push(`to-${asset.type}`);
     if (asset.deprecated) classes.push('deprecated');
     if (context.asset === asset.uid) classes.push({ current: true });
     href = context.url(asset);
-    title ||= `${asset.type}: ${asset.section.titlePath.slice(1).join('/')}/${asset.title}`;
+    title ||= `${asset.type}: ${section.titlePath.slice(1).join('/')}/${asset.title}`;
     if (!children) value ||= asset.title;
 }
 else if (x.to) // link to a static page

@@ -6,17 +6,15 @@
     An individual prop will be skipped if it is nullish or has a truthy 
     `ignore` value.
 
-    @tags conditional, delegate
+    @tags conditional, delegate, extra-props:List, uses:main/Prop
 
     @property { array } items
       List of props to be rendered.
     @property { string } [type='props']
       A type for the internal **List** component.
-    @property { snippet } [use]
-      Passed a snippet that renders the content of this component.
 -->
 
-<List {items} {filter} {type} {use}>
+<List {items} {filter} {type} {...args}>
   {#snippet children(data)}
     <Prop {...data} />
   {/snippet}
@@ -31,5 +29,5 @@ let filter = data => data && !data.ignore
 </script>
 
 <script>
-let { items, type = 'props', use } = $props();
+let { items, type = 'props', ...args } = $props();
 </script>

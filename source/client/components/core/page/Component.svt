@@ -9,8 +9,8 @@
 
 <Component 
   title={asset.title}
-  sect={asset.section.name}
-  mcid={asset.content}
+  section={asset.section}
+  mcid={asset.mcid}
   description={asset.description}
   deprecated={asset.deprecated}
   props={asset.props}
@@ -28,9 +28,9 @@ import Component from '#custom/page/Component'
 <script>
 let { uid, site } = $props();
 
-let asset = sinfo.asset(uid);
+let asset = sinfo.asset(uid, context.page);
 
-context.section = asset.section.name;
+context.section = asset.section;
 context.asset = asset.uid; 
 webpage.setTitle(asset.title);
 </script>

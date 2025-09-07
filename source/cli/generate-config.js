@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import { hackson } from '#lib/hosted.js'
-import { is } from '#utils'
+import { is, jss } from '#utils'
 import { assign, defaults } from '../config/index.js'
 
 
@@ -81,8 +81,6 @@ ${hackson.type === 'module' ? 'export default' : 'module.exports ='}
     server: ${format(config.server, 1)}
 }
 `
-
-let jss = str => JSON.stringify(str)
 
 let format = (object, indent) =>
 {

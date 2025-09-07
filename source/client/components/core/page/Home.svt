@@ -6,9 +6,9 @@
 -->
 
 <Home 
-  sect={root.name}
+  section={root.name}
   title={root.title}
-  mcid={root.content}
+  mcid={root.mcid}
   tocDepth={root.tocDepth}
   {site}
 />

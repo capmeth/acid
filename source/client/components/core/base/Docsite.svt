@@ -1,6 +1,8 @@
 <!--*
     Root docsite component.
 
+    @tags uses:main/Docsite
+
     @property { string } page
       Current page name.
     @property { snippet } children

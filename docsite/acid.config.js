@@ -9,7 +9,7 @@ import sections from './sections.js'
 */
 export default
 {
-    namespace: "metasite",
+    namespace: "acidoc",
     title: "A Component Interface Documenter",
 
     copy: { files: path.join("source", "images", "acid.png"), to: 'acid.png' },
@@ -31,13 +31,13 @@ export default
 
     tagLegend: 
     {
-        "cobe": "Part of the CoBE component family.",
-        "conditional": "No render output when certain condition(s) fail.",
-        "custom": "Replaceable component (id: {info}).",
-        "delegate": "Passes content snippet to `use` snippet prop.",
-        "extra-props": "Unused props are passed to <{info}>.",
-        "inject": "Injects {info} CSS from theme files.",
-        "uses": "Uses custom component (id: {info})."
+        "cobe": "Is part of the CoBE component family",
+        "conditional": "Does not render output when certain condition(s) fail",
+        "custom": "Is a replaceable component ({info})",
+        "delegate": "Passes content snippet to `use` snippet prop",
+        "extra-props": "Passes unused props to <{info}>",
+        "inject": "Injects {info} CSS from theme files",
+        "uses": "Uses replaceable UI component ({info})"
     },
 
     toAssetId: [ [ "^(?:source[/]client[/]components|docsite[/]docs)[/](.+?)[.][^./]+$" ], "$1" ],
