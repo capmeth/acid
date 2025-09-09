@@ -50,7 +50,7 @@ export default function (id)
                 case 'tag':
                     target.tags.push(...(is.array(value) ? value : [ value ]));
                     break;
-s
+
                 default:
                     if (!is.undef(value)) target[prop] = value;
             }

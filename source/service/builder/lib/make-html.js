@@ -3,7 +3,6 @@ import { is } from '#utils'
 
 
 let spaceRe = /\s+/;
-let ogRe = /^og:/;
 /**
     Generates the docsite html page.
 

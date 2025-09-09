@@ -21,8 +21,6 @@ export default function(logger)
     {
         if (typeof message === 'string')
         {
-            let res;
-
             while (chalkRe.test(message))
             {
                 message = message.replace(chalkRe, (...args) => 

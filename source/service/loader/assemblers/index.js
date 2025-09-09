@@ -12,6 +12,8 @@ export default function (config, other)
 
     let toProc = (...routines) => async record =>
     {
+        /* eslint-disable no-await-in-loop */
+        // routines must be executed sequentially (and therefore synchronously)
         for (let routine of routines)
         {
             let res = await routine(record);
@@ -20,6 +22,7 @@ export default function (config, other)
             // short circuit processing on non-object
             if (!is.nonao(res)) return null;
         }
+        /* eslint-enable no-await-in-loop */
         
         return record;
     }

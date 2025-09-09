@@ -1,5 +1,3 @@
-import globit from '#lib/globit.js'
-
 
 /**
     Restricts id resolution for the given plugin based on importer.

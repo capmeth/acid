@@ -8,7 +8,7 @@ export default
 {
     name: 'ACID Svelte Linter',
     // eslint does not have support for absolute paths
-    files: [ path.join('source', 'client', '**', '*.svt') ],
+    files: [ path.join('source', 'client', '**', '*.{svelte.js,svt}') ],
 
     plugins: { svelte },
 
