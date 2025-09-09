@@ -1,0 +1,49 @@
+<!--*
+    Manages the asset usable (deprecated) filter.
+
+    @property { snippet } each
+      Passed each filter value for rendering.
+    @property { object } [store]
+      Name of the filter store to use.
+    @property { string } [type="options"]
+      A type for the internal **List** component.
+-->
+
+<List {items} {type}>
+  {#snippet children(item)}
+    <Toggle bind:active={options[item]} hint="checkbox">
+      {@render each(item)}
+    </Toggle>
+  {/snippet}
+</List>
+
+
+<script module>
+import stateFilters from '#frend/state/filters'
+
+import List from '../../shared/common/List'
+import Toggle from '#shared/helper/Toggle'
+
+let items = [ 'deprecated', 'sanctioned' ];
+</script>
+
+<script>
+let { each, store, type = 'options' } = $props();
+let filters = stateFilters(store);
+
+/*
+    It seems impossible to split a shared state boolean value (`deprecated`) 
+    into two separate values (`deprecated` and `sanctioned`) and still receive 
+    updates when the value changes (e.g., clearing filters).
+
+    So the `options` does all the reactivity work while the real filter value
+    (`deprecated`) is stored in the $effect.
+*/
+let options = $derived(filters.options || {});
+
+$effect(() => 
+{
+    filters.options = options;
+    filters.deprecated = options.deprecated === options.sanctioned ? void 0 : options.deprecated;
+});
+</script>

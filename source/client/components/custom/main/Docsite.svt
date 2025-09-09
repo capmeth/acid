@@ -38,16 +38,8 @@
       <Link to="catalog" />
     </div>
   </header>
-  {@render children({ assets, toc, tree })}
+  {@render children({ toc, tree })}
 </div>
-
-{#snippet assets(filters)}
-  <Assets {...filters} type="columns">
-    {#snippet children(asset)}
-      <Link class="annex-link" to={asset} />
-    {/snippet}
-  </Assets> 
-{/snippet}
 
 {#snippet toc(id, tocDepth, hint = 'nav')}
   <Toc sel="#{id}" {tocDepth} each={tocItem}>
@@ -92,7 +84,6 @@
 
 <script module>
 import Active from '#shared/helper/Active'
-import Assets from '#shared/common/Assets'
 import Link from '#shared/helper/Link'
 import Toc from '#shared/common/Toc'
 import Tree from '#shared/common/Tree'

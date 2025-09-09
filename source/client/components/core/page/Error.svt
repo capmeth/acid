@@ -1,6 +1,8 @@
 <!--*
 	  Error page.
 
+    @tags uses:page/Error
+
     @property { any } site
       Data from **Docsite** component.
     @property { object } error

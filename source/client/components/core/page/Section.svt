@@ -1,19 +1,15 @@
 <!--*
 	  Section overview page.
 
+    @tags uses:page/Section
+
     @property { any } site
       Data from **Docsite** component.
     @property { string } sect
       Name of section on display.
 -->
 
-<Section 
-  title={section.title}
-  section={section.name}
-  mcid={section.mcid}
-  tocDepth={section.tocDepth}
-  {site}
-/>
+<Section title={section.title} {section} {site} />
 
 
 <script module>

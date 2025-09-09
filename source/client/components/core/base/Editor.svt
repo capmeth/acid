@@ -65,7 +65,7 @@
 <script module>
 import { onMount } from 'svelte'
 import { cobe } from '#config'
-import { compose, context, dom, sinfo } from '#frend/lib'
+import { ainfo, compose, context, dom, sinfo } from '#frend/lib'
 import { ids } from '#frend/lib/code-blocks'
 
 import Button from '../../shared/helper/Button'
@@ -75,7 +75,7 @@ import Renbox from '../../shared/common/Renbox'
 
 let contextMode = () =>
 {
-    if (context.asset) return sinfo.asset(context.asset).cobeMode;
+    if (context.asset) return ainfo(context.asset).cobeMode;
     if (context.section) return sinfo(context.section).cobeMode;
 }
 

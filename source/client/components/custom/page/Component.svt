@@ -3,12 +3,10 @@
 
     @tags inject:#page-component, custom:page/Component
 
-    @property { string } [mcid]
-      Markdown Content ID for example content.
+    @property { object } asset
+      Asset on display.
     @property { object } site
       Data from **Docsite** component.
-    @property { array } tags
-      List of tags associated with the component.
     @property { string } title
       Component name.
 -->
@@ -36,7 +34,7 @@
           </Active>
         {/snippet}
       </Tags>
-      <Props items={props} type="dual">
+      <Props items={propers} type="dual">
         {#snippet use(render)}
           <Active hint="sector" store="asset-props">
             {#snippet header()}
@@ -67,7 +65,8 @@ import Tags from '#shared/common/Tags'
 </script>
 
 <script>
-let { deprecated, description, mcid, props, site, tags, title } = $props();
+let { asset, site, title } = $props();
+let { deprecated, description, mcid, props: propers, tags } = asset;
 </script>
 
 <style>

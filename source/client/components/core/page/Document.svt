@@ -1,24 +1,19 @@
 <!--*
 	  Document page.
 
+    @tags uses:page/Document
+
     @property { any } site
       Data from **Docsite** component.
     @property { string } uid
       Id of document asset to display.
 -->
 
-<Document 
-  title={asset.title}
-  section={asset.section}
-  mcid={asset.mcid}
-  tags={asset.tags}
-  tocDepth={asset.tocDepth}
-  {site}
-/>
+<Document title={asset.title} {asset} {site} />
 
 
 <script module>
-import { context, sinfo, webpage } from '#frend/lib'
+import { ainfo, context, webpage } from '#frend/lib'
 
 import Document from '#custom/page/Document'
 </script>
@@ -26,7 +21,7 @@ import Document from '#custom/page/Document'
 <script>
 let { uid, site } = $props();
 
-let asset = sinfo.asset(uid, context.page);
+let asset = ainfo(uid, context.page);
 
 context.section = asset.section;
 context.asset = asset.uid; 

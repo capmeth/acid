@@ -1,4 +1,4 @@
-import { sinfo } from '#frend/lib'
+import { ainfo, sinfo } from '#frend/lib'
 import { is } from '#utils'
 import hashRouter from './hash-router'
 import routes  from './routes'
@@ -12,7 +12,7 @@ export let toUrl = param =>
 
     if (uid && !name)
     {
-        let asset = sinfo.asset(uid);
+        let asset = ainfo(uid);
         return router.toNavLink(asset.type, { uid });
     }
 

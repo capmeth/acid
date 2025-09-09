@@ -1,12 +1,12 @@
 <!--*
     Generates section/asset link tree for a section and its sub-sections.
 
-    When not specified, `sect` defaults to the configured `rootSection`.
+    When not specified, `section` defaults to the configured `rootSection`.
 
-    When `group` is specified, nothing is rendered if section `sect` has no 
-    child or descendant assets in the group. Descendant sections will also be
-    omitted for not having the same.  If `group` is not specified, the full
-    section descendant tree is rendered without assets.
+    When `group` is specified, nothing is rendered if `section` has no child or
+    descendant assets in the group. Descendant sections will also be omitted 
+    for not having the same.  If `group` is not specified, the full descendant 
+    tree from `section` is rendered without assets.
 
     @tags conditional, delegate
 
@@ -14,8 +14,8 @@
       Passed each section and asset for render.
     @property { string } [group]
       Asset group to render the tree for.
-    @property { string } [sect]
-      Name of the section to be rendered.
+    @property { string | object } [section]
+      The section to be rendered.
     @property { string } [type='tree']
       A type for the internal **List** components.
     @property { snippet } [use]
@@ -39,7 +39,7 @@
 
 {#snippet listAssets(items)}
   {#if !isSections}
-    <List {items} pred={sinfo.asset} {type}>
+    <List {items} pred={ainfo} {type}>
       {#snippet children(asset)}
         {@render each(asset, asset.type)}
       {/snippet}
@@ -49,21 +49,21 @@
 
 
 <script module>
-import { sinfo } from '#frend/lib'
+import { ainfo, sinfo } from '#frend/lib'
 
 import List from './List'
 import When from './When'
 </script>
 
 <script>
-let { each, group, sect, type = 'tree', use } = $props();
+let { each, group, section, type = 'tree', use } = $props();
 
 group ||= 'sections';
+section = section ? sinfo(section) : sinfo.root;
 
 let hasAssets = section => !!section[group]?.length || !!section.descendants[group]?.length
 
 let isSections = group === 'sections';
-let section = sect ? sinfo(sect) : sinfo.root;
 let test = isSections ? !!section.sections?.length : hasAssets(section);
 
 let filter = sect => isSections || hasAssets(sinfo(sect))

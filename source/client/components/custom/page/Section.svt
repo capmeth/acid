@@ -3,27 +3,27 @@
 
     @tags inject:#page-section, custom:page/Section
 
-    @property { string } [mcid]
-      Markdown Content ID for document content.
-    @property { string } sect
-      Name of the section on display.
+    @property { object } section
+      Section on display.
     @property { object } site
       Data from **Docsite** component.
     @property { string } title
       Title for the page.
-    @property { number } tocDepth
-      ToC header depth level for `mcid` content.
 -->
 
 <div class="page-section">
   <main>
     <div class="leader">
       <div class="title">{ title }</div>
-      <Crumbs sect={section} />
+      <Crumbs {section} />
     </div>
     <div class="content">
       <Article {mcid} />
-      {@render site.assets({ sect: section })}
+      <Assets sects={section.name} type="columns">
+        {#snippet children(asset)}
+          <Link class="annex-link" to={asset} />
+        {/snippet}
+      </Assets> 
     </div>
   </main>
   <nav>
@@ -37,11 +37,14 @@
 
 <script module>
 import Article from '#shared/common/Article'
+import Assets from '#shared/common/Assets'
 import Crumbs from '#shared/common/Crumbs'
+import Link from '#shared/helper/Link'
 </script>
 
 <script>
-let { mcid, section, site, title, tocDepth } = $props();
+let { section, site, title } = $props();
+let { mcid, tocDepth } = section;
 </script>
 
 <style>

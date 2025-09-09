@@ -17,7 +17,17 @@
       <div class="title">{ title }</div>
     </div>
     <div class="content">
-      {@render site.assets(filters)}
+      <Assets store="catalog" type="columns" sort>
+        {#snippet children(asset)}
+          <Link class="annex-link" to={asset} />
+        {/snippet}
+        {#snippet use(render, { assets })}
+          <div class="count">
+            { t('msg_asset_count', { count: assets.length, total: ainfo.assets.length }) }
+          </div>
+          {@render render()}
+        {/snippet}
+      </Assets> 
     </div>
   </main>
   <nav>
@@ -25,18 +35,49 @@
       {#snippet header()}
         <div class="nav-title">{ t.label_filters }</div>
       {/snippet}
-      {@render filterInput()}
+      <div class="filters">
+        <div class="text">
+          <Text store="catalog" />
+        </div>
+        <div class="group">
+          <Group store="catalog">
+            {#snippet each(group)}
+              <span>{ t(`label_${group}`) }</span>
+            {/snippet}
+          </Group>
+        </div>
+        <div class="tag">
+          <Tag store="catalog" />
+        </div>
+        <div class="usable">
+          <Usable store="catalog">
+            {#snippet each(key)}
+              <span>{ t(`label_${key}`) }</span>
+            {/snippet}
+          </Usable>
+        </div>
+        <Clear store="catalog" />
+      </div>
     </Active>
   </nav>
 </div>
 
 
 <script module>
+import { ainfo } from '#public'
+
 import Active from '#shared/helper/Active'
+import Assets from '#shared/common/Assets'
+import Clear from '#shared/filter/Clear'
+import Group from '#shared/filter/Group'
+import Tag from '#shared/filter/Tag'
+import Text from '#shared/filter/Text'
+import Link from '#shared/helper/Link'
+import Usable from '#shared/filter/Usable'
 </script>
 
 <script>
-let { title, filterInput, filters, site } = $props();
+let { title } = $props();
 </script>
 
 <style>

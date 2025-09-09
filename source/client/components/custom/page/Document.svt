@@ -3,23 +3,19 @@
 
     @tags inject:#page-document, custom:page/Document
 
-    @property { string } [mcid]
-      Markdown Content ID for document content.
+    @property { object } asset
+      Asset on display.
     @property { object } site
       Data from **Docsite** component.
-    @property { array } tags
-      List of tags associated with the document.
     @property { string } title
       Document name.
-    @property { number } tocDepth
-      ToC header depth level for `mcid` content.
 -->
 
 <div class="page-document">
   <main>
     <div class="leader">
       <div class="title">{ title }</div>
-      <Crumbs sect={section} />
+      <Crumbs {section} />
       <Tags items={tags} />
     </div>
     <div class="content">
@@ -41,7 +37,8 @@ import Tags from '#shared/common/Tags'
 </script>
 
 <script>
-let { mcid, section, site, tags, title, tocDepth } = $props();
+let { asset, site, title } = $props();
+let { mcid, section, tags, tocDepth } = asset;
 </script>
 
 <style>

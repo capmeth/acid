@@ -14,27 +14,26 @@
 -->
 
 <When test={true} {use} param={{ assets }}>
-  <List items={assets} pred={asset} {type} {children} />
+  <List items={assets} pred={ainfo} {type} {children} />
 </When>
 
 
 <script module>
-import { naf, sinfo } from '#frend/lib'
+import { ainfo } from '#frend/lib'
+import stateFilters from '#frend/state/filters.svelte'
 
 import List from './List'
 import When from './When'
-
-let { asset } = sinfo;
 </script>
 
 <script>
 let { sort, type, use, children, ...filters } = $props();
 
-let assets = $state([]);
+let others = filters.store ? stateFilters(filters.store) : {};
 
-$effect(() => 
+let assets = $derived.by(() => 
 {
-    assets = asset.filter(naf(filters));
-    if (sort) assets.sort(asset.sort.title);
+    let items = ainfo.assets.filter(ainfo.filter({ ...others, ...filters }));
+    return sort ? items.sort(ainfo.sort.title) : items;
 });
 </script>

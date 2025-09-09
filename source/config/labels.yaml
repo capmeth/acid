@@ -12,7 +12,7 @@ action_update: Render
 label_accept_values: "Accepts:"
 label_components: Components
 label_default_value: "Default:"
-label_deprecated: DEPRECATED
+label_deprecated: Deprecated
 label_description: Description
 label_documents: Documents
 label_error: "ERROR:"
@@ -20,6 +20,7 @@ label_filters: Filters
 label_logo: Project Logo
 label_primary: Site
 label_props: Props
+label_sanctioned: Sanctioned
 label_sections: Sections
 label_tags: Tags
 label_toc: Table of Contents
@@ -29,6 +30,7 @@ page_catalog_title: Asset Index
 page_home_title: Homepage
 
 # messages/alerts
+msg_asset_count: Showing {count} of {total} assets in docsite.
 msg_copied: Copied to Clipboard!
 msg_filter_name: filter by name
 msg_goto_page: Go to {title} page.

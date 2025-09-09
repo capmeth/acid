@@ -3,16 +3,12 @@
 
     @tags inject:#page-home, custom:page/Home
 
-    @property { string } [mcid]
-      Markdown Content ID for document content.
-    @property { string } sect
-      Name of the docsite root section.
+    @property { object } section
+      Root section entity.
     @property { object } site
       Data from **Docsite** component.
     @property { string } title
       Title for the page.
-    @property { number } tocDepth
-      ToC header depth level for `mcid` content.
 -->
 
 <div class="page-home">
@@ -22,7 +18,11 @@
     </div>
     <div class="content">
       <Article {mcid} />
-      {@render site.assets({ sect: section })}
+      <Assets sects={section.name} type="columns">
+        {#snippet children(asset)}
+          <Link class="annex-link" to={asset} />
+        {/snippet}
+      </Assets> 
     </div>
   </main>
   <nav>
@@ -36,10 +36,13 @@
 
 <script module>
 import Article from '#shared/common/Article'
+import Assets from '#shared/common/Assets'
+import Link from '#shared/helper/Link'
 </script>
 
 <script>
-let { mcid, section, site, title, tocDepth } = $props();
+let { section, site, title } = $props();
+let { mcid, tocDepth } = section;
 </script>
 
 <style>

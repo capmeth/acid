@@ -1,26 +1,19 @@
 <!--*
 	  Component display page.
 
+    @tags uses:page/Component
+
     @property { any } site
       Data from **Docsite** component.
     @property { string } uid
       Id of component asset to display.
 -->
 
-<Component 
-  title={asset.title}
-  section={asset.section}
-  mcid={asset.mcid}
-  description={asset.description}
-  deprecated={asset.deprecated}
-  props={asset.props}
-  tags={asset.tags}
-  {site}
-/>
+<Component title={asset.title} {asset} {site} />
 
 
 <script module>
-import { context, sinfo, webpage } from '#frend/lib';
+import { ainfo, context, webpage } from '#frend/lib';
 
 import Component from '#custom/page/Component'
 </script>
@@ -28,7 +21,7 @@ import Component from '#custom/page/Component'
 <script>
 let { uid, site } = $props();
 
-let asset = sinfo.asset(uid, context.page);
+let asset = ainfo(uid, context.page);
 
 context.section = asset.section;
 context.asset = asset.uid; 

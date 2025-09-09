@@ -1,17 +1,14 @@
 <!--*
 	  Docsite landing page.
 
+    @tags uses:page/Home
+
     @property { any } site
       Data from **Docsite** component.
 -->
 
-<Home 
-  section={root.name}
-  title={root.title}
-  mcid={root.mcid}
-  tocDepth={root.tocDepth}
-  {site}
-/>
+<Home title={root.title} section={root} {site} />
+
 
 <script module>
 import { context, sinfo } from '#frend/lib'

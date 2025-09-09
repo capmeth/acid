@@ -35,7 +35,7 @@
 
 <script module>
 import { is } from '#utils'
-import { context, sinfo } from '#frend/lib'
+import { ainfo, context, sinfo } from '#frend/lib'
 </script>
 
 <script>
@@ -56,7 +56,7 @@ if (x.name) // link to a section page
 }
 else if (x.uid) // link to an asset page
 {
-    let asset = sinfo.asset(x.uid);
+    let asset = ainfo(x.uid);
     let section = sinfo(asset.section);
     classes.push(`to-${asset.type}`);
     if (asset.deprecated) classes.push('deprecated');

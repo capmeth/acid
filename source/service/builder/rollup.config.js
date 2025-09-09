@@ -74,7 +74,8 @@ export default function(config, loaded, styles)
         {
             entries:
             {
-                '#shared': path.join(paths.client, 'components', 'shared'),
+                '#public': path.join(paths.client, 'lib', 'index-public'),
+                '#shared': path.join(paths.client, 'components', 'shared')
             }
         }),
         pluginByImporter(
@@ -91,12 +92,16 @@ export default function(config, loaded, styles)
             })
         }),
         pluginCustomSwap({ root, map: config.components }),
-        pluginNodeResolve({ extensions: [ '.css', '.js', '.json', '.png', '.svelte', '.svt' ], browser: true }),
+        pluginNodeResolve(
+        { 
+            extensions: [ '.css', '.js', '.json', '.png', '.svelte', '.svelte.js', '.svt' ], 
+            browser: true 
+        }),
         pluginJson(),
         pluginCommonjs(),
         pluginImage(),
         pluginScopedStyles({ styles }),
-        pluginSvelte({ extensions: [  '.svelte', '.svt' ], emitCss: true }), 
+        pluginSvelte({ extensions: [ '.svelte', '.svt' ], emitCss: true }), 
         pluginInject(
         {
             include: path.join('**', '*.{svelte,svt}'),

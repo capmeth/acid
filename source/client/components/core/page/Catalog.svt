@@ -1,34 +1,23 @@
 <!--*
     Asset lookup/filtering page.
 
+    @tags uses:page/Catalog
+
     @property { any } site
       Data from **Docsite** component.
 -->
 
-<Catalog 
-  title={t.page_catalog_title}
-  {filterInput}
-  {filters}
-  {site}
-/>
-
-{#snippet filterInput()}
-  <Filters store="catalog" {onfilter} />
-{/snippet}
+<Catalog title={t.page_catalog_title} {site} />
 
 
 <script module>
 import { webpage } from '#frend/lib'
 
 import Catalog from '#custom/page/Catalog'
-import Filters from '../../core/base/Filters'
 </script>
 
 <script>
 let { site } = $props();
-
-let filters = $state();
-let onfilter = data => filters = data
 
 webpage.setTitle(t.page_catalog_title);
 </script>
