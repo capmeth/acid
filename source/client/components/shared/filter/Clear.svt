@@ -3,11 +3,13 @@
 
     @property { string } [action="clear_filters"]
       Action name for the internal **Button** component.
+    @property { string } [kind]
+      Variant name for the internal **Button** component.
     @property { object } [store]
       Name of the filter store to clear.
 -->
 
-<Button {action} onclick={clear} />
+<Button {action} {kind} onclick={clear} />
 
 
 <script module>
@@ -17,7 +19,7 @@ import Button from '#shared/helper/Button'
 </script>
 
 <script>
-let { action = 'clear_filters', store } = $props();
+let { action = 'clear_filters', kind = 'filters-clear', store } = $props();
 
 let filters = stateFilters(store);
 let clear = () => Object.keys(filters).forEach(key => delete filters[key])

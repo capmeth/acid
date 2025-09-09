@@ -64,12 +64,12 @@
         text-decoration-thickness: 0.15em;
     }
 
-    .hint-nav .hint-switch
+    .type-nav .type-switch
     {
         text-align: left;
     }
 
-    .hint-sector .hint-switch
+    .type-sector .type-switch
     {
         border-radius: 8px;
         font-size: 120%;
@@ -110,7 +110,7 @@
 
     &.active .content { display: block; }
 
-    &.hint-nav
+    &.type-nav
     {
         border-radius: var(--acid-border-radius-default);
         box-shadow: var(--acid-box-shadow-default);
@@ -131,7 +131,7 @@
         &.hover { background-color: #ffffff11; }
     }
 
-    &.hint-sector
+    &.type-sector
     {
         display: inline-block;
 
@@ -211,12 +211,19 @@
 
     &.deprecated span::before { text-decoration: none; }
 
+    &.to-component, &.to-document
+    { 
+        span
+        {
+            overflow-x: hidden;
+            text-overflow: ellipsis;        
+            white-space: pre;
+        }
+    }
+
     &.to-component span
     {
         color: var(--acid-color-component);
-        overflow-x: hidden;
-        text-overflow: ellipsis;        
-        white-space: pre;
 
         &::before { content: '\0023' }
     }
@@ -224,14 +231,11 @@
     &.to-document span
     {
         color: var(--acid-color-document);
-        overflow-x: hidden;
-        text-overflow: ellipsis;        
-        white-space: pre;
 
         &::before { content: '\E73A' }
     }
 
-    &.annex-link
+    &.type-annex
     {
         background-color: #33333333;
         border-radius: var(--acid-border-radius-default);
@@ -272,7 +276,7 @@
 
 #-helper-toggle
 {
-    &.hint-checkbox
+    &.type-checkbox
     {
         display: flex;
         border-radius: 6px;
@@ -482,11 +486,15 @@
         .delimiter { &::before { content: '|'; } }
     }
 
-    &.type-groups, &.type-options, &.type-tags
+    &.type-filter-groups, &.type-filter-options, &.type-filter-tags, &.type-tags
     {
         display: flex;
         flex-wrap: wrap;
         gap: 6px;
+    }
+
+    &.type-filter-groups, &.type-filter-options, &.type-filter-tags
+    {
         justify-content: center;
     }
 

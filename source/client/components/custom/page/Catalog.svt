@@ -19,7 +19,7 @@
     <div class="content">
       <Assets store="catalog" type="columns" sort>
         {#snippet children(asset)}
-          <Link class="annex-link" to={asset} />
+          <Link kind="annex" to={asset} />
         {/snippet}
         {#snippet use(render, { assets })}
           <div class="count">
@@ -31,7 +31,7 @@
     </div>
   </main>
   <nav>
-    <Active hint="nav" store="filters">
+    <Active kind="nav" store="filters">
       {#snippet header()}
         <div class="nav-title">{ t.label_filters }</div>
       {/snippet}

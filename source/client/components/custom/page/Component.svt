@@ -18,7 +18,7 @@
       {#if deprecated}
         <div class="deprecation">{ deprecated }</div>
       {/if}
-      <Active hint="sector" store="asset-description">
+      <Active kind="sector" store="asset-description">
         {#snippet header()}
           <div class="sector-title">{ t.label_description }</div>
         {/snippet}
@@ -26,7 +26,7 @@
       </Active>
       <Tags items={tags}>
         {#snippet use(render)}
-          <Active hint="sector" store="asset-tags">
+          <Active kind="sector" store="asset-tags">
             {#snippet header()}
               <div class="sector-title">{ t.label_tags }</div>
             {/snippet}
@@ -36,7 +36,7 @@
       </Tags>
       <Props items={propers} type="dual">
         {#snippet use(render)}
-          <Active hint="sector" store="asset-props">
+          <Active kind="sector" store="asset-props">
             {#snippet header()}
               <div class="sector-title">{ t.label_props }</div>
             {/snippet}

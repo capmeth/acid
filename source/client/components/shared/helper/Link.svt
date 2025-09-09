@@ -12,10 +12,10 @@
 
     @property { snippet } children
       Child content.
-    @property { snippet } class
-      Additional CSS classes for the anchor tag.
     @property { string } [href]
       URL to link to.  This is ignored if `to` is set.
+    @property { string } [kind]
+      Variant classname as `type-{kind}`.
     @property { string } [title]
       Title attribute value for the link.
     @property { string | object } [to]
@@ -24,7 +24,7 @@
       Link content when `children` not present.
 -->
 
-<a class={['helper-link', ...classes, klass]} {href} {title} {...args}>
+<a class={['helper-link', ...classes, tc(kind)]} {href} {title} {...args}>
   {#if children}
     {@render children()}
   {:else}
@@ -35,11 +35,11 @@
 
 <script module>
 import { is } from '#utils'
-import { ainfo, context, sinfo } from '#frend/lib'
+import { ainfo, context, sinfo, tc } from '#frend/lib'
 </script>
 
 <script>
-let { class: klass, href, to, title, value, children, ...args } = $props();
+let { href, kind, to, title, value, children, ...args } = $props();
 
 let x = is.string(to) ? { to } : { ...to };
 let classes = [];

@@ -14,7 +14,7 @@
     @property { boolean } readonly
       Should the input area be removed?
     @property { string } value
-      Current code content (bindable).
+      Current code content (`$bindable`).
 -->
 
 <div class="cobe-code" data-lang={lang}>

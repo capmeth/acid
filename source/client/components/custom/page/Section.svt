@@ -21,7 +21,7 @@
       <Article {mcid} />
       <Assets sects={section.name} type="columns">
         {#snippet children(asset)}
-          <Link class="annex-link" to={asset} />
+          <Link kind="annex" to={asset} />
         {/snippet}
       </Assets> 
     </div>

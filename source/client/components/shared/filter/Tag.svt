@@ -11,7 +11,7 @@
 
 <List {items} pred={tagDetails} {type}>
   {#snippet children({ name, info, desc })}
-    <Toggle bind:active={tags[name]} hint="checkbox">
+    <Toggle bind:active={tags[name]} kind="checkbox">
       <Tag {name} {info} {desc} /> 
     </Toggle>
   {/snippet}
@@ -31,7 +31,7 @@ let items = Object.keys(tagLegend);
 </script>
 
 <script>
-let { store, type = 'tags' } = $props();
+let { store, type = 'filter-tags' } = $props();
 let filters = stateFilters(store);
 let tags = $derived(filters.tags || {});
 

@@ -41,12 +41,12 @@
   {@render children({ toc, tree })}
 </div>
 
-{#snippet toc(id, tocDepth, hint = 'nav')}
+{#snippet toc(id, tocDepth, kind = 'nav')}
   <Toc sel="#{id}" {tocDepth} each={tocItem}>
     {#snippet use(render)}
-      <Active {hint} store="toc">
+      <Active {kind} store="toc">
         {#snippet header()}
-          <div class="{hint}-title">{ t.label_toc }</div>
+          <div class="{kind}-title">{ t.label_toc }</div>
         {/snippet}
         {@render render()}
       </Active>
@@ -54,12 +54,12 @@
   </Toc>  
 {/snippet}
 
-{#snippet tree(group = 'sections', hint = 'nav')}
+{#snippet tree(group = 'sections', kind = 'nav')}
   <Tree {group} each={treeItem}>
     {#snippet use(render)}
-      <Active {hint} store={group}>
+      <Active {kind} store={group}>
         {#snippet header()}
-          <div class="{hint}-title">{ t(`label_${group}`) }</div>
+          <div class="{kind}-title">{ t(`label_${group}`) }</div>
         {/snippet}
         {@render render()}
       </Active>
@@ -69,7 +69,7 @@
 
 {#snippet tocItem({ id, title, onclick })}
   {#if id}
-    <Link class="type-toc" title={t('msg_scrollto', { name: title })} {onclick}>
+    <Link kind="toc" title={t('msg_scrollto', { name: title })} {onclick}>
       <span>{ title }</span>
     </Link>
   {:else}

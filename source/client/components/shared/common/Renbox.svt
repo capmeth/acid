@@ -12,7 +12,7 @@
     @property { string } content
       Child HTML content for `display`.
     @property { HTMLElenent } display
-      Rendering mount point (bindable).
+      Rendering mount point (`$bindable`).
 -->
 
 <div class:renbox={!allowCss}>

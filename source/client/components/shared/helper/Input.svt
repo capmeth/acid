@@ -3,17 +3,21 @@
 
     @tags inject:#helper-input, extra-props:input
 
-    @property { string } [hint="input"]
-      Styling hint (as classname "hint-{hint}").
+    @property { string } [kind]
+      Variant classname as `type-{kind}`.
     @property { any } [value]
       Data in the input field. This field is `$bindable`.
 -->
 
-<input class="helper-input hint-{hint}" {value} {...attrs} oninput={input} />
+<input class="helper-input {tc(kind)}" {value} {...attrs} oninput={input} />
 
+
+<script module>
+import { tc } from '#frend/lib'
+</script>
 
 <script>
-let { hint = 'input', value = $bindable(), ...attrs } = $props();
+let { kind, value = $bindable(), ...attrs } = $props();
 
 let input = evt => value = evt.target.value;
 </script>

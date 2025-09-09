@@ -11,7 +11,7 @@
 
 <List {items} {type}>
   {#snippet children(item)}
-    <Toggle bind:active={options[item]} hint="checkbox">
+    <Toggle bind:active={options[item]} kind="checkbox">
       {@render each(item)}
     </Toggle>
   {/snippet}
@@ -28,7 +28,7 @@ let items = [ 'deprecated', 'sanctioned' ];
 </script>
 
 <script>
-let { each, store, type = 'options' } = $props();
+let { each, store, type = 'filter-options' } = $props();
 let filters = stateFilters(store);
 
 /*

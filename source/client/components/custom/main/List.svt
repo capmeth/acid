@@ -13,7 +13,7 @@
       List layout hint.
 -->
 
-<ul class="main-list type-{type}">
+<ul class="main-list {tc(type)}">
   {#each items as item, index (item)}
     <li class="listitem">
       {@render children(item)}
@@ -24,6 +24,10 @@
   {/each}
 </ul>  
 
+
+<script module>
+import { tc } from '#frend/lib'
+</script>
 
 <script>
 let { delim, items, type, children } = $props();

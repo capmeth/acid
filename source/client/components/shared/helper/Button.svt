@@ -5,17 +5,21 @@
 
     @property { string } action
       Label id as `action_{action}`.
-    @property { string } [hint="button"]
-      Styling hint.
+    @property { string } [kind]
+      Variant classname as `type-{kind}`.
 -->
 
-<button class="helper-button hint-{hint} action_{action}" {...attrs}>
+<button class="helper-button {tc(kind)} action_{action}" {...attrs}>
   { t(`action_${action}`) }
 </button>
 
 
+<script module>
+import { tc } from '#frend/lib'
+</script>
+
 <script>
-let { action, hint = 'button', ...attrs } = $props();
+let { action, kind, ...attrs } = $props();
 </script>
 
 <style>

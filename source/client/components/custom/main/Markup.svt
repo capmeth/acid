@@ -22,7 +22,7 @@
       Type of markup being rendered.
 -->
 
-<svelte:element this={el} {id} class="main-markup type-{type}">
+<svelte:element this={el} {id} class="main-markup {tc(type)}">
   {#if empty}
     <p class="empty">
       { t(`msg_no_${type}_description`) }
@@ -32,6 +32,10 @@
   {/if}
 </svelte:element>
 
+
+<script module>
+import { tc } from '#frend/lib'
+</script>
 
 <script>
 let { el = 'div', empty, id, type, children } = $props();
