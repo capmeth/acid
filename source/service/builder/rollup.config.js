@@ -36,7 +36,7 @@ export default function(config, loaded, styles)
 
     let virtual = file => path.join(paths.client, 'virtual', file)
 
-    log.info(`output directory is {:cyanBright:${outpath}}`);
+    log.info(`output directory is {:emph:${outpath}}`);
 
     let main = {};
 

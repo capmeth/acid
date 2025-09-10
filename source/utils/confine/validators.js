@@ -20,18 +20,21 @@ export default
     functionOrString: h => h.or(h.string, h.func) || h.err('must be a function or a string'),
     zeroPlus: h => h.and(h.number, h.gte(0)) || h.err('must be zero or more'),
     logLevel: h => h.in('fail', 'info', 'off', 'warn', 'test') || h.err('must be a valid enumerated value'),
+    object: h => h.plain || h.err('must be an object'),
     objectOrAny: (...args) => h => h.not(h.undef) ? h.toPlain(...args) : 
         h.err('cannot be set undefined'),
     objectOrArrayOrString: (...args) => h => h.or(h.string, h.array, h.plain) ? h.toPlain(...args) : 
         h.err('must be an object, array, or a string'),
     objectOrBoolean: (...args) => h => h.or(h.bool, h.plain) ? h.toPlain(...args) : 
         h.err('must be an object or set to true or false'),
+    objectOrNull: h => h.or(h.plain, h.null) || h.err('must be an object or null'),
     objectOrNumber: (...args) => h => h.or(h.number, h.plain) ? h.toPlain(...args) : 
         h.err('must be an object or a number'),
     objectOrString: (...args) => h => h.or(h.string, h.plain) ? h.toPlain(...args) : 
         h.err('must be an object or a string'),
+    objectOrStringOrNull: (...args) => h => h.or(h.null, h.string, h.plain) ? h.toPlain(...args) : 
+        h.err('must be an object or a string or null'),
     number: h => h.number || h.err('must be an number'),
-    object: h => h.plain || h.err('must be an object'),
     port: h => h.and(!h.lt(0), !h.gt(65535)) || h.err('must be a valid port number'),
     regexOrArrayOrString: h => h.or(h.of(RegExp), h.string, h.array) || 
         h.err('must be a regular expression or a string or an array'),

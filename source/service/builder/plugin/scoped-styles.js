@@ -22,7 +22,7 @@ export default function ({ styles })
                     log.test(() => 
                     {
                         let temp = id.split('/').slice(-3).join('/');
-                        return `injecting styles {:white:${sid}} into {:white:${temp}}...`
+                        return `{:emph:${sid}} styles injected into {:emph:${temp}} component`
                     });
                     return styles[sid];
                 }

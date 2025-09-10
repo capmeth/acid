@@ -26,10 +26,10 @@ export default function(config, omits = [])
                 watcher.on('change', bounce);
                 watchers.push(watcher);
 
-                log.test(`watching file {:white:${file}}`);
+                log.test(`watching file {:emph:${file}}`);
             });
 
-            log.info(`watching {:cyanBright:${files.length} file(s)} for changes...`);
+            log.info(`watching {:emph:${files.length} file(s)} for changes...`);
         });
     }
 

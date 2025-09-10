@@ -22,7 +22,7 @@ export default function (root)
     {
         if (!mahjools[spec])
         {
-            log.test(`importing extension {:white:${spec}}...`);
+            log.test(`importing extension {:emph:${spec}}...`);
             mahjools[spec] = await rollup.gen(rollConfig(root, spec)).then(mod => import(mod.default));
         }
         return mahjools[spec];

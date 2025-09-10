@@ -37,7 +37,7 @@ export default function (config, other)
 
                 if (assets[uid])
                 {
-                    log.warn(`duplicate asset {:yellowBright:${uid}} was skipped`);
+                    log.warn(`duplicate asset {:emph:${uid}} was skipped`);
                     return null;
                 }
 

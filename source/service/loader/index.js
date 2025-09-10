@@ -25,11 +25,11 @@ export default function(config)
         await Promise.all(linkeys.map(async name =>
             sections[name] = await assemble.section({ ...linked[name], name })));
 
-        log.info(`{:cyanBright:${Object.keys(sections).length} section(s)} included in docsite`);
-        log.info(`{:cyanBright:${Object.keys(assets).length} asset(s)} included in docsite`);
+        log.info(`{:emph:${Object.keys(sections).length} section(s)} included in docsite`);
+        log.info(`{:emph:${Object.keys(assets).length} asset(s)} included in docsite`);
 
-        log.info(`{:cyanBright:${Object.keys(files).length} markdown component(s)} were generated`);
-        log.info(`{:cyanBright:${blocks.length} code block(s)} were indexed`);
+        log.info(`{:emph:${Object.keys(files).length} markdown component(s)} were generated`);
+        log.info(`{:emph:${blocks.length} code block(s)} were indexed`);
 
         return { sections, assets, files, blocks };
     }

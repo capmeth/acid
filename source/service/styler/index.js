@@ -54,9 +54,9 @@ export default function(config)
                 log.test(() => 
                 {
                     if (scope === 'root')
-                        return `merging {:white:${key}} styles into {:white:global} scope...`;
+                        return `merging {:emph:${key}} styles into {:emph:global} scope...`;
                     else
-                        return `merging styles into {:white:${scope}} scope...`;
+                        return `merging styles into {:emph:${scope}} scope...`;
                 });
 
                 data[scope] = artoo(data[scope], [ [ sel, value ] ]);

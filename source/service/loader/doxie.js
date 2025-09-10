@@ -29,7 +29,7 @@ export default function (id)
         catch (err)
         {
             if (!(err instanceof AcidValidateError)) throw err;
-            log.warn(`${at.name} in ${id} skipped: {:yellowBright:${err.message}}`);
+            log.warn(`${at.name} in ${id} skipped: {:emph:${err.message}}`);
         }
     });
 

@@ -2,31 +2,31 @@ import chalk from 'chalk'
 
 
 let chalkRe = /\{:([a-z.]+?)?:((?:(?!\{:[a-z.]+?:.+?\}).)+?)\}/gsi;
-let get = (obj, name) => name.split('.').reduce((o, n) => o[n], obj)
 let order = [ 'test', 'info', 'warn', 'fail' ];
 
-// colors and emphasis colors
-let lm = { test: 'gray', info: 'cyan', warn: 'yellow', fail: 'redBright' };
-// let em = { test: 'white', info: 'cyanBright', warn: 'yellowBright', fail: 'bold' }
+let cacheFn = {};
+let chalkFn = expr => cacheFn[expr] ||= new Function('chalk', `return chalk.${expr};`)(chalk)
 
 export default function(logger)
 {
-    let { name, noChalk, level } = logger;
+    let { colors, name, noChalk, level } = logger;
 
     let main = logger.default || console.log;
     let levels = (i => i >= 0 ? order.slice(i) : [])(order.indexOf(level))
     let toms = m => typeof m === 'function' ? m() : m;
 
-    let inter = message =>
+    let inter = (message, level) =>
     {
         if (typeof message === 'string')
         {
+            let theme = colors[level] || {};
+
             while (chalkRe.test(message))
             {
                 message = message.replace(chalkRe, (...args) => 
                 {
                     let [ mods, text ] = args.slice(1);
-                    return noChalk || !mods ? text : get(chalk, mods)(text);
+                    return noChalk || !mods ? text : chalkFn(theme[mods] || mods)(text);
                 });
             }
         }
@@ -53,8 +53,8 @@ export default function(logger)
         if (levels.includes(level) && logger[level])
         {
             msg = toms(msg);
-            msg = `{:${lm[level]}:${name}:${level} - ${msg}}`;
-            return logger[level](inter(msg));
+            msg = `{:main:${name}:${level} - ${msg}}`;
+            return logger[level](inter(msg, level));
         }
 
         if (level === 'fail') 
