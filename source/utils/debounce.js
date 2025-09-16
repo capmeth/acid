@@ -1,16 +1,18 @@
 
 /**
     Debouncer.
+
+    If `wait` is negative, `action` will be called immediately instead
+    of being queded.
     
     @param { function } action
       Function to execute.
     @param { number } wait
-      Milliseconds to timeout. If negative, `action` is called immediately
-      and in the current thread.
+      Milliseconds to timeout.
 */
 export default function(action, wait = 0)
 {
-    let id = undefined, time = wait;
+    let id = void 0, time = wait;
   
     let timer = function(...args)
     {

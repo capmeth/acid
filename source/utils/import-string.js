@@ -4,38 +4,41 @@ import is from './is.js'
 /**
     Creates an import statement from the exports of a module.
 
+    Results in a side-effect import string when `declares` is empty or omitted.
+
     @param { string } spec
-      Specifier for target module.
-    @param { object } declares
-      - `default`: name of the default export
-      - `named`: filters for named exports
+      Module specifier for the target module.
+    @param { object } [declares]
+      - `default`: for default or namespace export
+      - `named`: ffor named exports
     @return { string }
-      Expression that imports exports from `spec`.
+      Statement that imports exports from `spec`.
 */
 export default async function (spec, declares)
 {
-    let { default: defawlt, names: filter } = declares;
-    let promise = import(spec).then(mod => Object.keys(mod));
+    let { default: cdef, names: filter } = declares || {};
 
-    return promise.then(names => 
+    return import(spec).then(mod => 
     {
         let named = filter;
+        let names = Object.keys(mod).filter(n => n !== 'default');
 
         if (filter === '*')
             named = names;
         else if (filter instanceof RegExp)
             named = names.filter(n => filter.test(n));
         else if (is.func(filter))
-            named.map(filter).filter(n => !!n);
+            named = names.map(filter).filter(n => n);
 
         if (is.array(named)) named = named.join(', ');
 
         let imports = [];
-        if (defawlt) imports.push(defawlt);
-        if (named) imports.push(`{ ${named} }`);
-        imports = imports.join(', ');
-        if (imports) imports += ' from ';
 
-        return named ? `import ${imports}${JSON.stringify(spec)}` : '';
+        if (cdef) imports.push(cdef);
+        if (named) imports.push(`{ ${named} }`);
+
+        imports = imports.length ? imports.join(', ') + ' from ' : '';
+
+        return `import ${imports}${JSON.stringify(spec)}`;
     });
 }

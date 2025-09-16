@@ -1,7 +1,6 @@
 
 /*
-    This functionality is directly from string-hash.
-    Just reformatted a bit for ESM.
+    This functionality is from string-hash, reformatted a bit for ESM.
 
     https://github.com/darkskyapp/string-hash/blob/master/index.js
 
