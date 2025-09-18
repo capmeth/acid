@@ -1,35 +1,44 @@
 <!--*
     Renders an editable code block with syntax highlighting.
 
+    Tightly coupled with the **Editor** component and must appear as a 
+    descendant of it to work properly.
+
+    Operates against the context object `editor`.
+    - `code` *boolean*: Should anything be rendered?
+    - `disabled` *boolean*: Is the entry control inaccessible?
+    - `lang` *string*: Language-type of the code.
+    - `noHighlight` *boolean*: Turn off code highlighting?
+    - `onkeydown` *function*: Event handler for input control.
+    - `readonly` *boolean*: Should the input area be removed?
+    - `value` *string*: Current value of control (bound).
+
     @tags cobe
 
-    @property { boolean } disabled
-      Is this control non-accessible?
-    @property { string } lang
-      Language-type of the code.
-    @property { boolean } noHighlight
-      Turn off code highlighting?
-    @property { function } onkeydown
-      Event handler for input control.
-    @property { boolean } readonly
-      Should the input area be removed?
-    @property { string } value
-      Current code content (`$bindable`).
+    @property { snippet } [use]
+      Passed a snippet that renders the content of this component.
 -->
 
-<div class="cobe-code" data-lang={lang}>
-  <pre><code class="{lang} language-{lang}">{@html highlight(value)}</code></pre>
-  {#if !readonly}
-    <textarea bind:value {onkeydown} {disabled}></textarea>           
-  {/if}
-</div>
+<When test={code} {use}>
+  <div class="cobe-code" data-lang={lang}>
+    <pre><code class="{lang} language-{lang}">{@html highlight(editor.value)}</code></pre>
+    {#if !readonly}
+      <textarea bind:value={editor.value} {onkeydown} {disabled}></textarea>           
+    {/if}
+  </div>
+</When>
 
 
 <script module>
+import { context } from '#frend/lib'
+import { cacher } from '#utils'
+
+import When from '../common/When'
+
 // extra space at end makes sure <pre> captures final newline
 let escape = source => source.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + ' '
 
-let highlighter = (language, suppress) => 
+let highlighter = cacher((language, suppress) => 
 {
     if (suppress || !window.hljs || !language || language === 'default') return escape;
 
@@ -40,12 +49,14 @@ let highlighter = (language, suppress) =>
     }
     // extra space at end makes sure <pre> captures final newline
     return source => hljs.highlight(source, { language, ignoreIllegals: true }).value + ' '
-}
+});
 </script>
 
 <script>
-let { disabled, lang, noHighlight, onkeydown, readonly, value = $bindable() } = $props();
-let highlight = $state(highlighter(lang, noHighlight));
+let { use } = $props();
+let { editor } = context;
+let { code, disabled, lang, onkeydown, readonly } = $derived(editor);
+let highlight = highlighter(editor.lang, editor.noHighlight);
 </script>
 
 

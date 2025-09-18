@@ -276,6 +276,32 @@
 
 #-helper-toggle
 {
+    &.type-branch
+    {
+        &::before 
+        { 
+            display: inline-block;
+            border-radius: 100px;
+            content: '\E713';
+            font-family: var(--acid-font-family-icon);
+            line-height: 1.25em;
+            width: 1.25em;
+            margin: -0.25em;
+            vertical-align: middle;
+        }
+
+        &:hover::before, &:focus::before 
+        {
+            outline: 1px dashed var(--acid-color-text);
+            filter: brightness(1.25); 
+        }
+
+        &.active::before 
+        { 
+            content: '\E715';
+        }
+    }
+
     &.type-checkbox
     {
         display: flex;
@@ -340,7 +366,7 @@
 
             .logo
             {
-                width: 90%;
+                width: 85%;
             }
 
             .title
@@ -353,14 +379,14 @@
             }
         }
 
-        .links
+        /* .links
         {
             display: flex;
             justify-content: center;
             gap: 16px;
             margin-top: 12px;
             padding-block: 12px;
-        }
+        } */
     }
 }
 
@@ -427,8 +453,14 @@
             background: hsl(351, 100%, 95%);
             color: red;
             font-family: Monaco, monospace;
+            font-size: 12px;
             display: inline-block;
             padding: 8px;
+
+            &::before 
+            { 
+                content: 'ERROR!\0020';
+            }
         }
     }
 }
@@ -470,20 +502,20 @@
         }
     }
 
-    &.type-dual
-    {
-        columns: 3 410px;
-        column-gap: 48px;
-        column-fill: balance;
-    }
-
-    &.type-list
+    &.type-default
     {
         display: inline-flex;
         flex-wrap: wrap;
         gap: 8px;
 
         .delimiter { &::before { content: '|'; } }
+    }
+
+    &.type-dual
+    {
+        columns: 3 410px;
+        column-gap: 48px;
+        column-fill: balance;
     }
 
     &.type-filter-groups, &.type-filter-options, &.type-filter-tags, &.type-tags
@@ -498,7 +530,7 @@
         justify-content: center;
     }
 
-    &.type-tree, &.type-toc
+    &.type-static, &.type-tree, &.type-toc
     {
         .listitem { margin-block: 0.3em; }
 
@@ -794,7 +826,7 @@
 
     main
     {
-        background-color: #11111122;
+        background-color: #FFFFFF99;
         grid-column: 2 / 3;    
         grid-row: 1 / 4;
         overflow-y: auto;

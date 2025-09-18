@@ -26,7 +26,7 @@
   onmouseenter={hov(true)}
   onmouseleave={hov(false)}
 >
-  {@render children()}
+  {@render children?.()}
 </button>
 
 

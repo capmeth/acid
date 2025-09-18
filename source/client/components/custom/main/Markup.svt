@@ -18,11 +18,11 @@
       Is there no child content available?
     @property { string } id
       HTML id for root element.
-    @property { string } type
-      Type of markup being rendered.
+    @property { string } [type="default"]
+      Styling hint for the markup being rendered.
 -->
 
-<svelte:element this={el} {id} class="main-markup {tc(type)}">
+<svelte:element this={el} {id} class="main-markup type-{type}">
   {#if empty}
     <p class="empty">
       { t(`msg_no_${type}_description`) }
@@ -33,12 +33,8 @@
 </svelte:element>
 
 
-<script module>
-import { tc } from '#frend/lib'
-</script>
-
 <script>
-let { el = 'div', empty, id, type, children } = $props();
+let { el = 'div', empty, id, type = 'default', children } = $props();
 </script>
 
 <style>

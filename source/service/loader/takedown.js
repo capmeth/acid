@@ -73,7 +73,7 @@ export let tdContent = takedown(
                 ${e.value.replace(braceRe, '{"$&"}')}
         
                 <script module>
-                import Editor from '../core/base/Editor'
+                import Editor from '../stable/common/Editor'
                 </script>
             `;
             

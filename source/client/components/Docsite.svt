@@ -1,0 +1,60 @@
+<!--*
+    Root docsite component.
+
+    @tags uses:main/Docsite, uses:page/Error
+
+    @property { string } page
+      Current page name.
+    @property { snippet } children
+      Docsite content.
+-->
+
+<Docsite>
+  {#snippet children(site)}
+    <svelte:boundary {onerror}>
+      <Comp {...props} {site} />
+      {#snippet failed(error)}
+        <Error {site} {error} />
+      {/snippet}
+    </svelte:boundary>
+  {/snippet}
+</Docsite>
+
+
+<script module>
+import { ainfo, context, sinfo } from '#frend/lib'
+
+import Docsite from '#custom/main/Docsite'
+import Error from '#custom/page/Error'
+
+import Catalog from '#custom/page/Catalog'
+import Component from '#custom/page/Component'
+import Document from '#custom/page/Document'
+import Home from '#custom/page/Home'
+import Section from '#custom/page/Section'
+
+let pages = { Catalog, Component, Document, Home, Section };
+let onerror = error => console.error(error)
+</script>
+
+<script>
+let { component, route, ...props } = $props();
+
+let Comp = pages[component];
+
+context.page = route;
+
+if (route === 'home')
+{
+    context.section = sinfo.root.name;
+}
+else if (route === 'section')
+{
+    context.section = props.name;
+}
+else if (ainfo.types.includes(route)) 
+{
+    context.asset = props.uid;
+    context.section = ainfo(props.uid).section;
+}
+</script>

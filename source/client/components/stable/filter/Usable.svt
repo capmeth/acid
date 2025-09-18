@@ -21,8 +21,8 @@
 <script module>
 import stateFilters from '#frend/state/filters'
 
-import List from '../../shared/common/List'
-import Toggle from '#shared/helper/Toggle'
+import List from '../common/List'
+import Toggle from '../helper/Toggle'
 
 let items = [ 'deprecated', 'sanctioned' ];
 </script>

@@ -2,7 +2,7 @@ import '#frend/virtual/style.css'
 
 import { mount } from 'svelte';
 import { hljsc, hrMode } from '#config';
-import App from './components/core/base/Router'
+import App from './components/Router'
 import wsreload from './lib/ws-reload'
 
 

@@ -59,6 +59,7 @@ export default
     'config.metas': { test: test.arrayOrObjectOrString, default: [] },
     'config.metas.*': test.stringOrObject,
     'config.namespace': test.alphanum,
+    'config.noticeTimeout': test.number,
     'config.output': { test: test.objectOrString('dir'), default: {}, merge: true },
     'config.output.*': test.unset,
     'config.output.dir': test.string,

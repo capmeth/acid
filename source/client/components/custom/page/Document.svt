@@ -4,11 +4,9 @@
     @tags inject:#page-document, custom:page/Document
 
     @property { object } asset
-      Asset on display.
+      Document asset on display.
     @property { object } site
       Data from **Docsite** component.
-    @property { string } title
-      Document name.
 -->
 
 <div class="page-document">
@@ -25,20 +23,24 @@
   <nav>
     {@render site.tree()}
     {@render site.toc(mcid, tocDepth)}
-    {@render site.tree('documents')}
+    {@render site.links()}
   </nav>
 </div>
 
 
 <script module>
-import Article from '#shared/common/Article'
-import Crumbs from '#shared/common/Crumbs'
-import Tags from '#shared/common/Tags'
+import { ainfo, page } from '#public'
+
+import Article from '#stable/common/Article'
+import Crumbs from '#stable/common/Crumbs'
+import Tags from '#stable/common/Tags'
 </script>
 
 <script>
-let { asset, site, title } = $props();
-let { mcid, section, tags, tocDepth } = asset;
+let { uid, site } = $props();
+let { mcid, section, tags, title, tocDepth } = ainfo(uid);
+
+page.setTitle(title);
 </script>
 
 <style>

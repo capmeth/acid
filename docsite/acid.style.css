@@ -64,7 +64,7 @@
             color: var(--acid-color-accent);
             font-size: 1.1vw;
             position: absolute;
-            bottom: 5vw;
+            bottom: 1.4vw;
             left: 13vw;
             z-index: -1;
         }

@@ -60,6 +60,7 @@
         "#packson": "./package.json",
         "#paths": "./paths.js",
         "#source/*": "./source/*",
+        "#test/*": "./test/*",
         "#utils": "./source/utils/index.js"
     },
     "exports": {

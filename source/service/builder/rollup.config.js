@@ -75,7 +75,7 @@ export default function(config, loaded, styles)
             entries:
             {
                 '#public': path.join(paths.client, 'lib', 'index-public'),
-                '#shared': path.join(paths.client, 'components', 'shared')
+                '#stable': path.join(paths.client, 'components', 'stable')
             }
         }),
         pluginByImporter(
@@ -87,7 +87,6 @@ export default function(config, loaded, styles)
                 {
                     '#config': virtual('config.js'),
                     '#frend': paths.client, // `#client` conflicts with svelte internals
-                    '#utils': paths.utils
                 }
             })
         }),

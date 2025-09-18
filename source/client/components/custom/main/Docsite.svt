@@ -33,16 +33,21 @@
     {#if version}
       <div class="version">{ version }</div>
     {/if} 
-    <div class="links">
-      <Link to="home" />
-      <Link to="catalog" />
-    </div>
   </header>
-  {@render children({ toc, tree })}
+  {@render children({ links, toc, tree })}
 </div>
 
+{#snippet links(kind = 'nav')}
+  <Active {kind} store="links">
+    {#snippet header()}
+      <div class="{kind}-title">{ t.label_static }</div>
+    {/snippet}
+    <Static />
+  </Active>
+{/snippet}
+
 {#snippet toc(id, tocDepth, kind = 'nav')}
-  <Toc sel="#{id}" {tocDepth} each={tocItem}>
+  <Toc sel="#{id}" {tocDepth}>
     {#snippet use(render)}
       <Active {kind} store="toc">
         {#snippet header()}
@@ -54,12 +59,12 @@
   </Toc>  
 {/snippet}
 
-{#snippet tree(group = 'sections', kind = 'nav')}
-  <Tree {group} each={treeItem}>
+{#snippet tree(group, kind = 'nav')}
+  <Tree {group}>
     {#snippet use(render)}
-      <Active {kind} store={group}>
+      <Active {kind} store={group || 'tree'}>
         {#snippet header()}
-          <div class="{kind}-title">{ t(`label_${group}`) }</div>
+          <div class="{kind}-title">{ t(`label_${group || 'content'}`) }</div>
         {/snippet}
         {@render render()}
       </Active>
@@ -67,30 +72,21 @@
   </Tree>
 {/snippet}
 
-{#snippet tocItem({ id, title, onclick })}
-  {#if id}
-    <Link kind="toc" title={t('msg_scrollto', { name: title })} {onclick}>
-      <span>{ title }</span>
-    </Link>
-  {:else}
-    <span>{ title }</span>
-  {/if}
-{/snippet}
-
-{#snippet treeItem(entity)}
-  <Link to={entity} />
-{/snippet}
-
 
 <script module>
-import Active from '#shared/helper/Active'
-import Link from '#shared/helper/Link'
-import Toc from '#shared/common/Toc'
-import Tree from '#shared/common/Tree'
+import { site } from '#public'
+
+import Active from '#stable/helper/Active'
+import Link from '#stable/helper/Link'
+import Static from '#stable/common/Static'
+import Toc from '#stable/common/Toc'
+import Tree from '#stable/common/Tree'
+
+let { logo, title, version } = site;
 </script>
 
 <script>
-let { logo, title, version, children } = $props();
+let { children } = $props();
 </script>
 
 <style>

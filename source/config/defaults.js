@@ -121,6 +121,13 @@ config.metas =
 config.namespace = 'docsite';
 
 /**
+    User notification timeout (for things like copy-to-clipboard).
+
+    @type { number }
+*/
+config.noticeTimeout = 2000;
+
+/**
     Details for generated output.
 
     - `dir`: folder where all generated files go

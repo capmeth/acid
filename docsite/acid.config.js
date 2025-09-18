@@ -27,6 +27,11 @@ export default
 
     links: { href: "acid.png", rel: "icon", type: "image/x-icon" },
 
+    labels: 
+    { 
+        label_content: 'Documentation'
+    },
+
     sections,
 
     tagLegend: 

@@ -11,6 +11,7 @@ action_update: Render
 # general labels
 label_accept_values: "Accepts:"
 label_components: Components
+label_content: Content
 label_default_value: "Default:"
 label_deprecated: Deprecated
 label_description: Description
@@ -18,15 +19,16 @@ label_documents: Documents
 label_error: "ERROR:"
 label_filters: Filters
 label_logo: Project Logo
-label_primary: Site
 label_props: Props
+label_static: Site Links
 label_sanctioned: Sanctioned
 label_sections: Sections
 label_tags: Tags
-label_toc: Table of Contents
+label_toc: Page Contents
 
 # page names
 page_catalog_title: Asset Index
+page_error_title: Error
 page_home_title: Homepage
 
 # messages/alerts

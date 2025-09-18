@@ -35,7 +35,7 @@
 
 <script module>
 import { is } from '#utils'
-import { ainfo, context, sinfo, tc } from '#frend/lib'
+import { ainfo, context, sinfo, tc, toUrl } from '#frend/lib'
 </script>
 
 <script>
@@ -49,7 +49,7 @@ if (x.name) // link to a section page
     let section = sinfo(x.name);
     classes.push(`to-section`);
     if (context.section === section.name) classes.push({ current: true });
-    href = context.url(section);
+    href = toUrl(section);
     title ||= section.name === sinfo.root.name ? t('msg_goto_page', { title: 'home' }) : 
         `section: ${section.titlePath.slice(1).join('/')}`;
     if (!children) value ||= section.title;
@@ -61,7 +61,7 @@ else if (x.uid) // link to an asset page
     classes.push(`to-${asset.type}`);
     if (asset.deprecated) classes.push('deprecated');
     if (context.asset === asset.uid) classes.push({ current: true });
-    href = context.url(asset);
+    href = toUrl(asset);
     title ||= `${asset.type}: ${section.titlePath.slice(1).join('/')}/${asset.title}`;
     if (!children) value ||= asset.title;
 }
@@ -69,7 +69,7 @@ else if (x.to) // link to a static page
 {
     classes.push(`to-${x.to}`);
     if (context.page === x.to) classes.push({ current: true });
-    href = context.url(x.to);
+    href = toUrl(x.to);
     title ||= t('msg_goto_page', { title: x.to });
     if (!children) value ||= t(`page_${x.to}_title`);
 }

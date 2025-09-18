@@ -4,11 +4,9 @@
     @tags inject:#page-component, custom:page/Component
 
     @property { object } asset
-      Asset on display.
+      Component asset on display.
     @property { object } site
       Data from **Docsite** component.
-    @property { string } title
-      Component name.
 -->
 
 <div class="page-component">
@@ -51,22 +49,26 @@
   </main>
   <nav>
     {@render site.tree()}
-    {@render site.tree('components')}
+    {@render site.links()}
   </nav>
 </div>
 
 
 <script module>
-import Active from '#shared/helper/Active'
-import Article from '#shared/common/Article'
-import Description from '#shared/common/Description'
-import Props from '#shared/common/Props'
-import Tags from '#shared/common/Tags'
+import { ainfo, page } from '#public'
+
+import Active from '#stable/helper/Active'
+import Article from '#stable/common/Article'
+import Description from '#stable/common/Description'
+import Props from '#stable/common/Props'
+import Tags from '#stable/common/Tags'
 </script>
 
 <script>
-let { asset, site, title } = $props();
-let { deprecated, description, mcid, props: propers, tags } = asset;
+let { uid, site } = $props();
+let { deprecated, description, mcid, props: propers, tags, title } = ainfo(uid);
+
+page.setTitle(title);
 </script>
 
 <style>

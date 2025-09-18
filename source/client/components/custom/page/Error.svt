@@ -5,6 +5,8 @@
 
     @property { object } error
       The problem that happened.
+    @property { object } site
+      Data from **Docsite** component.
 -->
 
 <div class="page-error">
@@ -14,8 +16,14 @@
   </main>
 </div>
 
+<script module>
+import { page } from '#public'
+</script>
+
 <script>
 let { error } = $props();
+
+page.setTitle(t.page_error_title);
 </script>
 
 <style>

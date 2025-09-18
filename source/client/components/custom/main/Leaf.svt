@@ -1,0 +1,17 @@
+<!--*
+    Renders UI for a leaf (asset) of a **Tree** component.
+
+    @property { object } asset
+      Asset to render.
+-->
+
+<Link to={asset} />
+
+
+<script module>
+import Link from '#stable/helper/Link'
+</script>
+
+<script>
+let { asset } = $props();
+</script>

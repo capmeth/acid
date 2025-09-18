@@ -1,0 +1,32 @@
+<!--*
+    Renders UI for a branch (section) of a **Tree** component.
+
+    Use `group` to know what the parent tree is displaying.
+
+    @property { object } active
+      Track expand/collapse status by section name (`$bindable`).
+    @property { snippet } [children]
+      Content to render for branch.
+    @property { string } group
+      Either "sections" or an asset group name.
+    @property { object } section
+      Section for this branch.
+-->
+
+<Link to={section} />
+{#if children}
+  <Toggle bind:active kind="branch" store="branch-{group}-{section.name}" />
+  {#if active}
+    {@render children()}
+  {/if}
+{/if}
+
+
+<script module>
+import Link from '#stable/helper/Link'
+import Toggle from '#stable/helper/Toggle'
+</script>
+
+<script>
+let { active = $bindable(), group, section, children } = $props();
+</script>

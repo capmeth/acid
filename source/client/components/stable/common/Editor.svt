@@ -1,0 +1,158 @@
+<!--*
+    Code Block Editor (CoBE) component.
+    
+    A workbench for component code editing and rendering.
+
+    Tightly coupled with **Code** and **Renbox** components for code editing 
+    and component rendering, respectively.  Exactly one of each of these 
+    components should appear as descendants for the trio to work properly.
+
+    @tags cobe, uses:main/Editor
+
+    @property { boolean } allowCss
+      Allow docsite CSS to leak into the render-box?
+    @property { string } [id]
+      Id of the code block to render.
+    @property { string } [lang]
+      Language type of the code block.
+-->
+
+<!--*
+    @prop mode
+    @description Rendering mode for CoBE.
+    @type { string }
+    @values "edit", "live", "render", "static"
+-->
+
+<Editor 
+  {id} 
+  {label} 
+  {shifted} 
+  {edited} 
+  copied={editor.disabled} 
+  {error} 
+  showing={editor.code}
+  mode={cbe.mode} 
+  lang={cbe.lang}
+
+  copy={dom.clipboard.canCopy && editor.value ? copy : null}
+  reset={cbe.edit || cbe.live ? reset : null}
+  toggle={cbe.render || cbe.static ? null : toggle}
+  update={cbe.edit ? update : null}
+
+  {children}
+/>
+
+
+<script module>
+import { onMount } from 'svelte'
+import { cobe, noticeTimeout } from '#config'
+import { ainfo, compose, context, dom, sinfo } from '#frend/lib'
+import { ids } from '#frend/lib/code-blocks'
+
+import Editor from '#custom/main/Editor'
+
+let contextMode = () =>
+{
+    if (context.asset) return ainfo(context.asset).cobeMode;
+    if (context.section) return sinfo(context.section).cobeMode;
+}
+
+let setup = (mode, lang) => 
+{
+    let data = { ...cobe['*'], ...cobe[lang] };
+
+    data.lang = lang;
+    // when rendering function is available behavior mode can be set
+    // 1) locally (on info-string of code block)
+    // 2) contextually (provided by document front-matter)
+    // 3) linguistically (from spec for current code language)
+    // 4) globally (from star spec configuration)
+    // otherwise, static mode is in effect
+    data.mode = data.use && (mode || contextMode() || data.mode) || 'static';
+
+    data[data.mode] = true;
+
+    return data;
+}
+</script>
+
+<script>
+let { id, children, ...args } = $props();
+let { allowCss, code, label, lang, mode } = { ...ids[id], ...args };
+
+code = code.trim();
+
+let cbe = setup(mode, lang || 'default');
+
+let editor = $state(
+{ 
+    allowCss, 
+    code: cbe.static || cbe.noHide,
+    disabled: false, 
+    lang: cbe.lang,
+    noHighlight: cbe.noHighlight,
+    readonly: cbe.static || cbe.demo,
+    renbox: !cbe.static,
+    value: code 
+});
+
+let error = $state(null);
+// code input previous state
+let prev = $state(null);
+// has code changed?
+let edited = $derived(prev !== editor.value);
+// has code changed from original?
+let shifted = $derived(code !== editor.value);
+
+let copy = async () => 
+{
+    await dom.clipboard.copyTo(editor.value);
+    editor.disabled = true;
+    setTimeout(() => editor.disabled = false, noticeTimeout);
+}
+let reset = () => (editor.value = code, cbe.edit && update())
+let toggle = () => editor.code = !editor.code
+let update = () => 
+{
+    if (editor.display && edited)
+    {
+        error = null;
+        compose(cbe.lang, prev = editor.value, editor.display).catch(onerror);
+    }
+}
+
+let onerror = err => (error = err.message ?? err, console.error(err))
+editor.onkeydown = evt =>
+{
+    if (evt.metaKey)
+    {
+        switch (evt.keyCode)
+        {            
+            case 13: // enter key => render            
+            case 83: // s key => render
+              evt.preventDefault(); 
+              update(); 
+              break;            
+            case 67: // c key => copy (if nothing selected)
+              if (evt.target.selectionStart === evt.target.selectionEnd)
+              {
+                  evt.preventDefault();
+                  copy(); 
+              } 
+              break;            
+            case 82: // r key => reset
+              evt.preventDefault();
+              reset(); 
+              break;
+        }
+    }
+}
+
+// auto update display for LIVE state
+$effect(() => edited && cbe.live && update());
+// make sure we do an initial render (if necessary)
+onMount(() => !cbe.static && !cbe.live && update());
+
+context.editor = editor;
+</script>

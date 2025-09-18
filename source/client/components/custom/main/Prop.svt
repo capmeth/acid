@@ -40,8 +40,8 @@
 
 
 <script module>
-import Description from '#shared/common/Description'
-import List from '#shared/common/List'
+import Description from '#stable/common/Description'
+import List from '#stable/common/List'
 </script>
 
 <script>

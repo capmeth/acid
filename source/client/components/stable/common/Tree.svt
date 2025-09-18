@@ -1,0 +1,75 @@
+<!--*
+    Generates section/asset link tree for a section and its sub-sections.
+
+    Nothing is rendered unless `section` has child or descendant assets in the 
+    `group` specified. Descendant sections will also be omitted for not having 
+    the same.
+
+    @tags conditional, delegate, uses:main/Branch, uses:main/Leaf
+
+    @property { object } active
+      Tracks expand/collapse branch state (`$bindable`).
+    @property { string } [group]
+      Group to render the tree for.  This can be 
+      - an asset group, or
+      - "sections" to list sections only, or
+      If not specified or falsey, the entire tree is rendered.
+    @property { string | object } [section]
+      The section to be rendered.  Defaults to the configured 
+      `rootSection` if not specified.
+    @property { string } [type='tree']
+      A styling hints for the internal **List**, **Branch**, and **Leaf** 
+      components.
+    @property { snippet } [use]
+      Passed a snippet that renders the content of this component.
+-->
+
+<When {test} {use}>
+  {@render listAssets(section[list])}
+  {@render listSections(section.sections)}  
+</When>
+
+{#snippet listSections(items)}
+  <List {items} {filter} pred={sinfo} {type}>
+    {#snippet children(section)}
+      {#if section.sections?.length || section[list]?.length}
+        <Branch bind:active={active[section.name]} {section} group={list || group} {type}>
+          {@render listAssets(section[list])}
+          {@render listSections(section.sections)}
+        </Branch>
+      {:else}
+        <Branch {section} {type} />
+      {/if}
+    {/snippet}
+  </List>  
+{/snippet}
+
+{#snippet listAssets(items)}
+  <List {items} pred={ainfo} {type}>
+    {#snippet children(asset)}
+      <Leaf {asset} {type} />
+    {/snippet}
+  </List>
+{/snippet}
+
+
+<script module>
+import { ainfo, sinfo } from '#frend/lib'
+
+import Branch from '#custom/main/Branch'
+import Leaf from '#custom/main/Leaf'
+import List from './List'
+import When from './When'
+</script>
+
+<script>
+let { active = $bindable({}), group, section, type = 'tree', use } = $props();
+
+section = section ? sinfo(section) : sinfo.root;
+
+let filter = section => !group || isSections || !!section[list]?.length || !!section.descendant[list].length
+
+let isSections = group === 'sections';
+let list = group ? isSections ? null : group : 'assets';
+let test = isSections ? !!section.sections?.length : filter(section);
+</script>

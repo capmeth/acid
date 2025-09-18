@@ -4,10 +4,8 @@
     Nothing is rendered unless there is at least one header element with an id
     within `tocDepth` range descending from the node identified by `sel`.
 
-    @tags conditional, delegate
+    @tags conditional, delegate, uses:main/Tnode
 
-    @property { snippet } each
-      Passed details for each header link.
     @property { string } sel
       Selector identifying the root element in which to create a ToC from.
     @property { number } tocDepth
@@ -23,7 +21,7 @@
 </When>
 
 {#snippet single({ id, title, heads })}
-  {@render each({ id, title, onclick: e => doClick(e, id) })}
+  <Tnode {id} {title} onclick={e => doClick(e, id)} />
   {@render multi(heads)}
 {/snippet}
 
@@ -40,11 +38,12 @@
 import { headerTree } from '#frend/lib'
 
 import List from './List'
+import Tnode from '#custom/main/Tnode'
 import When from './When'
 </script>
 
 <script>
-let { each, sel, tocDepth, type = 'toc', use } = $props();
+let { sel, tocDepth, type = 'toc', use } = $props();
 let tree = $state();
 
 let doClick = (evt, id) =>

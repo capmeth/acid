@@ -23,9 +23,9 @@ import { tagLegend } from '#config'
 import { tagDetails } from '#frend/lib'
 import stateFilters from '#frend/state/filters'
 
-import List from '../../shared/common/List'
+import List from '../common/List'
 import Tag from '#custom/main/Tag'
-import Toggle from '#shared/helper/Toggle'
+import Toggle from '../helper/Toggle'
 
 let items = Object.keys(tagLegend);
 </script>

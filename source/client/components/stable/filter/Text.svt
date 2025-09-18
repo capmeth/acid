@@ -15,7 +15,7 @@
 <script module>
 import stateFilters from '#frend/state/filters'
 
-import Input from '#shared/helper/Input'
+import Input from '../helper/Input'
 </script>
 
 <script>

@@ -8,8 +8,7 @@ import { cacher, is, proxet } from '#utils'
 import nofi from './normalize-filters'
 
 
-let assetGroups = Object.values(assetTypes).map(v => v.plural);
-
+let assetKeys = Object.keys(assets);
 let assetSort = proxet({}, prop => (a, b) => (a = ainfo(a)[prop], b = ainfo(b)[prop], a < b ? -1 : a > b ? 1 : 0));
 
 let makeFilter = data => 
@@ -74,17 +73,19 @@ let asset = (ref, expectType) =>
 }
 
 asset.filter = makeFilter;
-asset.groups = assetGroups;
 asset.sort = assetSort;
 
 
 let ainfo = proxet(asset, prop => 
 {
-    if (prop === 'assets') return Object.keys(assets);
+    // if (prop === 'assets') return Object.keys(assets);
+    if (prop === 'assets') return ainfo.groups.reduce((a, g) => [ ...a, ...ainfo[g] ], []);
+    if (prop === 'groups') return Object.values(assetTypes).map(v => v.plural)
+    if (prop === 'types') return Object.values(assetTypes).map(v => v.singular)
 
-    if (assetGroups.includes(prop)) 
+    if (ainfo.groups.includes(prop)) 
     {
-        let items = assets.filter(makeFilter({ groups: [ prop ] }));
+        let items = assetKeys.filter(makeFilter({ groups: [ prop ] }));
         // documents not auto-sorted as their order might be important
         return prop === 'documents' ? items : items.sort(assetSort.title);
     }

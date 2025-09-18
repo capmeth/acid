@@ -22,27 +22,27 @@ let getParents = section =>
     return list;
 }
 
-let getDescendants = section =>
+let getDescendantData = (section, prop) =>
 {
-    let data = {};
-    
-    section.sections?.forEach(name =>
-    {
-        let section = sinfo(name), child = getDescendants(section);
-        data.sections = [ ...(data.sections || []), name, ...(child.sections || []) ];
-        ainfo.groups.forEach(g => data[g] = [ ...(data[g] || []), ...(section[g] || []), ...(child[g] || []) ]);
-    });
+    prop ??= 'sections';
 
-    return data;
+    let reducer = (array, name) =>
+    {
+        let sect = sinfo(name);
+        return [ ...array, ...[].concat(sect[prop] ?? []), ...sect.descendant[prop] ];
+    }
+
+    return section.sections?.reduce(reducer, []) || [];
 }
 
 let getSection = cacher(name =>
 {
     let { assets, parent, ...section } = sections[name];
 
-    let iface = proxet({ name, assets, parent }, prop => 
+    let iface = proxet({ name, parent }, prop => 
     {
-        if (prop === 'descendants') return getDescendants(iface);
+        if (prop === 'assets') return ainfo.groups.reduce((a, g) => [ ...a, ...iface[g] ], []);
+        if (prop === 'descendant') return proxet({ descendant: [] }, prop => getDescendantData(iface, prop));
         if (prop === 'parents') return getParents(iface);
         if (prop === 'path') return [ ...iface.parents, iface.name ];
         if (prop === 'sect') return name;
