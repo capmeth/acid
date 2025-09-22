@@ -4,49 +4,48 @@
     Derived information interface for docsite sections.
 */
 import { rootSection, sections, tocDepth } from '#config'
-import { cacher, proxet } from '#utils'
+import { cacher, is, proxet } from '#utils'
 import ainfo from './asset-info'
 
 
-let getParents = section => 
+let ancestor = section =>
 {
-    let list = [];
-
-    let parent = section.parent;
-    while (parent) 
+    if (section.parent)
     {
-        list.unshift(parent);
-        parent = sections[parent].parent;
+        let sect = sinfo(section.parent);
+        return [ ...sect.ancestor.name, sect.name ];
     }
 
-    return list;
+    return [];
 }
 
-let getDescendantData = (section, prop) =>
+let descendant = section =>
 {
-    prop ??= 'sections';
-
-    let reducer = (array, name) =>
+    if (section.sections)
     {
-        let sect = sinfo(name);
-        return [ ...array, ...[].concat(sect[prop] ?? []), ...sect.descendant[prop] ];
+        let reducer = (array, name) =>
+        {
+            let sect = sinfo(name);
+            return [ ...array, sect.name, ...sect.descendant.name ];
+        }
+
+        return section.sections.reduce(reducer, []);
     }
 
-    return section.sections?.reduce(reducer, []) || [];
+    return [];
 }
 
 let getSection = cacher(name =>
 {
-    let { assets, parent, ...section } = sections[name];
+    let { assets, cobe, parent, ...section } = sections[name];
 
     let iface = proxet({ name, parent }, prop => 
     {
+        if (prop === 'ancestor') return proxet({}, prop => ancestor(iface).map(sect => sinfo(sect)[prop]));
         if (prop === 'assets') return ainfo.groups.reduce((a, g) => [ ...a, ...iface[g] ], []);
-        if (prop === 'descendant') return proxet({ descendant: [] }, prop => getDescendantData(iface, prop));
-        if (prop === 'parents') return getParents(iface);
-        if (prop === 'path') return [ ...iface.parents, iface.name ];
-        if (prop === 'sect') return name;
-        if (prop === 'titlePath') return iface.path.map(parent => sinfo(parent).title);
+        if (prop === 'cobe') return { ...(parent && sinfo(parent).cobe), ...cobe };
+        if (prop === 'descendant') return proxet({}, prop => descendant(iface).map(sect => sinfo(sect)[prop]));
+        if (prop === 'lineage') return proxet({}, prop => [ ...iface.ancestor[prop], iface[prop] ]);
         if (prop === 'tocDepth') return section.tocDepth ?? tocDepth;
 
         if (ainfo.groups.includes(prop))
@@ -61,7 +60,6 @@ let getSection = cacher(name =>
 
     return iface;
 });
-
 
 let section = ref => getSection(ref.name || ref)
 

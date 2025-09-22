@@ -14,7 +14,7 @@
       Child content.
     @property { string } [href]
       URL to link to.  This is ignored if `to` is set.
-    @property { string } [kind]
+    @property { string } [kind="default"]
       Variant classname as `type-{kind}`.
     @property { string } [title]
       Title attribute value for the link.
@@ -24,7 +24,7 @@
       Link content when `children` not present.
 -->
 
-<a class={['helper-link', ...classes, tc(kind)]} {href} {title} {...args}>
+<a class={['helper-link', ...classes, `type-${kind}`]} {href} {title} {...args}>
   {#if children}
     {@render children()}
   {:else}
@@ -35,11 +35,11 @@
 
 <script module>
 import { is } from '#utils'
-import { ainfo, context, sinfo, tc, toUrl } from '#frend/lib'
+import { ainfo, context, sinfo, toUrl } from '#frend/lib'
 </script>
 
 <script>
-let { href, kind, to, title, value, children, ...args } = $props();
+let { href, kind = 'default', to, title, value, children, ...args } = $props();
 
 let x = is.string(to) ? { to } : { ...to };
 let classes = [];
@@ -50,20 +50,23 @@ if (x.name) // link to a section page
     classes.push(`to-section`);
     if (context.section === section.name) classes.push({ current: true });
     href = toUrl(section);
-    title ||= section.name === sinfo.root.name ? t('msg_goto_page', { title: 'home' }) : 
-        `section: ${section.titlePath.slice(1).join('/')}`;
+
+    if (section.name === sinfo.root.name)
+        title ||= t('msg_goto_page', { title: 'home' })
+    else
+        title ||= `section: ${section.lineage.title.slice(1).join('/')}`;
+
     if (!children) value ||= section.title;
 }
 else if (x.uid) // link to an asset page
 {
-    let asset = ainfo(x.uid);
-    let section = sinfo(asset.section);
-    classes.push(`to-${asset.type}`);
-    if (asset.deprecated) classes.push('deprecated');
-    if (context.asset === asset.uid) classes.push({ current: true });
-    href = toUrl(asset);
-    title ||= `${asset.type}: ${section.titlePath.slice(1).join('/')}/${asset.title}`;
-    if (!children) value ||= asset.title;
+    let { deprecated, section, title: atitle, type, uid } = ainfo(x.uid);
+    classes.push(`to-${type}`);
+    if (deprecated) classes.push('deprecated');
+    if (context.asset === uid) classes.push({ current: true });
+    href = toUrl({ uid });
+    title ||= `${type}: ${sinfo(section).lineage.title.slice(1).join('/')}/${atitle}`;
+    if (!children) value ||= atitle;
 }
 else if (x.to) // link to a static page
 {

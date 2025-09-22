@@ -1,11 +1,11 @@
 <!--*
-    Manages the asset usable (deprecated) filter.
+    Manages asset usability (deprecation) filtering criteria.
 
     @property { snippet } each
       Passed each filter value for rendering.
     @property { object } [store]
       Name of the filter store to use.
-    @property { string } [type="options"]
+    @property { string } [type="filter-options"]
       A type for the internal **List** component.
 -->
 

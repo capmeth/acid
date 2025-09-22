@@ -1,9 +1,9 @@
 <!--*
-    Renders the button to clears asset filters for the given `store`.
+    Renders the button to clear asset filtering criteria.
 
     @property { string } [action="clear_filters"]
       Action name for the internal **Button** component.
-    @property { string } [kind]
+    @property { string } [kind="filters-clear"]
       Variant name for the internal **Button** component.
     @property { object } [store]
       Name of the filter store to clear.

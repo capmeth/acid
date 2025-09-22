@@ -12,14 +12,14 @@
       Renders child content.
     @property { boolean } hover
       Is content currently hovered? (`$bindable`).
-    @property { string } [kind]
+    @property { string } [kind="default"]
       Variant classname as `type-{kind}`.
     @property { string } [store]
       If set, `active` state will be remembered in browser storage.
 -->
 
 <button 
-  class="helper-toggle {tc(kind)}" 
+  class="helper-toggle type-{kind}" 
   class:active 
   type="button" 
   onclick={click}
@@ -32,11 +32,11 @@
 
 <script module>
 import { is } from '#utils'
-import { storage, tc } from '#frend/lib'
+import { storage } from '#frend/lib'
 </script>
 
 <script>
-let { active = $bindable(), hover = $bindable(), kind, store, children } = $props();
+let { active = $bindable(), hover = $bindable(), kind = 'default', store, children } = $props();
 // don't use stored value if parent initially sets active state
 if (!is.bool(active) && store) active = storage[store];
 

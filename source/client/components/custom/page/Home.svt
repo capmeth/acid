@@ -1,10 +1,8 @@
 <!--*
 	  Renders UI for the docsite landing page.
 
-    @tags inject:#page-home, custom:page/Home
+    @tags page, inject:#page-home
 
-    @property { object } section
-      Root section entity.
     @property { object } site
       Data from **Docsite** component.
 -->
@@ -16,7 +14,7 @@
     </div>
     <div class="content">
       <Article mcid={section.mcid} />
-      <Assets sects={section.name} type="columns">
+      <Assets sections={section.name} type="columns">
         {#snippet children(asset)}
           <Link kind="annex" to={asset} />
         {/snippet}

@@ -3,7 +3,7 @@
 
     @tags conditional, delegate, uses:main/Tnode
 
-    @property { string } [type='static']
+    @property { string } [type="static"]
       A type for the internal **List** component.
 -->
 

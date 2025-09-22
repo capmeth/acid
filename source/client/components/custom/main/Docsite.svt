@@ -4,16 +4,10 @@
     Prop `children` can be passed a single parameter when rendering, and
     that parameter becomes the `site` prop of the current page component.
 
-    @tags inject:#main-docsite, custom:main/Docsite
+    @tags inject:#main-docsite
 
     @property { snippet } children
-      Docsite content. Any value passed here is provided to page component.
-    @property { string } logo
-      URL of docsite image logo.
-    @property { string } title
-      Docsite title.
-    @property { string } version
-      Version information string.
+      Docsite page content.
 -->
 
 <div class="main-docsite">

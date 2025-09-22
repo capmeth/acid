@@ -8,14 +8,14 @@ export default function (param)
 {
     let { name, to, uid } = is.nonao(param) ? param : { to: param };
 
-    if (uid && !name)
-        return router.toNavLink(ainfo(uid).type, { uid });
-
     if (name === sinfo.root.name)
         return router.toNavLink('home');
     
     if (name)
         return router.toNavLink('section', { name });
+
+    if (uid)
+        return router.toNavLink(ainfo(uid).type, { uid });
 
     return router.toNavLink(to);
 }

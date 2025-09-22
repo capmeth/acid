@@ -54,6 +54,7 @@ export default function (prints, assign)
                 
                 if (is.func(value)) spec.test = value;
                 if (is.plain(value)) spec = { ...value, ...spec };
+                if (is.string(value)) spec = toSpec({ ...at, path: value });
                 
                 return spec;
             }

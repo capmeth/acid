@@ -36,12 +36,17 @@ export default
 
     tagLegend: 
     {
+        "cid": 
+        {
+            desc: 'Component ID is "{info}" for import or replacement',
+            assign: ({ tid, uid, title }) => tid === 'cmp' && `${uid.split('-')[1]}/${title}`
+        },
         "cobe": "Is part of the CoBE component family",
         "conditional": "Does not render output when certain condition(s) fail",
-        "custom": "Is a replaceable component ({info})",
         "delegate": "Passes content snippet to `use` snippet prop",
         "extra-props": "Passes unused props to <{info}>",
         "inject": "Injects {info} CSS from theme files",
+        "page": "Is a page-level component",
         "uses": "Uses replaceable UI component ({info})"
     },
 

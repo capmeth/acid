@@ -104,7 +104,6 @@ export default function(config, loaded, styles)
         pluginInject(
         {
             include: path.join('**', '*.{svelte,svt}'),
-            ctx: path.join(paths.client, 'lib', 'context.js'),
             t: path.join(paths.client, 'lib', 't.js')
         }),
         pluginPostcss({ minimize: true }),

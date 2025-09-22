@@ -4,7 +4,7 @@
     Nothing is rendered if filtering results in an empty asset list.
 
     @property { snippet } children
-      Sort assets alphabetically by title?
+      Passed to **List** component for rendering each asset.
     @property { boolean } sort
       Sort assets alphabetically by title?
     @property { function } type

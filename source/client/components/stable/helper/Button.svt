@@ -9,7 +9,7 @@
       Variant classname as `type-{kind}`.
 -->
 
-<button class="helper-button action_{action} type-{kind}" {...attrs}>
+<button class="helper-button action-{action} type-{kind}" {...attrs}>
   { t(`action_${action}`) }
 </button>
 

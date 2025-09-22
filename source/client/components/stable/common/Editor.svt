@@ -13,15 +13,17 @@
       Allow docsite CSS to leak into the render-box?
     @property { string } [id]
       Id of the code block to render.
+    @property { string } [label]
+      Descriptive label for the block.
     @property { string } [lang]
       Language type of the code block.
 -->
 
 <!--*
     @prop mode
-    @description Rendering mode for CoBE.
+    @description Rendering mode for the code block.
     @type { string }
-    @values "edit", "live", "render", "static"
+    @values "demo", "edit", "live", "render", "static"
 -->
 
 <Editor 
@@ -60,7 +62,9 @@ let contextMode = () =>
 
 let setup = (mode, lang) => 
 {
-    let data = { ...cobe['*'], ...cobe[lang] };
+    let section = context.section && sinfo(context.section);
+
+    let data = { ...cobe['*'], ...section?.cobe?.['*'], ...cobe[lang], ...section?.cobe?.[lang] };
 
     data.lang = lang;
     // when rendering function is available behavior mode can be set

@@ -103,12 +103,13 @@
 
 #-main-tag
 {
+    &.cid { color: white; background: indigo; }
     &.cobe { color: gold; background: black; }
     &.conditional { color: white; background: darkblue; }
-    &.custom { color: white; background: green; }
     &.delegate { color: white; background: saddlebrown; }
     &.extra-props { color: white; background: blueviolet; }
     &.inject { color: white; background: blue; }
+    &.page { color: black; background: orange; }
     &.uses { color: white; background: darkgreen; }
 }
 

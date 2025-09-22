@@ -10,13 +10,13 @@
       Renders collapsible content.
     @property { snippet } [header]
       Renders clickable content (to trigger expand/collapse).
-    @property { string } [kind]
+    @property { string } [kind="default"]
       Variant classname as `type-{kind}`.
     @property { string } [store]
-      Passed to internal **Toggle** component.
+      Passed to internal **Toggle** component as `active-{store}`.
 -->
 
-<div class="helper-active {tc(kind)}" class:active class:hover>
+<div class="helper-active type-{kind}" class:active class:hover>
   {#if header}
     <Toggle bind:active bind:hover kind="switch" {store}>
       {@render header(active)}
@@ -29,13 +29,11 @@
 
 
 <script module>
-import { tc } from '#frend/lib'
-
 import Toggle from './Toggle'
 </script>
 
 <script>
-let { header, kind, store, children } = $props();
+let { header, kind = 'default', store, children } = $props();
 
 if (store) store = `active-${store}`;
 

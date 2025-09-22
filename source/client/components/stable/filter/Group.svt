@@ -1,5 +1,5 @@
 <!--*
-    Manages the asset group filter.
+    Manages asset group filtering criteria.
 
     Selected items are added to filter store as `groups` object.
 

@@ -1,10 +1,10 @@
 <!--*
 	  Renders UI for a component page.
 
-    @tags inject:#page-component, custom:page/Component
+    @tags page, inject:#page-component
 
-    @property { object } asset
-      Component asset on display.
+    @property { string } uid
+      Id of component asset to display.
     @property { object } site
       Data from **Docsite** component.
 -->

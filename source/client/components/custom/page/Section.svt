@@ -1,7 +1,7 @@
 <!--*
 	  Renders UI for a section overview page.
 
-    @tags inject:#page-section, custom:page/Section
+    @tags page, inject:#page-section
 
     @property { string } name
       Name of section to display.
@@ -17,7 +17,7 @@
     </div>
     <div class="content">
       <Article mcid={section.mcid} />
-      <Assets sects={section.name} type="columns">
+      <Assets sections={section.name} type="columns">
         {#snippet children(asset)}
           <Link kind="annex" to={asset} />
         {/snippet}

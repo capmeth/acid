@@ -1,11 +1,11 @@
 <!--*
-    Manages the asset tag filter.
+    Manages asset tag filtering criteria.
 
     @tags uses:main/Tag
 
     @property { object } [store]
       Name of the filter store to use.
-    @property { string } [type="tags"]
+    @property { string } [type="filter-tags"]
       A type for the internal **List** component.
 -->
 

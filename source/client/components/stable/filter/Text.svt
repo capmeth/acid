@@ -1,5 +1,5 @@
 <!--*
-    Filters assets by name, tag, and group.
+    Manages asset name text filtering criteria.
 
     @tags uses:main/Filters, uses:main/Tag
 

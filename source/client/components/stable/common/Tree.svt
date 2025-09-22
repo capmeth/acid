@@ -17,7 +17,7 @@
     @property { string | object } [section]
       The section to be rendered.  Defaults to the configured 
       `rootSection` if not specified.
-    @property { string } [type='tree']
+    @property { string } [type="tree"]
       A styling hints for the internal **List**, **Branch**, and **Leaf** 
       components.
     @property { snippet } [use]

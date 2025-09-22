@@ -7,7 +7,7 @@
 
     @property { array } items
       List of tags to be rendered.
-    @property { string } [type='tags']
+    @property { string } [type="tags"]
       A type for the internal **List** component.
 -->
 

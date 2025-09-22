@@ -1,7 +1,7 @@
 <!--*
     Renders UI for a tag element.
 
-    @tags inject:#main-tag, custom:main/Tag
+    @tags inject:#main-tag
 
     @property { string } name
       Name of the tag.

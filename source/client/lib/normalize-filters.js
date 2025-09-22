@@ -5,15 +5,15 @@ let commaRe = /\s*,\s*/;
 
 export default function (data)
 {
-    let { deprecated, groups, sects, tags, text } = data || {};
+    let { deprecated, groups, sects, sections = sects, tags, text } = data || {};
     
     deprecated = is.nullish(deprecated) ? void 0 : !!deprecated;
     groups = toArray(groups);
-    sects = toArray(sects);
+    sections = toArray(sections);
     tags = toArray(tags);
     text = is.string(text) ? text.toLowerCase() : '';
 
-    return { deprecated, groups, sects, tags, text };
+    return { deprecated, groups, sections, tags, text };
 }
 
 let toArray = value =>

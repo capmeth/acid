@@ -4,7 +4,7 @@
     The class "hljs" is added to the parent element of **Code** to ensure
     the proper background theme is applied.
     
-    @tags cobe, inject:#main-editor, custom:main/Editor
+    @tags cobe, inject:#main-editor
 
     @property { boolean } copied
       Has code been copied to clipboard?

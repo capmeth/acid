@@ -13,9 +13,7 @@ export default
             'authoring',
             'reference', 
             'integrate', 
-            'comps_core', 
-            'comps_shared', 
-            'comps_custom', 
+            'faqs',
             'credits' 
         ]
     },
@@ -28,7 +26,7 @@ export default
 
     authoring:
     {
-        title: 'Content Authoring Notes',
+        title: 'Markdown Documents',
         overview: 'file:/docsite/docs/docsite/authoring.md'
     },
 
@@ -46,7 +44,7 @@ export default
 
     tagging:
     {
-        title: 'Tagging',
+        title: 'Asset Tagging',
         overview: 'file:/docsite/docs/docsite/tagging.md'
     },
 
@@ -56,11 +54,12 @@ export default
         overview: 'file:/docsite/docs/reference/index.md',
         documents:
         [
-            'docsite/docs/reference/js-api.md',
             'docsite/docs/reference/options.md',
-            'docsite/docs/reference/markdown.md',
             'docsite/docs/reference/jsdoc.md',
-            'docsite/docs/reference/acid-cli.md'
+            'docsite/docs/reference/markdown.md',
+            'docsite/docs/reference/acid-cli.md',
+            'docsite/docs/reference/js-api.md',
+            'docsite/docs/reference/component-api.md'
         ]
     },
 
@@ -68,6 +67,12 @@ export default
     {
         title: 'Tech Credit',
         overview: 'file:/docsite/docs/misc/credits.md'
+    },
+
+    faqs:
+    {
+        title: 'FAQs',
+        overview: 'file:/docsite/docs/misc/faqs.md'
     },
 
     integrate:
@@ -78,28 +83,27 @@ export default
         [
             'docsite/docs/integration/parsers.md',
             'docsite/docs/integration/renderers.md',
-            'docsite/docs/integration/components.md',
+        ],
+        sections: 
+        [ 
+            'comps_stable', 
+            'comps_custom'
         ]
-    },
-
-    comps_core:
-    {
-        title: 'Core Components',
-        overview: 'file:/docsite/docs/components/core/index.md',
-        components: 'source/client/components/core/**/*.svt'
     },
 
     comps_custom:
     {
         title: 'Custom Components',
         overview: 'file:/docsite/docs/components/custom/index.md',
+        cobe: { types: 'svelte', mode: 'static' },
         components: 'source/client/components/custom/**/*.svt'
     },
 
-    comps_shared:
+    comps_stable:
     {
-        title: 'Shared Components',
-        overview: 'file:/docsite/docs/components/shared/index.md',
-        components: 'source/client/components/shared/**/*.svt'
+        title: 'Stable Components',
+        overview: 'file:/docsite/docs/components/stable/index.md',
+        cobe: { types: 'svelte', mode: 'static' },
+        components: 'source/client/components/stable/**/*.svt'
     }
 }

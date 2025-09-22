@@ -1,11 +1,12 @@
+import pluginAlias from '@rollup/plugin-alias'
 import pluginNodeResolve from '@rollup/plugin-node-resolve'
-import pluginVirtualFile from '#source/service/builder/plugin/virtual-file.js'
-import pluginYaml from '#source/service/builder/plugin/yaml.js'
+import paths from '#paths'
+import pluginYaml from '../source/service/builder/plugin/yaml.js'
 
 
 export default 
 { 
-    input: { 'site-bundle': './index.js' },
+    input: { 'site-bundle': './docsite/entry.js' },
 
     output: 
     { 
@@ -15,12 +16,12 @@ export default
     
     plugins:
     [
-        pluginVirtualFile(
+        pluginAlias(
         {
-            './index.js': 
-            `
-                export { default as labels } from '#source/config/labels.yaml'
-            `
+            entries:
+            {
+                '#config': paths.config
+            }
         }),
         pluginNodeResolve({ extensions: [ '.js', '.yaml' ], browser: true }),
         pluginYaml()

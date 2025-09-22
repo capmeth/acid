@@ -8,7 +8,7 @@
     - `component` for component descriptions
     - `prop` for component prop descriptions
 
-    @tags inject:#main-markup, custom:main/Markup
+    @tags inject:#main-markup
 
     @property { snippet } children
       HTML content.
@@ -19,7 +19,7 @@
     @property { string } id
       HTML id for root element.
     @property { string } [type="default"]
-      Styling hint for the markup being rendered.
+      The type of markup being rendered.
 -->
 
 <svelte:element this={el} {id} class="main-markup type-{type}">

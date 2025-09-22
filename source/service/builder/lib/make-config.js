@@ -37,5 +37,8 @@ export default function(config, sections, assets)
 
     lines.push(`export let cobe = await mapExtensions(${jss(cobe)})`);
 
+    lines.push(`let mapFn = async k => sections[k].cobe &&= await mapExtensions(sections[k].cobe)`);
+    lines.push(`await Promise.all(Object.keys(sections).map(mapFn));`);
+
     return lines.join('\n');
 }

@@ -13,7 +13,7 @@ let assetSort = proxet({}, prop => (a, b) => (a = ainfo(a)[prop], b = ainfo(b)[p
 
 let makeFilter = data => 
 {
-    let { deprecated, groups, sects, tags, text } = nofi(data);
+    let { deprecated, groups, sections, tags, text } = nofi(data);
     
     return id =>
     {
@@ -23,7 +23,7 @@ let makeFilter = data =>
         // asset must be of one of selected types
         if (groups.length && groups.findIndex(grp => asset.group === grp) < 0) return false;
         // asset must be in one of selected sections
-        if (sects.length && sects.findIndex(sect => asset.section === sect) < 0) return false;
+        if (sections.length && sections.findIndex(sect => asset.section === sect) < 0) return false;
         // asset must include all of the selected tags
         if (tags.length && tags.findIndex(tag => !asset.hasTag(tag)) >= 0) return false;
         // asset must match deprecated selection
@@ -35,11 +35,11 @@ let makeFilter = data =>
 
 let getAsset = cacher(uid =>
 {
-    let { section, ...asset } = assets[uid];
+    let { section, tid, ...asset } = assets[uid];
 
     let iface = proxet({ uid, section }, prop => 
     {
-        if (prop === 'group') return assetTypes[asset.tid].plural;
+        if (prop === 'group') return assetTypes[tid].plural;
         if (prop === 'hasTag') return name => iface.tagNames.includes(name)
         if (prop === 'tags') return asset.tags || [];
         if (prop === 'tagNames') 
@@ -53,7 +53,7 @@ let getAsset = cacher(uid =>
             return iface.tags.reduce(reducer, []);
         }
         if (prop === 'tocDepth') return asset.tocDepth ?? tocDepth;
-        if (prop === 'type') return assetTypes[asset.tid].singular;
+        if (prop === 'type') return assetTypes[tid].singular;
 
         return asset[prop];
     });

@@ -8,7 +8,7 @@
     @property { snippet } [children]
       Content to render for branch.
     @property { string } group
-      Either "sections" or an asset group name.
+      Either "assets", "sections", or an asset group name.
     @property { object } section
       Section for this branch.
 -->
