@@ -1,7 +1,7 @@
 <!--*
 	  Renders UI for the docsite landing page.
 
-    @tags page, inject:#page-home
+    @tags inject:#page-home
 
     @property { object } site
       Data from **Docsite** component.

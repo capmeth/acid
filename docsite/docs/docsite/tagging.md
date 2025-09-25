@@ -18,7 +18,12 @@ A tag has the form `name:info` where
 - `name` is a lowercase, alphanumeric, and possibly hyphenated value, and
 - `info` is any non-whitespace character except a comma.
 
-Incorrectly formed tags will be omitted from the documentation.  You should define tags in the `tagLegend` setting of *acid.config.js* to make them functional in the docsite.
+Incorrectly formed tags will be omitted from the documentation.  
+
+
+## Tag Definitions
+
+Define tags in the `tagLegend` setting of *acid.config.js* to make them functional in the docsite.
 
 A tag definition is simply a description of the tag:
 
@@ -33,6 +38,21 @@ tagLegend:
 Use `{info}` in the description to insert tag `info` when displayed in the docsite (as applicable).
 
 Tag descriptions are neither HTML nor markdown enabled.  They display as-is in the browser.
+
+For tags that need to be assigned automatically, you can define an `assign` function in the tag definition that will determine if the tag should be assigned.
+
+```js
+tagLegend:
+{
+    form: 
+    { 
+        desc: 'This component can be used as a form control.',
+        assign: asset => asset.path.indexOf('components/form/') >= 0
+    }
+}
+```
+
+The function must return `true` or a non-empty string for the tag to be added to the asset.  A returned string becomes the *info* portion of the tag. 
 
 
 ## Tag Styling

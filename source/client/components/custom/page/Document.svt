@@ -1,7 +1,7 @@
 <!--*
 	  Renders UI for a document page.
 
-    @tags page, inject:#page-document
+    @tags inject:#page-document
 
     @property { string } uid
       Id of document asset to display.

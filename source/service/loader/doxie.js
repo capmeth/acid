@@ -1,7 +1,6 @@
 import { AcidValidateError } from '#source/errors.js'
 import { confine, is } from '#utils'
 import { component } from './definitions.js'
-import { tdComment } from './takedown.js'
 
 
 /*
@@ -9,8 +8,10 @@ import { tdComment } from './takedown.js'
 
     @param { string } id
       Identifier for validation error reporting.
+    @param { string } tdComment
+      Markdown parser for comments.
 */
-export default function (id)
+export default function (id, tdComment)
 {
     let data = confine(component, (apply, value, at) => 
     {

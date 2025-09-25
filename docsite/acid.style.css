@@ -103,14 +103,12 @@
 
 #-main-tag
 {
-    &.cid { color: white; background: indigo; }
+    &.cid { color: white; background: var(--acid-color-logo); }
     &.cobe { color: gold; background: black; }
     &.conditional { color: white; background: darkblue; }
-    &.delegate { color: white; background: saddlebrown; }
     &.extra-props { color: white; background: blueviolet; }
     &.inject { color: white; background: blue; }
-    &.page { color: black; background: orange; }
-    &.uses { color: white; background: darkgreen; }
+    &.uses { color: white; background: indigo; }
 }
 
 #-page-catalog,

@@ -1,5 +1,6 @@
 import { AcidROOperationError, AcidValidateError } from '#source/errors.js'
 import is from '../is.js'
+import of from '../of.js'
 import helpers from './helpers.js'
 
 
@@ -38,13 +39,25 @@ export default function (prints, assign)
     */
     let proxer = (object, at) =>
     {
-        let id = (path, name = path) => 
+        let id = (path, name, value) => 
         {
-            if (!at) return { name, path };
-            return { name: `${at.name}.${name}`, path: `${at.path}.${path}` };
+            if (at)
+            {
+                name = `${at.name}.${name}`;
+                path = `${at.path}.${path}`;
+            }
+
+            if (!is.undef(value))
+            {
+                // new path based on specific type of value
+                let testpath = `${path}<${of(value)}>`;
+                if (prints[testpath]) path = testpath;
+            }            
+
+            return { name, path };
         }
 
-        let propSpec = (target, prop) =>
+        let propSpec = (target, prop, value) =>
         {
             let toSpec = at => 
             {
@@ -59,8 +72,8 @@ export default function (prints, assign)
                 return spec;
             }
 
-            let at = id(prop);
-            return prints[at.path] ? toSpec(at) : toSpec(id('*', prop));
+            let at = id(prop, prop, value);
+            return prints[at.path] ? toSpec(at) : toSpec(id('*', prop, value));
         }
 
         let useDefault = spec => is.undef(spec.default) ? void 0 : verify(spec, spec.default)
@@ -69,7 +82,7 @@ export default function (prints, assign)
         {
             let reducer = (array, value, index) =>
             {
-                let spec = propSpec(target, start + index);
+                let spec = propSpec(target, start + index, value);
                 let apply = value => array.push(verify(spec, value));
 
                 assign(apply, value, spec.at);
@@ -117,7 +130,7 @@ export default function (prints, assign)
 
             set(target, prop, value)
             {
-                let spec = propSpec(target, prop);
+                let spec = propSpec(target, prop, value);
                 let apply = value => target[prop] = verify(spec, value);
 
                 assign(apply, value, spec.at);
@@ -134,15 +147,18 @@ export default function (prints, assign)
 
         let final = value = is.func(result) ? result() : value;
 
-        if (is.plain(value))
-        {                    
-            final = (merge && target[prop]) || proxer({}, at);
-            Object.keys(value).forEach(k => final[k] = value[k]);
-        }                
-        else if (is.array(value))
+        if (prints[at.path])
         {
-            final = (merge && target[prop]) || proxer([], at);
-            final.push(...value);
+            if (is.plain(value))
+            {                    
+                final = (merge && target[prop]) || proxer({}, at);
+                Object.keys(value).forEach(k => final[k] = value[k]);
+            }                
+            else if (is.array(value))
+            {
+                final = (merge && target[prop]) || proxer([], at);
+                final.push(...value);
+            }
         }
 
         return final;

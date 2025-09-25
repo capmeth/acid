@@ -48,9 +48,9 @@ And then build and serve the site
 acid -s
 ```
 
-Remember to use the `-c` parameter in the command above if you placed your config file elsewhere.
+With no changes, the results will be about the same as not using a config file at all.
 
-This gets you about the same results as not using a config file if you didn't make any changes to it.
+Remember to specify file location with the `-c` parameter in the command above if you placed your config file elsewhere.
 
 - See the [CLI docs](document/configuration-acid-cli) for more details on command-line functionality.
 - See the [config options docs](document/configuration-options) for config file options and their defaults.

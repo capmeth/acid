@@ -6,7 +6,7 @@
     An individual prop will be skipped if it is nullish or has a truthy 
     `ignore` value.
 
-    @tags conditional, delegate, extra-props:List, uses:main/Prop
+    @tags conditional, extra-props:List, uses:main/Prop
 
     @property { array } items
       List of props to be rendered.

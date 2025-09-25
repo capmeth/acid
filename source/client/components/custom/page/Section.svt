@@ -1,7 +1,7 @@
 <!--*
 	  Renders UI for a section overview page.
 
-    @tags page, inject:#page-section
+    @tags inject:#page-section
 
     @property { string } name
       Name of section to display.

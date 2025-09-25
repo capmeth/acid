@@ -129,7 +129,7 @@ Set `noHighlight` to `true` to turn off code highlighting.  This has no effect i
 
 ## components
 
-Replace internal presentational components.
+Replace internal docsite components.
 
 ```js label="default value"
 components: {}
@@ -163,7 +163,7 @@ The docsite build can resolve *.svelte* and *.svt* extensions automatically, so 
 
 Setting a value to `null` or an empty string has the same effect as omitting it - the default internal component will be used.
 
-Visit [Custom Components](section/comps_custom) page for more details on how this works.
+Visit [Customizing Components](document/integration-components) for more details on how this works.
 
 
 ## copy
@@ -408,6 +408,21 @@ namespace: string
 The string can contain only letters, numbers, dashes, and underscores.
 
 
+## noticeTimeout
+
+Milliseconds in which to wait before dismissing a notification.
+
+```js label="default value"
+noticeTimeout: 2000
+```
+
+```js label="spec"
+noticeTimeout: number
+```
+
+Currently, this only affects *copy-to-clipboard* notices.
+
+
 ## output
 
 Details where generated artifacts will be placed.
@@ -479,9 +494,31 @@ Specify file extensions (".js", ".jsx", ".svelte", etc.) in `types`.
 A "fallback" record can be set by using `types: '*'`. The fallback is otherwise always set to the built-in JsDoc parser.
 
 
+## refLinks
+
+Global link reference definitions for markdown content.
+
+```js label="default value"
+refs: []
+```
+
+```js label="spec"
+refs: string | object | [ ... string | object ]
+```
+
+A string is assumed to be markdown content, or a path to a markdown file when prefixed with `file:/`.  The markdown is parsed only for its link reference definitions, and the rest of the document is discarded.
+
+In object form, each entry is a separate definition.
+
+The array form allows for specifying multiple strings and/or objects as defined above.  They are processed in the order given, with latter definitions overriding previous ones.
+
+These link reference definitions are made available to **all** of the markdown content parsed into the docsite by passing the resulting entries here to [Takedown]'s `refs` config option.  Please review the documentation there to understand how to properly construct these definitions in both object and markdown forms.
+
+
+
 ## root
 
-Root path for the project containing the files to be documented.
+Absolute path to the project targeted for documentation.
 
 ```js label="default value"
 root: process.cwd()
@@ -492,7 +529,7 @@ root: string
 ```
 
 This is the base path for 
-- relative file paths specified in config (`sections`, `watch`, etc.)
+- relative file or glob paths specified in config (`sections`, `watch`, etc.)
 - relative `@example` file paths in JsDoc comments
 
 
@@ -582,7 +619,11 @@ sections:
         /*
             Names of sections that will be children of this section (sub-sections).
         */
-        sections: [ ... string ]
+        sections: [ ... string ],
+        /*
+            Code block render settings for this section and its descendants.
+        */
+        cobe: /* same settings as `cobe` option */
     },
 
     // add as many sections as needed...
@@ -596,7 +637,7 @@ Specifying a string for `[name]` is the same as specifying the object form with 
 
 Note that `overview` can alternatively be a path to a markdown file.  Simply prefix the path with `file:/`.
 
-See [this page](section/structure) for more details on how this works.
+See [Site Structure](section/structure) for more details on how all this works.
 
 
 ## server
@@ -728,6 +769,10 @@ tagLegend: // merges
     [tagname]: string |
     {
         /*
+            Assigns the tag to the asset automatically.
+        */
+        assign: function | null
+        /*
             Description for the tag.
         */
         desc: string
@@ -736,9 +781,11 @@ tagLegend: // merges
 }
 ```
 
-`tagname` should be lowercase alphanumeric (incl. dashes).  A string value is the tag description.
+Setting `[tagname]` to a string is the same as setting `[tagname].desc`, and `[tagname]` itself must be a lowercase alphanumeric (incl. dashes) value.
 
-Any tag attached to an asset that is not defined here will not be available as a filter in the docsite.
+The `assign` function will receive a data object for each asset parsed.  It must return `true` or a non-empty string for the tag to be added to the asset.
+
+Any tag attached to an asset that is not defined here will not be functional in the docsite.
 
 
 ## title

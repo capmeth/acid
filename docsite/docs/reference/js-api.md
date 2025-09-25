@@ -1,5 +1,6 @@
 ---
 title: Javascript API
+obeMode: static
 ---
 
 

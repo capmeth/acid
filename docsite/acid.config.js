@@ -42,11 +42,9 @@ export default
             assign: ({ tid, uid, title }) => tid === 'cmp' && `${uid.split('-')[1]}/${title}`
         },
         "cobe": "Is part of the CoBE component family",
-        "conditional": "Does not render output when certain condition(s) fail",
-        "delegate": "Passes content snippet to `use` snippet prop",
+        "conditional": "Renders nothing when certain condition(s) fail",
         "extra-props": "Passes unused props to <{info}>",
         "inject": "Injects {info} CSS from theme files",
-        "page": "Is a page-level component",
         "uses": "Uses replaceable UI component ({info})"
     },
 
@@ -57,6 +55,8 @@ export default
     { 
         "#bundle": "./site-bundle.js"
     },
+
+    refLinks: 'file:/docsite/acid.refs.md',
 
     server: { port: 3005 },
     socket: { port: 3009 },

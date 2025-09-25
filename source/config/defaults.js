@@ -149,6 +149,13 @@ config.output =
 config.parsers = [];
 
 /** 
+    Global link references for markdown content.
+
+    @type { array }
+*/
+config.refLinks = [];
+
+/** 
     Root path for the project.
 
     @type { string }

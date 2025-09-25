@@ -6,7 +6,7 @@
     Each element of `items` that passes `filter` is passed to `children`, 
     optionally being first processed by the function `pred`.
 
-    @tags conditional, delegate, uses:main/List, extra-props:main/List
+    @tags conditional, uses:main/List, extra-props:main/List
 
     @property { function } [filter]
       Filters `items` for inclusion (falsey return value excludes item).

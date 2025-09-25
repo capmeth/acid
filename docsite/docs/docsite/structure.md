@@ -1,7 +1,7 @@
 
 # Sections
 
-The config option `sections` defines the navigtional hierarchy of the site as well as the assets to be included in the site.
+The config option `sections` defines the navigtional hierarchy of the site.  It is also where all of the files that will become part of the documentation are specified.  Each section must have a unique name.
 
 ```js
 sections:
@@ -37,7 +37,7 @@ The `rootSection` config setting is used to define the top-level section.
 rootSection: 'root'
 ```
 
-The docsite will be empty without `rootSection`, as a hierarchical tree is built by starting there and working down through `sections.*.sections` until each one has a "parent" reference. Any defined sections that ultimately do not descend from `rootSection` will be excluded from the docsite.
+The docsite will be empty without `rootSection`, as a hierarchical tree is built by starting there and working down through `sections.*.sections` until each one has a "parent" reference. Any sections that do not ultimately descend from `rootSection` will be excluded from the docsite.
 
 
 # Section Properties
@@ -126,7 +126,7 @@ The above case of course means that no additional configuration for the section 
 
 ## sections
 
-Specify the names of the sub-sections for the section.
+Specifies the names of the sub-sections for the section.
 
 ```js
 sections: [ 'introduction', 'action_components', 'layout_components' ]
@@ -143,4 +143,4 @@ The display name for the section.
 
 If this is not present, the `title` attribute from the `overview` file's front-matter will be used.
 
-If `overview` is not present or is not a file, or has no front-matter, or there is no `title` to be found therein, the name of the section itself is used as the display title.
+If `overview` is not present or is not a file, or has no front-matter or there is no `title` to be found therein, the name of the section itself is used as the display title.

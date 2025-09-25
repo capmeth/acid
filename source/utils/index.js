@@ -9,6 +9,7 @@
     External dependencies are ok.
 */
 export { default as aiter } from './aiter.js'
+export { default as attrsToObject } from './attrs-to-object.js'
 export { default as cacher } from './cacher.js'
 export { default as confine } from './confine/index.js'
 export { default as ctja } from './css-to-json-array.js'
@@ -21,6 +22,8 @@ export { default as is } from './is.js'
 export { default as jsToCss } from './js-to-css.js'
 export { default as mapExtensions } from './map-extensions.js'
 export { default as modulize } from './modulize.js'
+export { default as objectToAttrs } from './object-to-attrs.js'
+export { default as of } from './of.js'
 export { default as proxet } from './proxet.js'
 export { default as remowned } from './remowned.js'
 export { default as rescape } from './rescape.js'

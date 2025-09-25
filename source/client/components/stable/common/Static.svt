@@ -1,7 +1,7 @@
 <!--*
     Renders static site links.
 
-    @tags conditional, delegate, uses:main/Tnode
+    @tags conditional, uses:main/Tnode
 
     @property { string } [type="static"]
       A type for the internal **List** component.

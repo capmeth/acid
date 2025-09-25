@@ -1,7 +1,7 @@
 <!--*
     Renders UI for the asset lookup/filtering page.
 
-    @tags page, inject:#page-catalog
+    @tags inject:#page-catalog
 
     @property { object } site
       Data from **Docsite** component.

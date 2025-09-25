@@ -15,12 +15,11 @@ Some features of ACID include:
   Language specific **syntax highlighting** for markdown code blocks.
 - ******Framework Agnostic!******  
   Document components built on **any framework** (with extensions).
-- ******Component Filtering!******  
-  **Quickly find documentation** in your library using tag and name filters.
 - ******Hot-Reload in Development!******  
   Edit document/source files and **see live updates** in the docsite.
-- ******Theming and Styling!******  
-  **Full CSS control** for modifying or rewriting docsite themes.
+- ******Fully Customizable!******  
+  Tailor your docsite by **editing the CSS** or **replacing internal components**.
 
 **ACID** is a hobby project inspired by [react-styleguidist](https://www.npmjs.com/package/react-styleguidist).
 
+For issues, questions, suggestions, etc... please leave a post on the [Github Issues](https://github.com/capmeth/acid/issues) page.

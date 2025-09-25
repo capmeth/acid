@@ -33,14 +33,14 @@ export default function(config)
             
             if (existsSync(abspath))
             {
-                return async ({ parsers }) =>
+                return async ({ parsers, td }) =>
                 {
                     let ext = np.extname(abspath);
                     let parser = { ...parsers['*'], ...parsers[ext] };
 
                     if (parser.use)
                     {
-                        let data = doxie(path);
+                        let data = doxie(path, td.comment);
                         await parser.use(abspath, data, docson);
 
                         Object.assign(record, data);

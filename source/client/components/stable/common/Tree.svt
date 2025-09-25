@@ -5,7 +5,7 @@
     `group` specified. Descendant sections will also be omitted for not having 
     the same.
 
-    @tags conditional, delegate, uses:main/Branch, uses:main/Leaf
+    @tags conditional, uses:main/Branch, uses:main/Leaf
 
     @property { object } active
       Tracks expand/collapse branch state (`$bindable`).

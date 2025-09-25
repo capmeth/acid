@@ -1,5 +1,5 @@
 
-ACID uses the [Takedown](https://www.npmjs.com/package/takedown) parser for converting markdown documents into HTML.  
+ACID uses the [Takedown] parser for converting markdown documents into HTML.
 
 Most HTML generation is left standard, but ACID does manipulate the output on some elements to achieve its feature set.
 
@@ -10,10 +10,12 @@ Most HTML generation is left standard, but ACID does manipulate the output on so
   These blocks are replaced with [**Editor**](component/cobe-editor) components for code highlighting and editing.
 
 - **HTML ids are added to header elements**  
-  This is used for rendering a table of contents.
+  For ATX (`#` prefixed) style headers only, this is used for rendering a table of contents.
 
 - **Docsite hyperlinks are adjusted**  
   Relative hyperlinks for docsite routes are adjusted for easier page linking from within a document.
+
+Here's a [quick reference](https://commonmark.org/help/) page and a [tutorial](https://commonmark.org/help/tutorial/) to help you learn how to use markdown.
 
 
 # Internal Hyperlinking
@@ -38,4 +40,4 @@ Relative links that the docsite understands include:
 - `document/[id]`: where `[id]` is the asset id of a document
 - the name of any other non-parameterized route in the docsite
 
-Asset ID generation is controlled by the `toAssetId` config option.
+Asset ID generation is controlled by the `config.toAssetId` option.

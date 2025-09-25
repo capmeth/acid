@@ -58,7 +58,7 @@ export default function(config)
         {
             return ({ td }) =>
             {
-                let fm = td.parseMeta(markdown);
+                let fm = td.content.parseMeta(markdown);
 
                 if (fm)
                 {
@@ -131,7 +131,7 @@ export default function(config)
                 record.mcid = pascalCase(`Article_${uid}`);
 
                 let file = np.join(paths.components, 'articles', `${record.mcid}.svt`);
-                let html = td.parse(markdown, { vars: { uid } }).doc;
+                let html = td.content.parse(markdown, { vars: { uid } }).doc;
 
                 files[file] = html;
 

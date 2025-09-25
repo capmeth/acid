@@ -1,7 +1,7 @@
 <!--*
 	  Renders UI for a component page.
 
-    @tags page, inject:#page-component
+    @tags inject:#page-component
 
     @property { string } uid
       Id of component asset to display.

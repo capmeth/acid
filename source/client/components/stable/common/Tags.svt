@@ -3,7 +3,7 @@
 
     Nothing is rendered if `items` is nullish or empty.
 
-    @tags conditional, delegate, extra-props:List, uses:main/Tag
+    @tags conditional, extra-props:List, uses:main/Tag
 
     @property { array } items
       List of tags to be rendered.
