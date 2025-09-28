@@ -4,7 +4,7 @@ import proxet from '../proxet.js'
 
 let help = (name, value) =>
 {
-    return proxet({ name, value }, attr => 
+    let helper = proxet({ name, value }, attr => 
     {
         switch (attr)
         {
@@ -21,26 +21,36 @@ let help = (name, value) =>
             case 'lt': return val => value < val
             case 'lte': return val => value <= val
 
-            // normalization helpers
+            // normalizer
             case 'to':
-                return func => () => func(value, name)
-            case 'toArray': 
-                return more => () => is(value) ? is.array(value) ? value : [ value, ...(more || []) ] : []
-            case 'toPlain': 
-                return (key, more) => () => is(value) ? is.plain(value) ? value : { [key]: value, ...more } : {}
-            case 'toObject': 
-                return (key, more) => () => is(value) ? is.object(value) ? value : { [key]: value, ...more } : {}
+                let to = use => () => is(value) ? is.func(use) ? use(former) : use : void 0
+                to.array = (...more) => to(is.array(value) ? value : [ value, ...more ])
+                to.plain = (key, more) => to(is.plain(value) ? value : { [key]: value, ...more })
+                return to;
             
-            // new helper with modified value 
-            case 'mod':
-                return fn => help(name, fn())
-
             // error message helper
             case 'err': return msg => `${name} ${msg}.`
         }
-        
+
         return is[attr](value);
     });
+
+    let unsup = [ 'to', 'err' ];
+
+    let former = proxet({ name, value }, attr => 
+    {
+        if (!unsup.includes(attr))
+        {
+            let oper = helper[attr];
+
+            if (is.func(oper))
+                return (...args) => form => oper(...args) ? form : void 0
+            else
+                return form => oper ? form : void 0
+        }
+    });
+
+    return helper;
 }
 
 export default help

@@ -31,7 +31,7 @@ logger.default = null;
 
     @type { object }
 */
-logger.level = 'fail';
+logger.level = 'warn';
 
 /**
     Fail level logger.

@@ -5,6 +5,8 @@ import is from './is.js'
 /**
     Converts an object into an HTML attribute string.
 
+    If `object` is not empty, the returned string is space-prepended.
+
     @param { object } object
       Data to be converted. 
     @return { string }
@@ -19,8 +21,8 @@ export default function (object)
         if (is.bool(value)) 
             return value ? `${string} ${kebabCase(key)}` : string;
 
-        if (is(value))
-            return `${string} ${kebabCase(key)}=${JSON.stringify(value)}`;
+        if (is(value) && (value = JSON.stringify(value)))
+            return `${string} ${kebabCase(key)}=${value}`;
 
         return string;
     }

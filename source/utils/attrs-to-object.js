@@ -5,6 +5,8 @@ import is from './is.js'
 let attrsRe = 
     /(?<k>[a-z_:][a-z0-9_.:-]*)(?:=(?:(?<v>[^\s"'<=>`]+)|"(?<v>(?:(?!\\").)*?)"|'(?<v>(?:(?!\\').)*?)'))?(?=\s|$)/gi;
 
+let numRe = /^-?\d*\.?\d+$/;
+
 /**
     Converts an attribute string into an object.
 
@@ -24,7 +26,7 @@ export default function (string)
         while (result = attrsRe.exec(string))
         {
             let { k: name, v: value } = result.groups;
-            attrs[camelCase(name)] = is(value) ? value : true;
+            attrs[camelCase(name)] = numRe.test(value) ? parseFloat(value) : value ?? true;
         }
     }
 
