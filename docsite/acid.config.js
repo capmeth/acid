@@ -29,7 +29,7 @@ export default
 
     labels: 
     { 
-        label_content: 'Documentation'
+        label_content: 'Docsite'
     },
 
     sections,

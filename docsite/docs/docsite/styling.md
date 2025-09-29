@@ -2,18 +2,19 @@
 cobeMode: static
 ---
 
+
 # Styling the Docsite
 
-Here we'll take an extensive look at the `style` configuration option, which defines all the styling for a docsite.
+Here we'll take an extensive look at the `config.style` option, which defines all the styling for a docsite.
 
 
 ## CSS Injection
 
 Let's first discuss how CSS gets applied to the site.
 
-ACID uses Svelte components under the hood, and by default most of the CSS is scoped to these components.  But this CSS does not actually live in the component source files. It lives in one or more "theme files" which get chopped up and the CSS divvied out to the components in the build process.  A theme file can have both component scoped and global CSS for a docsite.
+ACID uses Svelte components under the hood, and by default most of the CSS is scoped to these components.  But this CSS does not actually live in the component source files. It lives in one or more "theme files" which get chopped up and divvied out to the components in the build process.  A theme file can have both component scoped and global CSS for a docsite.
 
-Although everything in a theme file is technically valid CSS, the initial processing of it is slightly different.
+Although everything in a theme file is technically valid CSS, the top-level processing of it is slightly different.
 
 Top-level ID-only selectors are used to define CSS that will be injected directly into components.  Anything that is not a valid top-level ID-only selector is treated as normal, global CSS.
 
@@ -111,24 +112,20 @@ a:hover
 }
 ```
 
-Components that support injectable style will sport the *inject* tag in their documentation.
+Internal components that support injectable style will sport the *inject* tag in their documentation.
 
-> Injectables are also available in user-defined [custom components](section/comps_custom).
+Care must be taken to ensure that the CSS being injected is valid at the position of the comment.  Note that the comment is not removed if it does not map to an existing injectable.  After injection, the CSS becomes part of the component and is then of course subject to Svelte's CSS processing rules.
 
-Care must be taken to ensure that the CSS being injected is valid at the position of the comment.  Note that the comment is not removed if it does not map to an existing injectable.  After injection, the CSS becomes part of the component and is then of course subject to Svelte's component CSS processing rules.
-
-> As you may have noted, it will not be possible to style against an ID-only selector at the global level.  To get around this, you can extend the selector (e.g. `* #html-id`) or put the ruleset inside the `:root` definition.  This will prevent it from being set aside as an injectable.
+> As you may have noted, it will not be possible to style against an ID-only selector at the top level.  If you need to get around this, you can extend the selector (e.g. `* #html-id`) or put the ruleset inside `:root` or another non-ID-only definition.  This will prevent it from being set aside as an injectable.
 
 
-## The `style` option
+## The `style` Option
 
-With the details above out of the way, we can now get into how the `style` config option works.
-
-In its simplest form, `style` can specify a built-in theme.
+In its simplest form, `config.style` can specify a built-in theme.
 
 ```js
 // prefix builtins with a `#`
-style: '#grayscape'
+style: '#acidic'
 ```
 
 Or, it can specify a stylesheet file.
@@ -150,10 +147,10 @@ style: 'body { background: blue; color: yellow; }'
 To specify multiple stylesheets, use an array.
 
 ```js
-style: [ '#grayscape', 'file:/path/to/my/stylesheet.css' ]
+style: [ '#acidic', 'file:/path/to/my/stylesheet.css' ]
 ```
 
-Multiple sheets are processed from left to right, with later sheets deeply merging their top-level selectors/injectables atop previous ones.  Once a singular stylesheet has been constructed it is then applied to components as described above.
+Multiple items are processed from left to right, with later ones deeply merging their top-level selectors/injectables atop previous ones.  Once a singular stylesheet has been constructed it is then applied to components as described above.
 
 
 ## Protecting CoBE
@@ -188,4 +185,4 @@ Second, globally-scoped rulesets with CSS declarations must have a `:not(.renbox
 
 ACID will automatially append the pseudo-class to global level rulesets aa well as any rulesets appearing within a `:global` marker in component scope at build time.  However, there may be cases where you will need to add the pseudo-class manually ff you see docsite CSS selecting elements inside the render-boxes.
 
-> Note that because of the way CSS `:not` works, the pseudo-class **must** be appended to selectors that directly define styling declarations.  This trick **will not** work to block child ruleset declarations if appended to a parent selector.
+> Note that because of the way CSS `:not` works, the pseudo-class **must** be appended to selectors that directly define styling declarations.  This trick **will not** work to block child ruleset declarations when appended to a parent selector.

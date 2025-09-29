@@ -4,7 +4,7 @@ cobeMode: static
 ---
 
 
-Replacement components are compiled with Svelte in *runes* mode, and all of the typical Svelte functionality and imports are available.  Here we'll cover additional APIs made available via the build process to aid in authoring these components.
+Here we'll cover additional APIs made available via the docsite build process to aid in authoring custom components.
 
 
 # Imports
@@ -101,7 +101,7 @@ let filterFn = ainfo.filter(critera);
 let filteredAssets = ainfo.assets.filter(filterFn);
 ```
 
-Remember that `filteredAssets` will be a list of asset IDs, not asset objects.
+Remember that `filteredAssets` will be a list of UIDs, not asset objects.
 
 
 ## `page`
@@ -215,27 +215,23 @@ As ordered below, `param` will generate a link to
 
 # Components
 
-Replaceable components are available via the module specifier prefix `#custom`.  All other internal components are available via the prefix `#stable`. Import subpaths for the components can be found in the *cid* ("component ID") tag on their docpages.
+Replaceable components are available via the module specifier prefix `#custom`, while all other internal components are available via the prefix `#stable`.
 
 The following example imports the Button and Markup components.
 
 ```svelte
 <script module>
-import Button from '#shared/helper/Button'
+import Button from '#stable/helper/Button'
 import Markup from '#custom/main/Markup'
 </script>
 ```
 
-See the [Stable](section/comps_stable) and [Custom](section/comps_custom) component sections for all the available components with their individual documentation.
-
-Be sure to take note of the props defined for the default versions of custom components that you are replacing.  Generally, stable components make use of them and these props represent the expected interface for the component.
-
-All of the `#custom` (and some of the `#stable`) components support CSS injection (see the [Styling](section/styling) page).  Look to the `inject` asset tag for details on the ID used to inject CSS into a given cmoponent.
+Import subpaths for components can be found in the *cid* (Component ID) tag on their docpages.
 
 
 # Data Objects
 
-There are a couple of additional object types that you should know about.
+Additional object types used within the docsite.
 
 
 ## asset
@@ -269,17 +265,96 @@ A proxy object that represents a docsite asset.  The `ainfo()` factory can produ
     */
     tags: [ ... string ],
     /*
-        Maximum ToC header depth level for markdown content of this asset.
-    */
-    tocDepth: number,
-    /*
         Singular form of this asset's type (e.g. component, document).
     */
     type: string,
 }
 ```
 
-TODO: There are additional fields available that depend on the asset type.
+Additional fields are available based on asset type.
+
+
+### component asset
+
+A component asset can additionally have the following:
+
+```js
+{
+    /*
+        Deprecation indicator and optional explanation.
+    */
+    deprecated: true | string,
+    /*
+        A description of this component.
+    */
+    description: string,
+    /*
+        Property definitions for this component.
+    */
+    props: [ ... object ]
+}
+```
+
+Note that components with `@ignore` JsDoc tags are filtered out of the build entirely.
+
+A component prop object (in `props`) may have:
+
+```js
+{
+    /*
+        Deprecation indicator and optional explanation.
+    */
+    deprecated: true | string,
+    /*
+        A description of this property.
+    */
+    description: string,
+    /*
+        Default value for this property.
+    */
+    fallback: any,
+    /*
+        Should this property be ignored?
+    */
+    ignore: true | false,
+    /*
+        Name of this property.
+    */
+    name: true | string,
+    /*
+        Is this property required to be specified for the component?
+    */
+    required: true | false,
+    /*
+        Data type of this property.
+    */
+    type: string,
+    /*
+        Enumerated (accepted) values for this property.
+    */
+    values: [ ... any ]  
+}
+```
+
+Properties with `@ignore` JsDoc tags are filtered out automatically by the **Props** component.
+
+
+### document asset
+
+A document asset can additionally have the following:
+
+```js
+{
+    /*
+        Default edit mode for fenced code blocks in this document.
+    */
+    cobeMode: string,
+    /*
+        Maximum table-of-contents header depth level for this document.
+    */
+    tocDepth: number
+}
+```
 
 
 ## section
@@ -362,7 +437,11 @@ APIs in this section are available without explicit import as they are automatic
 
 ## t
 
-Label translation function, `t(label: string, vars: object): string`.
+Label translation function.
+
+```js
+t(label: string, vars: object): string
+```
 
 The function returns the label identified in `config.labels`, interpolating `vars` into the text as needed.
 

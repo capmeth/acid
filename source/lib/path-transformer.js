@@ -1,17 +1,18 @@
 import path from 'node:path'
-import { inter, is, uid } from '#utils'
+import { inter, is, proxet, uid } from '#utils'
 
 
 /**
     Returns a function that takes a filepath and transforms based on a 
     specification.
 
-    if `spec` is a function, it is simply returned.
+    if `spec` is a function it will be wrapped in a function that will pass it
+    the filepath and the `path.parse()` function.
 
-    if `spec` is a string, an interpolation function is returned where:
-    - `[dir]`: is the original file path
-    - `[name]`: is the original file name (w/o extension)
-    - `[ext]`: is the original file extension
+    if `spec` is a string, an interpolation function is returned where any 
+    property of the object returned by `path.parse()` can be used by enclosing
+    the name in braces.  Additionally `{hex}` is available as the hexadecimal
+    value of the hash of the original path.
 
     if `spec` is an array, a function is returned that uses it as parameters 
     in a call to String.prototype.replace against the original path.  If the 
@@ -25,20 +26,9 @@ import { inter, is, uid } from '#utils'
 */
 export default function (spec)
 {
-    if (is.func(spec)) return spec;
+    if (is.func(spec)) return str => spec(chop(str))
     
-    if (is.string(spec)) 
-    {        
-        return str => 
-        {
-            let dir = path.dirname(str);
-            let ext = path.extname(str);
-            let name = path.basename(str, ext);
-            let hex = uid.hex(str);
-
-            return inter(spec, { dir, ext, name, hex });
-        }
-    }
+    if (is.string(spec)) return str => inter(spec, chop(str));
     
     if (is.array(spec))
     {
@@ -49,3 +39,10 @@ export default function (spec)
         return str => str.replace(search, replace || '')
     }
 }
+
+let chop = str => proxet(path.parse(str), key =>
+{
+    if (key === 'hex') return uid.hex(str);
+    if (key === 'path') return str;
+    if (key === 'segs') return str.split(path.sep);
+})

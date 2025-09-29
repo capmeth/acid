@@ -839,6 +839,23 @@ Resulting filepaths are **kebab-cased** for id generation.
 > Care should be taken to ensure that each asset id will be unique across the docsite as page/content/links might not get rendered or resolved properly otherwise.
 
 
+## toAssetName
+
+Generates an asset name from a file path.
+
+```js label="default value"
+toAssetName: '{name}'
+```
+
+```js label="spec"
+toAssetName: @repath
+```
+
+Used when an asset is needs to derive its name from its filepath.
+
+Resulting values will be **Capital Cased** for document asset name generation.
+
+
 ## toExampleFile
 
 Generates the path to an example file from a source file path.
@@ -858,7 +875,7 @@ The default setting looks for an example with a *.md* extension at the exact sam
 
 ## useFilenameOnly
 
-Forces use of filename as component name.
+Forces a component's name to be a derivation of its filepath.
 
 ```js label="default value"
 useFilenameOnly: false
@@ -868,7 +885,7 @@ useFilenameOnly: false
 useFilenameOnly: true | false
 ```
 
-When `true`, the basename of the filepath from whence the component came is used as the component's name in the docsite, ignoring the name coming from a configured parser.
+When `true`, Component assets will be forced to get their names (titles) from `config.toAssetName`, ignoring any name coming from a configured parser.
 
 
 ## version
@@ -968,23 +985,24 @@ Converts filepaths from one form to another.
 ]
 ```
 
-The `root` config option is used to resolve relative source paths.
+The `config.root` option is used to resolve relative source paths.
 
-- A function value receives the source path and should return a target filepath.
-- A string value can be interpolated with information from the source path
-  - `{dir}` - directory path to the file
-  - `{name}` - name of the file (w/o extension)
-  - `{ext}` - file extension
-  - `{hex}` - hexadecimal value of the hash of the full source path
+- A function value receives a source path info object with the following and should return a string.
+  - `path` - the source filepath
+  - `dir` - directory path of `path`
+  - `base` - filename in `path` with extension
+  - `name` - filename in `path` w/o extension
+  - `ext` - file extension of `base`
+  - `hex` - hexadecimal value of hash of `path`
+  - `segs` - array of `path` segments
+- A string value can be interpolated with information from the source filepath using brace-enclosed 
+  keys from those above (e.g. `{name}` for filename).
 - An array value is used as parameters for `String.prototype.replace` against the source path. \
-  Optionally, **RegExp** constructor parameters can be provided in an array as the first argument.
+  Optionally, **RegExp** constructor parameters can be provided in an array as the first argument. \
+  For example, the following value
+  ```js
+  [ /^source[/](.+?)[.][^./]+$/, "example/$1.md" ]
+  ```
+  would convert `source/components/layout/Grid.jsx` to `example/components/layout/Grid.md`.
 
-For example, the following value
-
-```js
-[ /^source[/](.+?)[.][^./]+$/, "example/$1.md" ]
-```
-
-would convert `source/components/layout/Grid.jsx` to `example/components/layout/Grid.md`.
-
-See the docs for the referencing config option to understand how the output filepaths are used.
+See the documentation for the referencing config option to understand how the output strings are used.

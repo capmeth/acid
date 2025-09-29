@@ -39,7 +39,7 @@ let good = false; /**
 */ if (!good) fixit();
 ```
 
-Leading whitespace on each line is truncated and ignored.  A single `*` *within* that leading space will also be truncated up to the first whitespace character after it.  Starting lines with a `*` followed by a space will normalize the content for markdown-parsed tags (like `@description`).
+Leading whitespace on each line is truncated and ignored.  A single `*` *within* that leading space will also be truncated up to the first whitespace character after it.  Starting lines with a `*` followed by a space will help normalize the content for markdown-parsed tags (like `@description`).
 
 A block-level tag is one that starts a line in the comment after the above truncations.
 
@@ -211,7 +211,7 @@ Used to define props in a `@component` comment.  Aggregates with `@kind prop` co
 
 ## @required*
 
-Indiates that a value for the code entity is mandatory.
+Indicates that a value for the code entity is mandatory.
 
 This tag has no content, it need only appear in the comment to be effective.
 

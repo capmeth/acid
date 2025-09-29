@@ -7,10 +7,8 @@ export default
         sections: 
         [ 
             'start', 
-            'structure',
-            'styling',
-            'tagging',
-            'authoring',
+            'learn',
+            'tutorials',
             'reference', 
             'integrate', 
             'faqs',
@@ -24,28 +22,25 @@ export default
         overview: 'file:/docsite/docs/getting-started.md'
     },
 
-    authoring:
+    learn:
     {
-        title: 'Markdown Documents',
-        overview: 'file:/docsite/docs/docsite/authoring.md'
+        overview: 'Understand the basics of creating a docsite for your project.',
+        documents:
+        [
+            'docsite/docs/docsite/structure.md',
+            'docsite/docs/docsite/styling.md',
+            'docsite/docs/docsite/tagging.md',
+            'docsite/docs/docsite/authoring.md'
+        ]
     },
 
-    structure:
+    tutorials:
     {
-        title: 'Site Structure',
-        overview: 'file:/docsite/docs/docsite/structure.md'
-    },
-
-    styling:
-    {
-        title: 'Styling',
-        overview: 'file:/docsite/docs/docsite/styling.md'
-    },
-
-    tagging:
-    {
-        title: 'Asset Tagging',
-        overview: 'file:/docsite/docs/docsite/tagging.md'
+        overview: 'Guides to help with common setup scenarios',
+        documents: 
+        [
+            'docsite/docs/tutorials/starter.md'
+        ]
     },
 
     reference:
@@ -83,6 +78,7 @@ export default
         [
             'docsite/docs/integration/parsers.md',
             'docsite/docs/integration/renderers.md',
+            'docsite/docs/integration/components.md'
         ],
         sections: 
         [ 

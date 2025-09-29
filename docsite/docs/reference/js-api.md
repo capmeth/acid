@@ -37,30 +37,35 @@ When a string is passed log `level` is being set.  Otherwise, the object paramet
 
 ```js
 {
-    /**
-        Sets the lowest security level logger activated.
+    /*
+        Activates logging at the specified severity level.
     */
-    level: "test" | "info" | "warn" | "fail" | "off"
-    /**
+    level: "test" | "info" | "warn" | "fail" | "off",
+    /*
+        Severity level colors.
+    */
+    colors:
+    {
+        [level]: string |
+        {
+            /*
+                Primary color.
+            */
+            main: string,
+            /*
+                Secondary (emphasis) color.
+            */
+            emph: string
+        }
+    },
+    /*
         Default log function
     */
     default: function | null,
-    /**
-        Test severity level log function.
+    /*
+        Severity level log function.
     */
-    test: function | null,
-    /**
-        Information severity level log function.
-    */
-    info: function | null,
-    /**
-        Warning severity level log function.
-    */
-    warn: function | null,
-    /**
-        Error severity level log function.
-    */
-    fail: function | null,
+    [level]: function | null,
     /**
         Turn off colors in log messages?
     */
@@ -68,14 +73,14 @@ When a string is passed log `level` is being set.  Otherwise, the object paramet
 }
 ```
 
-The 4 severity-level logging functions (with default handlers) are
+`[level]` must be one of the 4 severity-levels:
 
-1. `test` => `console.debug`
-2. `info` => `console.info`
-3. `warn` => `console.warn`
-4. `fail` => `console.error`
+1. `test` => excessive information about the build process
+2. `info` => useful information about the build process
+3. `warn` => alerts about potential issues in the build process
+4. `fail` => errors in the build process (usually accompanied by a thrown exception)
 
-There is also a `default` logger which uses `console.log` by default.
+By default, `level` is "fail".  From the list above, all levels after the specified `level` are also activated (e.g. setting "info" also activates "warn" and "fail").  Use "off" to disable all severity-level logging.
 
 To set a logging `level`, do
 
@@ -85,13 +90,44 @@ acid.logger('info');
 acid.logger({ level: info });
 ```
 
-By default, `level` is "fail".  All levels after the specified `level` will also be activated (e.g. setting "info" also activates "warn" and "fail").  Use "off" to disable all severity-level logging.
-
 Specifying `null` for a severity-level logger will disable it.  Setting `default` to `null` forces the use of `console.log`.
 
 If a failure message occurs and "fail" level logging is disabled, a notification will be sent via the default logger.
 
-Finally, `noChalk` turns off log message colorization.
+Use `colors` to set `main` and `emph` (emphasis) [chalk](https://www.npmjs.com/package/chalk) mods for each severity level.
+
+```js
+colors:
+{
+    info: { main: 'blue', emph: 'blue.underline.bold' }
+}
+```
+
+Setting `colors[level]` to a string is the same as setting `colors[level].main`.
+
+Finally, `noChalk` turns off all log message colorization.
+
+Default settings are as follows:
+
+```js
+{
+    name:  'acid',
+    level: 'warn',
+    colors:
+    {
+        fail: 'redBright',
+        info: { main: 'cyan', emph: 'cyanBright' },
+        test: { main: 'gray', emph: 'white' },
+        warn: { main: 'yellow', emph: 'yellowBright' } 
+    },
+    default: null,
+    fail:  console.error,
+    info:  console.info,
+    test:  console.debug,
+    warn:  console.warn,
+    noChalk: false
+}
+```
 
 
 # Instance
@@ -134,9 +170,7 @@ Note that the `stop` function is always returned regardless of server and watch 
 
 ## `app.use()`
 
-Accepts a function that can update or modify configuration settings.
-
-This is the basis for an ACID extension or "plugin".
+Accepts a function that can update or modify configuration settings.  This is the basis for an ACID extension or "plugin".
 
 Here's how it works...
 
@@ -155,6 +189,8 @@ app.run();
 
 In the above, `acidReactExt` and `acidVueExt` are functions that accept the current config object, which will have defaults and config file settings (and also any previously applied extension settings) already loaded.  The config object itself is a self-managing proxy, so the extension does not need to return anything.
 
+A second parameter can also be passed, ostensibly as configuration for the extension itself.
+
 Alternatively, a module specifier can be used directly as long as the *default* export is the expected function.
 
 So, the above example could also be written as
@@ -169,8 +205,6 @@ app.use('acid-vue-extension', { /* extension config */ });
 
 app.run();
 ```
-
-A second parameter can also be passed, ostensibly as configuration for the extension itself.
 
 Although ACID configuration is not terribly complicated (right?), the idea is that 3rd-party extensions can apply their needs to configuration directly without having to instruct the user how to configure a renderer, which URLs to add to scripts, what needs be in the importmaps, etc.  
 

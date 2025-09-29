@@ -14,7 +14,7 @@ let fileRe = /^file:\//;
 
 export default function(config)
 {
-    let { assetTypes, root, tagLegend, toAssetId, toExampleFile, useFilenameOnly } = config;    
+    let { assetTypes, root, tagLegend, toAssetId, toAssetName, toExampleFile, useFilenameOnly } = config;    
     let types = Object.entries(assetTypes);
     let tagmap = new Map();
 
@@ -367,7 +367,7 @@ export default function(config)
                     }
                 }
 
-                promises.push(Promise.resolve(fn({ mcid, path: { ...path }, tid, uid })).then(handler));
+                promises.push(Promise.resolve(fn({ mcid, path: path.abs, tid, uid })).then(handler));
             }
 
             await Promise.all(promises);
@@ -403,11 +403,11 @@ export default function(config)
             if (is.nonao(path))
             {
                 if (record.tid === 'doc') // doc asset fallback
-                    record.title ||= capitalCase(path.base);
+                    record.title ||= capitalCase(toAssetName(path.path));
                 else if (useFilenameOnly) // non-doc asset force filename
-                    record.title = path.base;
+                    record.title = toAssetName(path.path);
                 else // non-doc asset fallback
-                    record.title ||= path.base;
+                    record.title ||= toAssetName(path.path);
             }
         }
 

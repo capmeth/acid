@@ -8,7 +8,7 @@ cobeMode: static
 
 ACID will look for configuration options in a markdown document's front-matter.
 
-For ACID, front-matter is parsed as YAML key-value pairs enclosed by standard triple-dash delimiters.
+Front-matter is parsed as YAML key-value pairs enclosed by standard triple-dash delimiters.
 
 ```yaml
 ---
@@ -28,7 +28,7 @@ Default mode for CoBEs embedded in the content.
 cobeMode: demo | edit | live | render | static 
 ```
 
-Unless `static` is forced, only the code block itself can override this.  See config option `cobe` for more details on CoBE modes.
+Unless `static` is forced, only the code block itself can override this.  See `config.cobe` option for more details on CoBE modes.
 
 Example: Set the default CoBE mode to "render" for all code blocks in the document.
 
@@ -177,4 +177,4 @@ As is standard, this value comes immediately after the opening fence of a block.
 ```
 ````
 
-This value indicates how the block should be highlighted (for HighlightJs) as well as which extension CoBE should use to parse the code for rendering (if applicable).
+This value indicates how the block should be highlighted as well as which extension CoBE should use to parse the code for rendering (if applicable).

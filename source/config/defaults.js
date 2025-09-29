@@ -271,6 +271,13 @@ config.tocDepth = 3;
 config.toAssetId = '{hex}';
 
 /**
+    Converts a file path to an asset name.
+
+    @type { function | string | array }
+*/
+config.toAssetName = '{name}';
+
+/**
     Resolves the path to an example markdown file.
 
     When a component source file does not specify an `@example` file, this

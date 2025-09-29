@@ -1,3 +1,8 @@
+---
+title: Asset Tagging
+cobeMode: static
+---
+
 
 # Asset Tags
 
@@ -47,17 +52,23 @@ tagLegend:
     form: 
     { 
         desc: 'This component can be used as a form control.',
-        assign: asset => asset.path.indexOf('components/form/') >= 0
+        assign: ({ path }) => path.indexOf('components/form/') >= 0
     }
 }
 ```
 
 The function must return `true` or a non-empty string for the tag to be added to the asset.  A returned string becomes the *info* portion of the tag. 
 
+The object passed to `assign` will have asset information.
+- `uid` *string*: asset id
+- `path` *object*: absolute path to asset file
+- `tid` *string*: asset type id
+- `mcid` *string*: markdown content id (if available)
+
 
 ## Tag Styling
 
-The **Tag** component is responsible for rendering tags.
+The default **Tag** component is responsible for rendering tags.
 
 It applies the tag name as a class on its root element, allowing for customized styling.
 
@@ -74,4 +85,4 @@ For instance, a "domain" tag with "pricing-data" info would render as follows.
 </span>
 ```
 
-You can style this component using `#main-tag` (`style` config option) or, as it is a custom component, replace it altogether using `main/Tag` (`components` config option).
+You can style this component using `#main-tag` (via `config.style`) or, as it is a custom component, replace it altogether using `main/Tag` (via `config.components`).

@@ -1,21 +1,36 @@
+---
+title: Site Structure
+---
+
 
 # Sections
 
 The config option `sections` defines the navigtional hierarchy of the site.  It is also where all of the files that will become part of the documentation are specified.  Each section must have a unique name.
+
+An individual section may have:
+- `title`: a display nmae for the section
+- `overview`: markdown content that describes the section
+- `documents`: markdown asset files to be included in the section
+- `components`: component source files to be included in the section
+- `sections`: names of the child sections of the section
+
+All of these settings are optional.
+
+The following example creates `root`, `components`, and `action` sections for the site.
 
 ```js
 sections:
 {
     root:
     {
-        title:
+        title: 'React Project',
         sections: [ 'components' ]
-    }
+    },
 
     components:
     {
         title: 'Components',
-        sections: [ 'action', ... ]
+        sections: [ 'action' ]
     },
 
     action:
@@ -24,60 +39,29 @@ sections:
         overview: 'file:/action-section/document.md',
         documents: 'action/*.md',
         components: 'action/*.jsx'
-    },
-    ...
+    }
 }
 ```
 
-In the above example, `root`, `components`, and `action` are the names of the sections.
-
-The `rootSection` config setting is used to define the top-level section.
+The `config.rootSection` option is used to define the top-level section.
 
 ```js
 rootSection: 'root'
 ```
 
-The docsite will be empty without `rootSection`, as a hierarchical tree is built by starting there and working down through `sections.*.sections` until each one has a "parent" reference. Any sections that do not ultimately descend from `rootSection` will be excluded from the docsite.
+A hierarchical tree is built by starting at `rootSection` and working down through the child `sections` until each one has a "parent" reference.  Sections that do not ultimately descend from `rootSection` will be excluded from the docsite.
 
 
 # Section Properties
 
-These are the elements that can appear in a section.
-
-## components
-
-Specifies which component files are to be included in the section.
-
-You can assign a glob inclusion string directly.
-
-```js
-components: 'components/**/*.jsx'
-```
-
-and with the object form you can use `exclude` to ignore included files.
-
-```js
-components:
-{
-    include: 'components/**/*.jsx'
-    exclude: 'components/actions/*.jsx'
-}
-```
-
-Arrays of glob strings are also accepted in any of the above settings.
-
-A component's name (title) will generally be provided by the extension that parsed the component source file. If that doesn't happen, the basename of the source file is used as-is.
-
-Alternatively, the `useFilenameOnly` config setting can be used to force the use of the filename.
+Here we'll cover a bit more detail about the various parts of a section.
 
 
-## documents
+## title
 
-Specifies which markdown files are to be included in the section.
+The visual identification (display name) for the section in the UI.  Generally, this is the value displayed as the title of or a link to a section page.
 
-This setting has the same form as `components`.
-
-A document's display name (title) is determined by the value of `title` in the front-matter.  If this is not available, the **Capital Cased** filename is used.
+If not present, the `title` entry from the `overview` file's front-matter will be used.  If `overview` is not present or has no front-matter or there is no `title` to be found therein, the **Capital Cased** name of the section itself is used as the display title.
 
 
 ## overview
@@ -126,21 +110,48 @@ The above case of course means that no additional configuration for the section 
 
 ## sections
 
-Specifies the names of the sub-sections for the section.
+Specifies the names of the child sections.
 
 ```js
 sections: [ 'introduction', 'action_components', 'layout_components' ]
 ```
 
-The sections specified must exist in the config or they will be skipped in the build process.  
+The sections specified must exist in `config.sections` or they will be skipped in the build process.  
 
-Any section that is included by more than one parent section will only ever appear as the child of the first parent that claims it (and "first" may be arbitrary, depending on the order in which they get processed).
+Any section that is included by more than one parent section will only ever appear as the child of the first parent that claims it (and *first* may be arbitrary due to the async processing involved).
 
 
-## title
+## components
 
-The display name for the section.
+Specifies which component files are to be included in the section.
 
-If this is not present, the `title` attribute from the `overview` file's front-matter will be used.
+You can assign a glob inclusion string directly.
 
-If `overview` is not present or is not a file, or has no front-matter or there is no `title` to be found therein, the name of the section itself is used as the display title.
+```js
+components: 'components/**/*.jsx'
+```
+
+and with the object form you can use `exclude` to ignore included files.
+
+```js
+components:
+{
+    include: 'components/**/*.jsx'
+    exclude: 'components/actions/*.jsx'
+}
+```
+
+Arrays of glob strings are also accepted in any of the above settings.
+
+A component's name (title) will generally be provided by the extension that parsed the component source file. If that doesn't happen, the basename of the source file is used as-is.
+
+Alternatively, the `useFilenameOnly` config setting can be used to force the use of the filename.
+
+
+## documents
+
+Specifies which markdown files are to be included in the section.
+
+This setting follows the same pattern as `components` for selecting files.
+
+A document's display name (title) is determined by the value of `title` in the front-matter.  If this is not provided, the **Capital Cased** filename is used.
