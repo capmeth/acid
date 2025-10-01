@@ -40,12 +40,15 @@ jobs:
   # build docsite
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${$GITHUB_WORKSPACE}
     needs: setup
     steps:
       - name: generate bundle
         run: npm run bundle
       - name: generate docs
-        run: node source/cli/main -l test -c docsite/acid.config.js
+        run: npm run build-docsite
       - name: setup pages
         uses: actions/configure-pages@v5
       - name: jekyll build
