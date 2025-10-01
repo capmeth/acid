@@ -1,0 +1,76 @@
+<!--*
+	  Renders UI for a component page.
+
+    @tags inject:#page-component
+
+    @property { string } uid
+      Id of component asset to display.
+    @property { object } site
+      Data from **Docsite** component.
+-->
+
+<div class="page-component">
+  <main>
+    <div class="leader">
+      <div class="title" class:deprecated>{ title }</div>
+      {#if deprecated}
+        <div class="deprecation">{ deprecated }</div>
+      {/if}
+      <Active kind="sector" store="asset-description">
+        {#snippet header()}
+          <div class="sector-title">{ t.label_description }</div>
+        {/snippet}
+        <Description type="component" value={description} />
+      </Active>
+      <Tags items={tags}>
+        {#snippet use(render)}
+          <Active kind="sector" store="asset-tags">
+            {#snippet header()}
+              <div class="sector-title">{ t.label_tags }</div>
+            {/snippet}
+            {@render render()}
+          </Active>
+        {/snippet}
+      </Tags>
+      <Props items={propers} type="dual">
+        {#snippet use(render)}
+          <Active kind="sector" store="asset-props">
+            {#snippet header()}
+              <div class="sector-title">{ t.label_props }</div>
+            {/snippet}
+            {@render render()}
+          </Active>
+        {/snippet}
+      </Props>
+    </div>
+    <div class="content">
+      <Article {mcid} />
+    </div>
+  </main>
+  <nav>
+    {@render site.tree()}
+    {@render site.links()}
+  </nav>
+</div>
+
+
+<script module>
+import { ainfo, page } from '#public'
+
+import Active from '#stable/helper/Active'
+import Article from '#stable/common/Article'
+import Description from '#stable/common/Description'
+import Props from '#stable/common/Props'
+import Tags from '#stable/common/Tags'
+</script>
+
+<script>
+let { uid, site } = $props();
+let { deprecated, description, mcid, props: propers, tags, title } = ainfo(uid);
+
+page.setTitle(title);
+</script>
+
+<style>
+/* @inject #page-component */
+</style>

@@ -1,0 +1,30 @@
+<!--*
+	  Renders UI for the error page.
+
+    @tags inject:#page-error
+
+    @property { object } error
+      The problem that happened.
+-->
+
+<div class="page-error">
+  <p class="name">{ error.name }</p> 
+  <p class="message">{ error }</p>
+  <p class="home">
+    <a href={site.toUrl('home')}>{ t.page_home_title }</a>
+  </p>
+</div>
+
+<script module>
+import { page, site } from '#public'
+</script>
+
+<script>
+let { error } = $props();
+
+page.setTitle(t.page_error_title);
+</script>
+
+<style>
+/* @inject #page-error */
+</style>

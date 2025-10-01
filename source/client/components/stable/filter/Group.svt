@@ -1,0 +1,37 @@
+<!--*
+    Manages asset group filtering criteria.
+
+    Selected items are added to filter store as `groups` object.
+
+    @property { snippet } each
+      Passed each filter value for rendering.
+    @property { object } [store]
+      Name of the filter store to use.
+    @property { string } [type="groups"]
+      A type for the internal **List** component.
+-->
+
+<List items={ainfo.groups} {type}>
+  {#snippet children(group)}
+    <Toggle bind:active={groups[group]} kind="checkbox">
+      {@render each(group)}
+    </Toggle>
+  {/snippet}
+</List>
+
+
+<script module>
+import { ainfo } from '#frend/lib'
+import stateFilters from '#frend/state/filters'
+
+import List from '../common/List'
+import Toggle from '../helper/Toggle'
+</script>
+
+<script>
+let { each, store, type = 'filter-groups' } = $props();
+let filters = stateFilters(store);
+let groups = $derived(filters.groups || {});
+
+$effect(() => filters.groups = groups);
+</script>

@@ -1,0 +1,28 @@
+<!--*
+    Renders UI for a tag element.
+
+    @tags inject:#main-tag
+
+    @property { string } name
+      Name of the tag.
+    @property { string } [info]
+      Data for the tag.
+    @property { string } [desc]
+      Description of tag from `tagLegend` (config).
+-->
+
+<span class="main-tag {name}" title={desc}>
+  <span class="name">{ name }</span>
+  {#if info}
+    <span class="info">{ info }</span>
+  {/if}
+</span>
+
+
+<script>
+let { desc, name, info } = $props();
+</script>
+
+<style>
+/* @inject #main-tag */
+</style>

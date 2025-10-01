@@ -1,0 +1,139 @@
+<!--*
+    Renders an editable code block with syntax highlighting.
+
+    Tightly coupled with the **Editor** component and must appear as a 
+    descendant of it to work properly.
+
+    Operates against the context object `editor`.
+    - `code` *boolean*: Should anything be rendered?
+    - `disabled` *boolean*: Is the entry control inaccessible?
+    - `lang` *string*: Language-type of the code.
+    - `noHighlight` *boolean*: Turn off code highlighting?
+    - `onkeydown` *function*: Event handler for input control.
+    - `readonly` *boolean*: Should the input area be removed?
+    - `value` *string*: Current value of control (bound).
+
+    @tags cobe
+
+    @property { snippet } [use]
+      Passed a snippet that renders the content of this component.
+-->
+
+<When test={code} {use}>
+  <div class="cobe-code" data-lang={lang}>
+    <pre><code class="{lang} language-{lang}">{@html highlight(editor.value)}</code></pre>
+    {#if !readonly}
+      <textarea bind:value={editor.value} {onkeydown} {disabled}></textarea>           
+    {/if}
+  </div>
+</When>
+
+
+<script module>
+import { context } from '#frend/lib'
+import { cacher } from '#utils'
+
+import When from '../common/When'
+
+// extra space at end makes sure <pre> captures final newline
+let escape = source => source.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + ' '
+
+let highlighter = cacher((language, suppress) => 
+{
+    if (suppress || !window.hljs || !language || language === 'default') return escape;
+
+    if (!hljs.getLanguage(language))
+    {
+        console.warn(`Syntax highlighting for ${language} is not available.`);
+        return escape;
+    }
+    // extra space at end makes sure <pre> captures final newline
+    return source => hljs.highlight(source, { language, ignoreIllegals: true }).value + ' '
+});
+</script>
+
+<script>
+let { use } = $props();
+let { editor } = context;
+let { code, disabled, lang, onkeydown, readonly } = $derived(editor);
+let highlight = highlighter(editor.lang, editor.noHighlight);
+</script>
+
+
+<style>
+.cobe-code
+{
+    border-radius: inherit !important;
+    display: flex !important;
+    position: relative !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+
+    &::after 
+    {
+        content: attr(data-lang);
+        display: block;
+        font-size: 24px;
+        color: #666666;
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 8px;
+        text-shadow: 1px 1px 1px black;
+        filter: opacity(0.1);
+    }
+
+    pre
+    {
+        background: none !important;
+        border-radius: inherit !important;
+        position: relative !important;        
+        margin: 0 !important;
+        min-width: 100% !important;
+        padding: 0 !important;
+        z-index: 1 !important;
+
+        code
+        {
+            background: none !important;
+            color: inherit !important;
+        }
+    }
+
+    textarea 
+    {
+        caret-color: var(--acid-caret-color-cobe, black);
+        color: transparent;
+        resize: none !important;
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        height: 100%;
+        width: 100%;
+        overflow: hidden !important;
+        z-index: 2 !important;
+
+        &:focus-visible
+        {
+            outline: none !important;
+        }
+    }
+
+    pre code, textarea
+    {
+        background: transparent !important;
+        border-radius: inherit !important;
+        box-sizing: border-box !important;
+        display: block !important;
+        font-family: var(--acid-font-family-cobe, Monaco, monospace) !important;
+        font-size: var(--acid-font-size-cobe, 1em) !important;
+        letter-spacing: var(--acid-letter-spacing-cobe, 0) !important;
+        line-height: var(--acid-line-height-cobe, 1.5em) !important; 
+        margin: 0 !important;
+        overflow: hidden !important;
+        padding: var(--acid-padding-cobe, 18px 26px) !important;
+        white-space: pre-wrap !important;
+    }
+}
+</style>

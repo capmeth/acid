@@ -1,19 +1,25 @@
+---
+title: Markdown Notes
+---
 
-ACID uses the [Takedown](https://www.npmjs.com/package/takedown) parser for converting markdown documents into HTML.  
+
+ACID uses the [Takedown] parser for converting markdown documents into HTML.
 
 Most HTML generation is left standard, but ACID does manipulate the output on some elements to achieve its feature set.
 
 - **Front-matter is enabled and parsed as YAML**  
-  Some [document-specific config settings](document/configuration-markdown) are available here.
+  Some [document-specific config settings](document/reference-markdown) are available here.
 
 - **Fenced code blocks are controlled**  
-  These blocks are replaced with [**Editor**](component/cobe-editor) components for code highlighting and editing.
+  These blocks are replaced with [**Editor**](component/stable-common-editor) components for code highlighting and editing.
 
 - **HTML ids are added to header elements**  
-  This is used for rendering a table of contents (not available for example files).
+  For ATX (`#` prefixed) style headers only, this is used for rendering a table of contents.
 
 - **Docsite hyperlinks are adjusted**  
-  Relative hyperlinks known to the docsite are adjusted to allow for easier docsite page linking from within a document.
+  Relative hyperlinks for docsite routes are adjusted for easier page linking from within a document.
+
+Here's a [quick reference](https://commonmark.org/help/) page and a [tutorial](https://commonmark.org/help/tutorial/) to help you learn how to use markdown.
 
 
 # Internal Hyperlinking
@@ -33,9 +39,9 @@ We can link to [the home page](home).
 Relative links that the docsite understands include:
 
 - `home`
+- `catalog`
 - `section/[name]`: where `[name]` is the name of a section
-- `component/[id]`: where `[id]` is the asset id of a component
-- `document/[id]`: where `[id]` is the asset id of a document
-- the name of any other non-parameterized route in the docsite
+- `component/[uid]`: where `[uid]` is the asset id of a component
+- `document/[uid]`: where `[uid]` is the asset id of a document
 
-Asset ID generation is controlled by the `toAssetId` config option.
+Asset UID generation is controlled by the `config.toAssetId` option.

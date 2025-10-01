@@ -1,0 +1,101 @@
+import { AcidValidateError } from '#source/errors.js'
+import { confine, test } from '#utils'
+
+
+/*
+    Validation criteria.
+*/
+let definition =
+{
+    'asset': { test: test.object, default: {}, merge: true },
+    'asset.*': test.unset,
+    'asset.author': test.object,
+    'asset.author.email': test.string,
+    'asset.author.name': test.string,
+    'asset.content': test.string,
+    'asset.deprecated': test.stringOrBoolean,
+    'asset.description': test.string,
+    'asset.example': test.string,
+    'asset.ignore': test.boolean,
+    'asset.kind': test.string,
+    'asset.name': test.string,
+    'asset.props': { test: test.array, default: [] },
+    'asset.props.*': test.object,
+    'asset.props.*.*': test.unset,
+    'asset.props.*.deprecated': test.stringOrBoolean,
+    'asset.props.*.description': test.string,
+    'asset.props.*.fallback': test.string,
+    'asset.props.*.ignore': test.boolean,
+    'asset.props.*.kind': test.string,
+    'asset.props.*.name': test.string,
+    'asset.props.*.required': test.boolean,
+    'asset.props.*.type': test.string,
+    'asset.props.*.values': test.array,
+    'asset.since': test.string,
+    'asset.summary': test.string,
+    'asset.tags': { test: test.array, default: [] },
+    'asset.tags.*': test.tag,
+}
+
+
+/*
+    Returns a Proxy for building a component data file.
+
+    @param { string } id
+      Identifier for validation error reporting.
+    @param { string } td
+      Markdown parser for comments.
+*/
+export default function (id, td)
+{
+    return confine(definition, (apply, value, at) => 
+    {
+        switch (at.path)
+        {
+            // descriptions parsed as markdown
+            case 'asset.description':
+            case 'asset.props.*.description':
+                value = td.parse(value).doc;
+        }
+        
+        try
+        {
+            apply(value);
+        }
+        catch (err)
+        {
+            if (!(err instanceof AcidValidateError)) throw err;
+            log.warn(`component data from {:emph:${id}} was skipped: {:emph:${err.message}}`);
+        }
+    });
+
+    // let doxie = new Proxy(data.asset, 
+    // {
+    //     set(target, prop, value)
+    //     {
+    //         switch (prop)
+    //         {
+    //             case 'self':
+    //                 Object.keys(value).forEach(key => doxie[key] = value[key]);
+    //                 break;
+
+    //             case 'prop':
+    //                 target.props.push(...(is.array(value) ? value : [ value ]));
+    //                 break;
+
+    //             case 'tag':
+    //                 target.tags.push(...(is.array(value) ? value : [ value ]));
+    //                 break;
+
+    //             default:
+    //                 if (!is.undef(value)) target[prop] = value;
+    //         }
+
+    //         return true;
+    //     }
+    // });
+
+    // return doxie;
+}
+
+

@@ -1,4 +1,0 @@
-
-```html label="Structure"
-<Docsite />
-```

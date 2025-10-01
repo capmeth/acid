@@ -1,8 +1,8 @@
 import { hackson } from '#lib/hosted.js'
-import { is } from '#utils'
+import { is, objectToAttrs } from '#utils'
 
 
-let spaceRe = /\s+/
+let spaceRe = /\s+/;
 /**
     Generates the docsite html page.
 
@@ -58,13 +58,27 @@ let toMetas = (list, lines) =>
     list.forEach(item => 
     {
         if (is.string(item))
-            hackson[item] && lines.push(`  <meta name="${item}" content="${hackson[item]}" />`);
+        {            
+            let [ attr, key = attr ] = item.split('=');
+
+            if (is(hackson[key]))
+            {
+                let data = 
+                { 
+                    [attr.indexOf(':') < 0 ? 'name' : 'property']: attr,
+                    content: hackson[key] 
+                }
+                lines.push(`  <meta ${objectToAttrs(data)} />`);
+            }
+        }
         else
-            lines.push(`  <meta ${toAttrs(item)} />`);
+        {
+            lines.push(`  <meta ${objectToAttrs(item)} />`);
+        }
     });
 }
 
-let toLinks = (list, lines) => list.forEach(item => lines.push(`  <link ${toAttrs(item)} />`))
+let toLinks = (list, lines) => list.forEach(item => lines.push(`  <link ${objectToAttrs(item)} />`))
 
 let toScripts = (list, lines) =>
 {
@@ -74,19 +88,6 @@ let toScripts = (list, lines) =>
         // assume an inline script if src has whitespace
         if (spaceRe.test(src)) (content = src, src = null);
         
-        lines.push(`  <script ${toAttrs({ ...rest, src })}>${content ?? ''}</script>`);
+        lines.push(`  <script ${objectToAttrs({ ...rest, src })}>${content ?? ''}</script>`);
     });
-}
-
-let toAttrs = object => 
-{
-    let reducer = (string, key) => 
-    {
-        let value = object[key];
-        if (is.bool(value)) return value ? `${string} ${key}` : string;
-        if (is(value)) return `${string} ${key}="${value}"`;
-        return string;
-    }
-
-    return Object.keys(object).reduce(reducer, '');
 }

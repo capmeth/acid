@@ -1,5 +1,5 @@
 import { is } from '#utils'
-import confine from '../shared/confine/index.js'
+import confine from '../utils/confine/index.js'
 import definition from './definition.js'
 
 

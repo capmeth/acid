@@ -1,8 +1,13 @@
 import { tagLegend } from '#config'
+import { inter, is } from '#utils'
 
 
 export default function (tag)
 {
     let [ name, info ] = tag.split(':');
-    return { name, info, ...tagLegend[name] };
+    let { desc } = tagLegend[name] || { desc: 'Unknown' };
+
+    if (!is.nullish(info)) desc = inter(desc, { info });
+
+    return { name, info, desc };
 }

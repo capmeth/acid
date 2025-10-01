@@ -1,4 +1,4 @@
-import { rollup } from '#utils'
+import rollup from '#lib/rollup.js'
 import rollConfig from './rollup.config.js'
 
 
@@ -9,9 +9,9 @@ export default function(config)
     */
     return async function(loaded, styles)
     {
-        let builds = rollConfig(config, loaded, styles);
-
         log.info('creating web bundle...');
+
+        let builds = rollConfig(config, loaded, styles);
 
         return Promise.all(builds.map(rollup.write));
     }   

@@ -16,7 +16,7 @@ export default function(config)
         {
             showbanner();
             
-            let theTitle = `{:greenBright:${title}}`;
+            let theTitle = title ? `{:greenBright:${title}}` : `{:blueBright:Untitled}`;
             let thePort = `{:whiteBright:${port}}`;
 
             log(`the ${theTitle} docsite server is now listening on port ${thePort}.\n`);

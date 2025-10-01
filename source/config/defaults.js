@@ -13,11 +13,15 @@ let config = {};
 
 
 /**
-    Included asset groups.
+    Included asset types.
 
     @type { array }
 */
-config.assetGroups = [ 'documents', 'components' ];
+config.assetTypes = 
+{
+    doc: { plural: 'documents', singular: 'document' },
+    cmp: { plural: 'components', singular: 'component' }
+};
 
 /**
     CoBE language-type handling specs.
@@ -27,11 +31,27 @@ config.assetGroups = [ 'documents', 'components' ];
 config.cobe = [];
 
 /**
-    Footer content for the docsite.
+    Generate the Svelte renderer?
 
-    @type { string }
+    @type { boolean }
 */
-config.footer = null;
+config.cobeSvelte = false;
+
+/**
+    Allows use of alternative presentational components.
+
+    These are `group-name` elements mapped to svelte component filepaths.
+
+    @type { object }
+*/
+config.components = {};
+
+/**
+    Build fle copy.
+
+    @type { array }
+*/
+config.copy = [];
 
 /**
     HighlightJs configuration.
@@ -87,7 +107,17 @@ config.logo = hackson.logo ?? null;
 
     @type { array }
 */
-config.metas = [ { charset: 'utf-8' }, 'author', 'description', 'keywords' ];
+config.metas = 
+[ 
+    { charset: 'utf-8' }, 
+    'author', 
+    'description', 
+    'keywords', 
+    'og:title=title', 
+    'og:description=description',
+    'og:url=homepage',
+    'og:image=logo'
+];
 
 /**
     Internal value used to prevent potential naming collisions.
@@ -96,6 +126,13 @@ config.metas = [ { charset: 'utf-8' }, 'author', 'description', 'keywords' ];
     @type { string }
 */
 config.namespace = 'docsite';
+
+/**
+    User notification timeout (for things like copy-to-clipboard).
+
+    @type { number }
+*/
+config.noticeTimeout = 2000;
 
 /**
     Details for generated output.
@@ -117,6 +154,13 @@ config.output =
     @type { array }
 */
 config.parsers = [];
+
+/** 
+    Global link references for markdown content.
+
+    @type { array }
+*/
+config.refLinks = [];
 
 /** 
     Root path for the project.
@@ -202,7 +246,7 @@ config.storage = 'local';
 
     @type { object }
 */
-config.style = '#grayscape';
+config.style = '#acidic';
 
 /** 
     Descriptions for tag `name`'s used by the components.
@@ -232,6 +276,13 @@ config.tocDepth = 3;
     @type { function | string | array }
 */
 config.toAssetId = '{hex}';
+
+/**
+    Converts a file path to an asset name.
+
+    @type { function | string | array }
+*/
+config.toAssetName = '{name}';
 
 /**
     Resolves the path to an example markdown file.
@@ -280,7 +331,7 @@ config.version = hackson.version ? `ver. ${hackson.version}` : null;
 config.watch =
 {
     enabled: false,
-    delay: 200,
+    delay: 1000,
     files:
     {
         include: path.join('**', '*.{js,jsx,md}'),

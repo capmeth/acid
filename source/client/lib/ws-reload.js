@@ -1,5 +1,5 @@
 import { on } from 'svelte/events'
-import { socket } from '#config'
+import { namespace as ns, socket } from '#config'
 
 
 export default function()
@@ -8,7 +8,7 @@ export default function()
     let tries = 0;
 
     let reload = () => location.reload()
-    let success = () => (tries = 0, console.info('Successfully connected to server.'))
+    let success = () => (tries = 0, console.info(`Successfully connected to ${ns} server.`))
     let connect = () =>
     {
         let socket = new window.WebSocket(`ws://localhost:${port}`);
@@ -22,12 +22,12 @@ export default function()
         tries ++;
         if (tries <= recoAttempts) 
         {
-            console.info('Trying to reconnect to server... ' + tries);
+            console.info(`Trying to reconnect to ${ns} server... ${tries}`);
             setTimeout(connect, recoAttemptDelay);
         }
         else
         {
-            console.info(`I gave up after trying ${recoAttempts} times to reconnect with the server.`);
+            console.info(`I gave up after trying ${recoAttempts} times to reconnect with ${ns} server.`);
         }
     }
 

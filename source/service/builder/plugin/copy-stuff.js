@@ -31,18 +31,19 @@ export default function ({ specs, rootpath, outpath })
                 {
                     return fs.cp(from, to, { recursive: true }).then(() => 
                     {
-                        log.test(`copied {:whiteBright:${file}} to ${to}`);
+                        log.test(`copied {:emph:${file}} to {:emph:${to}}`);
                         copies ++;
                     });
                 }
                 else
                 {
-                    log.warn(`copying {:whiteBright:${file}} was skipped as destination is outside ${outpath}`)
+                    log.warn(`{:emph:${file}} was not copied as destination is outside output directory`);
                 }
             }));
         }));
 
-        if (copies > 0) log.info(`{:whiteBright:${copies} additional file(s)} were copied into ${outpath}`);
+        if (copies > 0) 
+            log.info(`{:emph:${copies} additional file(s)} were copied to output directory`);
     }
 
     return plugin;

@@ -1,16 +1,15 @@
-// import merge from 'deepmerge'
-import { is, jsToCss, proxet } from '#utils';
-import sids from './scopes.js'
+import { is, jsToCss, proxet } from '#utils'
 import loadCss from './load-css.js'
 
+
+let commaRe = /\s*,\s*/;
+let scopeRe = /^#[\w-]+$/;
 
 export default function(config)
 {
     let { root, style } = config;
 
-    let sheetsPromise = loadCss(style, root)
-        .then(list => list.reduce((a, x) => [ ...a, ...x ]), []);
-        // TODO: might need to sort here (for at-rules)
+    let sheetsPromise = loadCss(style, root).then(list => list.reduce((a, x) => [ ...a, ...x ]), []);
     
     /**
         Merge key/value arrays into objects
@@ -21,10 +20,10 @@ export default function(config)
         
         value.forEach(([ key, val ]) => 
         {
-            // merge values under same selector
-            if (is.array(val)) val = artoo(target[key], val);            
+            // merge values under same selector (`null` key targets current)
+            if (is.array(val)) val = artoo(key ? target[key] : target, val);            
             // CSS directives do not merge
-            target[key] = key.startsWith('@') ? [ ...(target[key] || []), val ] : val;
+            if (key) target[key] = key.startsWith('@') ? [ ...(target[key] || []), val ] : val;
         });
         
         return target;
@@ -37,11 +36,31 @@ export default function(config)
 
         pairs.forEach(pair => 
         {
-            let [ key ] = pair;
-            let scope = sids.find(id => key.startsWith(id)) || 'root';
-            
-            log.test(`adding ${scope} scope styles: "${key}" ...`);
-            data[scope] = artoo(data[scope], [ pair ]);
+            let [ sels, value ] = pair;
+
+            sels.split(commaRe).forEach(key => 
+            {
+                let [ sid ] = key.match(scopeRe) || [];
+
+                let scope = sid || 'root', sel = sid ? null : key;
+
+                if (sid?.startsWith('#-'))
+                {
+                    let id = sid.slice(2);
+                    // dash-prefixed injectables are part of non-dashed scope
+                    scope = `#${id}`; sel = `.${id}`;
+                }
+                
+                log.test(() => 
+                {
+                    if (scope === 'root')
+                        return `merging {:emph:${key}} styles into {:emph:global} scope...`;
+                    else
+                        return `merging styles into {:emph:${scope}} scope...`;
+                });
+
+                data[scope] = artoo(data[scope], [ [ sel, value ] ]);
+            });
         });
 
         return proxet({}, sid => data[sid] ? jsToCss(data[sid], sid === 'root') : null);

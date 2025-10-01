@@ -1,0 +1,26 @@
+<!--*
+    Renders static site links.
+
+    @tags conditional, uses:main/Tnode
+
+    @property { string } [type="static"]
+      A type for the internal **List** component.
+-->
+
+<List {items} {type}>
+  {#snippet children(item)}
+    <Link to={item} />
+  {/snippet}
+</List>
+
+
+<script module>
+import List from './List'
+import Link from '../helper/Link'
+
+let items = [ 'home', 'catalog' ];
+</script>
+
+<script>
+let { type = 'static' } = $props();
+</script>

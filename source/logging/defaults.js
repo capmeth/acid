@@ -7,6 +7,19 @@ let logger = {};
 
 
 /**
+    Primary and secondary coloring for log messages.
+
+    @type { object }
+*/
+logger.colors =
+{
+    fail: 'redBright',
+    info: { main: 'cyan', emph: 'cyanBright' },
+    test: { main: 'gray', emph: 'white' },
+    warn: { main: 'yellow', emph: 'yellowBright' } 
+}
+
+/**
     Default logger.
 
     @type { function }
@@ -18,7 +31,7 @@ logger.default = null;
 
     @type { object }
 */
-logger.level = 'fail';
+logger.level = 'warn';
 
 /**
     Fail level logger.

@@ -1,27 +1,34 @@
 import chalk from 'chalk'
 
 
-let chalkRe = /\{:([a-z.]+?)?:(.+?)\}/gi;
-let get = (obj, name) => name.split('.').reduce((o, n) => o[n], obj)
-let lm = { test: '', info: 'cyanBright', warn: 'yellow', fail: 'redBright' };
+let chalkRe = /\{:([a-z.]+?)?:((?:(?!\{:[a-z.]+?:.+?\}).)+?)\}/gsi;
 let order = [ 'test', 'info', 'warn', 'fail' ];
+
+let cacheFn = {};
+let chalkFn = expr => cacheFn[expr] ||= new Function('chalk', `return chalk.${expr};`)(chalk)
 
 export default function(logger)
 {
-    let { name, noChalk, level } = logger;
+    let { colors, name, noChalk, level } = logger;
 
     let main = logger.default || console.log;
     let levels = (i => i >= 0 ? order.slice(i) : [])(order.indexOf(level))
+    let toms = m => typeof m === 'function' ? m() : m;
 
-    let inter = message =>
+    let inter = (message, level) =>
     {
         if (typeof message === 'string')
         {
-            return message.replace(chalkRe, (...args) => 
+            let theme = colors[level] || {};
+
+            while (chalkRe.test(message))
             {
-                let [ mods, text ] = args.slice(1);
-                return noChalk || !mods ? text : get(chalk, mods)(text);
-            });
+                message = message.replace(chalkRe, (...args) => 
+                {
+                    let [ mods, text ] = args.slice(1);
+                    return noChalk || !mods ? text : chalkFn(theme[mods] || mods)(text);
+                });
+            }
         }
 
         return message;
@@ -30,33 +37,28 @@ export default function(logger)
     /**
         Sends log message output to configured logger(s).
 
-        To add chalk to a message use `{mods:text}` replacement format in a
+        To add chalk to a message use `{:mods:text}` replacement format in a
         message.
 
         @param { string } msg
           String to be logged.
-        @param { string } lvl 
+        @param { string } level 
           One of 'test', 'info', 'warn', or 'fail'. 
     */
-    let send = (msg, lvl) => 
+    let send = (msg, level) => 
     {
-        if (lvl)
+        if (!level)
+            return main(inter(toms(msg)));
+
+        if (levels.includes(level) && logger[level])
         {
-            if (levels.includes(lvl) && logger[lvl])
-            {
-                if (lvl === 'fail') msg = `{:${lm[lvl]}:${msg}}`;
-                let string = `${name}:{:${lm[lvl]}:${lvl}} - ${msg}`;
-                return logger[lvl](inter(string));
-            }
-            else if (lvl === 'fail')
-            {
-                main(`A failure message occurred.  Turn on "fail" level logging to see errors.`);
-            }
+            msg = toms(msg);
+            msg = `{:main:${name}:${level} - ${msg}}`;
+            return logger[level](inter(msg, level));
         }
-        else
-        {
-            return main(inter(msg));
-        }
+
+        if (level === 'fail') 
+            return main(`A failure message occurred.  Turn on "fail" level logging to see errors.`);
     }
 
     let log = message => send(message)

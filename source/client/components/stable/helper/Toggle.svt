@@ -1,0 +1,54 @@
+<!--*
+    Provides active/inactive state content.
+
+    When a value for `store` is provided, the toggle state is written to and 
+    read from browser storage, if activated in config.
+
+    @tags inject:#helper-toggle
+
+    @property { boolean } active
+      Is content currently active? (`$bindable`).
+    @property { snippet } children
+      Renders child content.
+    @property { boolean } hover
+      Is content currently hovered? (`$bindable`).
+    @property { string } [kind="default"]
+      Variant classname as `type-{kind}`.
+    @property { string } [store]
+      If set, `active` state will be remembered in browser storage.
+-->
+
+<button 
+  class="helper-toggle type-{kind}" 
+  class:active 
+  type="button" 
+  onclick={click}
+  onmouseenter={hov(true)}
+  onmouseleave={hov(false)}
+>
+  {@render children?.()}
+</button>
+
+
+<script module>
+import { is } from '#utils'
+import { storage } from '#frend/lib'
+</script>
+
+<script>
+let { active = $bindable(), hover = $bindable(), kind = 'default', store, children } = $props();
+// don't use stored value if parent initially sets active state
+if (!is.bool(active) && store) active = storage[store];
+
+let click = () => 
+{
+    active = !active;
+    if (store) storage[store] = active;
+}
+
+let hov = bool => () => hover = bool
+</script>
+
+<style>
+/* @inject #helper-toggle */
+</style>

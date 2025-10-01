@@ -1,0 +1,53 @@
+<!--*
+	  Renders UI for a section overview page.
+
+    @tags inject:#page-section
+
+    @property { string } name
+      Name of section to display.
+    @property { object } site
+      Data from **Docsite** component.
+-->
+
+<div class="page-section">
+  <main>
+    <div class="leader">
+      <div class="title">{ section.title }</div>
+      <Crumbs {section} />
+    </div>
+    <div class="content">
+      <Article mcid={section.mcid} />
+      <Assets sections={section.name} type="columns">
+        {#snippet children(asset)}
+          <Link kind="annex" to={asset} />
+        {/snippet}
+      </Assets> 
+    </div>
+  </main>
+  <nav>
+    {@render site.tree()}
+    {@render site.toc(section.mcid, section.tocDepth)}
+    {@render site.links()}
+  </nav>
+</div>
+
+
+<script module>
+import { page, sinfo } from '#public'
+
+import Article from '#stable/common/Article'
+import Assets from '#stable/common/Assets'
+import Crumbs from '#stable/common/Crumbs'
+import Link from '#stable/helper/Link'
+</script>
+
+<script>
+let { name, site } = $props();
+let section = sinfo(name)
+
+page.setTitle(section.title);
+</script>
+
+<style>
+/* @inject #page-section */
+</style>

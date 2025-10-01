@@ -1,0 +1,36 @@
+<!--*
+    Renders content as a list.
+
+    Nothing is rendered if `items` is nullish or of zero length.
+
+    Each element of `items` that passes `filter` is passed to `children`, 
+    optionally being first processed by the function `pred`.
+
+    @tags conditional, uses:main/List, extra-props:main/List
+
+    @property { function } [filter]
+      Filters `items` for inclusion (falsey return value excludes item).
+    @property { array } [items]
+      List of items to render.
+    @property { function } [pred]
+      A function to "process" each item passed to `children`.
+    @property { snippet } [use]
+      Passed a snippet that renders the content of this component.
+-->
+
+<When test={items?.length} {use}>
+  <List items={aiter(items, pred, filter)} {...args} />
+</When>
+
+
+<script module>
+import { aiter, is } from '#utils'
+
+import List from '#custom/main/List'
+import When from './When'
+</script>
+
+<script>
+let { filter, items, pred, use, ...args } = $props();
+filter ||= item => !is.undef(item)
+</script>

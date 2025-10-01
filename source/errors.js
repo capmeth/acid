@@ -1,5 +1,4 @@
 
-
 export class AcidValidateError extends Error
 {
     constructor(message)

@@ -23,13 +23,13 @@ export default function(sections, root)
     {
         let section = sections[name];
 
-        log.test(`linking section ${name}...`);
+        log.test(`linking section {:emph:${name}}...`);
     
         if (is.nonao(section))
         {
             if (name !== root && is(linked[name]))
             {
-                log.warn(`section ${name} is already linked to ${linked[name].parent}, skipping`);                
+                log.warn(`section {:emph:${name}} already linked to {:emph:${linked[name].parent}}, skipping`);                
             }
             else
             {
@@ -47,7 +47,7 @@ export default function(sections, root)
         }
         else
         {
-            log.warn(`section ${name} does not exist or is invalid, skipping`);
+            log.warn(`section {:emph:${name}} does not exist or is invalid, skipping`);
         }
 
         return false;

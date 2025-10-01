@@ -1,0 +1,27 @@
+<!--*
+    Renders UI for a node of the **Toc** component.
+
+    @property { string } id
+      The id of the node.
+    @property { string } title
+      Label for the node.
+    @property { function } onclick
+      Event handler for a click on the node.
+-->
+
+{#if id}
+  <Link kind="toc" title={t('msg_scrollto', { name: title })} {onclick}>
+    <span>{ title }</span>
+  </Link>
+{:else}
+  <span>{ title }</span>
+{/if}
+
+
+<script module>
+import Link from '#stable/helper/Link'
+</script>
+
+<script>
+let { id, title, onclick } = $props();
+</script>

@@ -9,9 +9,7 @@ import sections from './sections.js'
 */
 export default
 {
-    namespace: "metasite",
-    title: "A Component Interface Documenter",
-    logo: 'acid.png',
+    namespace: "acidoc",
 
     copy: { files: path.join("source", "images", "acid.png"), to: 'acid.png' },
 
@@ -20,23 +18,34 @@ export default
     [
         { types: [ "svelte", "svt" ], use: "svelte-render", mode: "edit" }
     ],
+    cobeSvelte: true,
     hljs: 
     { 
         aliases: { jsx: [ "svelte", "svt"] },
         theme: 'kimbie-dark'
     },
 
-    labels: { "page-home-title": "Homepage" },
+    links: { href: "acid.png", rel: "icon", type: "image/x-icon" },
+
+    labels: 
+    { 
+        label_content: 'Docsite'
+    },
 
     sections,
 
     tagLegend: 
     {
-        "extra-props": "Unused props are passed to <{info}>.",
-        "group": "Belongs to {info} component group.",
-        "no-style": "This component cannot be styled.",
-        "page": "Styling can be page specific.",
-        "region": "Styling can be region specific."
+        "cid": 
+        {
+            desc: 'Component ID is "{info}" for import or replacement',
+            assign: ({ tid, uid, title }) => tid === 'cmp' && `${uid.split('-')[1]}/${title}`
+        },
+        "cobe": "Is part of the CoBE component family",
+        "conditional": "Renders nothing when certain condition(s) fail",
+        "extra-props": "Passes unused props to <{info}>",
+        "inject": "Injects {info} CSS from theme files",
+        "uses": "Uses replaceable UI component ({info})"
     },
 
     toAssetId: [ [ "^(?:source[/]client[/]components|docsite[/]docs)[/](.+?)[.][^./]+$" ], "$1" ],
@@ -47,16 +56,23 @@ export default
         "#bundle": "./site-bundle.js"
     },
 
+    refLinks: 'file:/docsite/acid.refs.md',
+
     server: { port: 3005 },
     socket: { port: 3009 },
     watch: 
     { 
         files: 
         [
-            path.join("source", "client", "**", "*.{js,svt}"),
+            path.join("source", "client", "components", "**", "*.svt"),
+            path.join("source", "client", "**", "*.js"),
             path.join("docsite", "docs", "**", "*.md")
         ] 
     },
 
-    style: [ '#acidic', 'file:/docsite/acid.style.css' ]
+    style: 
+    [ 
+        '#acidic',
+        'file:/docsite/acid.style.css' 
+    ]
 }

@@ -1,0 +1,102 @@
+<!--*
+    Renders UI for a Code Block Editor (CoBE) component.
+
+    The class "hljs" is added to the parent element of **Code** to ensure
+    the proper background theme is applied.
+    
+    @tags cobe, inject:#main-editor
+
+    @property { boolean } copied
+      Has code been copied to clipboard?
+    @property { function } [copy]
+      Copies current code to clipboard.
+      This function will not exist if copy operation not supported by browser.
+    @property { boolean } edited
+      Is current code different from current render?
+    @property { object } [error]
+      Error thrown by current render.
+    @property { string } id
+      An id for the editor.
+    @property { string } [label]
+      A label for the editor.
+    @property { string } [lang]
+      Language type of the code block.
+    @property { string } mode
+      Rendering mode for the editor.
+    @property { function } [reset]
+      Resets current code to original and renders.
+      This function will not exist for some editor modes.
+    @property { boolean } shifted
+      Is current code different from original code?
+    @property { boolean } showing
+      Is code entry currently being shown?
+    @property { function } [toggle]
+      Toggles hide/show of **Code** component.
+      This function will not exist for some editor modes.
+    @property { function } [update]
+      Renders current code.
+      This function will not exist for some editor modes.
+-->
+
+<div 
+  {id}
+  class="main-editor mode-{mode} lang-{lang}"
+  class:labeled={label}
+  class:shifted
+  class:edited
+  class:copied
+  class:showing
+  class:failed={error}
+>
+  {#if label}
+    <div class="label">{ label }</div>
+  {/if}
+  <Renbox>
+    {#snippet use(render)}
+      <div class="stage">
+        {@render render()}
+        {#if error}
+          <div class="error">{ error }</div>
+        {/if}
+      </div>
+    {/snippet}
+  </Renbox>
+  {#if mode !== 'render'}
+    <div class="controls">
+      {#if copy}
+        <Button action={copied ? 'copied' : 'copy'} disabled={copied} onclick={copy} />
+      {/if}
+      {#if toggle}
+        <Button action={showing ? 'hide' : 'show'} onclick={toggle} />        
+      {/if}
+      {#if update}
+        <Button action="update" disabled={!edited} onclick={update} />
+      {/if}
+      {#if reset}
+        <Button action="reset" disabled={!shifted} onclick={reset} />
+      {/if}
+    </div>
+  {/if}
+  <Code>
+    {#snippet use(render)}
+      <div class="entry hljs">
+        {@render render()}
+      </div>
+    {/snippet}
+  </Code>
+</div>
+
+
+<script module>
+import Button from '#stable/helper/Button'
+import Code from '#stable/common/Code'
+import Renbox from '#stable/common/Renbox'
+</script>
+
+<script>
+let { copied, copy, edited, error, id, label, lang, mode, reset, shifted, showing, toggle, update } = $props();
+</script>
+
+<style>
+/* @inject #main-editor */
+</style>

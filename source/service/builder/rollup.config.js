@@ -21,25 +21,36 @@ import makeConfig from './lib/make-config.js'
 import makeExports from './lib/make-exports.js'
 import makeHtml from './lib/make-html.js'
 import pluginCopyStuff from './plugin/copy-stuff.js'
+import pluginCustomSwap from './plugin/custom-swap.js'
 import pluginEmitAsset from './plugin/emit-asset.js'
 import pluginScopedStyles from './plugin/scoped-styles.js'
+import pluginByImporter from './plugin/by-importer.js'
 import pluginVirtualFile from './plugin/virtual-file.js'
 
 
 export default function(config, loaded, styles)
 {
     let { copy, output, root } = config;
-    let { sections, files, blocks } = loaded;
+    let { sections, assets, files, blocks } = loaded;
     let outpath = path.join(root, output.dir);
+
+    let virtual = file => path.join(paths.client, 'virtual', file)
+
+    log.info(`output directory is {:emph:${outpath}}`);
 
     let main = {};
 
     main.input = 
     { 
         [`${output.name}-docsite`]: path.join(paths.client, 'app.js'),
-        [`${output.name}-examples`]: './examples.json',
-        [`${output.name}-svelte-render`]: path.join(paths.extensions, 'svelte.js')
+        [`${output.name}-examples`]: virtual('examples.json')
     };
+
+    if (config.cobeSvelte) 
+    {
+        log.test('adding {:emph:svelte renderer} to docsite...');
+        main.input[`${output.name}-svelte-render`] = path.join(paths.extensions, 'svelte.js');
+    }
 
     main.output =
     { 
@@ -48,39 +59,57 @@ export default function(config, loaded, styles)
         banner: banner(config.title) 
     };
 
-    main.external = [ 'rollup', /^svelte/ ];
+    main.external = [ /^svelte/ ];
 
     main.plugins = 
     [
-        pluginVirtualFile(
-        { 
-            'docsite-config': makeConfig(config, sections),
-            './examples.json': JSON.stringify(blocks),
-            './style/main.css': styles.root || '',
-            ...files,
-            '../markdown/index.js' : makeExports(Object.keys(files)),
+        pluginByImporter(
+        {
+            paths: [ paths.client ],
+            use: pluginVirtualFile(
+            { 
+                [virtual('config.js')]: makeConfig(config, sections, assets),
+                [virtual('examples.json')]: JSON.stringify(blocks),
+                [virtual('markdown.js')] : makeExports(Object.keys(files)),
+                [virtual('style.css')]: styles.root || '',
+                ...files
+            })
         }),
         pluginAlias(
         {
             entries:
             {
-                '#comps': path.join(paths.client, 'components'),
-                '#config': 'docsite-config',
-                '#frend': paths.client, // `#client` conflicts with svelte internals
-                '#image': paths.images,
-                '#utils': paths.shared,
+                '#public': path.join(paths.client, 'lib', 'index-public'),
+                '#stable': path.join(paths.client, 'components', 'stable')
             }
         }),
-        pluginNodeResolve({ extensions: [ '.css', '.js', '.json', '.png', '.svt' ], browser: true }),
+        pluginByImporter(
+        {
+            paths: [ paths.client ],
+            use: pluginAlias(
+            {
+                entries:
+                {
+                    '#config': virtual('config.js'),
+                    '#frend': paths.client, // `#client` conflicts with svelte internals
+                }
+            })
+        }),
+        pluginCustomSwap({ root, map: config.components }),
+        pluginNodeResolve(
+        { 
+            extensions: [ '.css', '.js', '.json', '.png', '.svelte', '.svelte.js', '.svt' ], 
+            browser: true 
+        }),
         pluginJson(),
         pluginCommonjs(),
         pluginImage(),
         pluginScopedStyles({ styles }),
-        pluginSvelte({ extensions: [ '.svt' ], emitCss: true }), 
+        pluginSvelte({ extensions: [ '.svelte', '.svt' ], emitCss: true }), 
         pluginInject(
         {
-            include: path.join(paths.client, 'components', '**', '*.svt'),
-            ctx: path.join(paths.client, 'lib', 'context.js')
+            include: path.join('**', '*.{svelte,svt}'),
+            t: path.join(paths.client, 'lib', 't.js')
         }),
         pluginPostcss({ minimize: true }),
         pluginEmitAsset({ fileName: `${output.name}.html`, source: makeHtml(config) }),

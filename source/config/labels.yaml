@@ -1,35 +1,41 @@
 
 # action labels
-action-clear-filters: Clear Filters
-action-copied: Copied!
-action-copy: Copy
-action-filter-name: filter by name
-action-hide: Code
-action-reset: Reset
-action-show: Code
-action-update: Render
+action_clear_filters: Clear Filters
+action_copied: Copied!
+action_copy: Copy
+action_hide: Code
+action_reset: Reset
+action_show: Code
+action_update: Render
 
 # general labels
-label-accept-values: "Accepts:"
-label-components: Components
-label-default-value: "Default:"
-label-deprecated: DEPRECATED
-label-description: Description
-label-documents: Documents
-label-error: "ERROR:"
-label-filters: Filters
-label-logo: Project Logo
-label-primary: Site
-label-props: Props
-label-sections: Sections
-label-tags: Tags
-label-toc: Table of Contents
+label_accept_values: "Accepts:"
+label_components: Components
+label_content: Content
+label_default_value: "Default:"
+label_deprecated: Deprecated
+label_description: Description
+label_documents: Documents
+label_error: "ERROR:"
+label_filters: Filters
+label_logo: Project Logo
+label_props: Props
+label_static: Site Links
+label_sanctioned: Sanctioned
+label_sections: Sections
+label_tags: Tags
+label_toc: Page Contents
 
 # page names
-page-home-title: "{title}"
-page-index-title: Asset Index
+page_catalog_title: Asset Index
+page_error_title: Error
+page_home_title: Homepage
 
 # messages/alerts
-msg-asset-count: "{count} of {total} assets listed."
-msg-copied: Copied to Clipboard!
-msg-no-comments: No comments were found for this {item}.
+msg_asset_count: Showing {count} of {total} assets in docsite.
+msg_copied: Copied to Clipboard!
+msg_filter_name: filter by name
+msg_goto_page: Go to {title} page.
+msg_no_component_description: No comments were found for this component.
+msg_no_prop_description: No comments were found for this component property.
+msg_scrollto: Scroll to {name}.

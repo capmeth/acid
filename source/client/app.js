@@ -1,20 +1,17 @@
-import './style/main.css'
+import '#frend/virtual/style.css'
 
 import { mount } from 'svelte';
 import { hljsc, hrMode } from '#config';
-import App from './components/app/Router'
-import composer from './composer'
+import App from './components/Router'
 import wsreload from './lib/ws-reload'
 
 
 export default async function ()
 {
-    let { hljs } = window;
+    let { hljs } = window, { aliases } = hljsc;
     // setup highlightjs language aliases
-    if (hljs)
-    {
-        let aliases = hljsc.aliases || {}
-        
+    if (hljs && aliases)
+    {        
         for (let lang in aliases)
         {
             let def = hljs.getLanguage(lang);            
@@ -30,5 +27,5 @@ export default async function ()
     if (hrMode) wsreload();
 
     // render the docsite
-    await composer().then(compose => mount(App, { target: document.body, props: { compose } }));
+    mount(App, { target: document.body });
 }

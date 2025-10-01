@@ -4,7 +4,7 @@ import paths from '#paths'
 import { ctja } from '#utils'
 
 
-let fileRe = /^#|file:\//;
+let fileRe = /^#(?=[^\s]+$)|file:\//;
 let jsp = data => JSON.parse(ctja(data))
 /**
     Takes CSS content or loads CSS files and converts them to arrays.

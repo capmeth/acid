@@ -20,7 +20,7 @@ let hljsCdn =
 */
 export default config =>
 {
-    let { hljs, links, metas, output, parsers, scripts } = config;
+    let { cobeSvelte, hljs, links, metas, output, parsers, scripts } = config;
 
     parsers.unshift({ types: '*', use: '#exts/jsdoc' });
 
@@ -34,12 +34,11 @@ export default config =>
     metas.push({ name: 'generator', content: 'ACID' });
 
     config.toAssetId = pathTransformer(config.toAssetId) || ident;
+    config.toAssetName = pathTransformer(config.toAssetName) || ident;
     config.toExampleFile = pathTransformer(config.toExampleFile) || (() => null);
 
     config.importMap =
     {
-        "rollup": "https://unpkg.com/@rollup/browser/dist/es/rollup.browser.js",
-
         "svelte": "https://esm.sh/svelte@5.34.7",
         "svelte/animate": "https://esm.sh/svelte@5.34.7/animate",
         "svelte/attachments": "https://esm.sh/svelte@5.34.7/attachments",
@@ -53,8 +52,8 @@ export default config =>
 
         "svelte/internal/client": "https://esm.sh/svelte@5.34.7/internal/client",
         "svelte/internal/disclose-version": "https://esm.sh/svelte@5.34.7/internal/disclose-version",
-        "svelte/internal/flags/legacy": "https://esm.sh/svelte@5.34.7/internal/flags/legacy",
-
-        "svelte-render": `./${output.name}-svelte-render.js`
+        "svelte/internal/flags/legacy": "https://esm.sh/svelte@5.34.7/internal/flags/legacy"
     }
+
+    if (cobeSvelte) config.importMap = { "svelte-render": `./${output.name}-svelte-render.js` };
 }

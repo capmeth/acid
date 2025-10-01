@@ -1,4 +1,6 @@
+import hashRouter from './hash-router'
+import routes  from './routes'
 
 
-export { default as hashRouter } from './hash-router'
-export { default as routes } from './routes'
+export default hashRouter(routes);
+

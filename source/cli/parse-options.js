@@ -6,6 +6,8 @@ export default function (options)
 {
     let { logLevel, outputDir, outputName, server, ...rest } = options;
 
+    if (rest.config === true) rest.config = 'acid.config.js';
+
     if (Object.hasOwn(options, 'server'))
     {
         rest.server = { enabled: true };

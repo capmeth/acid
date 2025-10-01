@@ -1,0 +1,28 @@
+<!--*
+    Manages asset name text filtering criteria.
+
+    @tags uses:main/Filters, uses:main/Tag
+
+    @property { string } [kind]
+      Variant name for the internal **Input** component.
+    @property { object } [store]
+      Name of the filter store to use.
+-->
+
+<Input bind:value={text} {kind} placeholder={t.msg_filter_name} />
+
+
+<script module>
+import stateFilters from '#frend/state/filters'
+
+import Input from '../helper/Input'
+</script>
+
+<script>
+let { kind = 'filter-text', store } = $props();
+
+let filters = stateFilters(store);
+let text = $derived(filters.text || '');
+
+$effect(() => filters.text = text);
+</script>

@@ -1,0 +1,39 @@
+<!--*
+    Generates navigation for the assets in a section.
+
+    Nothing is rendered if filtering results in an empty asset list.
+
+    @property { snippet } children
+      Passed to **List** component for rendering each asset.
+    @property { boolean } sort
+      Sort assets alphabetically by title?
+    @property { function } type
+      A type for the **List** component.
+    @property { ...any } [filters]
+      All additional properties are used as asset filters.
+-->
+
+<When test={true} {use} param={{ assets }}>
+  <List items={assets} pred={ainfo} {type} {children} />
+</When>
+
+
+<script module>
+import { ainfo } from '#frend/lib'
+import stateFilters from '#frend/state/filters.svelte'
+
+import List from './List'
+import When from './When'
+</script>
+
+<script>
+let { sort, type, use, children, ...filters } = $props();
+
+let others = filters.store ? stateFilters(filters.store) : {};
+
+let assets = $derived.by(() => 
+{
+    let items = ainfo.assets.filter(ainfo.filter({ ...others, ...filters }));
+    return sort ? items.sort(ainfo.sort.title) : items;
+});
+</script>

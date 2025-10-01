@@ -1,5 +1,5 @@
 {
-    "name": "@capmeth/acid",
+    "name": "@captison/acid",
     "version": "0.0.1",
     "description": "A Component Interface Documenter",
     "title": "ACID",
@@ -8,6 +8,7 @@
     "main": "main.js",
     "type": "module",
     "homepage": "https://capmeth.github.io/acid",
+    "logo": "https://capmeth.github.io/acid/acid.png",
     "private": true,
     "scripts": {
         "bundle": "rollup -c docsite/rollup.config.js",
@@ -43,7 +44,7 @@
         "rollup-plugin-postcss": "^4.0.2",
         "rollup-plugin-svelte": "^7.2.2",
         "svelte": "^5.34.7",
-        "takedown": "^0.1.1",
+        "takedown": "^0.1.3",
         "ws": "^8.18.0"
     },
     "devDependencies": {
@@ -55,11 +56,12 @@
     },
     "imports": {
         "#exts/*": "./extensions/*.js",
-        "#lib/*": "./source/shared/lib/*",
+        "#lib/*": "./source/lib/*",
         "#packson": "./package.json",
         "#paths": "./paths.js",
         "#source/*": "./source/*",
-        "#utils": "./source/shared/index.js"
+        "#test/*": "./test/*",
+        "#utils": "./source/utils/index.js"
     },
     "exports": {
         ".": "./source/entry.js"

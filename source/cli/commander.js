@@ -7,8 +7,7 @@ export default function (action)
 {
     let cmd = new Command();
 
-    let optionConfig = new Option('-c, --config [path]', 'path to configuration file')
-        .default('acid.config.js');
+    let optionConfig = new Option('-c, --config [path]', 'path to configuration file');
     let optionOutputDir = new Option('-d, --output-dir <dir>', 'folder to put generated docsite');
     let optionExtensions = new Option('-u, --use <ext>', 'extension module specifier and parameters')
         .argParser(collect());
@@ -19,6 +18,7 @@ export default function (action)
     let optionTitle = new Option('-t, --title <str>', 'title for the docsite');
     let optionWatch = new Option('-w, --watch', 'watch files for changes to trigger rebuild');
 
+    let optionRootSection = new Option('--root-section <name>', 'top-level section name');
     let optionTocDepth = new Option('--toc-depth <num>', 'table-of-contents header depth level')
         .argParser(integerOnly);
 
@@ -34,6 +34,7 @@ export default function (action)
         .addOption(optionServer)
         .addOption(optionTitle)
         .addOption(optionWatch)
+        .addOption(optionRootSection)
         .addOption(optionTocDepth)
         .action(action.run);
 
@@ -46,6 +47,7 @@ export default function (action)
         .addOption(optionServer)
         .addOption(optionTitle)
         .addOption(optionWatch)
+        .addOption(optionRootSection)
         .addOption(optionTocDepth)
         .action(action.makeConfig);
 

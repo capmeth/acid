@@ -1,0 +1,40 @@
+<!--*
+    Renders UI for a list container block and its items.
+
+    @tags inject:#main-list
+
+    @property { snippet } children
+      Passed each item in `items`.      
+    @property { snippet | boolean } delim
+      Insert delimiter items?
+    @property { iterable } items
+      List content.
+    @property { string } [type="default"]
+      Styling hint for the list being rendered.
+-->
+
+<ul class="main-list type-{type}">
+  {#each items as item, index (item)}
+    <li class="listitem">
+      {@render children(item)}
+    </li>
+    {#if delim && index < items.length - 1}
+      <li class="delimiter">
+        {#if typeof delim === 'function' }
+          {@render delim()}
+        {/if}
+      </li>
+    {/if}
+  {/each}
+</ul>  
+
+
+<script>
+let { delim, items, type = 'default', children } = $props();
+// actual length is needed for delimiting
+if (delim) items = Array.from(items);
+</script>
+
+<style>
+/* @inject #main-list */
+</style>

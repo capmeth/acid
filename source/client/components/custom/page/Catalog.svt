@@ -1,0 +1,84 @@
+<!--*
+    Renders UI for the asset lookup/filtering page.
+
+    @tags inject:#page-catalog
+
+    @property { object } site
+      Data from **Docsite** component.
+-->
+
+<div class="page-catalog">
+  <main>
+    <div class="leader">
+      <div class="title">{ t.page_catalog_title }</div>
+    </div>
+    <div class="content">
+      <Assets store="catalog" type="columns" sort>
+        {#snippet children(asset)}
+          <Link kind="annex" to={asset} />
+        {/snippet}
+        {#snippet use(render, { assets })}
+          <div class="count">
+            { t('msg_asset_count', { count: assets.length, total: ainfo.assets.length }) }
+          </div>
+          {@render render()}
+        {/snippet}
+      </Assets> 
+    </div>
+  </main>
+  <nav>
+    <Active kind="nav" store="filters">
+      {#snippet header()}
+        <div class="nav-title">{ t.label_filters }</div>
+      {/snippet}
+      <div class="filters">
+        <div class="text">
+          <Text store="catalog" />
+        </div>
+        <div class="group">
+          <Group store="catalog">
+            {#snippet each(group)}
+              <span>{ t(`label_${group}`) }</span>
+            {/snippet}
+          </Group>
+        </div>
+        <div class="tag">
+          <Tag store="catalog" />
+        </div>
+        <div class="usable">
+          <Usable store="catalog">
+            {#snippet each(key)}
+              <span>{ t(`label_${key}`) }</span>
+            {/snippet}
+          </Usable>
+        </div>
+        <Clear store="catalog" />
+      </div>
+    </Active>
+    {@render site.links()}
+  </nav>
+</div>
+
+
+<script module>
+import { ainfo, page } from '#public'
+
+import Active from '#stable/helper/Active'
+import Assets from '#stable/common/Assets'
+import Clear from '#stable/filter/Clear'
+import Group from '#stable/filter/Group'
+import Tag from '#stable/filter/Tag'
+import Text from '#stable/filter/Text'
+import Link from '#stable/helper/Link'
+import Usable from '#stable/filter/Usable'
+</script>
+
+<script>
+let { site } = $props();
+
+page.setTitle(t.page_catalog_title);
+</script>
+
+<style>
+/* @inject #page-catalog */
+</style>

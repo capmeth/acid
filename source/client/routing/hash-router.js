@@ -1,5 +1,4 @@
 import { on } from 'svelte/events'
-import Error from '../components/page/Error'
 import eventer from '../lib/eventer'
 
 
@@ -57,17 +56,14 @@ export default function(routes)
 
         if (route)
         {
-            let { name, Component, path } = route;
+            let { name, component, path } = route;
             let segments = spath.split('/');
 
             let reducer = (o, s, i) => s[0] === ':' ? { ...o, [s.slice(1)]: segments[i] } : o
             let params = path.split('/').reduce(reducer, {});
 
-            return { route: name, Component, ...params };
+            return { route: name, component, ...params };
         }
-
-        let message = `No page found at ${spath}`;
-        return { Component: Error, code: 404, message }
     }
 
     let toNavLink = (name, params) =>
