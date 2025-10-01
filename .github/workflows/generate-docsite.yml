@@ -47,6 +47,8 @@ jobs:
         with:
           node-version: 23
           registry-url: https://registry.npmjs.org/
+      - name: install deps
+        run: npm ci
       - name: generate bundle
         run: npm run bundle
       - name: generate docs
