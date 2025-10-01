@@ -69,7 +69,7 @@
         ".": "./source/entry.js"
     },
     "bin": {
-        "acid": "./source/cli/main.js"
+        "acid": "source/cli/main.js"
     },
     "repository": {
         "type": "git",
