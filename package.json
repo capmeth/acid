@@ -18,6 +18,7 @@
     },
     "keywords": [
         "component",
+        "docsite",
         "documentation",
         "generator",
         "jsdoc",
@@ -73,5 +74,10 @@
     "repository": {
         "type": "git",
         "url": "git+https://github.com/capmeth/acid.git"
-    }
+    },
+    "files": [
+        "extensions/",
+        "source/",
+        "paths.js"
+    ]
 }
