@@ -6,7 +6,7 @@ let insmap = new Map();
 
 export default function ()
 {
-    let render = async ({ source, partition, modulize, el }) =>
+    let render = async ({ source, partition, imports, modulize, el }) =>
     {
         let { code, template } = partition(source);
 
@@ -16,6 +16,13 @@ export default function ()
 
             <script>
             ${code}
+            </script>
+        `;
+
+        if (imports) body +=
+        `
+            <script module>
+            ${imports}
             </script>
         `;
 

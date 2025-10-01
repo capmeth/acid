@@ -10,7 +10,6 @@ import sections from './sections.js'
 export default
 {
     namespace: "acidoc",
-    title: "A Component Interface Documenter",
 
     copy: { files: path.join("source", "images", "acid.png"), to: 'acid.png' },
 
@@ -19,6 +18,7 @@ export default
     [
         { types: [ "svelte", "svt" ], use: "svelte-render", mode: "edit" }
     ],
+    cobeSvelte: true,
     hljs: 
     { 
         aliases: { jsx: [ "svelte", "svt"] },

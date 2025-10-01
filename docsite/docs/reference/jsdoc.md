@@ -4,63 +4,11 @@ cobeMode: static
 ---
 
 
-# Parsing JsDoc
-
-ACID provides a built-in [JsDoc](https://jsdoc.app) parser (see *Codeless Site Generation* below). It supports only "block-level" tags.
-
-The parser will look for standard JsDoc markers
-
-```js
-/**
-    This is a standard JsDoc-style comment.
- */
-```
-
-as well as JsDoc within HTML comment markers
-
-```html
-<!--*
-    This can also be detected as JsDoc.
--->
-```
-
-The key here is the extra `*` (star) added to an opening JS or HTML style block comment to identify it as JsDoc.
-
-Note that the opening and closing comment markers *must* appear on separate lines with only optional whitespace before or after them, respectively.
-
-```js
-let good = false; /**
-    This comment will not be detected as there is code on the same line and before 
-    the opening comment marker.
-*/
-/**
-    This comment will not be detected as there is code on the same line and after
-    the closing comment marker.
-*/ if (!good) fixit();
-```
-
-Leading whitespace on each line is truncated and ignored.  A single `*` *within* that leading space will also be truncated up to the first whitespace character after it.  Starting lines with a `*` followed by a space will help normalize the content for markdown-parsed tags (like `@description`).
-
-A block-level tag is one that starts a line in the comment after the above truncations.
-
-```js
-/**
- * This is a description (@see JsDoc docs).
- *
- * @name ComponentName
- */
-```
-
-In the example above `@name` is a block tag while `@see` is used as an inline one.  If any non-whitespace content appears on a line before a tag (including a non-truncated `*`), that tag is considered to be inline.
-
-Block-level tags are processed, but inline tags are not and may appear in docsite content as-is.  A block tag's content is ended by the start of the next block tag, or by the end of the comment itself.
-
-
 # JsDoc Tags
 
-Ok... here are the JsDoc tags recognized by ACID...  
+Below are the JsDoc tags recognized by ACID...  
 
-A tag with a `*` after it denotes either a non-standard tag or a deviation from the specified use of a standard tag.  For the rest, please refer to the JsDoc documentation for proper use and formatting.
+A tag with a `*` after it denotes either a non-standard tag or a deviation from the specified use of a standard tag.  For the rest, please refer to the [JsDoc documentation](https://jsdoc.app) for proper use and formatting.
 
 
 ## @author
@@ -282,30 +230,3 @@ Comma-separated list of possible enumerated values for the code entity.
 
 ****Captured for:****
 - component props
-
-
-# Codeless Site Generation
-
-That is, docsite generation without parsing any code, only JsDoc.
-
-For many codebases, formal documentation-oriented comments can be pretty sparse.  However, for projects that enforce JsDoc in the code, ACID provides a "codeless" JsDoc to JSON parser.
-
-It is configured as the fallback parser.
-
-```js
-parsers:
-[
-    { types: '*', use: '#exts/jsdoc' }
-]
-```
-
-You can override this by setting the fallback (`*`) record to something else (if necessary), but otherwise there is no need to set the parser explicitly.
-
-For this to work,
-- it is assumed that each source file implements exactly one component
-- at least `@name` and `@kind` or equivalents should be specified in each comment
-- first `@kind component` comment or first comment without `@kind` is assumed to be the primary comment
-
-If the selected primary "component" comment has no `@name`, the filename itself is used.
-
-Once the component comment has been identified, all other comments without `@name` and `@kind` will be skipped.  If the component comment cannot be identified, the file itself is skipped.

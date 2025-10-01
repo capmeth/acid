@@ -36,6 +36,8 @@
         &:hover, &:focus { filter: brightness(1.25); }
     }
 
+    body { line-height: 1.5em; }
+
     button
     {
         background: none;
@@ -92,7 +94,6 @@
 {
     border: none;
     box-sizing: border-box;
-    line-height: 1.5em;
     outline: none;
     text-decoration: none;
     transition: all 200ms ease-out;
@@ -530,7 +531,9 @@
 
     &.type-static, &.type-tree, &.type-toc
     {
-        .listitem { margin-block: 0.3em; }
+        line-height: 1.25em;
+
+        .listitem { margin-block: 0.4em; }
 
         :global(.main-list)
         {
@@ -755,6 +758,7 @@
             {
                 display: block;
                 font-size: max(3.4vw, 1.8em);
+                line-height: 1.5em;
                 margin-top: 2vw;
                 padding: 2px 0;
                 text-shadow: var(--acid-text-shadow-default);
@@ -820,37 +824,44 @@
 
 #-page-error
 {
-    display: contents;
-
-    main
+    background-color: #FFFFFFDD;
+    margin: 2vh 2vw;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 96vh;
+    
+    .message
     {
-        background-color: #FFFFFF99;
-        grid-column: 2 / 3;    
-        grid-row: 1 / 4;
-        overflow-y: auto;
-        padding: 1vw 2vw 4vw 2vw;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        
-        .message
-        {
-            color: crimson;
-            font-family: var(--acid-font-family-code);
-            font-size: 160%;
-            width: 70%;
-        }
+        color: crimson;
+        font-family: var(--acid-font-family-code);
+        font-size: 160%;
+        width: 70%;
+    }
 
-        .name
+    .name
+    {
+        background: crimson;
+        box-shadow: 1px 1px 3px 0 #555;
+        color: #ffffffee;
+        font-size: 280%;
+        padding: 8px 16px;
+        margin-bottom: 2vh;
+    }
+
+    .home 
+    {    
+        margin-top: 4vh;
+
+        a
         {
-            background: crimson;
-            box-shadow: 1px 1px 3px 0 #555;
-            color: #ffffffee;
-            font-size: 280%;
-            padding: 8px 16px;
-            margin: -5% 0 16px 0;
+            background: black;
+            border-radius: 1000px;
+            font-size: 125%;
+            padding: 6px 16px;
         }
     }
 }

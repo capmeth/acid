@@ -36,6 +36,7 @@ export default
 
     tutorials:
     {
+        title: 'How-tos',
         overview: 'Guides to help with common setup scenarios',
         documents: 
         [

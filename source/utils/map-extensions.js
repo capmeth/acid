@@ -51,7 +51,7 @@ export default async function(specs, moreImport)
 
         return doImport(name)
             .then(mod => map[type].use = mod.default({ param, type }))
-            .catch(() => map[type].use = null);
+            .catch(() => delete map[type].use);
     }));
 
     return map;

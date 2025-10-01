@@ -3,6 +3,7 @@ import is from './is.js'
 
 let commaRe = /\s*,\s*/;
 let skipRe = /^(?:html|body|:root|&:[a-z-]+)$/
+let pseudoRe = /^&:[a-z-]+$/
 let noren = ':not(.renbox *)';
 
 /**
@@ -35,43 +36,60 @@ let noren = ':not(.renbox *)';
     @return { string }
       A CSS stylesheet.
 */
-let jsToCss = (styles, limit) =>
+export default function (styles, limit)
 {
-    let reducer = (string, key) =>
+    let limitKey = (k, l) => l && !skipRe.test(k) && !k.endsWith(noren) ? k + noren : k
+
+    let jsToCss = (styles, limit) =>
     {
-        let value = styles[key];
-
-        if (is.nonao(value))
+        let reducer = (string, key) =>
         {
-            let limited = limit && hasDeclarations(value);
+            let value = styles[key];
 
-            key.split(commaRe).forEach(k => 
+            if (is.nonao(value))
             {
-                let val = `{ ${jsToCss(value, limit || k.startsWith(':global'))} }`;
-                let key = limited && !skipRe.test(k) && !k.endsWith(noren) ? k + noren : k;
-                string += `${key} ${val}\n`;
-            });
-        }
-        else if (is.array(value)) // CSS directives
-        {
-            value.forEach(val => 
+                let limited = limit && useProtection(value);
+
+                key.split(commaRe).forEach(k => 
+                {
+                    let val = `{\n${jsToCss(value, limit || k.startsWith(':global'))}}`;
+                    string += `${limitKey(k, limited)}\n${val}\n`;
+                });
+            }
+            else if (is.array(value)) // CSS directives
             {
-                val = is.nonao(val) ? `{ ${jsToCss(val, limit)} }` : `${val};`;
-                string += `${key} ${val}\n`;
-            });
-        }
-        else if (is(value))
-        {
-            string += `${key}: ${value};\n`;
+                value.forEach(val => 
+                {
+                    let isObj = is.nonao(val);
+                    val = isObj ? `{\n${jsToCss(val, limit)}}` : `${val};`;
+                    string += `${key}${isObj ? '\n' : ' '}${val}\n`;
+                });
+            }
+            else if (is(value))
+            {
+                string += `${key}: ${value};\n`;
+            }
+
+            return string;
         }
 
-
-        return string;
+        return Object.keys(styles).reduce(reducer, '');
     }
 
-    return Object.keys(styles).reduce(reducer, '');
+    return jsToCss(styles, limit);
 }
 
-let hasDeclarations = val => Object.keys(val).findIndex(key => !is.nonao(val[key])) >= 0
+let useProtection = val =>
+{
+    let finder = key => 
+    {
+        // CSS declarations
+        if (!is.nonao(val[key])) return true;
+        // CSS pseudo classes
+        if (pseudoRe.test(key)) return true;
 
-export default jsToCss
+        return false;
+    }
+
+    return Object.keys(val).findIndex(finder) >= 0;
+}

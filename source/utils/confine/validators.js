@@ -3,6 +3,8 @@ export default
 {
     alphanum: h => h.re(/^[a-z0-9_-]+$/) || 
         h.err('must be alphanumeric (including `_` and `-` characters)'),
+    array: h => h.array || 
+        h.err('must be an array'),
     arrayOrFunctionOrStringOrNull: h => h.or(h.null, h.string, h.func, h.array) ? h.to.array() : 
         h.err('must be an array or a function or a string or null'),
     arrayOrObject: h => h.object ? h.to.array() : 

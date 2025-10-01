@@ -20,7 +20,7 @@ let hljsCdn =
 */
 export default config =>
 {
-    let { hljs, links, metas, output, parsers, scripts } = config;
+    let { cobeSvelte, hljs, links, metas, output, parsers, scripts } = config;
 
     parsers.unshift({ types: '*', use: '#exts/jsdoc' });
 
@@ -52,8 +52,8 @@ export default config =>
 
         "svelte/internal/client": "https://esm.sh/svelte@5.34.7/internal/client",
         "svelte/internal/disclose-version": "https://esm.sh/svelte@5.34.7/internal/disclose-version",
-        "svelte/internal/flags/legacy": "https://esm.sh/svelte@5.34.7/internal/flags/legacy",
-
-        "svelte-render": `./${output.name}-svelte-render.js`
+        "svelte/internal/flags/legacy": "https://esm.sh/svelte@5.34.7/internal/flags/legacy"
     }
+
+    if (cobeSvelte) config.importMap = { "svelte-render": `./${output.name}-svelte-render.js` };
 }

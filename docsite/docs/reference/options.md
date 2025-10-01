@@ -127,6 +127,21 @@ A code block's `mode` will be forced to "static" if no `use` exists for its lang
 Set `noHighlight` to `true` to turn off code highlighting.  This has no effect if highlighting for the block's language-type is not supported or not loaded (see `hljs` option).
 
 
+## cobeSvelte
+
+Builds the default Svelte renderer.
+
+```js label="default value"
+cobeSvelte: false
+```
+
+```js label="spec"
+cobeSvelte: true | false
+```
+
+Remember that this only tells ACID to generate the renderer with a docsite build.  To use it, you will still need to set it up in `config.cobe` with the specifier "svelte-render".
+
+
 ## components
 
 Replace internal docsite components.

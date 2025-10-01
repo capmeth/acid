@@ -164,5 +164,5 @@ export default function (prints, assign)
         return final;
     }
 
-    return proxer(is.array(prints) ? [] : {});
+    return proxer({});
 }

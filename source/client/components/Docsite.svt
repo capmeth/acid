@@ -11,12 +11,7 @@
 
 <Docsite>
   {#snippet children(site)}
-    <svelte:boundary {onerror}>
-      <Comp {...props} {site} />
-      {#snippet failed(error)}
-        <Error {site} {error} />
-      {/snippet}
-    </svelte:boundary>
+    <Comp {...props} {site} />
   {/snippet}
 </Docsite>
 
@@ -25,7 +20,6 @@
 import { ainfo, context, sinfo } from '#frend/lib'
 
 import Docsite from '#custom/main/Docsite'
-import Error from '#custom/page/Error'
 
 import Catalog from '#custom/page/Catalog'
 import Component from '#custom/page/Component'
@@ -34,7 +28,6 @@ import Home from '#custom/page/Home'
 import Section from '#custom/page/Section'
 
 let pages = { Catalog, Component, Document, Home, Section };
-let onerror = error => console.error(error)
 </script>
 
 <script>
@@ -50,11 +43,21 @@ if (route === 'home')
 }
 else if (route === 'section')
 {
-    context.section = props.name;
+    if (sinfo.sections.includes(props.name))
+        context.section = props.name;
+    else
+        throw new ReferenceError(`Cannot find section "${props.name}".`);
 }
 else if (ainfo.types.includes(route)) 
 {
-    context.asset = props.uid;
-    context.section = ainfo(props.uid).section;
+    if (ainfo.assets.includes(props.uid))
+    {
+        context.asset = props.uid;
+        context.section = ainfo(props.uid).section;
+    }
+    else
+    {
+        throw new ReferenceError(`Cannot find asset "${props.uid}".`);
+    }
 }
 </script>

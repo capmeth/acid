@@ -6,7 +6,7 @@ import globit from '#lib/globit.js'
 import paths from '#paths'
 import { is } from '#utils'
 import docson from '../docson.js'
-import doxie from '../doxie.js'
+import doxie from '../doxie/index.js'
 
 
 let commaRe = /\s*,\s*/;
@@ -110,9 +110,9 @@ export default function(config)
     
 
     /**
-        Sets a UID value for a record.
+        Sets a UID value for a record (if not already present).
 
-        If the record already has a `name` or a `uid`, no change is made.
+        Only affects records with a `tid` value.
 
         @param { object } record
           - `path`: a path object
@@ -122,13 +122,13 @@ export default function(config)
     */
     op.identify = async (record, exec) =>
     {
-        if (!record.uid && !record.name)
+        if (record.tid && !record.uid)
         {
             record = await exec.pather(record);
 
-            let { path, tid } = record;
+            let { path } = record;
 
-            if (tid && is.nonao(path)) // no `uid` for sections
+            if (is.nonao(path)) 
                 record.uid = kebabCase(toAssetId(path.path));
         }
 
@@ -283,12 +283,7 @@ export default function(config)
             let abs = np.resolve(root, path);
 
             if (existsSync(abs))
-            {
-                let ext = np.extname(abs)
-                let base = np.basename(abs, ext)
-                
-                record.path = { path, abs, base, ext };
-            }
+                record.path = { ...np.parse(abs), path, abs };
         }
 
         return record;
@@ -296,10 +291,14 @@ export default function(config)
 
 
     /**
-        Parses source file into `record`.
+        Parses source file documentation data into `record`.
+
+        If parsed data includes `name` and not `title` then `title` becomes 
+        `name`.
 
         @param { object } record
-          - `path`: path object
+          - `path`: a path object for the source file
+          - `tid`: asset type id
         @return { object }
           All parsed data added.
     */
@@ -307,7 +306,7 @@ export default function(config)
     {
         record = await exec.pather(record);
 
-        let { path } = record;
+        let { path, tid } = record;
 
         if (is.nonao(path))
         {            
@@ -317,11 +316,16 @@ export default function(config)
 
                 if (parser.use)
                 {
-                    let data = doxie(path.path, td.comment);
-                    await parser.use(path.abs, data, docson);
+                    let doxer = doxie[tid](path.path, td.comment);
+                    // doxer validates all data from parser
+                    doxer.asset = await parser.use(path.abs, docson);
 
-                    if (data.ignore) return null;
-                    Object.assign(record, data);
+                    let { ignore, name, ...rest } = doxer.asset;
+
+                    if (ignore) return null;
+                    if (name) rest.title ||= name;
+
+                    Object.assign(record, rest);
                 }
 
                 return record;

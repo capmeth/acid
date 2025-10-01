@@ -31,6 +31,13 @@ config.assetTypes =
 config.cobe = [];
 
 /**
+    Generate the Svelte renderer?
+
+    @type { boolean }
+*/
+config.cobeSvelte = false;
+
+/**
     Allows use of alternative presentational components.
 
     These are `group-name` elements mapped to svelte component filepaths.

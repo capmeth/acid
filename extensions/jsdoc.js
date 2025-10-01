@@ -9,7 +9,7 @@ export default function ()
     // captures JsDoc comments in Js and HTML form.
     let commentRe = /(?<=^|\n)\s*\/\*\*[^*].*?\*\/|<!--\*.+?-->\s*(?=\n|$)/gs;
 
-    return async (file, data, docson) =>
+    return async (file, docson) =>
     {
         let source = await fs.readFile(file, { encoding: 'utf8' });
         let result, parsed = [];
@@ -18,22 +18,22 @@ export default function ()
         while (result = commentRe.exec(source)) parsed.push(docson(result[0]));
 
         // find the component related comment
-        let mainComment = 
+        let data = 
             parsed.find(item => item.kind === 'component') ||
             parsed.find(item => !item.kind);
         
-        // abort here if there is no component comment
-        if (!mainComment) return;
-
-        parsed.splice(parsed.indexOf(mainComment), 1);
-        // update the data proxy
-        data.self = mainComment;
+        if (data) 
+            parsed.splice(parsed.indexOf(data), 1);
+        else
+            data = {};
 
         // look for props
         for (let item of parsed)
         {
-            if (typeof item.name === 'string' && item.name !== '' && item.kind === 'prop')
-                data.prop = item;            
+            if (item.name && typeof item.name === 'string' && item.kind === 'prop')
+                (data.props ||= []).push(item);
         }
+
+        return data;
     }
 }

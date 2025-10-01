@@ -113,23 +113,24 @@ The reamining sections will all be similar.
 }
 ```
 
-As the "Layouts" folder has no readme file, we have just provided a short description in `overview` instead.
+As the "Layouts" folder has no readme file, we have provided a short description in `overview` instead.
 
-In `components` we use glob patterns to select all the files that should be included in the section. For each category above, we are selecting every *index.jsx* file found as a descendant of that category's folder, as they are all component source files, presumably.
+In `components` we use glob patterns to select all the files that should be included in the section. For each category, we have selected every *index.jsx* file found as a descendant of the category's folder, as they are all component source files.
 
 *As this is a basic tutorial, we won't go into how to setup a source parser here.  We will assume that all of the component source files in this fake project are well documented using [JsDoc tags that are understood by ACID](document/reference-jsdoc), and thus can be parsed for documentation using the default internal parser.*
 
 At this point your app will be more organized, but notice that the names of all the components are "index".  Of course, this might not be true if a component specifies a name in its JsDoc comment, but our project structure dictates that a component name should come from the immediate parent folder of the component source file.
 
-Let's fix that using `config.toAssetName`.
+Let's fix that!
 
 ```js
 {
-    toAssetName: ({ base, name, segs }) => base === 'index.jsx' ? segs.reverse()[1] : name
+    toAssetName: ({ base, name, segs }) => base === 'index.jsx' ? segs.reverse()[1] : name,
+    useFilenameOnly: true
 }
 ```
 
-The above function is selecting the second-to-last path segment (using reversed `segs` array) as the name when the `base` path segment is *index.jsx*.  Otherwise, the file `name` is used.
+The above `toAssetName` function is selecting the second-to-last path segment (using reversed `segs` array) as the name when the `base` path segment is *index.jsx*.  Otherwise, the file `name` is used.  Option `useFilenameOnly` is set to force the component to derive its name from its filename (which will use `toAssetName`).
 
 
 We've left out the *App.jsx* component, though.  Let's just add it to the *home* section.
@@ -182,7 +183,9 @@ export default
         }
     },
 
-    toAssetName: ({ base, name, segs }) => base === 'index.jsx' ? segs.reverse()[1] : name
+    toAssetName: ({ base, name, segs }) => base === 'index.jsx' ? segs.reverse()[1] : name,
+
+    useFilenameOnly: true
 }
 ```
 

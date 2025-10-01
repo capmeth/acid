@@ -26,6 +26,7 @@ export default
     'config.cobe.*.use': test.arrayOrStringOrNull,
     'config.cobe.*.use.0': test.string,    
     'config.cobe.*.use.1': test.serial,
+    'config.cobeSvelte': test.boolean,
     'config.components': { test: test.object, default: {}, merge: true },
     'config.components.*': test.stringOrNull,
     'config.copy': { test: test.arrayOrObjectOrString, default: [] },

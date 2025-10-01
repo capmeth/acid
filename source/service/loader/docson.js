@@ -1,64 +1,23 @@
-import { is } from '#utils'
+import { is, mapComment, uncomment } from '#utils'
 
 
-/*
-    Custom JSDoc to JSON (docson) parser
-    ---------------------------------------------------------------------------
+/** 
+    Parses JSDoc comments into `target` object.
+
+    @param { string } comment
+      Data to be parsed.
+    @param { object | Proxy } target
+      Object to which JsDoc tag data will be added.
+    @return { object | Proxy }
+      Updated `target` object.
 */
-let jsRe = /^\s*\/\*\*(.+?)\*\/\s*$/s;
-let htmlRe = /^\s*<!--\*(.+?)-->\s*$/s;
-let truncRe = /^(?:\s(?<!\n))*(?:\*(?: |$))?/gm;
-
-/**
-    Trims comment string and strips comment markers (js and html) including *'s
-    at beginning of lines. 
-*/
-let stripMarkers = source =>
+export default (comment, target = {}) => 
 {
-    let adjusted = source;
-
-    if (jsRe.test(adjusted)) 
-        adjusted = jsRe.exec(adjusted)[1];
-    else if (htmlRe.test(adjusted)) 
-        adjusted = htmlRe.exec(adjusted)[1];
-
-    if (truncRe.test(adjusted))
-        adjusted = adjusted.replace(truncRe, '');
-
-    return adjusted;
-}
-
-
-let tagdefRe = /(?:^\s*(?!\s|@)(?<spec>.+?)|(?<=(^|\n)\s*)@(?<tag>\w+)(?:\s+(?<spec>.+?))?)\s*(?=\n\s*@|$)/gsi;
-
-let alias =
-{
-    arg: 'param',
-    argument: 'param',
-    defaultvalue: 'default',
-    enums: 'values',
-    desc: 'description',
-    emits: 'fires',
-    func: 'function',
-    method: 'function',
-    return: 'returns'
-};
-
-/**
-    Splits comment into individual parts by tags.  This selects the tag marker 
-    and everything after it until the next tag marker.  Initial portion without 
-    tag is always "description".
-*/
-let divideTags = (source, target) =>
-{
-    for (let match of source.matchAll(tagdefRe))
+    mapComment(uncomment(comment), (tag, spec) => 
     {
-        // default `tag` to "description" for comment open without tag
-        let { tag = 'description', spec = '' } = match.groups;
-
-        let data = procs[alias[tag] || tag]?.(spec);
+        let data = procs[tag]?.(spec);
         is.func(data) ? data(target) : Object.assign(target, data);
-    }
+    });
 
     return target;
 }
@@ -84,10 +43,6 @@ let classMemberRe = /^(.+?)#(.+?)$/;
 let isOptionalRe = /^\[.+?\]$/;
 let commaRe = /\s*,\s*/;
 
-/*
-    The object return value of these processors is merged to build the coment
-    spec.
-*/
 let procs = 
 {
     /**
@@ -111,9 +66,9 @@ let procs =
     component: spec => ({ kind: 'component', name: spec }),
     /**
         @return { object }
-          - `default`: default value for the thing
+          - `fallback`: default value for the thing
     */
-    default: spec => ({ default: spec }),
+    default: spec => ({ fallback: spec }),
     /**
         @return { object }
           - `deprecated`: details about why the thing is no longer useful
@@ -180,11 +135,10 @@ let procs =
         @return { object }
           - `prop`
             - `name`: name of property
-            - `mod`: type modifier (spread, nullable)
             - `type`: data type
-            - `desc`: property description
-            - `default`: default value 
-            - `optional`: is property optional?
+            - `description`: property description
+            - `fallback`: default value 
+            - `required`: is property required?
     */
     property: spec =>
     {
@@ -200,7 +154,7 @@ let procs =
         if (fallback) prop.fallback = fallback;
         prop.required = !isOptionalRe.test(param);
 
-        return t => t.prop = [ ...t.prop || [], prop ];
+        return t => t.props = [ ...t.props || [], prop ];
     },
     /**
         @return { object }
@@ -260,19 +214,3 @@ let procs =
     */
     version: spec => ({ version: spec }),
 };
-
-/** 
-    Parses JSDoc comments into `target` object.
-
-    Values are not aggregated for repeatable tags found in a comment.  They
-    are simply assigned directly to `target`.  Thus, `target` is preferably a 
-    Proxy that can handle multiple assignments to the same key internally.
-
-    @param { string } comment
-      Data to be parsed.
-    @param { object | Proxy } target
-      Object to which JsDoc tag data will be added.
-    @return { object | Proxy }
-      Updated `target` object.
-*/
-export default (comment, target = {}) => divideTags(stripMarkers(comment), target)

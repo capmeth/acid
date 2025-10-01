@@ -43,9 +43,14 @@ export default function(config, loaded, styles)
     main.input = 
     { 
         [`${output.name}-docsite`]: path.join(paths.client, 'app.js'),
-        [`${output.name}-examples`]: virtual('examples.json'),
-        [`${output.name}-svelte-render`]: path.join(paths.extensions, 'svelte.js')
+        [`${output.name}-examples`]: virtual('examples.json')
     };
+
+    if (config.cobeSvelte) 
+    {
+        log.test('adding {:emph:svelte renderer} to docsite...');
+        main.input[`${output.name}-svelte-render`] = path.join(paths.extensions, 'svelte.js');
+    }
 
     main.output =
     { 

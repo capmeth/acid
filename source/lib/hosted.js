@@ -1,12 +1,7 @@
 import path from 'node:path'
 
 
-/*
-    Utilities to access the dependent (hosted) application.
-*/
+let filepath = path.join(process.cwd(), 'package.json');
+let mod = await import(filepath, { with: { type: 'json' } });
 
-let root = process.cwd();
-
-export let toHostedPath = (...segs) => path.join(root, ...segs)
-
-export let hackson = await import(path.join(root, 'package.json'), { with: { type: 'json' } }).then(x => x.default);
+export let hackson = mod.default;
