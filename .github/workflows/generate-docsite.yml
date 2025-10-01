@@ -42,7 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ${$GITHUB_WORKSPACE}
+        working-directory: ${{ github.workspace }}
     needs: setup
     steps:
       - name: generate bundle
