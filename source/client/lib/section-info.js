@@ -4,7 +4,7 @@
     Derived information interface for docsite sections.
 */
 import { rootSection, sections, tocDepth } from '#config'
-import { cacher, is, proxet } from '#utils'
+import { cacher, proxet } from '#utils'
 import ainfo from './asset-info'
 
 

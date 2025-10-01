@@ -50,9 +50,9 @@ Generated docsites are built on the Svelte platform.
 
 ## [takedown](https://www.npmjs.com/package/takedown)
 
-Takedown is a custom CommonMark-compliant markdown parser built primarily for ACID.
+Takedown is a customizable CommonMark-compliant markdown parser.
 
-Markdown files and code entity descriptions are processed through Takedown.
+Markdown files and code comment descriptions are processed through Takedown.
 
 
 # Development Stack
@@ -87,3 +87,9 @@ The champion Javascript package manager, Nervous Purple Monkeys. :laugh:
 
 NPM is used for managing dependencies and general project management.
 
+
+## [sinon](https://sinonjs.org)
+
+Sinon is a great tool stubbing functions and spying on them.
+
+Sinon handles some of the more complicated aspects of unit testing.

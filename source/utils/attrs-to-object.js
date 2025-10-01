@@ -1,5 +1,4 @@
 import { camelCase } from 'change-case'
-import is from './is.js'
 
 
 let attrsRe = 
