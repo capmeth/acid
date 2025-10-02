@@ -23,6 +23,7 @@
         "generator",
         "jsdoc",
         "markdown",
+        "styleguide",
         "svelte",
         "ui",
         "workbench"

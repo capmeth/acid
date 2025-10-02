@@ -11,6 +11,7 @@
 
 - build artifacts are minified in production (`NODE_ENV=production`)
 - `assign` parameters fixed for `config.tagLegend`
+- added tutorial for injecting bundled code in CoBEs
 
 
 ## v0.0.1

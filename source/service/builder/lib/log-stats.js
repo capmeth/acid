@@ -1,4 +1,6 @@
 
+let env = process.env.NODE_ENV || 'development';
+
 export default function(stats)
 {
     let { bundleSize, bundleOrigSize, bundleReduction, moduleCount } = stats;
@@ -9,7 +11,7 @@ export default function(stats)
     log(
     `
     ::::::::::::::::::::::::::::::::::::::::::::::::::::::
-         ACID Web Bundle Stats
+         ACID Web Bundle Stats ({:whiteBright:${env}})
     ::::::::::::::::::::::::::::::::::::::::::::::::::::::
            {:greenBright:bundle size:      ${kb}kb}
            original size:    ${ogkb}kb

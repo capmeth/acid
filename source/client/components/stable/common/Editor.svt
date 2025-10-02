@@ -126,7 +126,7 @@ let update = () =>
     }
 }
 
-let onerror = err => (error = err.message ?? err, console.error(err))
+let onerror = err => (error = err.message ?? err, console.error('CoBE:', err))
 editor.onkeydown = evt =>
 {
     if (evt.metaKey)

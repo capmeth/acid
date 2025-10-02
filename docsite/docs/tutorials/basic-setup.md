@@ -88,7 +88,7 @@ Now let's fill out the root section.
 
 We've now given the home section a `title`, connected the project's readme file as the `overview` content, and linked the other three sections as children or sub-sections.
 
-The reamining sections will all be similar.
+The remaining sections will all be similar.
 
 ```js
 {
@@ -131,7 +131,6 @@ Let's fix that!
 ```
 
 The above `toAssetName` function is selecting the second-to-last path segment (using reversed `segs` array) as the name when the `base` path segment is *index.jsx*.  Otherwise, the file `name` is used.  Option `useFilenameOnly` is set to force the component to derive its name from its filename (which will use `toAssetName`).
-
 
 We've left out the *App.jsx* component, though.  Let's just add it to the *home* section.
 
