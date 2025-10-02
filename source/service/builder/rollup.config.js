@@ -9,7 +9,9 @@ import pluginImage from '@rollup/plugin-image'
 import pluginInject from '@rollup/plugin-inject'
 import pluginJson from '@rollup/plugin-json'
 import pluginNodeResolve from '@rollup/plugin-node-resolve'
+import pluginTerser from '@rollup/plugin-terser'
 import pluginAnalyzer from 'rollup-plugin-analyzer'
+import pluginCleanup from 'rollup-plugin-cleanup'
 import pluginPostcss from 'rollup-plugin-postcss'
 import pluginSvelte from 'rollup-plugin-svelte'
 import path from 'node:path'
@@ -27,6 +29,8 @@ import pluginScopedStyles from './plugin/scoped-styles.js'
 import pluginByImporter from './plugin/by-importer.js'
 import pluginVirtualFile from './plugin/virtual-file.js'
 
+
+let prod = process.env.NODE_ENV === 'production';
 
 export default function(config, loaded, styles)
 {
@@ -111,8 +115,9 @@ export default function(config, loaded, styles)
             include: path.join('**', '*.{svelte,svt}'),
             t: path.join(paths.client, 'lib', 't.js')
         }),
-        pluginPostcss({ minimize: true }),
+        pluginPostcss({ minimize: prod }),
         pluginEmitAsset({ fileName: `${output.name}.html`, source: makeHtml(config) }),
+        prod ? pluginTerser() : pluginCleanup(),
         pluginCopyStuff({ specs: copy, rootpath: root, outpath }),
         pluginAnalyzer({ onAnalysis: logStats, skipFormatted: true })
     ];
