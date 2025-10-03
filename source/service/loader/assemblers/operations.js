@@ -350,11 +350,12 @@ export default function(config)
         record = await exec.identify(record);
         record = await exec.pather(record);
 
-        let { mcid, path, tid, uid } = record;
-
         if (tagmap.size)
         {
             let promises = [];
+
+            let { path, tid, uid } = record;
+            let data = { path: { ...path }, tid, uid };
 
             for (let [ fn, name ] of tagmap.entries())
             {
@@ -371,7 +372,7 @@ export default function(config)
                     }
                 }
 
-                promises.push(Promise.resolve(fn({ mcid, path: path.abs, tid, uid })).then(handler));
+                promises.push(Promise.resolve(fn(data)).then(handler));
             }
 
             await Promise.all(promises);

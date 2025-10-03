@@ -20,6 +20,4 @@ Some features of ACID include:
 - ******Fully Customizable!******  
   Tailor your docsite by **editing the CSS** or **replacing internal components**.
 
-**ACID** is a hobby project inspired by [react-styleguidist](https://www.npmjs.com/package/react-styleguidist).
-
 For issues, questions, suggestions, etc... please leave a post on the [Github Issues](https://github.com/capmeth/acid/issues) page.

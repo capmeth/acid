@@ -34,7 +34,7 @@
 {#snippet links(kind = 'nav')}
   <Active {kind} store="links">
     {#snippet header()}
-      <div class="{kind}-title">{ t.label_static }</div>
+      <span class="{kind}-title">{ t.label_static }</span>
     {/snippet}
     <Static />
   </Active>
@@ -45,7 +45,7 @@
     {#snippet use(render)}
       <Active {kind} store="toc">
         {#snippet header()}
-          <div class="{kind}-title">{ t.label_toc }</div>
+          <span class="{kind}-title">{ t.label_toc }</span>
         {/snippet}
         {@render render()}
       </Active>
@@ -58,7 +58,7 @@
     {#snippet use(render)}
       <Active {kind} store={group || 'tree'}>
         {#snippet header()}
-          <div class="{kind}-title">{ t(`label_${group || 'content'}`) }</div>
+          <span class="{kind}-title">{ t(`label_${group || 'content'}`) }</span>
         {/snippet}
         {@render render()}
       </Active>

@@ -59,11 +59,14 @@ tagLegend:
 
 The function must return `true` or a non-empty string for the tag to be added to the asset.  A returned string becomes the *info* portion of the tag. 
 
-The object passed to `assign` will have asset information.
+The object passed to `assign` will have the following information.
 - `uid` *string*: asset id
-- `path` *object*: absolute path to asset file
+- `path` *object*: asset filepath details
+  - `abs`: absolute path
+  - `base`: filename with extension
+  - `ext`: file extension
+  - `name`: filename w/o extension
 - `tid` *string*: asset type id
-- `mcid` *string*: markdown content id (if available)
 
 
 ## Tag Styling

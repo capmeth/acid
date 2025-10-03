@@ -40,7 +40,8 @@ export default
         overview: 'Guides to help with common setup scenarios',
         documents: 
         [
-            'docsite/docs/tutorials/starter.md'
+            'docsite/docs/tutorials/basic-setup.md',
+            'docsite/docs/tutorials/cobe-code-injection.md'
         ]
     },
 

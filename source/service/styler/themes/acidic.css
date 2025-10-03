@@ -78,9 +78,12 @@
         font-weight: bold;
         padding: 6px 16px;
 
-        &.active::after { content: ':'; }
-
         &:hover { background-color: #ffffff22; }
+
+        &.active
+        {
+            &::after { content: ':'; }
+        }        
     }
 
     .nav-title
@@ -201,6 +204,8 @@
 
 #-helper-link
 {
+    line-height: 1.5em;
+    
     & span::before
     {
         display: inline-block;
@@ -375,6 +380,7 @@
                 display: inline-block;
                 font-size: max(3.6vw, 1.2em);
                 font-weight: 700;
+                line-height: 1.5em;
                 margin-top: 24px;
                 text-shadow: var(--acid-text-shadow-default);
             }
@@ -452,7 +458,7 @@
             background: hsl(351, 100%, 95%);
             color: red;
             font-family: Monaco, monospace;
-            font-size: 12px;
+            font-size: 16px;
             display: inline-block;
             padding: 8px;
 

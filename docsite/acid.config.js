@@ -39,7 +39,7 @@ export default
         "cid": 
         {
             desc: 'Component ID is "{info}" for import or replacement',
-            assign: ({ tid, uid, title }) => tid === 'cmp' && `${uid.split('-')[1]}/${title}`
+            assign: ({ path, tid, uid }) => tid === 'cmp' && `${uid.split('-')[1]}/${path.name}`
         },
         "cobe": "Is part of the CoBE component family",
         "conditional": "Renders nothing when certain condition(s) fail",
