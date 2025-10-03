@@ -29,7 +29,7 @@
   <nav>
     <Active kind="nav" store="filters">
       {#snippet header()}
-        <div class="nav-title">{ t.label_filters }</div>
+        <span class="nav-title">{ t.label_filters }</span>
       {/snippet}
       <div class="filters">
         <div class="text">

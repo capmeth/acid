@@ -2,8 +2,8 @@ import is from './is.js'
 
 
 let commaRe = /\s*,\s*/;
-let skipRe = /^(?:html|body|:root|&:[a-z-]+)$/
-let pseudoRe = /^&:[a-z-]+$/
+let skipRe = /^(?:html|body|:root|&::?[a-z-]+)$/
+let pseudoRe = /^&::?[a-z-]+$/
 let noren = ':not(.renbox *)';
 
 /**

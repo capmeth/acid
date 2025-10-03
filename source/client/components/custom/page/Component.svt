@@ -18,7 +18,7 @@
       {/if}
       <Active kind="sector" store="asset-description">
         {#snippet header()}
-          <div class="sector-title">{ t.label_description }</div>
+          <span class="sector-title">{ t.label_description }</span>
         {/snippet}
         <Description type="component" value={description} />
       </Active>
@@ -26,7 +26,7 @@
         {#snippet use(render)}
           <Active kind="sector" store="asset-tags">
             {#snippet header()}
-              <div class="sector-title">{ t.label_tags }</div>
+              <span class="sector-title">{ t.label_tags }</span>
             {/snippet}
             {@render render()}
           </Active>
@@ -36,7 +36,7 @@
         {#snippet use(render)}
           <Active kind="sector" store="asset-props">
             {#snippet header()}
-              <div class="sector-title">{ t.label_props }</div>
+              <span class="sector-title">{ t.label_props }</span>
             {/snippet}
             {@render render()}
           </Active>
