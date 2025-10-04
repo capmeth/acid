@@ -1,6 +1,6 @@
 {
     "name": "@captison/acid",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "A Component Interface Documenter",
     "title": "ACID",
     "author": "Ben Captison",
@@ -40,7 +40,6 @@
         "change-case": "^5.4.4",
         "chokidar": "^4.0.3",
         "commander": "^13.0.0",
-        "deepmerge": "^4.3.1",
         "glob": "^11.0.1",
         "js-yaml": "^4.1.0",
         "rollup": "^4.43.0",

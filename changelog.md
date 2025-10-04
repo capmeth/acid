@@ -7,6 +7,11 @@
 
 
 ---
+## v0.0.3
+
+- renderer extension functions no longer receive `modulize` and `partition` props
+
+
 ## v0.0.2
 
 - build artifacts are minified in production (`NODE_ENV=production`)

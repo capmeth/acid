@@ -71,6 +71,8 @@ export default
         h.err('must be a string or a function'),
     stringOrNull: h => h.or(h.string, h.null) || 
         h.err('must be a string or null'),
+    stringOrNullish: h => h.or(h.string, h.nullish) || 
+        h.err('must be a string or null or undefined'),
     stringOrObject: h => h.or(h.string, h.plain) || 
         h.err('must be a string or an object'),
     tag: h => h.re(/^([a-z0-9-]+)(?::([^\s]+))?$/) || 

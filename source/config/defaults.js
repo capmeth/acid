@@ -128,7 +128,8 @@ config.metas =
 config.namespace = 'docsite';
 
 /**
-    User notification timeout (for things like copy-to-clipboard).
+    User notification timeout  in milliseconds (for things like 
+    copy-to-clipboard).
 
     @type { number }
 */

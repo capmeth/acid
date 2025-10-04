@@ -1,7 +1,6 @@
 import fs from 'node:fs'
 import parseFile from '#lib/parse-file.js'
 import { is } from '#utils'
-import { assign, defaults } from '../config/index.js'
 import controller from './controller.js'
 import getLogger from '../logging/index.js'
 
@@ -21,13 +20,12 @@ import getLogger from '../logging/index.js'
       Additional configuration options (usually from CLI).
     @return { object | promise }
       Resolves to an object with
-      - `start` (func): start the app
-      - `extend` (func): extend the app
+      - `run` (func): start the app
+      - `use` (func): extend the app
 */
 let service = async (options, cliopts) =>
 {
-    let merge = data => assign(defaults, data || {}, cliopts || {}).config
-    let serve = config => controller(merge(config), options)
+    let serve = config => controller(config, cliopts)
     
     if (is.string(options) && fs.existsSync(options)) 
         return parseFile(options).then(serve);
@@ -35,8 +33,7 @@ let service = async (options, cliopts) =>
     return is.nonao(options) ? serve(options) : serve();
 }
 
-service.sync = config => controller(assign(defaults, config || {}).config)
-
+service.sync = controller;
 service.logger = config => global.log = getLogger(config)
 service.logger();
 

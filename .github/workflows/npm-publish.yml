@@ -53,7 +53,7 @@ jobs:
       - name: publish
         run: npm publish --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.CAPTISON_NPM_TOKEN }}
 
   deploy:
     environment:
