@@ -18,7 +18,7 @@ let definition =
     'asset.example': test.string,
     'asset.ignore': test.boolean,
     'asset.kind': test.string,
-    'asset.name': test.string,
+    'asset.name': test.stringOrNullish,
     'asset.props': { test: test.array, default: [] },
     'asset.props.*': test.object,
     'asset.props.*.*': test.unset,

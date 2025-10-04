@@ -448,19 +448,21 @@
 
     .stage
     {
-        background: #ccc;
+        background: #eee;
         padding: 16px;
         overflow-x: auto;
         width: 100%;
 
         > .error
         {
-            background: hsl(351, 100%, 95%);
-            color: red;
+            background: red;
+            color: white;
             font-family: Monaco, monospace;
             font-size: 16px;
             display: inline-block;
+            overflow-x: auto;
             padding: 8px;
+            white-space: pre-wrap;
 
             &::before 
             { 

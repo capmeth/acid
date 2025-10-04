@@ -1,13 +1,14 @@
+import path from 'node:path'
 import chokidar from 'chokidar'
 import globit from '#lib/globit.js'
 import { debounce } from '#utils'
 
 
-export default function(config, omits = [])
+export default function(config)
 {
-    let { root, watch: { delay, enabled, files } } = config;
-    // add extra excluded files
-    (files.exclude ??= []).push(...omits);
+    let { output, root, watch: { delay, enabled, files } } = config;
+    // always exclude output directory from watch
+    (files.exclude ??= []).push(path.join(output.dir, '**'));
 
     let watchers = [];
 

@@ -1,6 +1,3 @@
-import fs from 'node:fs'
-import path from 'node:path'
-
 import builder from './builder/index.js'
 import loader from './loader/index.js'
 import importer from './importer/index.js'
@@ -10,7 +7,7 @@ import styler from './styler/index.js'
 import watcher from './watcher.js'
 
 import { is } from '#utils'
-import { assign, required } from '../config/index.js'
+import { assign, defaults, required } from '../config/index.js'
 
 
 /**
@@ -20,17 +17,17 @@ import { assign, required } from '../config/index.js'
     - `run`: executes a docsite build
     - `use`: adds a function used to extend configuration
 
-    @param { object } config
-      Configuration options.
-    @param { string } file
-      Configuration filename (for watch exclusion).
+    @param { ...object } options
+      Configuration options objects.
     @return { object }
       Services object.
 */
-export default function(config, file)
+export default function(...options)
 {
-    let isFile = is.string(file) && fs.existsSync(file);
-    let omits = isFile ? [ file ] : [];
+    let { config } = assign(defaults, ...options);
+
+    let users = [];
+    let importExt = importer(config.root);
 
     let run = async bool =>
     {
@@ -38,23 +35,13 @@ export default function(config, file)
 
         if (bool) data.config = { server: true, watch: true };
 
-        let svc = createServices(data.config, omits);
+        let svc = createServices(data.config);
 
-        let exec = async () => 
-        {
-            await Promise.all([ svc.bundle(), svc.watch.start(svc.update) ]).then(svc.serve.start);
-        }
-
-        let stop = async () => 
-        {
-            await Promise.all([ svc.serve.stop(), svc.watch.close(), svc.socket.close() ]);
-        }
+        let exec = () => Promise.all([ svc.bundle(), svc.watch.start(svc.update) ]).then(svc.serve.start)
+        let stop = () => Promise.all([ svc.serve.stop(), svc.watch.close(), svc.socket.close() ])
     
         return exec().then(svc.notify).then(() => stop);
     }
-
-    let users = [];
-    let importExt = importer(config.root);
 
     let use = async (update, param) =>
     {
@@ -67,18 +54,16 @@ export default function(config, file)
     return { run, use };
 }
 
-function createServices(config, watchOmits)
+function createServices(config)
 {
     let service = {};
-
-    watchOmits.push(path.join(config.output.dir, '**'));
 
     service.build = builder(config);
     service.load = loader(config);
     service.serve = server(config);
     service.socket = socketer(config);    
     service.style = styler(config);
-    service.watch = watcher(config, watchOmits);
+    service.watch = watcher(config);
 
     // derived services
     service.notify = () => service.socket.send('reload')

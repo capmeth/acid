@@ -6,7 +6,7 @@ let insmap = new Map();
 
 export default function ()
 {
-    let render = async ({ source, partition, imports, modulize, el }) =>
+    let render = async ({ source, imports, el }) =>
     {
         let { code, template } = partition(source);
 
@@ -36,4 +36,25 @@ export default function ()
     }
 
     return { render };
+}
+
+let modulize = code => import(`data:text/javascript,${encodeURIComponent(code)}`);
+
+let partRe = /(?:^|\n)\s*(?<tmp><.+)$/s;
+/**
+    Converts source to a string object and attaches `template` and `code`
+    partitions (if possible).
+
+    @param { string } source
+      The code to partition.
+    @param { object }
+      The same `source` with properties for split parts.
+*/
+let partition = source =>
+{
+    let result = source.match(partRe);
+    let template = result ? result.groups.tmp.trim() : '';
+    let code = result ? source.replace(template, '').trim() : '';
+
+    return { code, template };
 }

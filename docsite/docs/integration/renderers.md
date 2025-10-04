@@ -46,28 +46,27 @@ The `render` function should have the form:
 async function (params: object): void
 ```
 
-It is called every time a code block with the associated lang marker needs to be rendered.  The `params` parameter will contain the following:
+It is called every time a code block with the associated lang marker needs to be rendered.  The `params` argument will contain the following:
 
 - `source` *string*: raw content from the code block
 - `imports` *string*: import statements to be added to the code
-- `modulize` *function*: "modulizes" a script via a data url (async)
-- `el` *HTMLElement*: host or mount element for the component
-- `partition` *function*: separates template from code in source string
+- `el` *object*: DOM node for mounting the component
 
 The render function should generally do the following:
 
 1. Modify `source` to construct the proper component export for the framework supported.
 2. Insert `imports` into the source to make imported names accessible to the code.
-3. Pass the updated source to `modulize` to generate an ESM module.
-4. Extract the component from the module and mount it to `el`.
+3. Perform some sort of build step to generate a component from `source`.
+4. Mount the component to `el`.
 
 Here's a pseudocode-ish example of a render function.
 
 ```js
+// Remember: Module specifiers must be mapped and available in the browser
 import Framework from 'supported-component-framework';
 import transform from './transform-source-into-component.js';
 
-let render = async ({ source, imports, modulize, el }) =>
+let render = ({ source, imports, el }) =>
 {
     return new Promise((accept, reject) => 
     {
@@ -77,8 +76,8 @@ let render = async ({ source, imports, modulize, el }) =>
             source = transform(source);
             // #2
             source = imports + source;
-            // #3
-            let { default: Component } = await modulize(source); 
+            // #3 - using a data url to "modulize" the source
+            let { default: Component } = await import(`data:text/javascript,${encodeURIComponent(source)}`);
             // #4
             Framework.mount(Component, el);
 
