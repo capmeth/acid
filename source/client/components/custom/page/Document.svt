@@ -14,7 +14,11 @@
     <div class="leader">
       <div class="title">{ title }</div>
       <Crumbs {section} />
-      <Tags items={tags} />
+      <List items={tags} pred={tinfo} type="tags">
+        {#snippet children(data)}
+          <Tag {...data} />
+        {/snippet}        
+      </List>
     </div>
     <div class="content">
       <Article {mcid} />
@@ -29,11 +33,12 @@
 
 
 <script module>
-import { ainfo, page } from '#public'
+import { ainfo, page, tinfo } from '#public'
 
 import Article from '#stable/common/Article'
 import Crumbs from '#stable/common/Crumbs'
-import Tags from '#stable/common/Tags'
+import List from '#stable/common/List'
+import Tag from '#custom/main/Tag'
 </script>
 
 <script>

@@ -20,9 +20,17 @@
         {#snippet header()}
           <span class="sector-title">{ t.label_description }</span>
         {/snippet}
-        <Description type="component" value={description} />
+        <Markup type="component">
+          {#if description}
+            {@html description}
+          {:else}
+            <p class="empty">
+              { t(`msg_no_component_description`) }
+            </p>    
+          {/if}            
+        </Markup>
       </Active>
-      <Tags items={tags}>
+      <List items={tags} pred={tinfo} type="tags">
         {#snippet use(render)}
           <Active kind="sector" store="asset-tags">
             {#snippet header()}
@@ -31,8 +39,11 @@
             {@render render()}
           </Active>
         {/snippet}
-      </Tags>
-      <Props items={propers} type="dual">
+        {#snippet children(data)}
+          <Tag {...data} />
+        {/snippet}        
+      </List>
+      <List items={propers} type="dual">
         {#snippet use(render)}
           <Active kind="sector" store="asset-props">
             {#snippet header()}
@@ -41,7 +52,10 @@
             {@render render()}
           </Active>
         {/snippet}
-      </Props>
+        {#snippet children(data)}
+          <Prop {...data} />
+        {/snippet}
+      </List>
     </div>
     <div class="content">
       <Article {mcid} />
@@ -55,13 +69,14 @@
 
 
 <script module>
-import { ainfo, page } from '#public'
+import { ainfo, page, tinfo } from '#public'
 
 import Active from '#stable/helper/Active'
 import Article from '#stable/common/Article'
-import Description from '#stable/common/Description'
-import Props from '#stable/common/Props'
-import Tags from '#stable/common/Tags'
+import List from '#stable/common/List'
+import Markup from '#custom/main/Markup'
+import Prop from '#custom/main/Prop'
+import Tag from '#custom/main/Tag'
 </script>
 
 <script>

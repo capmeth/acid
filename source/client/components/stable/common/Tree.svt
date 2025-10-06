@@ -18,10 +18,9 @@
       The section to be rendered.  Defaults to the configured 
       `rootSection` if not specified.
     @property { string } [type="tree"]
-      A styling hints for the internal **List**, **Branch**, and **Leaf** 
-      components.
+      A styling hint for internal components.
     @property { snippet } [use]
-      Passed a snippet that renders the content of this component.
+      Receives a snippet that renders the content of this component.
 -->
 
 <When {test} {use}>

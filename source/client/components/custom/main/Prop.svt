@@ -19,7 +19,15 @@
     <div class="deprecation">{ deprecated }</div>
   {/if}
   <div class="desc">
-    <Description type="prop" value={description} />
+    <Markup type="prop">
+      {#if description}
+        {@html description}
+      {:else}
+        <p class="empty">
+          { t(`msg_no_prop_description`) }
+        </p>    
+      {/if}            
+    </Markup>
   </div>
   {#if values}
     <div class="values">
@@ -39,8 +47,8 @@
 
 
 <script module>
-import Description from '#stable/common/Description'
 import List from '#stable/common/List'
+import Markup from '#custom/main/Markup'
 </script>
 
 <script>

@@ -20,11 +20,12 @@ export default function(config)
 
         let assets = {}, blocks = [], files = {}, sections = {};
         let assemble = assemblers(config, { assets, files, parsers, td });
+        let mapper = async name => sections[name] = await assemble.section({ ...linked[name], name })
 
         td.content.config.vars.blocks = blocks;
 
-        await Promise.all(linkeys.map(async name =>
-            sections[name] = await assemble.section({ ...linked[name], name })));
+        await Promise.all(linkeys.map(mapper));
+        blocks = await Promise.all(blocks);
         
         log.info(`{:emph:${Object.keys(sections).length} section(s)} included in docsite`);
         log.info(`{:emph:${Object.keys(assets).length} asset(s)} included in docsite`);

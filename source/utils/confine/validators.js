@@ -29,8 +29,6 @@ export default
         h.err('must be a function or an array or a string or null'),
     functionOrString: h => h.or(h.string, h.func) || 
         h.err('must be a function or a string'),
-    zeroPlus: h => h.and(h.number, h.gte(0)) || 
-        h.err('must be zero or more'),
     logLevel: h => h.in('fail', 'info', 'off', 'warn', 'test') || 
         h.err('must be a valid enumerated value'),
     object: h => h.plain || 
@@ -78,5 +76,7 @@ export default
     tag: h => h.re(/^([a-z0-9-]+)(?::([^\s]+))?$/) || 
         h.err('must be a well formed asset tag'),
     unset: h => h.undef || 
-        h.err('is not a valid property')
+        h.err('is not a valid property'),
+    zeroPlus: h => h.and(h.number, h.gte(0)) || 
+        h.err('must be zero or more')
 }

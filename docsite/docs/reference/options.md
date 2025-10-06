@@ -302,7 +302,7 @@ As a convenience, any top-level entry whose key is not `imports`, `scopes`, or `
 
 Literal string content used by ACID.
 
-```svelte:render label="default value" allow-css
+```svelte mode="render" label="default value" allow-css
 import { labels } from '#bundle';
 <pre>
   labels:
@@ -690,7 +690,7 @@ For hot-reloading, `watch` option must also be enabled.
 
 Websocket (server/browser) communication control.
 
-```js label="default vallue"
+```js label="default value"
 socket:
 {
     port: { port: [ 3005, 3015, 3025 ] },

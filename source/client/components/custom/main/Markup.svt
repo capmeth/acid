@@ -1,40 +1,23 @@
 <!--*
-    Renders UI for converted markdown content.
-
-    An `id` should be provided if ToC generation is needed.
-
-    Prop `type` can be
-    - `article` for document content
-    - `component` for component descriptions
-    - `prop` for component prop descriptions
+    Renders UI for converted markdown document.
 
     @tags inject:#main-markup
 
     @property { snippet } children
       HTML content.
-    @property { string } [el="div"]
-      HTML tagname to render as container.
-    @property { boolean } empty
-      Is there no child content available?
-    @property { string } id
-      HTML id for root element.
+    @property { string } [id]
+      An HTML id for the root element (needed for ToC).
     @property { string } [type="default"]
-      The type of markup being rendered.
+      Applied as class `type-{type}`.
 -->
 
-<svelte:element this={el} {id} class="main-markup type-{type}">
-  {#if empty}
-    <p class="empty">
-      { t(`msg_no_${type}_description`) }
-    </p>    
-  {:else}
-    {@render children()}
-  {/if}
-</svelte:element>
+<article {id} class="main-markup type-{type}">
+  {@render children()}
+</article>
 
 
 <script>
-let { el = 'div', empty, id, type = 'default', children } = $props();
+let { id, type = 'default', children } = $props();
 </script>
 
 <style>

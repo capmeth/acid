@@ -12,11 +12,10 @@
     - `allowCss` *boolean*: Should the `.renbox` CSS class be removed?
     - `display` *HTMLElenent*: Rendering mount point (bound).
 
-
     @tags cobe
     
     @property { snippet } [use]
-      Passed a snippet that renders the content of this component.
+      Receives a snippet that renders the content of this component.
 -->
 
 <When test={renbox} {use}>

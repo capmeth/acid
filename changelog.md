@@ -9,6 +9,11 @@
 ---
 ## v0.0.4
 
+- documentation for stable components updated
+- tags can now be ranked for order in `tagLegend` option
+- `tinfo` client utility added for tag details
+- component props with `@ignore` tags are filtered out of the build
+- `file` option on fenced block can load file content
 - plugin functions can now be async
 - `socket` and `server` config options automatically find an open port (via `get-port` dep)
 - `confine` utility adds immutable properties

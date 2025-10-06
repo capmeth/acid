@@ -78,13 +78,13 @@ All fenced code blocks are rendered by CoBE (Code Block Editor) components, and 
 
 Generally, options are defined on the opening fence in standard HTML attribute form (`attr="value"`) after the language-type specification.
 
-There must be at least one space after the `lang-type` before defining options.  That space must still be present even if the `lang-type` is not.
-
 ````md
 ```js label="example"
 let example = "Here's an example of a labeled code block";
 ```
 ````
+
+There must be at least one space after the `lang-type` before defining options.  That space must still be present even if the `lang-type` is not.
 
 
 ## allow-css
@@ -100,50 +100,19 @@ Code rendered from this block is affected by docsite CSS.
 The attribute has no value.  It's mere appearance signifies activation.
 
 
-## cobe-mode
+## file
 
-Rendering mode for the CoBE component associated to this block.
-
-This overrides any mode set in the document or in *acid.config.js*.  However, if there is no renderer configured for the language-type of the block, "static" mode will be forced.
-
-This setting is appended to the `lang-type` via a colon (`:`) rather than being a separate attribute option.
+Specifies a file to be loaded.
 
 ````md
-```svelte:[cobe-mode]
-let string = "[cobe-mode] is demo, edit, live, render, or static";
-<div style="color:blue">{ string }</div>
+``` file="path/to/code.js"
+Everything in here will be ignored.
 ```
 ````
 
-The values available for `cobeMode` are:
-- **demo**: show code and rendered results (no editing)
-- **edit** - code editing with on-demand render
-- **live** - code editing with immediate render
-- **render**: only show rendered results
-- **static** - just show the code
+File loading is handled at build time.  Relative filepaths are subject to `config.root`.
 
-Using the example block above here are examples of each mode.
-
-```svelte:demo label="demo mode"
-let string = "[cobe-mode] is demo, edit, live, render, or static";
-<div style="color:blue">{ string }</div>
-```
-```svelte:edit label="edit mode"
-let string = "[cobe-mode] is demo, edit, live, render, or static";
-<div style="color:blue">{ string }</div>
-```
-```svelte:live label="live mode"
-let string = "[cobe-mode] is demo, edit, live, render, or static";
-<div style="color:blue">{ string }</div>
-```
-```svelte:render label="render mode"
-let string = "[cobe-mode] is demo, edit, live, render, or static";
-<div style="color:blue">{ string }</div>
-```
-```svelte:static label="static mode"
-let string = "[cobe-mode] is demo, edit, live, render, or static";
-<div style="color:blue">{ string }</div>
-```
+The content of the code block will be *replaced* by the file contents.
 
 
 ## label
@@ -178,3 +147,51 @@ As is standard, this value comes immediately after the opening fence of a block.
 ````
 
 This value indicates how the block should be highlighted as well as which extension CoBE should use to parse the code for rendering (if applicable).
+
+
+## mode
+
+Rendering mode for the CoBE component associated to this block.
+
+This overrides any mode set in the document (`cobeMode`) or in `config.cobe`.  However, if there is no renderer configured for the language-type of the block, "static" mode will be forced.
+
+````md
+```svelte mode="[mode]"
+let string = "[mode] is demo, edit, live, render, or static";
+<div style="color:blue">{ string }</div>
+```
+````
+
+Alternatively, this setting can just be appended to the `lang-type` via a colon (`:`).
+
+````md
+```svelte:[mode]
+let string = "[mode] is demo, edit, live, render, or static";
+<div style="color:blue">{ string }</div>
+```
+````
+
+The values available for `[mode]` are **demo**, **edit**, **live**, **render**, and **static**.
+
+Using the example block above here are examples of each mode.
+
+```svelte:demo label="demo - displays the code and the render with no update capability"
+let string = "[mode] is demo, edit, live, render, or static";
+<div style="color:blue">{ string }</div>
+```
+```svelte:edit label="edit - displays the code and the render with on-demand update capability"
+let string = "[mode] is demo, edit, live, render, or static";
+<div style="color:blue">{ string }</div>
+```
+```svelte:live label="live - displays the code and the render with immediate update capability"
+let string = "[mode] is demo, edit, live, render, or static";
+<div style="color:blue">{ string }</div>
+```
+```svelte:render label="render - displays the render only"
+let string = "[mode] is demo, edit, live, render, or static";
+<div style="color:blue">{ string }</div>
+```
+```svelte:static label="static - displays the code only"
+let string = "[mode] is demo, edit, live, render, or static";
+<div style="color:blue">{ string }</div>
+```

@@ -1,11 +1,41 @@
 <!--*
     Code Block Editor (CoBE) component.
     
-    A workbench for component code editing and rendering.
-
     Tightly coupled with **Code** and **Renbox** components for code editing 
     and component rendering, respectively.  Exactly one of each of these 
     components should appear as descendants for the trio to work properly.
+
+    Props passed to **Editor**:
+    - `copied` *boolean* \
+      Has code been copied to clipboard?
+    - `copy` *function* \
+      Copies current code to clipboard.  This function will not exist if copy 
+      operation not supported by browser.
+    - `edited` *boolean* \
+      Is current code different from current render?
+    - `error` *object* \
+      Error thrown by current render.
+    - `id` *string* \
+      An id for the editor.
+    - `label` *string* \
+      A label for the editor.
+    - `lang` *string* \
+      Language type of the code block.
+    - `mode` *string* \
+      Rendering mode for the editor.
+    - `reset` *function* \
+      Resets current code to original and renders.  This function will not 
+      exist for some editor modes.
+    - `shifted` *boolean* \
+      Is current code different from original code?
+    - `showing` *boolean* \
+      Is code entry currently being shown?
+    - `toggle` *function* \
+      Toggles hide/show of **Code** component.  This function will not exist 
+      for some editor modes.
+    - `update` *function* \
+      Renders current code.  This function will not exist for some editor 
+      modes.
 
     @tags cobe, uses:main/Editor
 

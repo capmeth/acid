@@ -1,10 +1,8 @@
 
-```svelte label="markup/css structure"
-<When {use}>
-  if [can render]
-    <Markup id={mcid} el="article" type="article">
-      <!-- render markdown content -->
-    </Markup>
-  end if
+```svelte mode="static" label="structure"
+<When test={__valid_mcid__} {use}>
+  <Article id={mcid} {type}>
+    <!-- render markdown content component -->
+  </Article>
 </When>
 ```

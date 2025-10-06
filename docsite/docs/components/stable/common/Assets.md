@@ -1,12 +1,6 @@
 
-```svelte label="markup/css structure"
-<When {use}>
-  if [can render]
-    <List items={items} {type} #each="item">
-      <!-- render children(item) -->
-    </List>
-  end if
+```svelte mode="static" label="structure"
+<When test={true} {use} param={{ assets: __filtered_assets__ }}>
+  <List items={__filtered_assets__} {type} {children} />
 </When>
 ```
-
-- `items` is the filtered list of assets

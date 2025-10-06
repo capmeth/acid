@@ -847,6 +847,7 @@
         color: crimson;
         font-family: var(--acid-font-family-code);
         font-size: 160%;
+        line-height: 1.5em;
         width: 70%;
     }
 
@@ -856,6 +857,7 @@
         box-shadow: 1px 1px 3px 0 #555;
         color: #ffffffee;
         font-size: 280%;
+        line-height: 1.5em;
         padding: 8px 16px;
         margin-bottom: 2vh;
     }
@@ -869,7 +871,8 @@
             background: black;
             border-radius: 1000px;
             font-size: 125%;
-            padding: 6px 16px;
+            line-height: 1.5em;
+            padding: 8px 16px;
         }
     }
 }

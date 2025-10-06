@@ -11,11 +11,6 @@ import helpers from './helpers.js'
     It does not provide control with array mutator operations (push, 
     splice, unshift, etc.).
 
-    `assign` function will receive
-    - `apply` - pass this function the value to be assigned
-    - `value` - the original value to be assigned
-    - `at` - object with spec `path` and actual `name` for value assignment 
-
     If `apply` throws, no value was assigned.
 
     @param { object } prints
@@ -25,7 +20,8 @@ import helpers from './helpers.js'
 */
 export default function (prints, assign)
 {
-    assign ||= (apply, value) => apply(value)
+    assign ||= ({ apply, spec, value, verify }) => apply(verify(spec, value))
+    // assign ||= (apply, value) => apply(value)
 
     /**
         Governs object manipulation to adhere to a set of (blue) `prints`.
@@ -81,9 +77,9 @@ export default function (prints, assign)
             let reducer = (array, value, index) =>
             {
                 let spec = propSpec(target, start + index, value);
-                let apply = value => array.push(verify(spec, value));
+                let apply = value => array.push(value);
 
-                assign(apply, value, spec.at);
+                assign({ apply, spec, value, verify });
                 return array;
             }
 
@@ -133,9 +129,9 @@ export default function (prints, assign)
             set(target, prop, value)
             {
                 let spec = propSpec(target, prop, value);
-                let apply = value => target[prop] = verify(spec, value);
+                let apply = value => target[prop] = value;
 
-                assign(apply, value, spec.at);
+                assign({ apply, spec, value, verify });
                 return true;
             }
         });

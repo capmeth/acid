@@ -110,6 +110,7 @@ export default
     'config.tagLegend.*.*': test.unset,
     'config.tagLegend.*.assign': test.functionOrNull,
     'config.tagLegend.*.desc': test.string,
+    'config.tagLegend.*.rank': test.zeroPlus,
     'config.title': test.stringOrNull,
     'config.tocDepth': h => h.and(h.number, h.gte(0), h.lte(6)) || h.err('must be a number between 0 and 6'),
     'config.toAssetId': test.functionOrArrayOrStringOrNull,

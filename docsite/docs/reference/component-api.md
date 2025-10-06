@@ -13,7 +13,7 @@ Use module specifier `#public` for the following imports:
 
 ```svelte
 <script module>
-import { ainfo, page, sinfo, site } from '#public'
+import { ainfo, page, sinfo, site, tinfo } from '#public'
 </script>
 ```
 
@@ -213,6 +213,53 @@ As ordered below, `param` will generate a link to
 3. the page specified by `to`
 
 
+## `tinfo`
+
+Tag information function proxy.
+
+The ID of a tag is determined by its `name:info` string, or just its `name` if no `info` is available.
+
+Calling `tinfo()` with a tag ID will return a tag object.  This also works if an object having at least a `name` property (like a tag object itself) is passed.
+
+```js
+let tag = tinfo(tag_or_id);
+```
+
+An error will be thrown if the parameter is not a string or an object.
+
+```js label="tinfo proxy"
+{
+    /*
+        All known tag names (from `config.tagLegend`).
+    */
+    tags: [ ... string ],
+    /*
+        Proxy for generating sort methods.
+    */
+    sort:
+    {
+        /*
+            Tag property to sort by.
+        */
+        [prop]:
+        {
+            /*
+                Sorts tags in ascending order by `[prop]`.
+            */
+            asc: function,
+            /*
+                Sorts tags in descending order by `[prop]`.
+            */
+            desc: function,
+        }
+    }
+}
+```
+
+Note that:
+- `sort` functions are intended as parameters for `Array.prototype.sort`
+
+
 # Components
 
 Replaceable components are available via the module specifier prefix `#custom`, while all other internal components are available via the prefix `#stable`.
@@ -295,7 +342,7 @@ A component asset can additionally have the following:
 }
 ```
 
-Note that components with `@ignore` JsDoc tags are filtered out of the build entirely.
+Components with `@ignore` JsDoc tags are filtered out of the build entirely.
 
 A component prop object (in `props`) may have:
 
@@ -336,7 +383,7 @@ A component prop object (in `props`) may have:
 }
 ```
 
-Properties with `@ignore` JsDoc tags are filtered out automatically by the **Props** component.
+Properties with `@ignore` JsDoc tags are filtered out of the build entirely.
 
 
 ### document asset
@@ -359,7 +406,7 @@ A document asset can additionally have the following:
 
 ## section
 
-A proxy object that represents a docsite section.  The `sinfo()` factory can produce these from an section `name`.
+A proxy object that represents a docsite section.  The `sinfo()` factory can produce these from a section `name`.
 
 ```js label="section data"
 {
@@ -428,6 +475,38 @@ Note that:
 - `[group]` assets are sorted by `title` (except for `documents`)
 
 
+## tag
+
+A proxy object that represents an asset tag.  The `tinfo()` factory can produce these from a tag id.
+
+```js label="tag data"
+{
+    /*
+        Name of this tag.
+    */
+    name: string,
+    /*
+        Informational ingot for this tag.
+    */
+    info: string,
+    /*
+        Description of this tag (from `config.tagLegend`).
+    */
+    desc: string,
+    /*
+        Is this tag defined in `config.tagLegend`?
+    */
+    known: true | false,
+    /*
+        Sorting rank of this tag.
+    */
+    rank: number
+}
+```
+
+Note that:
+- a tag's "ID" is either `name:info` or just `name` if `info` does not exist
+- the default tag sorting is in descending order by `rank`
 
 
 # Globals

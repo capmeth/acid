@@ -1,10 +1,12 @@
 
-```svelte label="markup/css structure"
+```svelte mode="static" label="structure"
 <a class="helper-link type-${kind}">
   if children
     <!-- render `children` -->
   else
-    <span>{ value }</span>
+    <span>
+      <!-- display `value` -->
+    </span>
   end if
 </a>
 ```

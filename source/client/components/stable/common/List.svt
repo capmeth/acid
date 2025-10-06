@@ -1,21 +1,26 @@
 <!--*
-    Renders content as a list.
+    Processes and filters a list of items.
 
     Nothing is rendered if `items` is nullish or of zero length.
 
-    Each element of `items` that passes `filter` is passed to `children`, 
-    optionally being first processed by the function `pred`.
+    Props passed to **List**:
+    - `items` *iterator* \
+      Each subsequent element in the `items` array is transformed by `pred`. If 
+      that transformation passes `filter` it will then be emitted by this 
+      iterator.
+    - `...unused` \
+      all other unused props are passed
 
     @tags conditional, uses:main/List, extra-props:main/List
 
-    @property { function } [filter]
-      Filters `items` for inclusion (falsey return value excludes item).
-    @property { array } [items]
-      List of items to render.
+    @property { function } [filter=x => x !== void 0]
+      Receives each transformed item. A falsey return value excludes the item.
+    @property { array } items
+      List of items to be iterated.
     @property { function } [pred]
-      A function to "process" each item passed to `children`.
+      Processes each item.  The return value is evaluated by `filter`.
     @property { snippet } [use]
-      Passed a snippet that renders the content of this component.
+      Receives a snippet that renders the content of this component.
 -->
 
 <When test={items?.length} {use}>

@@ -2,11 +2,11 @@
     Manages asset usability (deprecation) filtering criteria.
 
     @property { snippet } each
-      Passed each filter value for rendering.
+      Receives each filter value. Rendered inside **Toggle**.
     @property { object } [store]
       Name of the filter store to use.
     @property { string } [type="filter-options"]
-      A type for the internal **List** component.
+      Styling hint for the list.
 -->
 
 <List {items} {type}>

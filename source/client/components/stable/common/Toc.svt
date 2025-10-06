@@ -7,13 +7,13 @@
     @tags conditional, uses:main/Tnode
 
     @property { string } sel
-      Selector identifying the root element in which to create a ToC from.
+      CSS selector identifying the root element in which to create a ToC from.
     @property { number } tocDepth
       ToC header depth (0-6).  Specify 0 for no ToC.
     @property { string } [type="toc"]
-      A type for the internal **List** components.
+      Styling hint for internal lists.
     @property { snippet } [use]
-      Passed a snippet that renders the content of this component.
+      Receives a snippet that renders the content of this component.
 -->
 
 <When test={tree} {use}>

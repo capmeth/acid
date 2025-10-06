@@ -1,9 +1,11 @@
 <!--*
     Manages asset name text filtering criteria.
 
+    Entered text is added to filter store as `text`.
+
     @tags uses:main/Filters, uses:main/Tag
 
-    @property { string } [kind]
+    @property { string } [kind="filter-text"]
       Variant name for the internal **Input** component.
     @property { object } [store]
       Name of the filter store to use.

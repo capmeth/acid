@@ -4,11 +4,11 @@
     Selected items are added to filter store as `groups` object.
 
     @property { snippet } each
-      Passed each filter value for rendering.
+      Receives each filter value. Rendered inside **Toggle**.
     @property { object } [store]
       Name of the filter store to use.
-    @property { string } [type="groups"]
-      A type for the internal **List** component.
+    @property { string } [type="filter-groups"]
+      Styling hint for the list.
 -->
 
 <List items={ainfo.groups} {type}>

@@ -1,5 +1,5 @@
 
-```svelte label="markup/css structure"
+```svelte mode="static" label="structure"
 <button class="helper-toggle type-{kind} active">
   <!-- render `children` -->
 </button>
