@@ -7,7 +7,7 @@ import styler from './styler/index.js'
 import watcher from './watcher.js'
 
 import { is } from '#utils'
-import { assign, defaults, required } from '../config/index.js'
+import { assign, defaults, make, required } from '../config/index.js'
 
 
 /**
@@ -24,14 +24,12 @@ import { assign, defaults, required } from '../config/index.js'
 */
 export default function(...options)
 {
-    let { config } = assign(defaults, ...options);
-
     let users = [];
-    let importExt = importer(config.root);
+    let importExt = importer(make().root);
 
     let run = async bool =>
     {
-        let data = assign(config, ...users, required);
+        let data = await assign(defaults, ...options, ...users, required);
 
         if (bool) data.config = { server: true, watch: true };
 

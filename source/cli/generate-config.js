@@ -23,7 +23,7 @@ export default async function (dest, options)
         return void 0;
     }
 
-    let { config } = assign(defaults, options);
+    let { config } = await assign(defaults, options);
     let code = content(config)
 
     return fs.writeFile(dest, code, { encoding: 'utf8' });

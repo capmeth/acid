@@ -168,7 +168,7 @@ config.refLinks = [];
 
     @type { string }
 */
-config.root = process.cwd();
+// config.root = process.cwd();
 
 /** 
     Top of the hierarchy tree for `sections`.
@@ -218,7 +218,7 @@ config.sections =
 config.server =
 {
     enabled: false,
-    port: 3010
+    port: { port: [ 3000, 3010, 3020 ] }
 }
 
 /**
@@ -228,7 +228,7 @@ config.server =
 */
 config.socket = 
 {
-    port: 3014,
+    port: { port: [ 3005, 3015, 3025 ] },
     recoAttempts: 30,
     recoAttemptDelay: 1000
 };
@@ -264,7 +264,7 @@ config.tagLegend = {};
 
     @type { string }
 */
-config.title = hackson.title ?? null;
+config.title = hackson.title ?? 'Untitled';
 
 /**
     Depth level for table of contents menu.

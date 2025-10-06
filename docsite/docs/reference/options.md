@@ -539,13 +539,11 @@ Absolute path to the project targeted for documentation.
 root: process.cwd()
 ```
 
-```js label="spec"
-root: string
-```
-
 This is the base path for 
 - relative file or glob paths specified in config (`sections`, `watch`, etc.)
 - relative `@example` file paths in JsDoc comments
+
+This value is immutable.  It exists on the config for reference only.
 
 
 ## rootSection
@@ -663,7 +661,7 @@ Configures the HTTP server.
 server:
 {
     enabled: false,
-    port: 3010
+    port: { port: [ 3000, 3010, 3020 ] }
 }
 ```
 
@@ -677,11 +675,13 @@ server: true | false | // merges
     /*
         Port number where HTTP server listens for requests.
     */
-    port: number
+    port: number | null | object
 }
 ```
 
 Specifying a boolean is the same as setting `server.enabled`.
+
+An object `port` value will be passed to [get-port](https://www.npmjs.com/package/get-port) to attempt to find an open port for the server to use.  Setting `null` will invoke the same without any parameter.  Setting a number indicates that **only** the specified port should be used.
 
 For hot-reloading, `watch` option must also be enabled.
 
@@ -693,7 +693,7 @@ Websocket (server/browser) communication control.
 ```js label="default vallue"
 socket:
 {
-    port: 3014,
+    port: { port: [ 3005, 3015, 3025 ] },
     recoAttempts: 30,
     recoAttemptDelay: 1000
 }
@@ -705,7 +705,7 @@ socket: number | // merges
     /*
         Web socket port to use.
     */
-    port: number,
+    port: number | null | object,
     /*
         Number of times to attempt reconnecting to server.
     */
@@ -721,7 +721,9 @@ Specifying a number is the same as setting `socket.port`.
 
 This option essentially defines *hot-reload* for the docsite, but has no effect unless both `server` *and* `watch` are enabled, as the socket needs something to connect to and a reason to respond, respectively.
 
-Change `port` if you have conflicts on your dev machine.  The other two properties control the frequency in which the browser attempts to reconnect with the server when a connection is lost (due to server restarts, errors, etc.).
+The `port` option functions just like `server.port`.
+
+The `reco*` properties control the frequency in which the browser attempts to reconnect with the server when a connection is lost (due to server restarts, errors, etc.).
 
 
 ## storage
@@ -808,7 +810,7 @@ Any tag attached to an asset that is not defined here will not be functional in 
 Display name for the docsite.
 
 ```js label="default value"
-title: packageJson.title
+title: packageJson.title ?? 'Untitled'
 ```
 
 ```js label="spec"
@@ -900,7 +902,7 @@ useFilenameOnly: false
 useFilenameOnly: true | false
 ```
 
-When `true`, Component assets will be forced to get their names (titles) from `config.toAssetName`, ignoring any name coming from a configured parser.
+When `true`, Component assets will be forced to get their names (titles) from `toAssetName`, ignoring any name coming from a configured parser.
 
 
 ## version
@@ -1000,7 +1002,7 @@ Converts filepaths from one form to another.
 ]
 ```
 
-The `config.root` option is used to resolve relative source paths.
+The `root` option is used to resolve relative source paths.
 
 - A function value receives a source path info object with the following and should return a string.
   - `path` - the source filepath

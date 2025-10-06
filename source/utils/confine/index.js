@@ -76,8 +76,6 @@ export default function (prints, assign)
             return prints[at.path] ? toSpec(at) : toSpec(id('*', prop, value));
         }
 
-        let useDefault = spec => is.undef(spec.default) ? void 0 : verify(spec, spec.default)
-
         let verifyItems = (target, values, start = 0) => 
         {
             let reducer = (array, value, index) =>
@@ -121,8 +119,12 @@ export default function (prints, assign)
 
                 if (is.undef(target[prop]))
                 {
-                    let defval = useDefault(propSpec(target, prop));
-                    if (!is.undef(defval)) target[prop] = defval;
+                    let spec = propSpec(target, prop);
+
+                    if (spec.immutable === true) 
+                        target[prop] = spec.default;
+                    else if (!is.undef(spec.default)) 
+                        target[prop] = verify(spec, spec.default);
                 }
 
                 return target[prop];
@@ -139,11 +141,17 @@ export default function (prints, assign)
         });
     }
 
-    let verify = ({ at, merge, prop, target, test }, value) =>
+    let verify = ({ at, immutable, merge, prop, target, test }, value) =>
     {
-        let result = is.func(test) ? test(helpers(at.name, value)) : null;
+        let result = null;
+
+        if (immutable === true)
+            result = new AcidValidateError('value cannot be changed', at.name);
+        else if (is.func(test))
+            result = test(helpers(at.name, value));
+
         // throw if validation error message returned
-        if (is.string(result)) throw new AcidValidateError(result);
+        if (result instanceof AcidValidateError) throw result;
 
         let final = value = is.func(result) ? result() : value;
 

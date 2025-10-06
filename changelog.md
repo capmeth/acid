@@ -7,6 +7,14 @@
 
 
 ---
+## v0.0.4
+
+- plugin functions can now be async
+- `socket` and `server` config options automatically find an open port (via `get-port` dep)
+- `confine` utility adds immutable properties
+- `root` option is now immutable
+
+
 ## v0.0.3
 
 - renderer extension functions no longer receive `modulize` and `partition` props

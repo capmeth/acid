@@ -51,8 +51,8 @@ export default
         h.err('must be an object or a string or null'),
     number: h => h.number || 
         h.err('must be an number'),
-    port: h => h.and(!h.lt(0), !h.gt(65535)) ||
-        h.err('must be a valid port number'),
+    portOrObjectOrNull: h => h.or(h.and(!h.lt(0), !h.gt(65535)), h.plain, h.null) || 
+        h.err('must be a valid port number or an object or null'),
     regexOrArrayOrString: h => h.or(h.of(RegExp), h.string, h.array) || 
         h.err('must be a regular expression or a string or an array'),
     regexOrArrayOrStringOrFunctionOrNull: h => h.or(h.of(RegExp), h.string, h.array, h.func, h.null) || 

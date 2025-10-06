@@ -1,3 +1,4 @@
+import { AcidValidateError } from '#source/errors.js'
 import is from '../is.js'
 import proxet from '../proxet.js'
 
@@ -29,7 +30,7 @@ let help = (name, value) =>
                 return to;
             
             // error message helper
-            case 'err': return msg => `${name} ${msg}.`
+            case 'err': return reason => new AcidValidateError(reason, name, value)
         }
 
         return is[attr](value);

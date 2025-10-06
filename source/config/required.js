@@ -1,5 +1,6 @@
+import getPort, { portNumbers } from 'get-port'
 import pathTransformer from '#lib/path-transformer.js'
-import { ident } from '#utils'
+import { ident, is } from '#utils'
 
 
 let repRe = /\{([a-z]+)\}/gi;
@@ -18,9 +19,9 @@ let hljsCdn =
 
     This comes after all manual and extension settings have been applied.
 */
-export default config =>
+export default async config =>
 {
-    let { cobeSvelte, hljs, links, metas, output, parsers, scripts } = config;
+    let { cobeSvelte, hljs, links, metas, output, parsers, scripts, server, socket } = config;
 
     parsers.unshift({ types: '*', use: '#exts/jsdoc' });
 
@@ -56,4 +57,7 @@ export default config =>
     }
 
     if (cobeSvelte) config.importMap = { "svelte-render": `./${output.name}-svelte-render.js` };
+
+    if (!is.number(server.port)) server.port = await getPort(server.port ?? void 0);
+    if (!is.number(socket.port)) socket.port = await getPort(socket.port ?? void 0);
 }

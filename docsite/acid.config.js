@@ -58,8 +58,8 @@ export default
 
     refLinks: 'file:/docsite/acid.refs.md',
 
-    server: { port: 3005 },
-    socket: { port: 3009 },
+    server: { port: 3030 },
+    socket: { port: 3035 },
     watch: 
     { 
         files: 
