@@ -1,5 +1,5 @@
 import path from 'node:path'
-import { inter, is, proxet, uid } from '#utils'
+import { inter, is, proxet, sarf, uid } from '#utils'
 
 
 /**
@@ -26,18 +26,9 @@ import { inter, is, proxet, uid } from '#utils'
 */
 export default function (spec)
 {
-    if (is.func(spec)) return str => spec(chop(str))
-    
-    if (is.string(spec)) return str => inter(spec, chop(str));
-    
-    if (is.array(spec))
-    {
-        let [ search, replace ] = spec;
-
-        if (is.array(search)) search = new RegExp(...[].concat(search));
-        
-        return str => str.replace(search, replace || '')
-    }
+    if (is.func(spec)) return str => spec(chop(str))    
+    if (is.string(spec)) return str => inter(spec, chop(str))
+    if (is.object(spec)) return sarf(spec);
 }
 
 let chop = str => proxet(path.parse(str), key =>

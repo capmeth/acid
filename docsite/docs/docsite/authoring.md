@@ -3,7 +3,7 @@ title: Markdown Notes
 ---
 
 
-ACID uses the [Takedown] parser for converting markdown documents into HTML.
+ACID uses the [Takedown] parser for converting markdown content into HTML.
 
 Most HTML generation is left standard, but ACID does manipulate the output on some elements to achieve its feature set.
 
@@ -13,8 +13,14 @@ Most HTML generation is left standard, but ACID does manipulate the output on so
 - **Fenced code blocks are controlled**  
   These blocks are replaced with [**Editor**](component/stable-common-editor) components for code highlighting and editing.
 
-- **HTML ids are added to header elements**  
-  For ATX (`#` prefixed) style headers only, this is used for rendering a table of contents.
+- **HTML IDs are added to header elements**  
+  This is used for rendering a table of contents (in applicable contexts).
+
+- **Header elements share a common class**  
+  The CSS classname `hx` is added to every markdown generated header.
+
+- **There are differences for non-document content (e.g. descriptions)**  
+  Headers are rendered as `<div>` elements and thematic breaks are rendered literally (no `<hr />` elements).  There is no **Editor** component embedding for fenced blocks.
 
 - **Docsite hyperlinks are adjusted**  
   Relative hyperlinks for docsite routes are adjusted for easier page linking from within a document.
@@ -39,9 +45,9 @@ We can link to [the home page](home).
 Relative links that the docsite understands include:
 
 - `home`
-- `catalog`
 - `section/[name]`: where `[name]` is the name of a section
-- `component/[uid]`: where `[uid]` is the asset id of a component
 - `document/[uid]`: where `[uid]` is the asset id of a document
+- `component/[uid]`: where `[uid]` is the asset id of a component
+- `catalog`
 
 Asset UID generation is controlled by the `config.toAssetId` option.

@@ -11,12 +11,16 @@ Some features of ACID include:
 
 - ******Live Code Editing!******  
   Edit example code **in the browser** and immediately see results.
+
 - ******Code Highlighting!******  
   Language specific **syntax highlighting** for markdown code blocks.
+
 - ******Framework Agnostic!******  
   Document components built on **any framework** (with extensions).
+
 - ******Hot-Reload in Development!******  
   Edit document/source files and **see live updates** in the docsite.
+  
 - ******Fully Customizable!******  
   Tailor your docsite by **editing the CSS** or **replacing internal components**.
 

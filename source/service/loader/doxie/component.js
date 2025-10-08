@@ -43,10 +43,10 @@ let definition =
 
     @param { string } id
       Identifier for validation error reporting.
-    @param { string } td
-      Markdown parser for comments.
+    @param { function } mdparse
+      Parses markdown content.
 */
-export default function (id, td)
+export default function (id, mdparse)
 {
     return confine(definition, ({ apply, spec, value, verify }) => 
     {
@@ -57,7 +57,7 @@ export default function (id, td)
             // descriptions parsed as markdown
             case 'asset.description':
             case 'asset.props.*.description':
-                value = td.parse(value).doc;
+                value = mdparse(value).doc;
                 break;
 
             // filter out ignored props

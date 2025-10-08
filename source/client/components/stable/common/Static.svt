@@ -1,10 +1,8 @@
 <!--*
     Renders static site links.
 
-    @tags conditional, uses:main/Tnode
-
     @property { string } [type="static"]
-      A type for the internal **List** component.
+      Styling hint for the list.
 -->
 
 <List {items} {type}>

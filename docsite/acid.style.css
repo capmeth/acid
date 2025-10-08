@@ -41,36 +41,6 @@
     }
 }
 
-#-main-docsite
-{
-    &::before { background: #500612; }
-
-    .banner
-    {
-        padding-top: 3vh;
-
-        .logo
-        {
-            :global(.helper-link)
-            {
-                &:hover, &:focus { filter: none; }
-            }
-        }
-
-        .title { display: none; }
-
-        .version
-        {
-            color: var(--acid-color-accent);
-            font-size: 1.1vw;
-            position: absolute;
-            bottom: 1.4vw;
-            left: 13vw;
-            z-index: -1;
-        }
-    }
-}
-
 #-main-editor
 {
     .label { background: #33000077; }
@@ -109,6 +79,40 @@
     &.extra-props { color: white; background: blueviolet; }
     &.inject { color: white; background: blue; }
     &.uses { color: white; background: indigo; }
+}
+
+#-page-catalog,
+#-page-component,
+#-page-document,
+#-page-home,
+#-page-section
+{
+    &::before { background: #500612; }
+
+    > header
+    {
+        padding-top: 3vh;
+
+        .logo
+        {
+            :global(.helper-link)
+            {
+                &:hover, &:focus { filter: none; }
+            }
+        }
+
+        .title { display: none; }
+
+        .version
+        {
+            color: var(--acid-color-accent);
+            font-size: 1.1vw;
+            position: absolute;
+            bottom: 1.4vw;
+            left: 13vw;
+            z-index: -1;
+        }
+    }
 }
 
 #-page-catalog,

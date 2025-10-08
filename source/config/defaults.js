@@ -54,6 +54,13 @@ config.components = {};
 config.copy = [];
 
 /**
+    Modify or suppress a processed asset.
+
+    @type { array }
+*/
+config.finalizeAsset = null;
+
+/**
     HighlightJs configuration.
 
     @type { object }
@@ -134,6 +141,13 @@ config.namespace = 'docsite';
     @type { number }
 */
 config.noticeTimeout = 2000;
+
+/**
+    Remove the "watermark" ACID logo.
+
+    @type { boolean }
+*/
+config.noRecognition = false;
 
 /**
     Details for generated output.
@@ -240,7 +254,7 @@ config.socket =
 
     @type { string }
 */
-config.storage = 'local';
+config.storage = 'session';
 
 /**
     Docsite styling.
@@ -299,6 +313,14 @@ config.toAssetName = '{name}';
     @type { function | string | array }
 */
 config.toExampleFile = [ [ '^(.+)\\.[^./]+$' ], '$1.md' ];
+
+/** 
+    Array of search and replace parameters for manipulating markdown 
+    content.
+
+    @type { array }
+*/
+config.updateMarkdown = null;
 
 /** 
     Use only source filenames as component names?

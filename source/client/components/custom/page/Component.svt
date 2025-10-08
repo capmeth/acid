@@ -5,11 +5,26 @@
 
     @property { string } uid
       Id of component asset to display.
-    @property { object } site
-      Data from **Docsite** component.
 -->
 
 <div class="page-component">
+  <header>
+    {#if site.logo}
+      <div class="logo">
+        <Link to="home">
+          <img class="logo" src={site.logo} alt="docsite logo" />
+        </Link>
+      </div>
+    {/if}
+    {#if site.title}
+      <div class="title">
+        <Link to="home">{ site.title }</Link>
+      </div>
+    {/if}
+    {#if site.version}
+      <div class="version">{ site.version }</div>
+    {/if} 
+  </header>
   <main>
     <div class="leader">
       <div class="title" class:deprecated>{ title }</div>
@@ -52,8 +67,39 @@
             {@render render()}
           </Active>
         {/snippet}
-        {#snippet children(data)}
-          <Prop {...data} />
+        {#snippet children({ name, deprecated, description, fallback, required, type, values })}
+          <div class="prop" class:required>
+            <div class="name" class:deprecated>{ name }</div>
+            <div class="type">{ type }</div>
+            {#if deprecated}
+              <div class="deprecation">{ deprecated }</div>
+            {/if}
+            <div class="desc">
+              <Markup type="prop">
+                {#if description}
+                  {@html description}
+                {:else}
+                  <p class="empty">
+                    { t(`msg_no_prop_description`) }
+                  </p>    
+                {/if}            
+              </Markup>
+            </div>
+            {#if values}
+              <div class="values">
+                <List items={values} delim>
+                  {#snippet children(value)}
+                    <code>{ value }</code>
+                  {/snippet}
+                </List>
+              </div>
+            {/if}
+            {#if fallback}
+              <div class="default">
+                <code>{ fallback }</code>
+              </div>
+            {/if}
+          </div>
         {/snippet}
       </List>
     </div>
@@ -62,25 +108,41 @@
     </div>
   </main>
   <nav>
-    {@render site.tree()}
-    {@render site.links()}
+    <Tree>
+      {#snippet use(render)}
+        <Active kind="nav" store="tree">
+          {#snippet header()}
+            <span class="nav-title">{ t.label_content }</span>
+          {/snippet}
+          {@render render()}
+        </Active>
+      {/snippet}
+    </Tree>
+    <Active kind="nav" store="links">
+      {#snippet header()}
+        <span class="nav-title">{ t.label_static }</span>
+      {/snippet}
+      <Static />
+    </Active>
   </nav>
 </div>
 
 
 <script module>
-import { ainfo, page, tinfo } from '#public'
+import { ainfo, page, site, tinfo } from '#public'
 
 import Active from '#stable/helper/Active'
 import Article from '#stable/common/Article'
+import Link from '#stable/helper/Link'
 import List from '#stable/common/List'
 import Markup from '#custom/main/Markup'
-import Prop from '#custom/main/Prop'
+import Static from '#stable/common/Static'
 import Tag from '#custom/main/Tag'
+import Tree from '#stable/common/Tree'
 </script>
 
 <script>
-let { uid, site } = $props();
+let { uid } = $props();
 let { deprecated, description, mcid, props: propers, tags, title } = ainfo(uid);
 
 page.setTitle(title);

@@ -211,6 +211,35 @@ The resulting filename(s) from `to` are assumed to be relative to `output.dir`.
 If `to` is omitted, `null`, or results in the same or an empty string, the file is copied into `output.dir` using its original path.  If `to` resolves to a path that is not inside `output.dir` the file will not be copied.
 
 
+## finalizeAsset
+
+Review discovered asset data.
+
+```js label="default value"
+finalizeAsset: null
+```
+
+```js label="spec"
+finalizeAsset: function | null
+```
+
+The function receives each asset data object in the form that will be serialized into the build, and it must return the final form of the asset, as a nullish value will cause the asset to be skipped.
+
+You can use this, for example, to omit component assets without example files.
+
+```js
+finalizeAsset: asset => 
+{
+    let isComponent = asset.tid === 'cmp';
+    let hasExample = !!asset.mcid;
+
+    if (!isComponent || hasExample) return asset;
+}
+```
+
+Remember that non-serializable data (functions, symbols, etc.) returned in the asset object will not survive the trip to the browser.
+
+
 ## hljs
 
 Code highlighting (HighlightJs) configuration.
@@ -423,6 +452,25 @@ namespace: string
 The string can contain only letters, numbers, dashes, and underscores.
 
 
+## noRecognition
+
+Hide the ACID logo.
+
+```js label="default value"
+noRecognition: false
+```
+
+```js label="spec"
+noRecognition: true | false
+```
+
+ACID adds a "watermark" logo in the lower right corner of the sites it generates.  It is very unobtrusive, mostly transparent, allows interaction with content underneath it, and is great way to acknowledge the tool that made your docsite possible!
+
+...so please, never set this to `true`, ok? 🙏🏼
+
+And, yes, this setting was intentionally named to make you feel a bit guilty 😉
+
+
 ## noticeTimeout
 
 Milliseconds in which to wait before dismissing a notification.
@@ -528,7 +576,6 @@ In object form, each entry is a separate definition.
 The array form allows for specifying multiple strings and/or objects as defined above.  They are processed in the order given, with latter definitions overriding previous ones.
 
 These link reference definitions are made available to **all** of the markdown content parsed into the docsite by passing the resulting entries here to [Takedown]'s `refs` config option.  Please review the documentation there to understand how to properly construct these definitions in both object and markdown forms.
-
 
 
 ## root
@@ -731,7 +778,7 @@ The `reco*` properties control the frequency in which the browser attempts to re
 Determines how to store docsite user state.
 
 ```js label="default value"
-storage: 'local'
+storage: 'session'
 ```
 
 ```js label="spec"
@@ -888,6 +935,62 @@ toExampleFile: @repath
 This evaluation is skipped for source files specifying `@example` with a filepath in the primary JsDoc comment.
 
 The default setting looks for an example with a *.md* extension at the exact same path.  E.g., an example file for `path/to/Component.jsx` would be looked for at `path/to/Component.md`.
+
+
+## updateMarkdown
+
+Globally manipulate all docsite markdown content.
+
+```js label="default value"
+updateMarkdown: null
+```
+
+```js label="spec"
+updateMarkdown: string | RegExp | object | function | null
+[
+    string |
+    [ 
+        string | RegExp | [ string | RegExp, string ], 
+        string | function 
+    ] |
+    {
+        search: string | RegExp | [ string | RegExp, string ],
+        replace: string | function 
+    }
+    ...
+]
+```
+
+Every markdown string passes through this option before being parsed into HTML.
+
+A function value is passed a markdown string and should then return the new markdown.
+
+The array form represents `String.prototype.replace` calls that are each played in the order given against a markdown string.  For each *value* in the array,
+- a string or RegExp is treated as `replace(value, '')`
+- an array is treated as `replace(value[0], value[1])`
+- an object is treated as `replace(value.search, value.replace)`
+
+If the first parameter to `replace()` would be an array, it is first spread as parameters to `RegExp()` before being passed along.  If the would-be second parameter is nullish it converts to an empty string.
+
+Take care with this syntax as something like
+
+```js
+updateMarkdown: [ /code/g, 'toad' ]
+// => remove all "code" strings and the first "toad" string
+```
+
+is a bit different from
+
+```js
+updateMarkdown: [ [ /code/g, 'toad' ] ]
+// => replace all "code" strings with a "toad" string
+```
+
+Setting any other valid *value*, except for `null`, is the same as setting `[ value ]`.
+
+Omitting or setting to `null` turns this feature off.
+
+> Note that this feature **ignores** markdown front-matter.
 
 
 ## useFilenameOnly

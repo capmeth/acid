@@ -23,6 +23,7 @@ export default function(config, sections, assets)
     lines.push(`export let logo = ${cfg.logo}`);
     lines.push(`export let namespace = ${cfg.namespace}`);
     lines.push(`export let noticeTimeout = ${cfg.noticeTimeout}`);    
+    lines.push(`export let noWatermark = ${cfg.noRecognition}`);    
     lines.push(`export let rootSection = ${cfg.rootSection}`);
     lines.push(`export let socket = ${cfg.socket}`);
     lines.push(`export let storage = ${cfg.storage}`);

@@ -5,6 +5,9 @@
     and component rendering, respectively.  Exactly one of each of these 
     components should appear as descendants for the trio to work properly.
 
+    All other props are ignored if `id` is set, as this indicates a reference
+    to indexed code block information extracted from a markdown file.
+
     Props passed to **Editor**:
     - `copied` *boolean* \
       Has code been copied to clipboard?
@@ -17,6 +20,11 @@
       Error thrown by current render.
     - `id` *string* \
       An id for the editor.
+    - `isolate` *function* \
+      Opens this code block on a page by itself.  This function will not exist 
+      for some editor modes.
+    - `isolated` *boolean* \
+      Are we currently rendering in isolation?
     - `label` *string* \
       A label for the editor.
     - `lang` *string* \
@@ -39,7 +47,9 @@
 
     @tags cobe, uses:main/Editor
 
-    @property { boolean } allowCss
+    @property { boolean } [allowCss]
+      Allow docsite CSS to leak into the render-box?
+    @property { string } [code]
       Allow docsite CSS to leak into the render-box?
     @property { string } [id]
       Id of the code block to render.
@@ -50,27 +60,26 @@
 -->
 
 <!--*
+    Rendering mode for the code block.
+
     @prop mode
-    @description Rendering mode for the code block.
     @type { string }
     @values "demo", "edit", "live", "render", "static"
 -->
 
 <Editor 
   {id} 
-  {label} 
+  label={cbe.label} 
   {shifted} 
   {edited} 
   copied={editor.disabled} 
   {error} 
   showing={editor.code}
+  {isolated}
   mode={cbe.mode} 
   lang={cbe.lang}
 
-  copy={dom.clipboard.canCopy && editor.value ? copy : null}
-  reset={cbe.edit || cbe.live ? reset : null}
-  toggle={cbe.render || cbe.static ? null : toggle}
-  update={cbe.edit ? update : null}
+  {...funcs}
 
   {children}
 />
@@ -78,57 +87,28 @@
 
 <script module>
 import { onMount } from 'svelte'
-import { cobe, noticeTimeout } from '#config'
-import { ainfo, compose, context, dom, sinfo } from '#frend/lib'
-import { ids } from '#frend/lib/code-blocks'
+import { noticeTimeout } from '#config'
+import { binfo, compose, context, dom, toUrl } from '#frend/lib'
 
 import Editor from '#custom/main/Editor'
-
-let contextMode = () =>
-{
-    if (context.asset) return ainfo(context.asset).cobeMode;
-    if (context.section) return sinfo(context.section).cobeMode;
-}
-
-let setup = (mode, lang) => 
-{
-    let section = context.section && sinfo(context.section);
-
-    let data = { ...cobe['*'], ...section?.cobe?.['*'], ...cobe[lang], ...section?.cobe?.[lang] };
-
-    data.lang = lang;
-    // when rendering function is available behavior mode can be set
-    // 1) locally (on info-string of code block)
-    // 2) contextually (provided by document front-matter)
-    // 3) linguistically (from spec for current code language)
-    // 4) globally (from star spec configuration)
-    // otherwise, static mode is in effect
-    data.mode = data.use && (mode || contextMode() || data.mode) || 'static';
-
-    data[data.mode] = true;
-
-    return data;
-}
 </script>
 
 <script>
 let { id, children, ...args } = $props();
-let { allowCss, code, label, lang, mode } = { ...ids[id], ...args };
 
-code = code.trim();
-
-let cbe = setup(mode, lang || 'default');
+let cbe = id ? binfo(id) : binfo.make(args);
+let isolated = window.name === id;
 
 let editor = $state(
 { 
-    allowCss, 
+    allowCss: cbe.allowCss, 
     code: cbe.static || cbe.noHide,
     disabled: false, 
     lang: cbe.lang,
     noHighlight: cbe.noHighlight,
     readonly: cbe.static || cbe.demo,
     renbox: !cbe.static,
-    value: code 
+    value: cbe.code 
 });
 
 let error = $state(null);
@@ -137,7 +117,20 @@ let prev = $state(null);
 // has code changed?
 let edited = $derived(prev !== editor.value);
 // has code changed from original?
-let shifted = $derived(code !== editor.value);
+let shifted = $derived(cbe.code !== editor.value);
+// functions to pass along
+let funcs = $derived.by(() => 
+{
+    let fn = {};
+
+    if (dom.clipboard.canCopy && editor.value) fn.copy = copy;
+    if (cbe.edit || cbe.live) fn.reset = reset;
+    if (!(cbe.render || cbe.static)) fn.toggle = toggle;
+    if (cbe.edit) fn.update = update;
+    if (id && cbe.edit || cbe.live) fn.isolate = isolate;
+
+    return fn;
+})
 
 let copy = async () => 
 {
@@ -145,7 +138,7 @@ let copy = async () =>
     editor.disabled = true;
     setTimeout(() => editor.disabled = false, noticeTimeout);
 }
-let reset = () => (editor.value = code, cbe.edit && update())
+let reset = () => (editor.value = cbe.code, cbe.edit && update())
 let toggle = () => editor.code = !editor.code
 let update = () => 
 {
@@ -155,6 +148,7 @@ let update = () =>
         compose(cbe.lang, prev = editor.value, editor.display).catch(onerror);
     }
 }
+let isolate = () => isolated ? window.close() : window.open(toUrl({ to: 'isolate', id }), id)
 
 let onerror = err => (error = err.message ?? err, console.error('CoBE:', err))
 editor.onkeydown = evt =>

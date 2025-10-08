@@ -14,7 +14,8 @@ let fileRe = /^file:\//;
 
 export default function(config)
 {
-    let { assetTypes, root, tagLegend, toAssetId, toAssetName, toExampleFile, useFilenameOnly } = config;    
+    let { assetTypes, root, tagLegend, toAssetId, toAssetName, toExampleFile, useFilenameOnly } = config;  
+
     let types = Object.entries(assetTypes);
     let tagmap = new Map();
 
@@ -162,10 +163,10 @@ export default function(config)
 
         if (content)
         {
-            return ({ files, td }) => 
+            return ({ files, md }) => 
             {
                 let mcid = pascalCase(`Article_${uid}`);
-                let { doc, matter } = td.content.parse(content, { vars: { uid } });
+                let { doc, matter } = md.content(content, { vars: { uid } });
 
                 files[np.join(paths.components, 'articles', `${mcid}.svt`)] = doc;
 
@@ -310,13 +311,13 @@ export default function(config)
 
         if (is.nonao(path))
         {            
-            return async ({ parsers, td }) =>
+            return async ({ parsers, md }) =>
             {
                 let parser = { ...parsers['*'], ...parsers[path.ext] };
 
                 if (parser.use)
                 {
-                    let doxer = doxie[tid](path.path, td.comment);
+                    let doxer = doxie[tid](path.path, md.comment);
                     // doxer validates all data from parser
                     doxer.asset = await parser.use(path.abs, docson);
 

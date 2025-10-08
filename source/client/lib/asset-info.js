@@ -12,12 +12,9 @@ import tinfo from './tag-info'
 let assetKeys = Object.keys(assets);
 let assetSort = proxet({}, prop => sorter((a, b, t) => t(ainfo(a)[prop], ainfo(b)[prop])));
 
-
-// let assetSort = proxet({}, prop => (a, b) => (a = ainfo(a)[prop], b = ainfo(b)[prop], a < b ? -1 : a > b ? 1 : 0));
-
 let makeFilter = data => 
 {
-    let { deprecated, groups, sections, tags, text } = nofi(data);
+    let { deprecated, groups, sections, tags, text } = nofi.asset(data);
     
     return id =>
     {

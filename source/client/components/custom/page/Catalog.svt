@@ -2,12 +2,26 @@
     Renders UI for the asset lookup/filtering page.
 
     @tags inject:#page-catalog
-
-    @property { object } site
-      Data from **Docsite** component.
 -->
 
 <div class="page-catalog">
+  <header>
+    {#if site.logo}
+      <div class="logo">
+        <Link to="home">
+          <img class="logo" src={site.logo} alt="docsite logo" />
+        </Link>
+      </div>
+    {/if}
+    {#if site.title}
+      <div class="title">
+        <Link to="home">{ site.title }</Link>
+      </div>
+    {/if}
+    {#if site.version}
+      <div class="version">{ site.version }</div>
+    {/if} 
+  </header>
   <main>
     <div class="leader">
       <div class="title">{ t.page_catalog_title }</div>
@@ -55,27 +69,31 @@
         <Clear store="catalog" />
       </div>
     </Active>
-    {@render site.links()}
+    <Active kind="nav" store="links">
+      {#snippet header()}
+        <span class="nav-title">{ t.label_static }</span>
+      {/snippet}
+      <Static />
+    </Active>
   </nav>
 </div>
 
 
 <script module>
-import { ainfo, page } from '#public'
+import { ainfo, page, site } from '#public'
 
 import Active from '#stable/helper/Active'
 import Assets from '#stable/common/Assets'
 import Clear from '#stable/filter/Clear'
 import Group from '#stable/filter/Group'
+import Link from '#stable/helper/Link'
+import Static from '#stable/common/Static'
 import Tag from '#stable/filter/Tag'
 import Text from '#stable/filter/Text'
-import Link from '#stable/helper/Link'
 import Usable from '#stable/filter/Usable'
 </script>
 
 <script>
-let { site } = $props();
-
 page.setTitle(t.page_catalog_title);
 </script>
 

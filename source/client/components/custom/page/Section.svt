@@ -5,11 +5,26 @@
 
     @property { string } name
       Name of section to display.
-    @property { object } site
-      Data from **Docsite** component.
 -->
 
 <div class="page-section">
+  <header>
+    {#if site.logo}
+      <div class="logo">
+        <Link to="home">
+          <img class="logo" src={site.logo} alt="docsite logo" />
+        </Link>
+      </div>
+    {/if}
+    {#if site.title}
+      <div class="title">
+        <Link to="home">{ site.title }</Link>
+      </div>
+    {/if}
+    {#if site.version}
+      <div class="version">{ site.version }</div>
+    {/if} 
+  </header>
   <main>
     <div class="leader">
       <div class="title">{ section.title }</div>
@@ -25,24 +40,51 @@
     </div>
   </main>
   <nav>
-    {@render site.tree()}
-    {@render site.toc(section.mcid, section.tocDepth)}
-    {@render site.links()}
+    <Tree>
+      {#snippet use(render)}
+        <Active kind="nav" store="tree">
+          {#snippet header()}
+            <span class="nav-title">{ t.label_content }</span>
+          {/snippet}
+          {@render render()}
+        </Active>
+      {/snippet}
+    </Tree>
+    <Toc sel="#{section.mcid}" tocDepth={section.tocDepth}>
+      {#snippet use(render)}
+        <Active kind="nav" store="toc">
+          {#snippet header()}
+            <span class="nav-title">{ t.label_toc }</span>
+          {/snippet}
+          {@render render()}
+        </Active>
+      {/snippet}
+    </Toc>  
+    <Active kind="nav" store="links">
+      {#snippet header()}
+        <span class="nav-title">{ t.label_static }</span>
+      {/snippet}
+      <Static />
+    </Active>
   </nav>
 </div>
 
 
 <script module>
-import { page, sinfo } from '#public'
+import { page, sinfo, site } from '#public'
 
+import Active from '#stable/helper/Active'
 import Article from '#stable/common/Article'
 import Assets from '#stable/common/Assets'
 import Crumbs from '#stable/common/Crumbs'
 import Link from '#stable/helper/Link'
+import Static from '#stable/common/Static'
+import Toc from '#stable/common/Toc'
+import Tree from '#stable/common/Tree'
 </script>
 
 <script>
-let { name, site } = $props();
+let { name } = $props();
 let section = sinfo(name)
 
 page.setTitle(section.title);

@@ -2,6 +2,7 @@
 export * as dom from './dom'
 
 export { default as ainfo } from './asset-info'
+export { default as binfo } from './block-info'
 export { default as compose } from './compose'
 export { default as context } from './context'
 export { default as eventer } from './eventer'

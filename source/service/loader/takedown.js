@@ -39,13 +39,15 @@ export default async function (config)
             {
                 let [ lang, dome, attrs ] = e.info?.match(langRe)?.slice(1) || [];
                 let { file, mode = dome, ...rest } = attrsToObject(attrs);
+
                 let block = Promise.resolve(file ? fs.readFile(path.resolve(root, file), 'utf8') : e.value);
-                // store details on code block
-                blocks.push(block.then(code => ({ id: e.id, lang, code, uid, ...rest })));
-                return e.mode = mode, '<Editor id="{id}"{? mode="{mode}"?} />';
+                blocks.push(block.then(code => ({ id: e.id, lang, mode, code, uid, ...rest })));
+
+                return '<Editor id="{id}" />';
             },
 
             header: '<h{level} id="{id}" class="hx">{value}</h{level}>\n',
+            setext: '<h{level} id="{id}" class="hx">{value}</h{level}>\n',
 
             link,
 

@@ -1,6 +1,6 @@
 import getPort, { portNumbers } from 'get-port'
 import pathTransformer from '#lib/path-transformer.js'
-import { ident, is } from '#utils'
+import { ident, is, sarf } from '#utils'
 
 
 let repRe = /\{([a-z]+)\}/gi;
@@ -37,6 +37,12 @@ export default async config =>
     config.toAssetId = pathTransformer(config.toAssetId) || ident;
     config.toAssetName = pathTransformer(config.toAssetName) || ident;
     config.toExampleFile = pathTransformer(config.toExampleFile) || (() => null);
+
+    if (is.array(config.updateMarkdown)) 
+    {
+        let specs = config.updateMarkdown.map(sarf);
+        config.updateMarkdown = str => specs.reduce((s, fn) => fn(s), str)
+    }
 
     config.importMap =
     {

@@ -9,25 +9,12 @@
       Docsite content.
 -->
 
-<Docsite>
-  {#snippet children(site)}
-    <Comp {...props} {site} />
-  {/snippet}
-</Docsite>
+<Comp {...props} />
 
 
 <script module>
 import { ainfo, context, sinfo } from '#frend/lib'
-
-import Docsite from '#custom/main/Docsite'
-
-import Catalog from '#custom/page/Catalog'
-import Component from '#custom/page/Component'
-import Document from '#custom/page/Document'
-import Home from '#custom/page/Home'
-import Section from '#custom/page/Section'
-
-let pages = { Catalog, Component, Document, Home, Section };
+import pages from '../pages'
 </script>
 
 <script>

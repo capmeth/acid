@@ -4,8 +4,10 @@ action_clear_filters: Clear Filters
 action_copied: Copied!
 action_copy: Copy
 action_hide: Code
+action_isolate: Isolate
 action_reset: Reset
 action_show: Code
+action_shutter: Close
 action_update: Render
 
 # general labels

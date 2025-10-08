@@ -9,7 +9,10 @@
 ---
 ## v0.0.4
 
-- documentation for stable components updated
+- `updateMarkdown` option can manipulate markdown content before parsing
+- `finalizeAsset` option allows for asset updates before build serialization
+- allow hide of watermark logo
+- documentation for internal components updated
 - tags can now be ranked for order in `tagLegend` option
 - `tinfo` client utility added for tag details
 - component props with `@ignore` tags are filtered out of the build

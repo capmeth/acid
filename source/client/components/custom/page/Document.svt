@@ -5,11 +5,26 @@
 
     @property { string } uid
       Id of document asset to display.
-    @property { object } site
-      Data from **Docsite** component.
 -->
 
 <div class="page-document">
+  <header>
+    {#if site.logo}
+      <div class="logo">
+        <Link to="home">
+          <img class="logo" src={site.logo} alt="docsite logo" />
+        </Link>
+      </div>
+    {/if}
+    {#if site.title}
+      <div class="title">
+        <Link to="home">{ site.title }</Link>
+      </div>
+    {/if}
+    {#if site.version}
+      <div class="version">{ site.version }</div>
+    {/if} 
+  </header>
   <main>
     <div class="leader">
       <div class="title">{ title }</div>
@@ -25,24 +40,52 @@
     </div>
   </main>
   <nav>
-    {@render site.tree()}
-    {@render site.toc(mcid, tocDepth)}
-    {@render site.links()}
+    <Tree>
+      {#snippet use(render)}
+        <Active kind="nav" store="tree">
+          {#snippet header()}
+            <span class="nav-title">{ t.label_content }</span>
+          {/snippet}
+          {@render render()}
+        </Active>
+      {/snippet}
+    </Tree>
+    <Toc sel="#{mcid}" {tocDepth}>
+      {#snippet use(render)}
+        <Active kind="nav" store="toc">
+          {#snippet header()}
+            <span class="nav-title">{ t.label_toc }</span>
+          {/snippet}
+          {@render render()}
+        </Active>
+      {/snippet}
+    </Toc>  
+    <Active kind="nav" store="links">
+      {#snippet header()}
+        <span class="nav-title">{ t.label_static }</span>
+      {/snippet}
+      <Static />
+    </Active>
   </nav>
-</div>
+</div>  
 
 
 <script module>
-import { ainfo, page, tinfo } from '#public'
+import { ainfo, page, site, tinfo } from '#public'
 
+import Active from '#stable/helper/Active'
 import Article from '#stable/common/Article'
 import Crumbs from '#stable/common/Crumbs'
+import Link from '#stable/helper/Link'
 import List from '#stable/common/List'
+import Static from '#stable/common/Static'
 import Tag from '#custom/main/Tag'
+import Toc from '#stable/common/Toc'
+import Tree from '#stable/common/Tree'
 </script>
 
 <script>
-let { uid, site } = $props();
+let { uid } = $props();
 let { mcid, section, tags, title, tocDepth } = ainfo(uid);
 
 page.setTitle(title);

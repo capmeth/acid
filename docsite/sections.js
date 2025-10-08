@@ -93,7 +93,6 @@ export default
     {
         title: 'Custom Components',
         overview: 'file:/docsite/docs/components/custom/index.md',
-        cobe: { types: 'svelte', mode: 'static' },
         components: 'source/client/components/custom/**/*.svt'
     },
 
@@ -101,7 +100,6 @@ export default
     {
         title: 'Stable Components',
         overview: 'file:/docsite/docs/components/stable/index.md',
-        cobe: { types: 'svelte', mode: 'static' },
         components: 'source/client/components/stable/**/*.svt'
     }
 }

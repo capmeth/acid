@@ -9,6 +9,9 @@ export default
         h.err('must be an array or a function or a string or null'),
     arrayOrObject: h => h.object ? h.to.array() : 
         h.err('must be an array or an object'),
+    arrayOrObjectOrRegexOrStringWithFunctionOrNull: h => 
+        h.or(h.string, h.of(RegExp), h.plain, h.array) ? h.to.array() : h.or(h.func, h.null) ||
+        h.err('must be an array or an object or a regular expression or a string or a function or null'),
     arrayOrObjectOrString: h => h.or(h.string, h.plain, h.array) ? h.to.array() : 
         h.err('must be an array, object, or a string'),
     arrayOrString: h => h.or(h.string, h.array) ? h.to.array() : 
@@ -21,6 +24,8 @@ export default
         h.err('must be a valid enumerated value'),
     display: h => h.in('always-hide', 'hide', 'always-show', 'show') || 
         h.err('must be a valid enumerated value'),
+    func: h => h.func || 
+        h.err('must be a function'),
     functionOrNull: h => h.or(h.null, h.func) || 
         h.err('must be a function or null'),
     functionOrArrayOrNull: h => h.or(h.null, h.func, h.array) || 
@@ -51,6 +56,8 @@ export default
         h.err('must be an number'),
     portOrObjectOrNull: h => h.or(h.and(!h.lt(0), !h.gt(65535)), h.plain, h.null) || 
         h.err('must be a valid port number or an object or null'),
+    regexOrArrayOrObjectOrString: h => h.or(h.of(RegExp), h.array, h.plain, h.string) || 
+        h.err('must be a regular expression or an array or an object or a string'),
     regexOrArrayOrString: h => h.or(h.of(RegExp), h.string, h.array) || 
         h.err('must be a regular expression or a string or an array'),
     regexOrArrayOrStringOrFunctionOrNull: h => h.or(h.of(RegExp), h.string, h.array, h.func, h.null) || 
