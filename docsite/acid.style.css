@@ -2,6 +2,8 @@
 
 :root
 {
+    --acid-background-site: #500612;
+
     --acid-color-accent: #5371FF;
     --acid-color-break: #EFD4C4BE;
     --acid-color-code: #99aaff;
@@ -87,8 +89,6 @@
 #-page-home,
 #-page-section
 {
-    &::before { background: #500612; }
-
     > header
     {
         padding-top: 3vh;

@@ -12,6 +12,7 @@
     --acid-box-shadow-default: 1px 1px 5px 1px black;
     --acid-text-shadow-default: 1px 1px 1px black;
 
+    --acid-background-site: #444444;
     --acid-color-component: #98AAFF;
     --acid-color-deprecated: #BA243CCC;
     --acid-color-break: #ddd;
@@ -632,7 +633,7 @@
     &::before
     {
         content: "";
-        background: #444;
+        background: var(--acid-background-site);
         display: block;
         position: fixed;
         top: 0;

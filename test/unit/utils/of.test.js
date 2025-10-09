@@ -16,7 +16,8 @@ test('reports the proper datatypes', t =>
 
         null: null,
         array: [],
-        nonao: {}
+        nonao: new String(),
+        plain: {}
     }
 
     let expect = Object.keys(tests);

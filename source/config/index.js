@@ -21,6 +21,8 @@ export let assign = async (...configs) =>
 {
     let data = make();
 
+    /* eslint-disable no-await-in-loop */
+    // configs must be applied sequentially (and therefore synchronously)
     for (let config of configs)
     {
         if (is.func(config)) 
@@ -28,6 +30,7 @@ export let assign = async (...configs) =>
         else
             data.config = config;
     }
+    /* eslint-enable no-await-in-loop */
 
     return data;
 }

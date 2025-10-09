@@ -5,7 +5,7 @@
 */
 import { cobe } from '#config'
 import blocks from '#blocks'
-import { cacher, is, proxet, sorter } from '#utils'
+import { cacher, proxet, sorter } from '#utils'
 import ainfo from './asset-info'
 import nofi from './normalize-filters'
 import sinfo from './section-info'

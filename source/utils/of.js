@@ -41,8 +41,8 @@ export default function (value)
 
         // objects
         case 'object':
-            if (value == null) return 'null';
-            if ( Array.isArray(value)) return 'array';
+            if (value === null) return 'null';
+            if (Array.isArray(value)) return 'array';
             if (value.constructor === Object || !value.constructor) return 'plain';
             return 'nonao';
     }

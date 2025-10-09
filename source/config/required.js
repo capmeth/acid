@@ -1,4 +1,4 @@
-import getPort, { portNumbers } from 'get-port'
+import getPort from 'get-port'
 import pathTransformer from '#lib/path-transformer.js'
 import { ident, is, sarf } from '#utils'
 
