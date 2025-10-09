@@ -9,18 +9,19 @@
 ---
 ## v0.0.4
 
-- `updateMarkdown` option can manipulate markdown content before parsing
-- `finalizeAsset` option allows for asset updates before build serialization
-- allow hide of watermark logo
-- documentation for internal components updated
-- tags can now be ranked for order in `tagLegend` option
-- `tinfo` client utility added for tag details
-- component props with `@ignore` tags are filtered out of the build
-- `file` option on fenced block can load file content
-- plugin functions can now be async
-- `socket` and `server` config options automatically find an open port (via `get-port` dep)
-- `confine` utility adds immutable properties
-- `root` option is now immutable
+- add fenced block isolation page
+- add `updateMarkdown` option to manipulate markdown content before parsing
+- add `finalizeAsset` option to update assets before build serialization
+- add option to hide watermark logo in docsite
+- update documentation for internal components
+- add rank for tag ordering in `tagLegend` option
+- add `tinfo` client utility for tag details
+- filter component props with `@ignore` tags from the build
+- add fenced block `file` option to load file content
+- allow plugin functions to be async
+- update `socket` and `server` config options to automatically find open port
+- add immutable properties for `confine` utility
+- change `root` option to be immutable
 
 
 ## v0.0.3

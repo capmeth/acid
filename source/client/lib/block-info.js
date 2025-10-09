@@ -5,7 +5,7 @@
 */
 import { cobe } from '#config'
 import blocks from '#blocks'
-import { cacher, proxet, sorter } from '#utils'
+import { cacher, is, proxet, sorter } from '#utils'
 import ainfo from './asset-info'
 import nofi from './normalize-filters'
 import sinfo from './section-info'
@@ -13,6 +13,8 @@ import sinfo from './section-info'
 
 let blockKeys = blocks.map(block => block.id);
 let blockSort = proxet({}, prop => sorter((a, b, t) => t(binfo(a)[prop], binfo(b)[prop])));
+
+let getOwner = uid => (ainfo.assets.includes(uid) ? ainfo : sinfo)(uid)
 
 let makeFilter = data => 
 {
@@ -48,17 +50,19 @@ let getBlock = cacher(id =>
 {
     let { uid, ...base } = blocks.find(block => block.id === id);
 
-    base.mode ||= (ainfo.assets.includes(uid) ? ainfo : sinfo)(uid).cobeMode;
+    base.mode ||= getOwner(uid).cobeMode;
 
     return { ...makeBlock(base), id, owner: uid };
 });
 
 let block = ref => getBlock(ref.id || ref)
+let owner = ref => getOwner(ref.id || ref)
 
 block.filter = makeFilter;
 block.make = makeBlock;
 block.sort = blockSort;
 block.blocks = blockKeys;
+block.owner = owner;
 
 let binfo = proxet(block, prop => 
 {

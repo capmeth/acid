@@ -102,7 +102,7 @@ let isolated = window.name === id;
 let editor = $state(
 { 
     allowCss: cbe.allowCss, 
-    code: cbe.static || cbe.noHide,
+    code: cbe.static || cbe.noHide || isolated,
     disabled: false, 
     lang: cbe.lang,
     noHighlight: cbe.noHighlight,

@@ -8,13 +8,11 @@
 -->
 
 <div class="page-isolate">
+  <header>
+    <div class="title">{ t.page_isolate_title }</div>
+  </header>
   <main>
-    <div class="leader">
-      <div class="title"> Isolate </div>
-    </div>
-    <div class="content">
-      <Editor {id} />
-    </div>
+    <Editor {id} />
   </main>  
 </div>
 
@@ -27,6 +25,7 @@ import Editor from '#stable/common/Editor'
 
 <script>
 let { id } = $props();
+
 page.setTitle(t.page_isolate_title);
 </script>
 

@@ -36,7 +36,7 @@ export default function (config, other)
     return other.assemble = 
     {
         section: toProc(exec.overview, exec.options, exec.title, exec.assets, exec.cleanup),
-        document: toProc(exec.markdown, exec.options, exec.tag, exec.title, exec.track, exec.cleanup),
-        component: toProc(exec.source, exec.example, exec.tag, exec.title, exec.track, exec.cleanup)
+        document: toProc(exec.markdown, exec.options, exec.tag, exec.title, exec.cleanup),
+        component: toProc(exec.source, exec.example, exec.tag, exec.title, exec.cleanup)
     };
 }

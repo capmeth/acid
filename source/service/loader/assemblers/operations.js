@@ -24,6 +24,7 @@ export default function(config)
 
     let op = {};
 
+
     /**
         Processes assets for `record`.
 
@@ -37,22 +38,33 @@ export default function(config)
     {
         let { name } = record;
 
-        return async ({ assemble }) =>
+        return async ({ assemble, assets }) =>
         {
-            let mapTypes = async ([ tid, { plural, singular } ]) => 
+            record.assets = [];
+
+            let mapType = async ([ tid, { plural, singular } ]) => 
             {
-                let files = await globit(record[plural], root);
-                let mapFiles = path => assemble[singular]({ path, section: name, tid })
-                let filterFiles = list => list.filter(is).map(item => item.uid)
+                let mapFile = async path =>
+                {
+                    let asset = await assemble[singular]({ path, section: name, tid });
+
+                    if (asset)
+                    {
+                        let { uid } = asset;
+
+                        if (assets[uid])
+                            log.warn(`duplicate asset {:emph:${uid}} was skipped`);
+                        else
+                            (record.assets.push(uid), assets[uid] = asset);
+                    }
+                }
+
+                await globit(record[plural], root).then(files => Promise.all(files.map(mapFile)));
 
                 delete record[plural];
-
-                return Promise.all(files.map(mapFiles)).then(filterFiles);
             }
 
-            record.assets = await Promise.all(types.map(mapTypes)).then(array => array.flat());
-
-            return record;
+            return Promise.all(types.map(mapType)).then(() => record);
         }
     }    
 
@@ -73,6 +85,7 @@ export default function(config)
 
         return record;
     }
+
 
     /**
         Parse `example` markdown content into `record`.
@@ -420,37 +433,6 @@ export default function(config)
         return record;
     }
 
-
-    /**
-        Tracks record with UID in master list.
-
-        @param { object } record
-          - `uid`: identifier for `record`
-        @return { object }
-          Asset record or `null` if asset already added.
-    */
-    op.track = async (record, exec) =>
-    {
-        record = await exec.identify(record);
-
-        let { uid } = record;
-
-        if (uid)
-        {
-            return ({ assets }) =>
-            {
-                if (assets[uid])
-                {
-                    log.warn(`duplicate asset {:emph:${uid}} was skipped`);
-                    return null;
-                }
-
-                return assets[uid] = record;
-            }
-        }
-
-        return record;
-    }
 
     return op;
 }

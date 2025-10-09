@@ -126,7 +126,6 @@ export default
     'config.toExampleFile.*': test.unset,
     'config.toExampleFile.0': test.regexOrArrayOrString,
     'config.toExampleFile.1': test.functionOrString,
-
     'config.updateMarkdown': { test: test.arrayOrObjectOrRegexOrStringWithFunctionOrNull, default: [] },
     'config.updateMarkdown.*': test.regexOrArrayOrObjectOrString,
     'config.updateMarkdown.*<plain>': test.object,
@@ -137,7 +136,6 @@ export default
     'config.updateMarkdown.*<array>.*': test.unset,
     'config.updateMarkdown.*<array>.0': test.regexOrArrayOrString,
     'config.updateMarkdown.*<array>.1': test.functionOrString,
-
     'config.useFilenameOnly': test.boolean,
     'config.version': test.stringOrNull,
     'config.watch': { test: test.objectOrBoolean('enabled'), default: {}, merge: true },

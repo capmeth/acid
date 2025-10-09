@@ -32,6 +32,7 @@ label_toc: Page Contents
 page_catalog_title: Asset Index
 page_error_title: Error
 page_home_title: Homepage
+page_isolate_title: CoBE Isolation
 
 # messages/alerts
 msg_asset_count: Showing {count} of {total} assets in docsite.
