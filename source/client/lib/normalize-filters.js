@@ -1,9 +1,7 @@
 import { is } from '#utils'
 
 
-let commaRe = /\s*,\s*/;
-
-export default function (data)
+let asset = data =>
 {
     let { deprecated, groups, sects, sections = sects, tags, text } = data || {};
     
@@ -16,6 +14,19 @@ export default function (data)
     return { deprecated, groups, sections, tags, text };
 }
 
+let block = data =>
+{
+    let { langs, owners, text } = data || {};
+    
+    langs = toArray(langs);
+    owners = toArray(owners);
+    text = is.string(text) ? text.toLowerCase() : '';
+
+    return { langs, owners, text };
+}
+
+let commaRe = /\s*,\s*/;
+
 let toArray = value =>
 {
     if (is.nonao(value)) return Object.keys(value).filter(key => value[key]);
@@ -23,3 +34,5 @@ let toArray = value =>
 
     return value || [];
 }
+
+export default { asset, block }

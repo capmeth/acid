@@ -211,6 +211,35 @@ The resulting filename(s) from `to` are assumed to be relative to `output.dir`.
 If `to` is omitted, `null`, or results in the same or an empty string, the file is copied into `output.dir` using its original path.  If `to` resolves to a path that is not inside `output.dir` the file will not be copied.
 
 
+## finalizeAsset
+
+Review discovered asset data.
+
+```js label="default value"
+finalizeAsset: null
+```
+
+```js label="spec"
+finalizeAsset: function | null
+```
+
+The function receives each asset data object in the form that will be serialized into the build, and it must return the final form of the asset, as a nullish value will cause the asset to be skipped.
+
+You can use this, for example, to omit component assets without example files.
+
+```js
+finalizeAsset: asset => 
+{
+    let isComponent = asset.tid === 'cmp';
+    let hasExample = !!asset.mcid;
+
+    if (!isComponent || hasExample) return asset;
+}
+```
+
+Remember that non-serializable data (functions, symbols, etc.) returned in the asset object will not survive the trip to the browser.
+
+
 ## hljs
 
 Code highlighting (HighlightJs) configuration.
@@ -302,7 +331,7 @@ As a convenience, any top-level entry whose key is not `imports`, `scopes`, or `
 
 Literal string content used by ACID.
 
-```svelte:render label="default value" allow-css
+```svelte mode="render" label="default value" allow-css
 import { labels } from '#bundle';
 <pre>
   labels:
@@ -423,6 +452,25 @@ namespace: string
 The string can contain only letters, numbers, dashes, and underscores.
 
 
+## noRecognition
+
+Hide the ACID logo.
+
+```js label="default value"
+noRecognition: false
+```
+
+```js label="spec"
+noRecognition: true | false
+```
+
+ACID adds a "watermark" logo in the lower right corner of the sites it generates.  It is very unobtrusive, mostly transparent, allows interaction with content underneath it, and is great way to acknowledge the tool that made your docsite possible!
+
+...so please, never set this to `true`, ok? 🙏🏼
+
+And, yes, this setting was intentionally named to make you feel a bit guilty 😉
+
+
 ## noticeTimeout
 
 Milliseconds in which to wait before dismissing a notification.
@@ -530,7 +578,6 @@ The array form allows for specifying multiple strings and/or objects as defined 
 These link reference definitions are made available to **all** of the markdown content parsed into the docsite by passing the resulting entries here to [Takedown]'s `refs` config option.  Please review the documentation there to understand how to properly construct these definitions in both object and markdown forms.
 
 
-
 ## root
 
 Absolute path to the project targeted for documentation.
@@ -539,13 +586,11 @@ Absolute path to the project targeted for documentation.
 root: process.cwd()
 ```
 
-```js label="spec"
-root: string
-```
-
 This is the base path for 
 - relative file or glob paths specified in config (`sections`, `watch`, etc.)
 - relative `@example` file paths in JsDoc comments
+
+This value is immutable.  It exists on the config for reference only.
 
 
 ## rootSection
@@ -663,7 +708,7 @@ Configures the HTTP server.
 server:
 {
     enabled: false,
-    port: 3010
+    port: { port: [ 3000, 3010, 3020 ] }
 }
 ```
 
@@ -677,11 +722,13 @@ server: true | false | // merges
     /*
         Port number where HTTP server listens for requests.
     */
-    port: number
+    port: number | null | object
 }
 ```
 
 Specifying a boolean is the same as setting `server.enabled`.
+
+An object `port` value will be passed to [get-port](https://www.npmjs.com/package/get-port) to attempt to find an open port for the server to use.  Setting `null` will invoke the same without any parameter.  Setting a number indicates that **only** the specified port should be used.
 
 For hot-reloading, `watch` option must also be enabled.
 
@@ -690,10 +737,10 @@ For hot-reloading, `watch` option must also be enabled.
 
 Websocket (server/browser) communication control.
 
-```js label="default vallue"
+```js label="default value"
 socket:
 {
-    port: 3014,
+    port: { port: [ 3005, 3015, 3025 ] },
     recoAttempts: 30,
     recoAttemptDelay: 1000
 }
@@ -705,7 +752,7 @@ socket: number | // merges
     /*
         Web socket port to use.
     */
-    port: number,
+    port: number | null | object,
     /*
         Number of times to attempt reconnecting to server.
     */
@@ -721,7 +768,9 @@ Specifying a number is the same as setting `socket.port`.
 
 This option essentially defines *hot-reload* for the docsite, but has no effect unless both `server` *and* `watch` are enabled, as the socket needs something to connect to and a reason to respond, respectively.
 
-Change `port` if you have conflicts on your dev machine.  The other two properties control the frequency in which the browser attempts to reconnect with the server when a connection is lost (due to server restarts, errors, etc.).
+The `port` option functions just like `server.port`.
+
+The `reco*` properties control the frequency in which the browser attempts to reconnect with the server when a connection is lost (due to server restarts, errors, etc.).
 
 
 ## storage
@@ -729,7 +778,7 @@ Change `port` if you have conflicts on your dev machine.  The other two properti
 Determines how to store docsite user state.
 
 ```js label="default value"
-storage: 'local'
+storage: 'session'
 ```
 
 ```js label="spec"
@@ -808,7 +857,7 @@ Any tag attached to an asset that is not defined here will not be functional in 
 Display name for the docsite.
 
 ```js label="default value"
-title: packageJson.title
+title: packageJson.title ?? 'Untitled'
 ```
 
 ```js label="spec"
@@ -888,6 +937,62 @@ This evaluation is skipped for source files specifying `@example` with a filepat
 The default setting looks for an example with a *.md* extension at the exact same path.  E.g., an example file for `path/to/Component.jsx` would be looked for at `path/to/Component.md`.
 
 
+## updateMarkdown
+
+Globally manipulate all docsite markdown content.
+
+```js label="default value"
+updateMarkdown: null
+```
+
+```js label="spec"
+updateMarkdown: string | RegExp | object | function | null
+[
+    string |
+    [ 
+        string | RegExp | [ string | RegExp, string ], 
+        string | function 
+    ] |
+    {
+        search: string | RegExp | [ string | RegExp, string ],
+        replace: string | function 
+    }
+    ...
+]
+```
+
+Every markdown string passes through this option before being parsed into HTML.
+
+A function value is passed a markdown string and should then return the new markdown.
+
+The array form represents `String.prototype.replace` calls that are each played in the order given against a markdown string.  For each *value* in the array,
+- a string or RegExp is treated as `replace(value, '')`
+- an array is treated as `replace(value[0], value[1])`
+- an object is treated as `replace(value.search, value.replace)`
+
+If the first parameter to `replace()` would be an array, it is first spread as parameters to `RegExp()` before being passed along.  If the would-be second parameter is nullish it converts to an empty string.
+
+Take care with this syntax as something like
+
+```js
+updateMarkdown: [ /code/g, 'toad' ]
+// => remove all "code" strings and the first "toad" string
+```
+
+is a bit different from
+
+```js
+updateMarkdown: [ [ /code/g, 'toad' ] ]
+// => replace all "code" strings with a "toad" string
+```
+
+Setting any other valid *value*, except for `null`, is the same as setting `[ value ]`.
+
+Omitting or setting to `null` turns this feature off.
+
+> Note that this feature **ignores** markdown front-matter.
+
+
 ## useFilenameOnly
 
 Forces a component's name to be a derivation of its filepath.
@@ -900,7 +1005,7 @@ useFilenameOnly: false
 useFilenameOnly: true | false
 ```
 
-When `true`, Component assets will be forced to get their names (titles) from `config.toAssetName`, ignoring any name coming from a configured parser.
+When `true`, Component assets will be forced to get their names (titles) from `toAssetName`, ignoring any name coming from a configured parser.
 
 
 ## version
@@ -1000,7 +1105,7 @@ Converts filepaths from one form to another.
 ]
 ```
 
-The `config.root` option is used to resolve relative source paths.
+The `root` option is used to resolve relative source paths.
 
 - A function value receives a source path info object with the following and should return a string.
   - `path` - the source filepath

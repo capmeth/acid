@@ -1,3 +1,5 @@
+import fs from 'node:fs/promises'
+import path from 'node:path'
 import jsyaml from 'js-yaml'
 import takedown from 'takedown'
 import { attrsToObject } from '#utils'
@@ -10,6 +12,8 @@ let pageRe = /^catalog|component|document|home|section/;
 
 export default async function (config)
 {
+    let { root } = config;
+
     let refs = await references(config);
 
     let link = e => 
@@ -31,16 +35,19 @@ export default async function (config)
     {
         convert:
         {
-            fenceblock: (e, v) =>
+            fenceblock: (e, { blocks, uid }) =>
             {
-                [ e.lang, e.mode, e.attrs ] = e.info?.match(langRe)?.slice(1) || [];
-                let attrs = attrsToObject(e.attrs);
-                // store details on code block
-                v.blocks.push({ id: e.id, lang: e.lang, code: e.value, uid: v.uid, ...attrs });
-                return '<Editor id="{id}"{? mode="{mode}"?} />';
+                let [ lang, dome, attrs ] = e.info?.match(langRe)?.slice(1) || [];
+                let { file, mode = dome, ...rest } = attrsToObject(attrs);
+
+                let block = Promise.resolve(file ? fs.readFile(path.resolve(root, file), 'utf8') : e.value);
+                blocks.push(block.then(code => ({ id: e.id, lang, mode, code, uid, ...rest })));
+
+                return '<Editor id="{id}" />';
             },
 
             header: '<h{level} id="{id}" class="hx">{value}</h{level}>\n',
+            setext: '<h{level} id="{id}" class="hx">{value}</h{level}>\n',
 
             link,
 

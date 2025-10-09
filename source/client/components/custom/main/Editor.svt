@@ -45,6 +45,7 @@
   class:shifted
   class:edited
   class:copied
+  class:isolated
   class:showing
   class:failed={error}
 >
@@ -75,6 +76,9 @@
       {#if reset}
         <Button action="reset" disabled={!shifted} onclick={reset} />
       {/if}
+      {#if isolate}
+        <Button action={isolated ? 'shutter' : 'isolate'} onclick={isolate} />
+      {/if}
     </div>
   {/if}
   <Code>
@@ -94,7 +98,13 @@ import Renbox from '#stable/common/Renbox'
 </script>
 
 <script>
-let { copied, copy, edited, error, id, label, lang, mode, reset, shifted, showing, toggle, update } = $props();
+let 
+{ 
+    copied, copy, edited, error, id, 
+    isolate, isolated, label, lang, mode, 
+    reset, shifted, showing, toggle, update 
+} 
+= $props();
 </script>
 
 <style>

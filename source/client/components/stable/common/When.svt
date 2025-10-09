@@ -1,5 +1,5 @@
 <!--*
-    Conditionally renders content.
+    Renders content conditionally.
 
     Nothing is rendered if `test` is falsey.
 
@@ -10,7 +10,7 @@
     @property { boolean } test
       Should the content be rendered?      
     @property { snippet } [use]
-      Passed the `children` snippet.
+      Passed the `children` snippet for rendering.
 -->
 
 {#if test}

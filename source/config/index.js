@@ -17,9 +17,23 @@ export let make = () => confine(definition)
     @return { Proxy }
       Configuration proxy. 
 */
-export let assign = (...configs) => 
-    configs.reduce((m, c) => (is.func(c) ? c(m.config) : m.config = c || {}, m), make())
+export let assign = async (...configs) => 
+{
+    let data = make();
 
+    /* eslint-disable no-await-in-loop */
+    // configs must be applied sequentially (and therefore synchronously)
+    for (let config of configs)
+    {
+        if (is.func(config)) 
+            await config(data.config);
+        else
+            data.config = config;
+    }
+    /* eslint-enable no-await-in-loop */
+
+    return data;
+}
 
 export { default as defaults } from './defaults.js'
 export { default as required } from './required.js'

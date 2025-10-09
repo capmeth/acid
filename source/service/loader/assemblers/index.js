@@ -4,6 +4,7 @@ import operations from './operations.js'
 
 export default function (config, other)
 {
+    let { finalizeAsset } = config;
     let op = operations(config);
 
     let exec = proxet({}, key => async record => 
@@ -22,13 +23,20 @@ export default function (config, other)
         for (let routine of routines) if (!(await routine(record))) return null;
         /* eslint-enable no-await-in-loop */
         
+        if (record.tid && finalizeAsset)
+        {
+            let { tid, uid } = record;
+            record = finalizeAsset(record);
+            if (record) record = { ...record, tid, uid };
+        }
+
         return record;
     }
 
     return other.assemble = 
     {
         section: toProc(exec.overview, exec.options, exec.title, exec.assets, exec.cleanup),
-        document: toProc(exec.markdown, exec.options, exec.tag, exec.title, exec.track, exec.cleanup),
-        component: toProc(exec.source, exec.example, exec.tag, exec.title, exec.track, exec.cleanup)
+        document: toProc(exec.markdown, exec.options, exec.tag, exec.title, exec.cleanup),
+        component: toProc(exec.source, exec.example, exec.tag, exec.title, exec.cleanup)
     };
 }

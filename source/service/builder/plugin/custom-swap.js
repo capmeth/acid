@@ -10,27 +10,53 @@ let custom = path.join(paths.client, 'components', 'custom');
 */
 export default function ({ root, map })
 {
+    let cache = {};
+
     let plugin = {};
 
     plugin.name = 'custom-swap';
 
-    plugin.resolveId = async function(id, importer)
+    plugin.resolveId = async function(id)
     {
+        if (cache[id]) return cache[id];
+    
         if (baseRe.test(id))
         {
-            let cid = id.replace(baseRe, '');
-            let file = path.join(custom, cid);
+            let cid = id.replace(baseRe, ''), file;
+            let hasDefault = defaults.includes(cid);
 
             if (map[cid])
             {
                 file = path.resolve(root, map[cid]);
-                log.test(`replacing {:emph:${cid}} component with {:emph:${file}}...`);
+                
+                if (hasDefault)
+                    log.test(`replacing {:emph:${cid}} component with {:emph:${file}}...`);
+                else
+                    log.test(`importing {:emph:${cid}} component from {:emph:${file}}...`);
+            }
+            else if (hasDefault)
+            {
+                file = path.join(custom, cid);
             }
             
             // additional resolution needed (extension)
-            return this.resolve(file, importer);
+            if (file) return cache[id] = this.resolve(file);
+
+            log.error(`unable to resolve {:emph:${cid}} custom component import`);
         }
     }
   
     return plugin;
 }
+
+// list of default custom components
+let defaults =
+[
+    'page/Home',         'main/Branch',
+    'page/Section',      'main/Editor',
+    'page/Document',     'main/Leaf',
+    'page/Component',    'main/List',
+    'page/Catalog',      'main/Markup',
+    'page/Isolate',      'main/Node',
+    'page/Error',        'main/Tag',
+];

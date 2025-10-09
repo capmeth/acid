@@ -54,6 +54,13 @@ config.components = {};
 config.copy = [];
 
 /**
+    Modify or suppress a processed asset.
+
+    @type { array }
+*/
+config.finalizeAsset = null;
+
+/**
     HighlightJs configuration.
 
     @type { object }
@@ -136,6 +143,13 @@ config.namespace = 'docsite';
 config.noticeTimeout = 2000;
 
 /**
+    Remove the "watermark" ACID logo.
+
+    @type { boolean }
+*/
+config.noRecognition = false;
+
+/**
     Details for generated output.
 
     - `dir`: folder where all generated files go
@@ -168,7 +182,7 @@ config.refLinks = [];
 
     @type { string }
 */
-config.root = process.cwd();
+// config.root = process.cwd();
 
 /** 
     Top of the hierarchy tree for `sections`.
@@ -218,7 +232,7 @@ config.sections =
 config.server =
 {
     enabled: false,
-    port: 3010
+    port: { port: [ 3000, 3010, 3020 ] }
 }
 
 /**
@@ -228,7 +242,7 @@ config.server =
 */
 config.socket = 
 {
-    port: 3014,
+    port: { port: [ 3005, 3015, 3025 ] },
     recoAttempts: 30,
     recoAttemptDelay: 1000
 };
@@ -240,7 +254,7 @@ config.socket =
 
     @type { string }
 */
-config.storage = 'local';
+config.storage = 'session';
 
 /**
     Docsite styling.
@@ -264,7 +278,7 @@ config.tagLegend = {};
 
     @type { string }
 */
-config.title = hackson.title ?? null;
+config.title = hackson.title ?? 'Untitled';
 
 /**
     Depth level for table of contents menu.
@@ -299,6 +313,14 @@ config.toAssetName = '{name}';
     @type { function | string | array }
 */
 config.toExampleFile = [ [ '^(.+)\\.[^./]+$' ], '$1.md' ];
+
+/** 
+    Array of search and replace parameters for manipulating markdown 
+    content.
+
+    @type { array }
+*/
+config.updateMarkdown = null;
 
 /** 
     Use only source filenames as component names?

@@ -1,16 +1,19 @@
 <!--*
-    Generates navigation for the assets in a section.
+    Processes and filters docsite assets.
 
-    Nothing is rendered if filtering results in an empty asset list.
+    Unused props are assumed to be filter values.
+
+    > TODO: Link to filtering props!
 
     @property { snippet } children
-      Passed to **List** component for rendering each asset.
-    @property { boolean } sort
+      Receives each included (unfiltered) asset object.
+    @property { boolean } [sort]
       Sort assets alphabetically by title?
-    @property { function } type
-      A type for the **List** component.
-    @property { ...any } [filters]
-      All additional properties are used as asset filters.
+    @property { string } [type]
+      Styling hint for the list.
+    @property { snippet } [use]
+      Receives a snippet that renders the content of this component.
+      Also receives the full list of `assets` as a second parameter.
 -->
 
 <When test={true} {use} param={{ assets }}>
@@ -34,6 +37,6 @@ let others = filters.store ? stateFilters(filters.store) : {};
 let assets = $derived.by(() => 
 {
     let items = ainfo.assets.filter(ainfo.filter({ ...others, ...filters }));
-    return sort ? items.sort(ainfo.sort.title) : items;
+    return sort ? items.sort(ainfo.sort.title.asc) : items;
 });
 </script>

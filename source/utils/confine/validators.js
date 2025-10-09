@@ -9,6 +9,9 @@ export default
         h.err('must be an array or a function or a string or null'),
     arrayOrObject: h => h.object ? h.to.array() : 
         h.err('must be an array or an object'),
+    arrayOrObjectOrRegexOrStringWithFunctionOrNull: h => 
+        h.or(h.string, h.of(RegExp), h.plain, h.array) ? h.to.array() : h.or(h.func, h.null) ||
+        h.err('must be an array or an object or a regular expression or a string or a function or null'),
     arrayOrObjectOrString: h => h.or(h.string, h.plain, h.array) ? h.to.array() : 
         h.err('must be an array, object, or a string'),
     arrayOrString: h => h.or(h.string, h.array) ? h.to.array() : 
@@ -21,6 +24,8 @@ export default
         h.err('must be a valid enumerated value'),
     display: h => h.in('always-hide', 'hide', 'always-show', 'show') || 
         h.err('must be a valid enumerated value'),
+    func: h => h.func || 
+        h.err('must be a function'),
     functionOrNull: h => h.or(h.null, h.func) || 
         h.err('must be a function or null'),
     functionOrArrayOrNull: h => h.or(h.null, h.func, h.array) || 
@@ -29,8 +34,6 @@ export default
         h.err('must be a function or an array or a string or null'),
     functionOrString: h => h.or(h.string, h.func) || 
         h.err('must be a function or a string'),
-    zeroPlus: h => h.and(h.number, h.gte(0)) || 
-        h.err('must be zero or more'),
     logLevel: h => h.in('fail', 'info', 'off', 'warn', 'test') || 
         h.err('must be a valid enumerated value'),
     object: h => h.plain || 
@@ -51,8 +54,10 @@ export default
         h.err('must be an object or a string or null'),
     number: h => h.number || 
         h.err('must be an number'),
-    port: h => h.and(!h.lt(0), !h.gt(65535)) ||
-        h.err('must be a valid port number'),
+    portOrObjectOrNull: h => h.or(h.and(!h.lt(0), !h.gt(65535)), h.plain, h.null) || 
+        h.err('must be a valid port number or an object or null'),
+    regexOrArrayOrObjectOrString: h => h.or(h.of(RegExp), h.array, h.plain, h.string) || 
+        h.err('must be a regular expression or an array or an object or a string'),
     regexOrArrayOrString: h => h.or(h.of(RegExp), h.string, h.array) || 
         h.err('must be a regular expression or a string or an array'),
     regexOrArrayOrStringOrFunctionOrNull: h => h.or(h.of(RegExp), h.string, h.array, h.func, h.null) || 
@@ -78,5 +83,7 @@ export default
     tag: h => h.re(/^([a-z0-9-]+)(?::([^\s]+))?$/) || 
         h.err('must be a well formed asset tag'),
     unset: h => h.undef || 
-        h.err('is not a valid property')
+        h.err('is not a valid property'),
+    zeroPlus: h => h.and(h.number, h.gte(0)) || 
+        h.err('must be zero or more')
 }

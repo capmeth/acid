@@ -1,19 +1,20 @@
 /**
-    Section Info
+    Asset Info
     ---------------------------------------------------------------------------
-    Derived information interface for docsite sections.
+    Derived information interface for docsite assets.
 */
 import { assets, assetTypes, tocDepth } from '#config'
-import { cacher, is, proxet } from '#utils'
+import { cacher, is, proxet, sorter } from '#utils'
 import nofi from './normalize-filters'
+import tinfo from './tag-info'
 
 
 let assetKeys = Object.keys(assets);
-let assetSort = proxet({}, prop => (a, b) => (a = ainfo(a)[prop], b = ainfo(b)[prop], a < b ? -1 : a > b ? 1 : 0));
+let assetSort = proxet({}, prop => sorter((a, b, t) => t(ainfo(a)[prop], ainfo(b)[prop])));
 
 let makeFilter = data => 
 {
-    let { deprecated, groups, sections, tags, text } = nofi(data);
+    let { deprecated, groups, sections, tags, text } = nofi.asset(data);
     
     return id =>
     {
@@ -35,13 +36,13 @@ let makeFilter = data =>
 
 let getAsset = cacher(uid =>
 {
-    let { section, tid, ...asset } = assets[uid];
+    let { section, tags, tid, ...asset } = assets[uid];
 
     let iface = proxet({ uid, section }, prop => 
     {
         if (prop === 'group') return assetTypes[tid].plural;
         if (prop === 'hasTag') return name => iface.tagNames.includes(name)
-        if (prop === 'tags') return asset.tags || [];
+        if (prop === 'tags') return tags ? tags.sort(tinfo.sort.rank.desc) : [];
         if (prop === 'tagNames') 
         {
             let reducer = (array, tag) => 
@@ -61,7 +62,6 @@ let getAsset = cacher(uid =>
     return iface;
 });
 
-
 let asset = (ref, expectType) => 
 {
     let asset = getAsset(ref.uid || ref);
@@ -75,7 +75,6 @@ let asset = (ref, expectType) =>
 asset.filter = makeFilter;
 asset.sort = assetSort;
 
-
 let ainfo = proxet(asset, prop => 
 {
     // if (prop === 'assets') return Object.keys(assets);
@@ -87,7 +86,7 @@ let ainfo = proxet(asset, prop =>
     {
         let items = assetKeys.filter(makeFilter({ groups: [ prop ] }));
         // documents not auto-sorted as their order might be important
-        return prop === 'documents' ? items : items.sort(assetSort.title);
+        return prop === 'documents' ? items : items.sort(assetSort.title.asc);
     }
 });
 

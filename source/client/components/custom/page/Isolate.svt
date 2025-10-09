@@ -1,0 +1,34 @@
+<!--*
+	  Renders UI for the code block isolation page.
+
+    @tags inject:#page-isolate
+
+    @property { string } id
+      ID of the code block to render.
+-->
+
+<div class="page-isolate">
+  <header>
+    <div class="title">{ t.page_isolate_title }</div>
+  </header>
+  <main>
+    <Editor {id} />
+  </main>  
+</div>
+
+
+<script module>
+import { page } from '#public'
+
+import Editor from '#stable/common/Editor'
+</script>
+
+<script>
+let { id } = $props();
+
+page.setTitle(t.page_isolate_title);
+</script>
+
+<style>
+/* @inject #page-isolate */
+</style>

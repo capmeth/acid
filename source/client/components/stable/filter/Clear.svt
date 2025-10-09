@@ -1,5 +1,5 @@
 <!--*
-    Renders the button to clear asset filtering criteria.
+    Renders a button to clear asset filtering criteria.
 
     @property { string } [action="clear_filters"]
       Action name for the internal **Button** component.

@@ -1,13 +1,15 @@
 <!--*
-    Displays parent section hierarchy as breadcrumb links.
+    Displays section breadcrumb links.
 
     @property { string | object } section
-      The section to list hierarchy for.
-    @property { string } [type='crumbs']
-      A type for the internal **List** component.
+      Breadcrumb target.
+    @property { string } [type="crumbs"]
+      Styling hint for the list.
+    @property { snippet } [use]
+      Receives a snippet that renders the content of this component.
 -->
 
-<List {items} pred={sinfo} {type} {use} delim>
+<List {items} pred={sinfo} {type} {use}>
   {#snippet children(sect)}
     <Link to={sect}>{ sect.title }</Link>
   {/snippet}

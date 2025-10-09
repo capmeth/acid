@@ -1,8 +1,8 @@
 
-```svelte label="markup/css structure"
-<List {items} {type} {use} delim #each="item">
-  <Link to={item}>
-    <!-- render `item.title` -->
+```svelte mode="static" label="structure"
+<List items={__section_ancestors__} {type} {use} #each={section}>
+  <Link to={section}>
+    <!-- render `section.title` -->
   </Link>
 </List>  
 ```

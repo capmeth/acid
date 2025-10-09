@@ -6,4 +6,5 @@ export default
     { name: 'document', path: '/document/:uid', component: 'Document' },
     { name: 'component', path: '/component/:uid', component: 'Component' },
     { name: 'catalog', path: '/catalog', component: 'Catalog' },
+    { name: 'isolate', path: '/isolate/:id', component: 'Isolate' },
 ];

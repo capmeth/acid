@@ -46,8 +46,7 @@ export default function(config, loaded, styles)
 
     main.input = 
     { 
-        [`${output.name}-docsite`]: path.join(paths.client, 'app.js'),
-        [`${output.name}-examples`]: virtual('examples.json')
+        [`${output.name}-docsite`]: path.join(paths.client, 'app.js')
     };
 
     if (config.cobeSvelte) 
@@ -94,6 +93,7 @@ export default function(config, loaded, styles)
             {
                 entries:
                 {
+                    '#blocks': virtual('examples.json'),
                     '#config': virtual('config.js'),
                     '#frend': paths.client, // `#client` conflicts with svelte internals
                 }

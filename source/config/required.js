@@ -1,5 +1,6 @@
+import getPort from 'get-port'
 import pathTransformer from '#lib/path-transformer.js'
-import { ident } from '#utils'
+import { ident, is, sarf } from '#utils'
 
 
 let repRe = /\{([a-z]+)\}/gi;
@@ -18,9 +19,9 @@ let hljsCdn =
 
     This comes after all manual and extension settings have been applied.
 */
-export default config =>
+export default async config =>
 {
-    let { cobeSvelte, hljs, links, metas, output, parsers, scripts } = config;
+    let { cobeSvelte, hljs, links, metas, output, parsers, scripts, server, socket } = config;
 
     parsers.unshift({ types: '*', use: '#exts/jsdoc' });
 
@@ -36,6 +37,12 @@ export default config =>
     config.toAssetId = pathTransformer(config.toAssetId) || ident;
     config.toAssetName = pathTransformer(config.toAssetName) || ident;
     config.toExampleFile = pathTransformer(config.toExampleFile) || (() => null);
+
+    if (is.array(config.updateMarkdown)) 
+    {
+        let specs = config.updateMarkdown.map(sarf);
+        config.updateMarkdown = str => specs.reduce((s, fn) => fn(s), str)
+    }
 
     config.importMap =
     {
@@ -56,4 +63,7 @@ export default config =>
     }
 
     if (cobeSvelte) config.importMap = { "svelte-render": `./${output.name}-svelte-render.js` };
+
+    if (!is.number(server.port)) server.port = await getPort(server.port ?? void 0);
+    if (!is.number(socket.port)) socket.port = await getPort(socket.port ?? void 0);
 }

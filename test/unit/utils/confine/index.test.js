@@ -2,13 +2,20 @@ import confine from "#source/utils/confine/index.js";
 import { AcidValidateError, AcidROOperationError } from "#source/errors.js"
 
 
-let array = ({ value }) => Array.isArray(value) || 'is not an array'
-let boolean = ({ value }) => typeof value === 'boolean' || 'is not a boolean'
-let flavors = ({ value }) => [ 'vanilla', 'chocolate', 'nutty', 'honey' ].includes(value) || 'is not included'
-let nonao = ({ value }) => typeof value === 'object' && !Array.isArray(value) && value !== null || 'is not an object'
-let number = ({ value }) => typeof value === 'number' || 'is not a number'
-let string = ({ value }) => typeof value === 'string' || 'is not a string'
-let undef = ({ value }) => typeof value === 'undefined' || 'is not undefined'
+let array = ({ err, value }) => Array.isArray(value) 
+    || err('is not an array')
+let boolean = ({ err, value }) => typeof value === 'boolean' 
+    || err('is not a boolean')
+let flavors = ({ err, value }) => [ 'vanilla', 'chocolate', 'nutty', 'honey' ].includes(value) 
+    || err('is not included')
+let nonao = ({ err, value }) => typeof value === 'object' && !Array.isArray(value) && value !== null 
+    || err('is not an object')
+let number = ({ err, value }) => typeof value === 'number' 
+    || err('is not a number')
+let string = ({ err, value }) => typeof value === 'string' 
+    || err('is not a string')
+let undef = ({ err, value }) => typeof value === 'undefined' 
+    || err('is not undefined')
 
 let def =
 {
@@ -30,6 +37,7 @@ let def =
     'test.food<array>.*': string,
     'test.content': { test: array, default: [] },
     'test.content.*': 'test.data',
+    'test.fixed': { default: 'set in stone', immutable: true }
 }
 
 
@@ -170,4 +178,15 @@ test('allows for data path reusablity', t =>
     let expect2 = { instanceOf: AcidValidateError };
 
     t.throws(actual2, expect2);
+});
+
+
+test('prevents immutable value from being changed', t => 
+{
+    let { test } = confine(def);
+
+    let actual = () => test.fixed = 'overwrite'
+    let expect = { instanceOf: AcidValidateError };
+
+    t.throws(actual, expect);
 });

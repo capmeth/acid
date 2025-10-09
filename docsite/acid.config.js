@@ -39,6 +39,7 @@ export default
         "cid": 
         {
             desc: 'Component ID is "{info}" for import or replacement',
+            rank: 100,
             assign: ({ path, tid, uid }) => tid === 'cmp' && `${uid.split('-')[1]}/${path.name}`
         },
         "cobe": "Is part of the CoBE component family",
@@ -58,8 +59,8 @@ export default
 
     refLinks: 'file:/docsite/acid.refs.md',
 
-    server: { port: 3005 },
-    socket: { port: 3009 },
+    server: { port: 3030 },
+    socket: { port: 3035 },
     watch: 
     { 
         files: 

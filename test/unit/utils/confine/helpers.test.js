@@ -1,3 +1,4 @@
+import { AcidValidateError } from "#source/errors.js";
 import help from "#source/utils/confine/helpers.js";
 
 
@@ -160,11 +161,12 @@ test('can auto-wrap `value` in on object if it is not already an object', t =>
     t.deepEqual(actual3, expect3);
 });
 
-test('can generate a message prefixed by `name`', t => 
+test('can generate the proper error with message prefixed by `name`', t => 
 {
     let h = help('key', 'value');
-    let msg = h.symbol || h.err('is not a symbol');
+    let err = h.symbol || h.err('is not a symbol');
 
-    t.true(msg.indexOf('key') >= 0);
-    t.true(msg.indexOf('is not a symbol') >= 0);
+    t.true(err instanceof AcidValidateError);
+    t.true(err.prop === 'key');
+    t.true(err.message.indexOf('is not a symbol') >= 0);
 });

@@ -6,7 +6,7 @@ import sinfo from './section-info'
 
 export default function (param)
 {
-    let { name, to, uid } = is.nonao(param) ? param : { to: param };
+    let { name, to, uid, ...rest } = is.nonao(param) ? param : { to: param };
 
     if (name === sinfo.root.name)
         return router.toNavLink('home');
@@ -17,5 +17,5 @@ export default function (param)
     if (uid)
         return router.toNavLink(ainfo(uid).type, { uid });
 
-    return router.toNavLink(to);
+    return router.toNavLink(to, rest);
 }

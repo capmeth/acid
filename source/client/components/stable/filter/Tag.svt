@@ -1,33 +1,32 @@
 <!--*
     Manages asset tag filtering criteria.
 
+    Selected items are added to filter store as `tags` object.
+
     @tags uses:main/Tag
 
     @property { object } [store]
       Name of the filter store to use.
     @property { string } [type="filter-tags"]
-      A type for the internal **List** component.
+      Styling hint for the list.
 -->
 
-<List {items} pred={tagDetails} {type}>
-  {#snippet children({ name, info, desc })}
-    <Toggle bind:active={tags[name]} kind="checkbox">
-      <Tag {name} {info} {desc} /> 
+<List items={tinfo.tags} pred={tinfo} {type}>
+  {#snippet children(data)}
+    <Toggle bind:active={tags[data.name]} kind="checkbox">
+      <Tag {...data} /> 
     </Toggle>
   {/snippet}
 </List>
 
 
 <script module>
-import { tagLegend } from '#config'
-import { tagDetails } from '#frend/lib'
+import { tinfo } from '#frend/lib'
 import stateFilters from '#frend/state/filters'
 
 import List from '../common/List'
 import Tag from '#custom/main/Tag'
 import Toggle from '../helper/Toggle'
-
-let items = Object.keys(tagLegend);
 </script>
 
 <script>

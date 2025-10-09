@@ -2,6 +2,8 @@
 
 :root
 {
+    --acid-background-site: #500612;
+
     --acid-color-accent: #5371FF;
     --acid-color-break: #EFD4C4BE;
     --acid-color-code: #99aaff;
@@ -37,36 +39,6 @@
         { 
             background-color: #ffffff99; 
             color: var(--acid-color-darkest);
-        }
-    }
-}
-
-#-main-docsite
-{
-    &::before { background: #500612; }
-
-    .banner
-    {
-        padding-top: 3vh;
-
-        .logo
-        {
-            :global(.helper-link)
-            {
-                &:hover, &:focus { filter: none; }
-            }
-        }
-
-        .title { display: none; }
-
-        .version
-        {
-            color: var(--acid-color-accent);
-            font-size: 1.1vw;
-            position: absolute;
-            bottom: 1.4vw;
-            left: 13vw;
-            z-index: -1;
         }
     }
 }
@@ -109,6 +81,38 @@
     &.extra-props { color: white; background: blueviolet; }
     &.inject { color: white; background: blue; }
     &.uses { color: white; background: indigo; }
+}
+
+#-page-catalog,
+#-page-component,
+#-page-document,
+#-page-home,
+#-page-section
+{
+    > header
+    {
+        padding-top: 3vh;
+
+        .logo
+        {
+            :global(.helper-link)
+            {
+                &:hover, &:focus { filter: none; }
+            }
+        }
+
+        .title { display: none; }
+
+        .version
+        {
+            color: var(--acid-color-accent);
+            font-size: 1.1vw;
+            position: absolute;
+            bottom: 1.4vw;
+            left: 13vw;
+            z-index: -1;
+        }
+    }
 }
 
 #-page-catalog,

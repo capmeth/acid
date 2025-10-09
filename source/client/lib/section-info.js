@@ -52,7 +52,7 @@ let getSection = cacher(name =>
         {
             let items = assets.filter(ainfo.filter({ groups: [ prop ] }));
             // documents not auto-sorted as their order might be important
-            return prop === 'documents' ? items : items.sort(ainfo.sort.title);
+            return prop === 'documents' ? items : items.sort(ainfo.sort.title.asc);
         }
 
         return section[prop];

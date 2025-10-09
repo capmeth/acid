@@ -1,13 +1,13 @@
 
-```svelte label="markup/css structure"
+```svelte mode="static" label="structure"
 <div class="helper-active type-{kind} active hover">
   if header
     <Toggle kind="switch">
-      <!-- render `header` -->
+      <!-- render `header()` -->
     </Toggle>
   end if
   <div class="content">
-    <!-- render `children` -->
+    <!-- render `children()` -->
   </div>
 </div>
 ```

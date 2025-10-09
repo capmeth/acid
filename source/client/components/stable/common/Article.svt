@@ -4,16 +4,24 @@
     Nothing is rendered if specified `mcid` is not mapped to a document 
     component.
 
+    Props passed to **Markup**:
+    - `id` *string* \
+      ID of the markdown content component.
+    - `type` *string* \
+      Styling hint.
+
     @tags conditional, uses:main/Markup
 
     @property { string } [mcid]
       Markdown content id of a pre-generated component.
+    @property { string } [type="article"]
+      Styling hint for the presentation component.
     @property { snippet } [use]
-      Passed a snippet that renders the content of this component.
+      Receives a snippet that renders the content of this component.
 -->
 
 <When test={Marked} {use}>
-  <Markup id={mcid} el="article" type="article">
+  <Markup id={mcid} {type}>
     <Marked />
   </Markup>
 </When>
@@ -27,6 +35,6 @@ import When from './When'
 </script>
 
 <script>
-let { mcid, use } = $props();
+let { mcid, type = 'article', use } = $props();
 let Marked = markdown[mcid];
 </script>

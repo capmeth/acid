@@ -25,8 +25,6 @@ components:
 
 Look for the *cid* tag on a custom component to get the id to use for replacing a component.
 
-All of the custom components also support CSS injection (see the [styling docs](section/styling) page), so you can create custom injectables for them as needed.
-
 
 # Customizing Components
 
@@ -67,7 +65,7 @@ The build process compiles components in *runes* mode and will make all of the t
 
 ## Importing Components
 
-The docsite build also maps stable and custom components via special module specifier prefixes.
+The docsite build maps stable and custom components via special module specifier prefixes.
 
 ```svelte
 <script module>
@@ -80,7 +78,28 @@ Just prefix a component's *cid* with `#stable/` or `#custom/` to import it.  The
 
 Module specifiers are remapped when replacing a component.  For instance, if you have replaced the **Markup** component in the above example then your custom implementation will be the one imported, not the original.
 
-Any component that supports CSS injection will have the `inject` tag attached that identifies the ID used to inject CSS into that cmoponent (see the [docsite styling](section/styling) page).
+Below is the list of replaceable components used directly by a docsite:
+
+- page components
+  - [**page/Home**](component/custom-page-home) - Docsite Homepage
+  - [**page/Section**](component/custom-page-section) - Section Display Page
+  - [**page/Document**](component/custom-page-document) - Document Asset Page
+  - [**page/Component**](component/custom-page-component) - Component Asset Page
+  - [**page/Catalog**](component/custom-page-catalog) - Asset Search Page
+  - [**page/Isolate**](component/custom-page-isolate) - CoBE Isolation Page
+  - [**page/Error**](component/custom-page-error) - Navigation Error Page
+- main components
+  - [**main/Branch**](component/custom-main-branch) - Tree Navigation Branch
+  - [**main/Editor**](component/custom-main-editor) - CoBE Editor
+  - [**main/Leaf**](component/custom-main-leaf) - Tree Navigation Leaf
+  - [**main/List**](component/custom-main-list) - Item Listing
+  - [**main/Markup**](component/custom-main-markup) - Markdown HTML Content
+  - [**main/Node**](component/custom-main-node) - Toc Navigation Node
+  - [**main/Tag**](component/custom-main-tag) - Asset Tag
+
+If you are writing a plugin that replaces components, importing additional components using `#custom/` and mapping them in `config.components` (instead of using local paths) will allow users to customize those components as well.
+
+Note that any custom component can also use CSS injection (see [docsite styling](section/styling)).
 
 
 ## APIs

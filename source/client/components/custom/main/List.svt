@@ -31,6 +31,8 @@
 
 <script>
 let { delim, items, type = 'default', children } = $props();
+
+delim ||= type === 'crumbs'
 // actual length is needed for delimiting
 if (delim) items = Array.from(items);
 </script>

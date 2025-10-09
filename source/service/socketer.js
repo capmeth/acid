@@ -16,8 +16,6 @@ export default function socketer(config)
     // no web socket needed if http server and watch disabled
     if (!enabled) return (sock.close(), sock);
 
-    log.info(`{:emph:hot-reload} is enabled`);
-
     if (sock.port !== port)
     {
         sock.close();
@@ -25,6 +23,9 @@ export default function socketer(config)
         let wss = new WebSocketServer({ port });
         let send = msg => wss.clients.forEach(cli => cli.send(msg));
         let close = async () => (sock = voidSock, new Promise(accept => wss.close(accept)))
+
+        wss.on('listening', () => log.info(`{:emph:hot-reload} is enabled ({:emph:using port #${port}})`));
+        wss.on('error', err => log.warn(`websocket error: {:emph:${err}}`));
     
         return sock = { close, send, port };
     }

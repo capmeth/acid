@@ -43,19 +43,27 @@ let definition =
 
     @param { string } id
       Identifier for validation error reporting.
-    @param { string } td
-      Markdown parser for comments.
+    @param { function } mdparse
+      Parses markdown content.
 */
-export default function (id, td)
+export default function (id, mdparse)
 {
-    return confine(definition, (apply, value, at) => 
+    return confine(definition, ({ apply, spec, value, verify }) => 
     {
-        switch (at.path)
+        value = verify(spec, value);
+
+        switch (spec.at.path)
         {
             // descriptions parsed as markdown
             case 'asset.description':
             case 'asset.props.*.description':
-                value = td.parse(value).doc;
+                value = mdparse(value).doc;
+                break;
+
+            // filter out ignored props
+            case 'asset.props':
+                value = value.filter(val => val && !val.ignore)
+                break;
         }
         
         try
@@ -68,34 +76,6 @@ export default function (id, td)
             log.warn(`component data from {:emph:${id}} was skipped: {:emph:${err.message}}`);
         }
     });
-
-    // let doxie = new Proxy(data.asset, 
-    // {
-    //     set(target, prop, value)
-    //     {
-    //         switch (prop)
-    //         {
-    //             case 'self':
-    //                 Object.keys(value).forEach(key => doxie[key] = value[key]);
-    //                 break;
-
-    //             case 'prop':
-    //                 target.props.push(...(is.array(value) ? value : [ value ]));
-    //                 break;
-
-    //             case 'tag':
-    //                 target.tags.push(...(is.array(value) ? value : [ value ]));
-    //                 break;
-
-    //             default:
-    //                 if (!is.undef(value)) target[prop] = value;
-    //         }
-
-    //         return true;
-    //     }
-    // });
-
-    // return doxie;
 }
 
 
