@@ -139,7 +139,7 @@ cobeSvelte: false
 cobeSvelte: true | false
 ```
 
-Remember that this only tells ACID to generate the renderer with a docsite build.  To use it, you will still need to set it up in `config.cobe` with the specifier "svelte-render".
+Remember that this only tells ACID to generate the renderer with a docsite build.  To use it, you will still need to set it up in `cobe` with the specifier "svelte-render".
 
 
 ## components
@@ -223,7 +223,9 @@ finalizeAsset: null
 finalizeAsset: function | null
 ```
 
-The function receives each asset data object in the form that will be serialized into the build, and it must return the final form of the asset, as a nullish value will cause the asset to be skipped.
+The function receives each asset data object in the form that will be serialized into the build, and it must return the final form of the asset.  
+
+Changing `tid`, `uid`, or `section` will have no effect here.  A nullish return value will cause the asset to be skipped.
 
 You can use this, for example, to omit component assets without example files.
 
@@ -886,7 +888,7 @@ By default, this is not available for component example files.
 
 ## toAssetId
 
-Generates an asset id from a file path.
+Generates an asset UID from a file path.
 
 ```js label="default value"
 toAssetId: '{hex}'
@@ -898,9 +900,9 @@ toAssetId: @repath
 
 This can be used to make prettier ids (used in URLs) for asset pages.
 
-Resulting filepaths are **kebab-cased** for id generation.
+The resulting value is **kebab-cased** for id generation.  If it falsey, the asset will be omitted from the docsite.
 
-> Care should be taken to ensure that each asset id will be unique across the docsite as page/content/links might not get rendered or resolved properly otherwise.
+> Care should be taken to ensure that each UID is unique across the docsite as page/content/links might not get rendered or resolved properly otherwise.
 
 
 ## toAssetName
@@ -915,7 +917,7 @@ toAssetName: '{name}'
 toAssetName: @repath
 ```
 
-Used when an asset is needs to derive its name from its filepath.
+Called when an asset is needs to derive its name from its filepath.
 
 Resulting values will be **Capital Cased** for document asset name generation.
 

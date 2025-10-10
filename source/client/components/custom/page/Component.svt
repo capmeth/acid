@@ -29,13 +29,19 @@
     <div class="leader">
       <div class="title" class:deprecated>{ title }</div>
       {#if deprecated}
-        <div class="deprecation">{ deprecated }</div>
+        <Markup type="deprecation">
+          {#if deprecated === true}
+            <p>{ t.label_deprecated }</p>    
+          {:else}
+            {@html deprecated}
+          {/if}            
+        </Markup>
       {/if}
       <Active kind="sector" store="asset-description">
         {#snippet header()}
           <span class="sector-title">{ t.label_description }</span>
         {/snippet}
-        <Markup type="component">
+        <Markup type="description">
           {#if description}
             {@html description}
           {:else}
@@ -72,10 +78,18 @@
             <div class="name" class:deprecated>{ name }</div>
             <div class="type">{ type }</div>
             {#if deprecated}
-              <div class="deprecation">{ deprecated }</div>
+              <div class="depre">
+                <Markup type="deprecation">
+                  {#if deprecated === true}
+                    <p>{ t.label_deprecated }</p>    
+                  {:else}
+                    {@html deprecated}
+                  {/if}            
+                </Markup>
+              </div>
             {/if}
             <div class="desc">
-              <Markup type="prop">
+              <Markup type="description">
                 {#if description}
                   {@html description}
                 {:else}

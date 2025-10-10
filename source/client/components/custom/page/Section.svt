@@ -27,12 +27,21 @@
   </header>
   <main>
     <div class="leader">
-      <div class="title">{ section.title }</div>
-      <Crumbs {section} />
+      <div class="title" class:deprecated>{ title }</div>
+      {#if deprecated}
+        <Markup type="deprecation">
+          {#if deprecated === true}
+            <p>{ t.label_deprecated }</p>    
+          {:else}
+            {@html deprecated}
+          {/if}            
+        </Markup>
+      {/if}
+      <Crumbs section={name} />
     </div>
     <div class="content">
-      <Article mcid={section.mcid} />
-      <Assets sections={section.name} type="columns">
+      <Article {mcid} />
+      <Assets sections={name} type="columns">
         {#snippet children(asset)}
           <Link kind="annex" to={asset} />
         {/snippet}
@@ -50,7 +59,7 @@
         </Active>
       {/snippet}
     </Tree>
-    <Toc sel="#{section.mcid}" tocDepth={section.tocDepth}>
+    <Toc sel="#{mcid}" {tocDepth}>
       {#snippet use(render)}
         <Active kind="nav" store="toc">
           {#snippet header()}
@@ -78,6 +87,7 @@ import Article from '#stable/common/Article'
 import Assets from '#stable/common/Assets'
 import Crumbs from '#stable/common/Crumbs'
 import Link from '#stable/helper/Link'
+import Markup from '#custom/main/Markup'
 import Static from '#stable/common/Static'
 import Toc from '#stable/common/Toc'
 import Tree from '#stable/common/Tree'
@@ -85,9 +95,9 @@ import Tree from '#stable/common/Tree'
 
 <script>
 let { name } = $props();
-let section = sinfo(name)
+let { deprecated, mcid, title, tocDepth } = sinfo(name)
 
-page.setTitle(section.title);
+page.setTitle(title);
 </script>
 
 <style>

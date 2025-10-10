@@ -88,7 +88,7 @@ export default function(config)
 
 
     /**
-        Parse `example` markdown content into `record`.
+        Parse `example` markdown content into asset `record`.
 
         Uses `config.toExampleFile` option to determine example file path if 
         `example` not set.
@@ -98,12 +98,11 @@ export default function(config)
           - `path`: a path object
           - `uid`: indetifier for the record
         @return { object }
-          - `matter`: front-matter attributes
           - `mcid`: markdown content id
+          - relevant front-matter data (if available)
     */
     op.example = async (record, exec) =>
     {
-        record = await exec.identify(record);
         record = await exec.pather(record);
 
         let { example, path, uid } = record;        
@@ -111,12 +110,14 @@ export default function(config)
 
         delete record.example;
 
-        let results = await exec.markdown(data);
+        let { mcid, matter } = await exec.markdown(data);
 
-        if (results.mcid)
+        if (mcid) record.mcid = mcid;
+        if (is.nonao(matter))
         {
-            record.mcid = results.mcid;
-            record.matter = results.matter;
+            let { cobeMode } = matter;
+            
+            if (cobeMode) record.cobeMode = cobeMode;
         }
 
         return record;
@@ -130,23 +131,25 @@ export default function(config)
 
         @param { object } record
           - `path`: a path object
-          - `tid`: asset type id
         @return { object }
           - `uid`: an identifier for the record
     */
     op.identify = async (record, exec) =>
     {
-        if (record.tid && !record.uid)
+        if (!record.uid)
         {
             record = await exec.pather(record);
 
             let { path } = record;
 
             if (is.nonao(path)) 
-                record.uid = kebabCase(toAssetId(path.path));
+            {
+                let uid = toAssetId(path.path);
+                if (uid) record.uid = kebabCase(uid);
+            }
         }
 
-        return record;
+        return record.uid ? record : null;
     }
 
 
@@ -156,18 +159,16 @@ export default function(config)
         @param { object } record
           - `content`: markdown string content (consumed)
           - `path`: a path object
-          - `name`: an identifier for `record` (sections)
-          - `uid`: an identifier for `record` (assets)
+          - `uid`: an identifier for `record`
         @return { object}
           - `matter`: front-matter attributes
           - `mcid`: markdown content id
     */
     op.markdown = async (record, exec) =>
     {
-        record = await exec.identify(record);
         record = await exec.pather(record);
 
-        let { content, name, path, uid = name } = record;
+        let { content, path, uid } = record;
 
         if (!content && is.nonao(path))
             content = await fs.readFile(path.abs, 'utf8');
@@ -195,82 +196,68 @@ export default function(config)
 
 
     /**
-        Aplies `matter` options to `record`.
-
-        @param { object } record
-          - `matter`: markdown front-matter (consumed)
-          - `tid`: asset type identifier
-        @return { object}
-          - `cobeMode`: default cobe display mode
-          - `tags`: info-stamps
-          - `title`: title for the record
-          - `tocDepth`: ToC header level
-    */
-    op.options = record =>
-    {
-        let { matter, tid } = record;
-
-        if (is.nonao(matter))
-        {
-            let { cobeMode, tags, title, tocDepth } = matter;
-
-            if (tid === 'doc')
-            {
-                if (cobeMode) record.cobeMode = cobeMode;
-                if (tags)
-                {
-                    record.tags ||= [];
-                    record.tags.push(...(is.array(tags) ? tags : tags.split(commaRe)));
-                }
-                if (title) record.title = title;
-                if (tocDepth || tocDepth === 0) record.tocDepth = tocDepth;
-            }
-            else if (!tid)
-            {
-                if (cobeMode) record.cobeMode = cobeMode;
-                if (title) record.title ||= title;
-                if (tocDepth || tocDepth === 0) record.tocDepth = tocDepth;
-            }
-        }
-
-        delete record.matter;
-
-        return record;
-    }
-    
-    
-    /**
-        Parse `overview` markdown content into `record`.
+        Parse markdown content into document `record`.
 
         @param { object } record
           - `name`: a name for the record
           - `overview`: string content or filepath (consumed)
         @return { object }
-          - `matter`: front-matter attributes
           - `mcid`: markdown content id
+          - relevant front-matter data (if available)
     */
-    op.overview = async (record, exec) =>
+    op.options = (record, exec) =>
     {
-        let { name, overview } = record;
+        let data = {};
 
-        let data = { name };
-
-        if (fileRe.test(overview))
-            data.path = overview.replace(fileRe, '');
-        else
-            data.content = overview;
-        
-        delete record.overview;
-
-        let results = await exec.markdown(data);
-
-        if (results.mcid)
+        if (record.tid)
         {
-            record.mcid = results.mcid;
-            record.matter = results.matter;
+            let { path, uid } = record;
+            data = { path, uid };
+        }
+        else // section
+        {
+            let { name, overview } = record;
+
+            data.uid = name;
+
+            if (fileRe.test(overview))
+                data.path = overview.replace(fileRe, '');
+            else
+                data.content = overview;
+            
+            delete record.overview;
         }
 
-        return record;
+        return async ({ md }) =>
+        {
+            let { mcid, matter } = await exec.markdown(data);
+
+            if (mcid) record.mcid = mcid;
+            if (is.nonao(matter))
+            {
+                let { cobeMode, deprecated, title, tags, tocDepth } = matter;
+
+                if (cobeMode) record.cobeMode = cobeMode;
+
+                if (deprecated) 
+                {
+                    record.deprecated = deprecated;
+                    if (is.string(deprecated)) 
+                        record.deprecated = md.comment(deprecated).doc;
+                }
+                
+                if (title) record.title = title;
+                if (tocDepth || tocDepth === 0) record.tocDepth = tocDepth;
+
+                if (record.tid)
+                {
+                    if (is.string(tags)) tags = tags.split(commaRe);
+                    if (is.array(tags)) (record.tags ||= []).push(...tags);
+                }
+            }
+
+            return record;
+        }
     }
 
 
@@ -361,7 +348,6 @@ export default function(config)
     */
     op.tag = async (record, exec) =>
     {
-        record = await exec.identify(record);
         record = await exec.pather(record);
 
         if (tagmap.size)
@@ -377,7 +363,7 @@ export default function(config)
                 {
                     if (info)
                     {
-                        let tag = info === `true` ? name : `${name}:${info}`;
+                        let tag = info === true ? name : `${name}:${info}`;
 
                         record.tags ||= [];
                         record.tags.push(tag);
@@ -409,11 +395,7 @@ export default function(config)
     */
     op.title = async (record, exec) =>
     {
-        if (!record.tid) // section fallback
-        {
-            record.title ||= capitalCase(record.name);
-        }
-        else
+        if (record.tid) // section fallback
         {
             record = await exec.pather(record);
 
@@ -428,6 +410,10 @@ export default function(config)
                 else // non-doc asset fallback
                     record.title ||= toAssetName(path.path);
             }
+        }
+        else
+        {
+            record.title ||= capitalCase(record.name);
         }
 
         return record;

@@ -14,7 +14,7 @@
 
     --acid-background-site: #444444;
     --acid-color-component: #98AAFF;
-    --acid-color-deprecated: #BA243CCC;
+    --acid-color-deprecated: #BA243C;
     --acid-color-break: #ddd;
     --acid-color-document: #94E1FF;
     --acid-color-link: #E2B3C2; /* pinkie */
@@ -590,7 +590,26 @@
 
         ul { list-style-type: disc; }
 
-        *:first-child { margin-top: 0; }
+        *:first-child:not(&.type-description *) { margin-top: 0; }
+
+        &.type-deprecation
+        {
+            padding: 0 8px;
+
+            p { margin: 0; }
+        }
+        
+        &.type-description
+        {
+            padding: 0 8px;
+            
+            p { padding: 0; }
+        }
+    }
+
+    &.type-deprecation
+    {
+        background-color: var(--acid-color-deprecated);
     }
 }
 
@@ -759,12 +778,6 @@
 
         .title { color: var(--acid-color-component); }
 
-        .deprecation
-        {
-            background-color: var(--acid-color-deprecated);
-            padding: 4px 8px;
-        }
-
         .empty { font-style: italic; }
 
         .prop
@@ -803,16 +816,14 @@
                 }
             }
 
-            .deprecation
-            {
-                background-color: var(--acid-color-deprecated);
-                grid-column: 1 / -1;
-                padding: 4px 8px;
+            .depre
+            { 
+                grid-column: 1 / -1; 
             }
 
             .desc
             {
-                background: #ffffff11;
+                background-color: #ffffff11;
                 grid-column: 1 / -1;
                 padding: 4px 8px;
 
