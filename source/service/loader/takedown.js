@@ -1,8 +1,8 @@
-import fs from 'node:fs/promises'
+import fs from 'node:fs'
 import path from 'node:path'
 import jsyaml from 'js-yaml'
 import takedown from 'takedown'
-import { attrsToObject } from '#utils'
+import { attrsToObject, uid } from '#utils'
 import references from './references.js'
 
 
@@ -35,15 +35,18 @@ export default async function (config)
     {
         convert:
         {
-            fenceblock: (e, { blocks, uid }) =>
+            fenceblock: (e, v) =>
             {
                 let [ lang, dome, attrs ] = e.info?.match(langRe)?.slice(1) || [];
                 let { file, mode = dome, ...rest } = attrsToObject(attrs);
+                
+                let code = file ? fs.readFileSync(path.resolve(root, file), 'utf8') : e.value;
+                let data = { ...rest, lang, mode, code, uid: v.uid }
+                
+                data.id ||= uid.hex(data);
+                v.blocks.push(data);
 
-                let block = Promise.resolve(file ? fs.readFile(path.resolve(root, file), 'utf8') : e.value);
-                blocks.push(block.then(code => ({ id: e.id, lang, mode, code, uid, ...rest })));
-
-                return '<Editor id="{id}" />';
+                return `<Editor id="${data.id}" />`;
             },
 
             header: '<h{level} id="{id}" class="hx">{value}</h{level}>\n',
@@ -58,7 +61,7 @@ export default async function (config)
                     ${e.value.replace(braceRe, '{"$&"}')}
             
                     <script module>
-                    import Editor from '../stable/common/Editor'
+                    import Editor from '#stable/cobe/Editor'
                     </script>
                 `;
                 

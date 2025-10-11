@@ -1,9 +1,12 @@
 <!--*
     Code Block Editor (CoBE) component.
     
-    Tightly coupled with **Code** and **Renbox** components for code editing 
-    and component rendering, respectively.  Exactly one of each of these 
-    components should appear as descendants for the trio to work properly.
+    Tightly coupled with **Action**, **Code** and **Renbox** components for 
+    user interaction, code editing, and component rendering, respectively.
+
+    Exactly one of each of **Code** and **Renbox** should appear as 
+    descendants, whereas **Action** components are clickable elements for 
+    toggles and actions and can appear multiple times.
 
     All other props are ignored if `id` is set, as this indicates a reference
     to indexed code block information extracted from a markdown file.
@@ -11,18 +14,12 @@
     Props passed to **Editor**:
     - `copied` *boolean* \
       Has code been copied to clipboard?
-    - `copy` *function* \
-      Copies current code to clipboard.  This function will not exist if copy 
-      operation not supported by browser.
     - `edited` *boolean* \
       Is current code different from current render?
     - `error` *object* \
       Error thrown by current render.
     - `id` *string* \
       An id for the editor.
-    - `isolate` *function* \
-      Opens this code block on a page by itself.  This function will not exist 
-      for some editor modes.
     - `isolated` *boolean* \
       Are we currently rendering in isolation?
     - `label` *string* \
@@ -31,19 +28,10 @@
       Language type of the code block.
     - `mode` *string* \
       Rendering mode for the editor.
-    - `reset` *function* \
-      Resets current code to original and renders.  This function will not 
-      exist for some editor modes.
     - `shifted` *boolean* \
       Is current code different from original code?
     - `showing` *boolean* \
       Is code entry currently being shown?
-    - `toggle` *function* \
-      Toggles hide/show of **Code** component.  This function will not exist 
-      for some editor modes.
-    - `update` *function* \
-      Renders current code.  This function will not exist for some editor 
-      modes.
 
     @tags cobe, uses:main/Editor
 
@@ -67,22 +55,7 @@
     @values "demo", "edit", "live", "render", "static"
 -->
 
-<Editor 
-  {id} 
-  label={cbe.label} 
-  {shifted} 
-  {edited} 
-  copied={editor.disabled} 
-  {error} 
-  showing={editor.code}
-  {isolated}
-  mode={cbe.mode} 
-  lang={cbe.lang}
-
-  {...funcs}
-
-  {children}
-/>
+<Editor {id} {label} {lang} {mode} {shifted} {edited} {copied} {showing} {isolated} {error} />
 
 
 <script module>
@@ -91,67 +64,43 @@ import { noticeTimeout } from '#config'
 import { binfo, compose, context, dom, toUrl } from '#frend/lib'
 
 import Editor from '#custom/main/Editor'
+
+let { canCopy, copyTo } = dom.clipboard;
 </script>
 
 <script>
-let { id, children, ...args } = $props();
+let { id, ...args } = $props();
 
-let cbe = id ? binfo(id) : binfo.make(args);
+let { allowCss, label, lang, mode, noHighlight, ...cbe } = id ? binfo(id) : binfo.make(args);
 let isolated = window.name === id;
-
-let editor = $state(
-{ 
-    allowCss: cbe.allowCss, 
-    code: cbe.static || cbe.noHide || isolated,
-    disabled: false, 
-    lang: cbe.lang,
-    noHighlight: cbe.noHighlight,
-    readonly: cbe.static || cbe.demo,
-    renbox: !cbe.static,
-    value: cbe.code 
-});
-
-let error = $state(null);
-// code input previous state
-let prev = $state(null);
-// has code changed?
-let edited = $derived(prev !== editor.value);
-// has code changed from original?
-let shifted = $derived(cbe.code !== editor.value);
-// functions to pass along
-let funcs = $derived.by(() => 
-{
-    let fn = {};
-
-    if (dom.clipboard.canCopy && editor.value) fn.copy = copy;
-    if (cbe.edit || cbe.live) fn.reset = reset;
-    if (!(cbe.render || cbe.static)) fn.toggle = toggle;
-    if (cbe.edit) fn.update = update;
-    if (id && cbe.edit || cbe.live) fn.isolate = isolate;
-
-    return fn;
-})
 
 let copy = async () => 
 {
-    await dom.clipboard.copyTo(editor.value);
-    editor.disabled = true;
-    setTimeout(() => editor.disabled = false, noticeTimeout);
+    await copyTo(editor.value);
+    copied = true;
+    setTimeout(() => copied = false, noticeTimeout);
 }
-let reset = () => (editor.value = cbe.code, cbe.edit && update())
-let toggle = () => editor.code = !editor.code
+let reset = () => shifted && (editor.value = cbe.code, cbe.edit && update())
+let toggle = () => showing = !showing
 let update = () => 
 {
     if (editor.display && edited)
     {
         error = null;
-        compose(cbe.lang, prev = editor.value, editor.display).catch(onerror);
+        prev = editor.value;
+        
+        compose(lang, editor.value, editor.display)
+            .catch(onerror);
     }
 }
 let isolate = () => isolated ? window.close() : window.open(toUrl({ to: 'isolate', id }), id)
+let onerror = err => 
+{
+    error = err.message ?? err;
+    console.error('CoBE:', err);
+}
 
-let onerror = err => (error = err.message ?? err, console.error('CoBE:', err))
-editor.onkeydown = evt =>
+let onkeydown = evt =>
 {
     if (evt.metaKey)
     {
@@ -177,6 +126,64 @@ editor.onkeydown = evt =>
     }
 }
 
+let editor = $state(
+{ 
+    actions: 
+    {
+        copy: { action: copy },
+        reset: { action: reset },
+        toggle: { action: toggle },
+        update: { action: update },
+        isolate: { action: isolate },
+    }, 
+    code: 
+    { 
+        lang, 
+        noHighlight, 
+        onkeydown, 
+        readonly: cbe.static || cbe.demo 
+    }, 
+    renbox: 
+    {
+        render: !cbe.static,
+        allowCss 
+    }, 
+    value: cbe.code 
+});
+
+let error = $state(null);
+// code input previous state
+let prev = $state(null);
+// was copy-to-clipboard recently executed?
+let copied = $state(false);
+// is code pane currently displayed?
+let showing = $state(cbe.static || cbe.noHide || isolated);
+// has code changed?
+let edited = $derived(prev !== editor.value);
+// has code changed from original?
+let shifted = $derived(cbe.code !== editor.value);
+
+// update children via context
+$effect(() => 
+{
+    editor.renbox.render = !cbe.static;
+
+    editor.code.render = showing;
+    editor.code.disabled = copied;
+
+    let { actions } = editor;
+
+    actions.copy.render = canCopy && editor.value;
+    actions.copy.disabled = copied;    
+    actions.reset.render = cbe.edit || cbe.live;
+    actions.reset.disabled = !shifted;    
+    actions.toggle.render = !(cbe.render || cbe.static);
+    actions.toggle.disabled = false;    
+    actions.update.render = cbe.edit;
+    actions.update.disabled = !edited;    
+    actions.isolate.render = id && cbe.edit || cbe.live;
+    actions.isolate.disabled = false;
+});
 // auto update display for LIVE state
 $effect(() => edited && cbe.live && update());
 // make sure we do an initial render (if necessary)

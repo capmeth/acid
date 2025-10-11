@@ -1,0 +1,29 @@
+<!--*
+    Editor action handler.
+
+    The action details object provided to `children` will have:
+    - `action` *function*: called to execute the action
+    - `disabled` *boolean*: is the action disabled?
+
+    @tags cobe
+
+    @property { string } name
+      Editor action name.
+    @property { snippet } children
+      Receives action details object.
+-->
+
+{#if action.render}
+  {@render children(action)}
+{/if}
+
+
+<script module>
+import { context } from '#frend/lib'
+</script>
+
+<script>
+let { name, children } = $props();
+let { editor } = context;
+let { [name]: action } = $derived(editor.actions);
+</script>

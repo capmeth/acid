@@ -5,12 +5,12 @@
     descendant of it to work properly.
 
     Operates against the context object `editor`.
-    - `code` *boolean*: Should anything be rendered?
-    - `disabled` *boolean*: Is the entry control inaccessible?
-    - `lang` *string*: Language-type of the code.
-    - `noHighlight` *boolean*: Turn off code highlighting?
-    - `onkeydown` *function*: Event handler for input control.
-    - `readonly` *boolean*: Should the input area be removed?
+    - `code` *object*: nothing renders if not present
+      - `disabled` *boolean*: Is the entry control inaccessible?
+      - `lang` *string*: Language-type of the code.
+      - `noHighlight` *boolean*: Turn off code highlighting?
+      - `onkeydown` *function*: Event handler for input control.
+      - `readonly` *boolean*: Should the input area be removed?
     - `value` *string*: Current value of control (bound).
 
     @tags cobe
@@ -19,7 +19,7 @@
       Receives a snippet that renders the content of this component.
 -->
 
-<When test={code} {use}>
+<When test={render} {use}>
   <div class="cobe-code" data-lang={lang}>
     <pre><code class="{lang} language-{lang}">{@html highlight(editor.value)}</code></pre>
     {#if !readonly}
@@ -55,8 +55,8 @@ let highlighter = cacher((language, suppress) =>
 <script>
 let { use } = $props();
 let { editor } = context;
-let { code, disabled, lang, onkeydown, readonly } = $derived(editor);
-let highlight = highlighter(editor.lang, editor.noHighlight);
+let { disabled, lang, noHighlight, onkeydown, readonly, render } = $derived(editor.code);
+let highlight = $derived(highlighter(lang, noHighlight));
 </script>
 
 

@@ -18,7 +18,7 @@
       Receives a snippet that renders the content of this component.
 -->
 
-<When test={renbox} {use}>
+<When test={render} {use}>
   <div class:renbox={!allowCss}>
     <div bind:this={editor.display}></div>
   </div>
@@ -34,7 +34,7 @@ import When from '../common/When'
 <script>
 let { use } = $props();
 let { editor } = context;
-let { allowCss, renbox } = $derived(editor);
+let { allowCss, render } = $derived(editor.renbox);
 </script>
 
 <style>
