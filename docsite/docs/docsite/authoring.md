@@ -25,6 +25,9 @@ Most HTML generation is left standard, but ACID does manipulate the output on so
 - **Docsite hyperlinks are adjusted**  
   Relative hyperlinks for docsite routes are adjusted for easier page linking from within a document.
 
+- **Components can be used in the content**  
+  Via standard markdown HTML parsing, Svelte components can also be embedded in the content.
+
 Here's a [quick reference](https://commonmark.org/help/) page and a [tutorial](https://commonmark.org/help/tutorial/) to help you learn how to use markdown.
 
 

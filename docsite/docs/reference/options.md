@@ -144,7 +144,7 @@ Remember that this only tells ACID to generate the renderer with a docsite build
 
 ## components
 
-Replace internal docsite components.
+Add custom components or replace internal docsite components.
 
 ```js label="default value"
 components: {}
@@ -161,24 +161,33 @@ components: // merges
 }
 ```
 
-The `[name]` should take the form `group/Component` where `Component` is the proper name of the component and `group` must be one of the custom component groups (currently only "main" or "page").
+The `[name]` should take the form `group/Component` where `Component` is the proper name of the component and `group` is one of the following custom component groups:
 
-Relative filepaths are based on `root` config option.
+- *page* - page-level internal components
+- *main* - all other internal components
+- *embed* - user-defined markdown-available components
+- *user* - all other user-defined components
 
-For example, if you have a custom component at *src/components/Docsite.svelte* that you want to use in place of the internal root **Docsite** component, do
+While things can be mapped as desired here, it is recommended to use only *page* and *main* groups for replacing internal components, and *embed* or *user* groups for any other user-defined components.
+
+Components mapped in the *embed* group will be available for use in markdown documents.  The component's name within a markdown document is the **PascalCased** name of everything that follows *embed/*.
+
+Relative filename values are subject to `root` config option.
+
+For example, if you have a custom component at *src/components/Homepage.svelte* that you want to use in place of the internal **Home** component, do
 
 ```js
 components:
 {
-    'main/Docsite': 'src/components/Docsite'
+    'page/Home': 'src/components/Homepage'
 }
 ```
 
 The docsite build can resolve *.svelte* and *.svt* extensions automatically, so the extension is not required.
 
-Setting a value to `null` or an empty string has the same effect as omitting it - the default internal component will be used.
+Setting a value to `null` or an empty string has the same effect as omitting it - the default internal component will be used.  This obviously only works for components that have defaults.
 
-Visit [Customizing Components](document/integration-components) for more details on how this works.
+Visit [Customizing Components](document/integration-components) for more details on how all this works.
 
 
 ## copy

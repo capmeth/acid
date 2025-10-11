@@ -7,6 +7,13 @@
 
 
 ---
+## v0.0.5
+
+- allow components to be embedded in markdown files via `config.components`
+- add Action component for Editor interaction/toggles
+- add deprecation messages to documents, sections 
+
+
 ## v0.0.4
 
 - add fenced block isolation page

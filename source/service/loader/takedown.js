@@ -1,3 +1,4 @@
+import { pascalCase } from 'change-case'
 import fs from 'node:fs'
 import path from 'node:path'
 import jsyaml from 'js-yaml'
@@ -12,8 +13,9 @@ let pageRe = /^catalog|component|document|home|section/;
 
 export default async function (config)
 {
-    let { root } = config;
+    let { components, root } = config;
 
+    let embeds = articleEmbeds(components);
     let refs = await references(config);
 
     let link = e => 
@@ -46,7 +48,7 @@ export default async function (config)
                 data.id ||= uid.hex(data);
                 v.blocks.push(data);
 
-                return `<Editor id="${data.id}" />`;
+                return `<CoBEditor id="${data.id}" />`;
             },
 
             header: '<h{level} id="{id}" class="hx">{value}</h{level}>\n',
@@ -54,15 +56,13 @@ export default async function (config)
 
             link,
 
-            root: e =>
+            root: e => 
             {
                 let file = 
                 `
                     ${e.value.replace(braceRe, '{"$&"}')}
             
-                    <script module>
-                    import Editor from '#stable/cobe/Editor'
-                    </script>
+                    <script module>${embeds}</script>
                 `;
                 
                 return file;
@@ -105,4 +105,21 @@ export default async function (config)
     });
 
     return { content, comment };
+}
+
+let embedRe = /^embed\//;
+
+let articleEmbeds = map =>
+{
+    let imports = `import CoBEditor from '#stable/cobe/Editor'\n`;
+
+    let reducer = (str, cid) => 
+    {
+        if (embedRe.test(cid) && map[cid]) 
+            return str + `import ${pascalCase(cid.replace(embedRe, ''))} from '#custom/${cid}'\n`;
+        
+        return str;
+    }
+
+    return '\n' + Object.keys(map).reduce(reducer, imports);
 }
