@@ -895,6 +895,23 @@ This must be an integer between 0 and 6.  Specifying 0 turns off the TOC complet
 By default, this is not available for component example files.
 
 
+## toAssetAccessLine
+
+Generates an access line (generally, an import statement) for an asset.
+
+```js label="default value"
+toAssetAccessLine: null
+```
+
+```js label="spec"
+toAssetAccessLine: @repath
+```
+
+No access lines will be generated if set to `null`.
+
+This becomes the `accessLine` property of the asset.
+
+
 ## toAssetId
 
 Generates an asset UID from a file path.
@@ -1119,16 +1136,17 @@ Converts filepaths from one form to another.
 The `root` option is used to resolve relative source paths.
 
 - A function value receives a source path info object with the following and should return a string.
-  - `path` - the source filepath
-  - `dir` - directory path of `path`
-  - `base` - filename in `path` with extension
-  - `name` - filename in `path` w/o extension
-  - `ext` - file extension of `base`
+  - `path` - the source filepath (absolute)
+  - `sub` - the source filepath (relative)
+  - `dir` - directory path
+  - `base` - filename with extension
+  - `name` - filename w/o extension
+  - `ext` - filename extension
   - `hex` - hexadecimal value of hash of `path`
-  - `segs` - array of `path` segments
+  - `sep` - path separator character
 - A string value can be interpolated with information from the source filepath using brace-enclosed 
   keys from those above (e.g. `{name}` for filename).
-- An array value is used as parameters for `String.prototype.replace` against the source path. \
+- An array value is used as parameters for `String.prototype.replace` against the source subpath. \
   Optionally, **RegExp** constructor parameters can be provided in an array as the first argument. \
   For example, the following value
   ```js

@@ -1,5 +1,4 @@
-import path from 'node:path'
-import { inter, is, proxet, sarf, uid } from '#utils'
+import { inter, is, sarf } from '#utils'
 
 
 /**
@@ -26,14 +25,7 @@ import { inter, is, proxet, sarf, uid } from '#utils'
 */
 export default function (spec)
 {
-    if (is.func(spec)) return str => spec(chop(str))    
-    if (is.string(spec)) return str => inter(spec, chop(str))
-    if (is.object(spec)) return sarf(spec);
+    if (is.func(spec)) return spec;
+    if (is.string(spec)) return obj => inter(spec, obj)
+    if (is.object(spec)) return (fn => obj => fn(obj.sub))(sarf(spec));
 }
-
-let chop = str => proxet(path.parse(str), key =>
-{
-    if (key === 'hex') return uid.hex(str);
-    if (key === 'path') return str;
-    if (key === 'segs') return str.split(path.sep);
-})

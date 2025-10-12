@@ -286,6 +286,13 @@ config.title = hackson.title ?? 'Untitled';
 config.tocDepth = 3;
 
 /**
+    Converts a file path to an asset access line.
+
+    @type { function | string | array }
+*/
+config.toAssetAccessLine = null;
+
+/**
     Converts a file path to an asset id.
 
     @type { function | string | array }

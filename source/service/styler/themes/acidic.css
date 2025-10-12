@@ -363,7 +363,7 @@
 
         :global
         {
-            .helper-button:last-child
+            .action-shutter, .action-isolate
             {
                 margin-left: auto;
             }
@@ -474,6 +474,11 @@
         display: flex;
         flex-wrap: wrap;
         gap: 6px;
+    }
+
+    &.type-tags
+    {
+        padding: 4px;
     }
 
     &.type-filter-groups, &.type-filter-options, &.type-filter-tags
@@ -590,7 +595,10 @@
 
         ul { list-style-type: disc; }
 
-        *:first-child:not(&.type-description *) { margin-top: 0; }
+        .hx, blockquote, pre, p, ol, ul
+        {
+            &:not(.type-description *):first-child { margin-top: 0; }
+        }
 
         &.type-deprecation
         {
@@ -779,6 +787,14 @@
         .title { color: var(--acid-color-component); }
 
         .empty { font-style: italic; }
+
+        .access-line
+        {
+            color: var(--acid-color-code);
+            font-family: var(--acid-font-family-code);
+            font-weight: 700;
+            padding: 8px;
+        }
 
         .prop
         {

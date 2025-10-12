@@ -1,17 +1,17 @@
 <!--*
     Renders an editable code block with syntax highlighting.
 
-    Tightly coupled with the **Editor** component and must appear as a 
-    descendant of it to work properly.
+    Works as a descendant of the **Editor** component, which provides
+    the `editor` context object necessary for operation.
 
-    Operates against the context object `editor`.
-    - `code` *object*: nothing renders if not present
-      - `disabled` *boolean*: Is the entry control inaccessible?
-      - `lang` *string*: Language-type of the code.
-      - `noHighlight` *boolean*: Turn off code highlighting?
-      - `onkeydown` *function*: Event handler for input control.
-      - `readonly` *boolean*: Should the input area be removed?
-    - `value` *string*: Current value of control (bound).
+    Expected `editor` context interface:
+ *  - `code` *object*: nothing renders if not present
+ *    - `disabled` *boolean*: Is the entry control inaccessible?
+ *    - `lang` *string*: Language-type of the code.
+ *    - `noHighlight` *boolean*: Turn off code highlighting?
+ *    - `onkeydown` *function*: Event handler for input control.
+ *    - `readonly` *boolean*: Should the input area be removed?
+ *  - `value` *string*: Current value of control (bound).
 
     @tags cobe
 

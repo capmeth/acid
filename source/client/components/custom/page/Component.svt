@@ -37,6 +37,14 @@
           {/if}            
         </Markup>
       {/if}
+      {#if accessLine}
+        <Active kind="sector" store="asset-access">
+          {#snippet header()}
+            <span class="sector-title">{ t.label_access }</span>
+          {/snippet}
+          <div class="access-line" class:deprecated>{ accessLine }</div>
+        </Active>
+      {/if}
       <Active kind="sector" store="asset-description">
         {#snippet header()}
           <span class="sector-title">{ t.label_description }</span>
@@ -157,7 +165,7 @@ import Tree from '#stable/common/Tree'
 
 <script>
 let { uid } = $props();
-let { deprecated, description, mcid, props: propers, tags, title } = ainfo(uid);
+let { accessLine, deprecated, description, mcid, props: propers, tags, title } = ainfo(uid);
 
 page.setTitle(title);
 </script>

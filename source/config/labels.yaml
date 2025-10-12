@@ -12,6 +12,7 @@ action_update: Render
 
 # general labels
 label_accept_values: "Accepts:"
+label_access: Access
 label_components: Components
 label_content: Content
 label_default_value: "Default:"

@@ -4,13 +4,13 @@
     The root element has a `.renbox` class applied which is used internally to
     block docsite-related CSS to create a clean rendering space.
 
-    Tightly coupled with the **Editor** component and must appear as a 
-    descendant of it to work properly.
+    Works as a descendant of the **Editor** component, which provides
+    the `editor` context object necessary for operation.
 
-    Operates against the context object `editor`.
-    - `renbox` *boolean*: Should anything be rendered?
-    - `allowCss` *boolean*: Should the `.renbox` CSS class be removed?
-    - `display` *HTMLElenent*: Rendering mount point (bound).
+    Expected `editor` context interface:
+ *  - `renbox` *object*: nothing renders if not present
+ *    - `allowCss` *boolean*: Should the `.renbox` CSS class be removed?
+ *  - `display` *HTMLElenent*: Rendering mount point (bound).
 
     @tags cobe
     

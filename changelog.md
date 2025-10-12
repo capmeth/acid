@@ -9,6 +9,7 @@
 ---
 ## v0.0.5
 
+- add `toAssetAccessLine` option for generating access statements for assets
 - allow components to be embedded in markdown files via `config.components`
 - add Action component for Editor interaction/toggles
 - add deprecation messages to documents, sections 

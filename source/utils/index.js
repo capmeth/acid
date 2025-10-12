@@ -16,10 +16,10 @@ export { default as confine } from './confine/index.js'
 export { default as ctja } from './css-to-json-array.js'
 export { default as debounce } from './debounce.js'
 export { default as equals } from './equals.js'
-export { default as ident } from './ident.js'
 export { default as importString } from './import-string.js'
 export { default as inter } from './inter.js'
 export { default as is } from './is.js'
+export { default as jss } from './json-string.js'
 export { default as jsToCss } from './js-to-css.js'
 export { default as mapComment } from './map-comment.js'
 export { default as mapExtensions } from './map-extensions.js'
@@ -41,5 +41,5 @@ export { default as uncomment } from './uncomment.js'
     ---------------------------------------------------------------------------
     Wrappers of existing functionality for ease of use.
 */
-export let jss = value => JSON.stringify(value)
-
+export let ident = value => value
+export let nil = () => null

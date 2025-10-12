@@ -22,6 +22,6 @@ Some features of ACID include:
   Edit document/source files and **see live updates** in the docsite.
   
 - ******Fully Customizable!******  
-  Tailor your docsite by **editing the CSS** or **replacing internal components**.
+  Tailor your docsite by **changing the CSS** or **replacing/embedding components**.
 
 For issues, questions, suggestions, etc... please leave a post on the [Github Issues](https://github.com/capmeth/acid/issues) page.

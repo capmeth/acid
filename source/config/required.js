@@ -1,6 +1,5 @@
 import getPort from 'get-port'
-import pathTransformer from '#lib/path-transformer.js'
-import { ident, is, sarf } from '#utils'
+import { is, sarf } from '#utils'
 
 
 let repRe = /\{([a-z]+)\}/gi;
@@ -33,10 +32,6 @@ export default async config =>
     }
     
     metas.push({ name: 'generator', content: 'ACID' });
-
-    config.toAssetId = pathTransformer(config.toAssetId) || ident;
-    config.toAssetName = pathTransformer(config.toAssetName) || ident;
-    config.toExampleFile = pathTransformer(config.toExampleFile) || (() => null);
 
     if (is.array(config.updateMarkdown)) 
     {

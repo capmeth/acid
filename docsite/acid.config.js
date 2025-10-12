@@ -49,6 +49,11 @@ export default
         "uses": "Uses replaceable UI component ({info})"
     },
 
+    toAssetAccessLine: ({ sub, name, sep }) =>
+    {
+        if (sub.startsWith('source/')) 
+            return `import ${name} from "#${sub.split(sep).slice(3, -1).join('/')}/${name}"`;
+    },
     toAssetId: [ [ "^(?:source[/]client[/]components|docsite[/]docs)[/](.+?)[.][^./]+$" ], "$1" ],
     toExampleFile: [ [ "^source[/]client[/](.+?)[.][^./]+$" ], "docsite/docs/$1.md" ],
 

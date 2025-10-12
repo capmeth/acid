@@ -3,8 +3,10 @@ import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import np from 'node:path'
 import globit from '#lib/globit.js'
+import pathTransformer from '#lib/path-transformer.js'
+import pathy from '#lib/pathy.js'
 import paths from '#paths'
-import { is } from '#utils'
+import { ident, is, nil } from '#utils'
 import docson from '../docson.js'
 import doxie from '../doxie/index.js'
 
@@ -14,15 +16,47 @@ let fileRe = /^file:\//;
 
 export default function(config)
 {
-    let { assetTypes, root, tagLegend, toAssetId, toAssetName, toExampleFile, useFilenameOnly } = config;  
+    let { assetTypes, root, tagLegend, useFilenameOnly } = config;  
 
+    let toPathObj = pathy(root);
     let types = Object.entries(assetTypes);
     let tagmap = new Map();
 
+    let toAssetAccessLine = pathTransformer(config.toAssetAccessLine) || nil;
+    let toAssetId = pathTransformer(config.toAssetId) || ident;
+    let toAssetName = pathTransformer(config.toAssetName) || ident;
+    let toExampleFile = pathTransformer(config.toExampleFile) || nil;
+
     Object.entries(tagLegend).forEach(([ key, val ]) => val.assign && tagmap.set(val.assign, key));
 
-
     let op = {};
+
+
+    /**
+        Sets a an access line for an asset (if not already present).
+
+        @param { object } record
+          - `path`: a path object
+        @return { object }
+          - `accessLine`: an string access line for the record
+    */
+    op.access = async (record, exec) =>
+    {
+        if (!record.accessLine)
+        {
+            record = await exec.pather(record);
+
+            let { path } = record;
+
+            if (is.nonao(path)) 
+            {
+                let line = toAssetAccessLine(path);
+                if (line) record.accessLine = line;
+            }
+        }
+
+        return record;
+    }
 
 
     /**
@@ -106,7 +140,7 @@ export default function(config)
         record = await exec.pather(record);
 
         let { example, path, uid } = record;        
-        let data = { path: example || toExampleFile(path.path), uid };
+        let data = { path: example || toExampleFile(path), uid };
 
         delete record.example;
 
@@ -144,7 +178,7 @@ export default function(config)
 
             if (is.nonao(path)) 
             {
-                let uid = toAssetId(path.path);
+                let uid = toAssetId(path);
                 if (uid) record.uid = kebabCase(uid);
             }
         }
@@ -171,7 +205,7 @@ export default function(config)
         let { content, path, uid } = record;
 
         if (!content && is.nonao(path))
-            content = await fs.readFile(path.abs, 'utf8');
+            content = await fs.readFile(path.path, 'utf8');
 
         delete record.content;
 
@@ -278,14 +312,7 @@ export default function(config)
         let { path } = record;
 
         if (is.string(path))
-        {
-            delete record.path;
-            
-            let abs = np.resolve(root, path);
-
-            if (existsSync(abs))
-                record.path = { ...np.parse(abs), path, abs };
-        }
+            record.path = toPathObj(record.path);
 
         return record;
     }   
@@ -317,9 +344,9 @@ export default function(config)
 
                 if (parser.use)
                 {
-                    let doxer = doxie[tid](path.path, md.comment);
+                    let doxer = doxie[tid](path.sub, md.comment);
                     // doxer validates all data from parser
-                    doxer.asset = await parser.use(path.abs, docson);
+                    doxer.asset = await parser.use(path.path, docson);
 
                     let { ignore, name, ...rest } = doxer.asset;
 
@@ -404,11 +431,11 @@ export default function(config)
             if (is.nonao(path))
             {
                 if (record.tid === 'doc') // doc asset fallback
-                    record.title ||= capitalCase(toAssetName(path.path));
+                    record.title ||= capitalCase(toAssetName(path));
                 else if (useFilenameOnly) // non-doc asset force filename
-                    record.title = toAssetName(path.path);
+                    record.title = toAssetName(path);
                 else // non-doc asset fallback
-                    record.title ||= toAssetName(path.path);
+                    record.title ||= toAssetName(path);
             }
         }
         else
