@@ -10,7 +10,7 @@
 -->
 
 <button name={action} class="helper-button type-{kind} {actionClass}" {title} {...attrs}>
-  {@render children()}
+  {@render children?.()}
 </button>
 
 

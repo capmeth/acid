@@ -168,7 +168,7 @@
 {
     background: transparent;
     color: var(--acid-color-textie);
-    font-family: var(--acid-font-family-icon), var(--acid-font-family-text);
+    font-family: var(--acid-font-family-text), var(--acid-font-family-icon);
     font-size: 135%;
     display: flex;
     align-items: center;
@@ -176,11 +176,6 @@
     height: 36px;
     cursor: pointer;
     padding-inline: 10px;
-
-    &::before
-    {
-        font-family: var(--acid-font-family-icon);
-    }
 
     &:focus
     {
@@ -197,7 +192,6 @@
     {
         border-radius: 6px;
         margin: 2px;
-        &::before { content: '\E796'; }
     }
 }
 

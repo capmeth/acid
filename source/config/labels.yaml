@@ -1,6 +1,6 @@
 
 # action labels
-action_clear_filters: Clear Filters
+action_clear_filters: '&#xE796; Clear Filters'
 action_editor_close: '&#xE747;'
 action_editor_copied: '&#xE79A;'
 action_editor_copy: '&#xE78A;'
@@ -45,6 +45,7 @@ msg_no_prop_description: No comments were found for this component property.
 msg_scrollto: Scroll to {name}.
 
 # element titles
+title_clear_filters: Clear all filter criteria
 title_editor_close: Close this window
 title_editor_copied: Code copied to clipboard!
 title_editor_copy: Copy code to clipboard
