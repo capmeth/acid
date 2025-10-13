@@ -20,9 +20,22 @@ cobeMode: static
 These settings will take precedence over their equivalents (as applicable) in an *acid.config.js* file for the document in which they appear.  
 
 
+## cobeColor
+
+Default background color for CoBEs.
+
+```yaml label="spec"
+cobeColor: string
+```
+
+A string value can be any valid CSS color value.  If the mode of the block is "edit" or "live" a color picker is added to CoBE that allows the user to change the background.  If `true` is set the color defaults to "#FFFFFF" (white).  Omitting or setting `false` turns this feature off.
+
+Also see `config.cobe` option `color` setting.
+
+
 ## cobeMode
 
-Default mode for CoBEs embedded in the content.
+Default mode for CoBEs.
 
 ```yaml label="spec"
 cobeMode: demo | edit | live | render | static 
@@ -89,6 +102,19 @@ There must be at least one space after the `lang-type` before defining options. 
 
 ## allow-css
 
+Background color for the render-box of the CoBE component rendering this block.
+
+This overrides any color set in the document (`cobeColor`) or in `config.cobe`.  It has the same behavior as those as well.
+
+````md
+``` color="#00FF00"
+Render everything on a green background.
+```
+````
+
+
+## allow-css
+
 CoBE rendering containers are protected from docsite CSS by default (as long as the proper selectors are used in styling).  If you wish to allow this CSS to affect these containers you can set the `allow-css` attribute.
 
 ````md
@@ -151,7 +177,7 @@ This value indicates how the block should be highlighted as well as which extens
 
 ## mode
 
-Rendering mode for the CoBE component associated to this block.
+Display mode for the CoBE component rendering this block.
 
 This overrides any mode set in the document (`cobeMode`) or in `config.cobe`.  However, if there is no renderer configured for the language-type of the block, "static" mode will be forced.
 

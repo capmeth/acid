@@ -13,6 +13,7 @@ export default
     'config.cobe': { test: test.arrayOrObject, default: [] },
     'config.cobe.*': test.object,
     'config.cobe.*.*': test.unset,
+    'config.cobe.*.color': test.stringOrBoolean,
     'config.cobe.*.imports': test.object,
     'config.cobe.*.imports.*': { test: test.objectOrAny('names') },
     'config.cobe.*.imports.*.*': test.unset,

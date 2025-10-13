@@ -9,6 +9,8 @@
 ---
 ## v0.0.5
 
+- add background color-picker for CoBE render-box
+- fix regex serialization bug with `cobe.*.imports` option 
 - add `toAssetAccessLine` option for generating access statements for assets
 - allow components to be embedded in markdown files via `config.components`
 - add Action component for Editor interaction/toggles

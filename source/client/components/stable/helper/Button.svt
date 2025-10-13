@@ -4,18 +4,24 @@
     @tags inject:#helper-button, extra-props:button
 
     @property { string } action
-      Label id as `action_{action}`.
+      Label id.
     @property { string } [kind='default']
       Variant classname as `type-{kind}`.
 -->
 
-<button class="helper-button action-{action} type-{kind}" {...attrs}>
-  { t(`action_${action}`) }
+<button name={action} class="helper-button type-{kind} {actionClass}" {title} {...attrs}>
+  {@render children()}
 </button>
 
 
+<script module>
+import { kebabCase } from 'change-case'
+</script>
+
 <script>
-let { action, kind = 'default', ...attrs } = $props();
+let { action, kind = 'default', children, ...attrs } = $props();
+let actionClass = `action-${kebabCase(action)}`;
+let title = t(`title_${action}`);
 </script>
 
 <style>

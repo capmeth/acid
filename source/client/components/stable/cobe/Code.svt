@@ -5,13 +5,14 @@
     the `editor` context object necessary for operation.
 
     Expected `editor` context interface:
- *  - `code` *object*: nothing renders if not present
- *    - `disabled` *boolean*: Is the entry control inaccessible?
- *    - `lang` *string*: Language-type of the code.
- *    - `noHighlight` *boolean*: Turn off code highlighting?
- *    - `onkeydown` *function*: Event handler for input control.
- *    - `readonly` *boolean*: Should the input area be removed?
- *  - `value` *string*: Current value of control (bound).
+ *  - `code` *object*:
+ *    - `render` *boolean*: should this component render?
+ *    - `disabled` *boolean*: is the entry control inaccessible?
+ *    - `lang` *string*: language-type of the code
+ *    - `noHighlight` *boolean*: turn off code highlighting?
+ *    - `onkeydown` *function*: event handler for input control
+ *    - `readonly` *boolean*: should the input area be removed?
+ *  - `value` *string*: bound to the text entered by user
 
     @tags cobe
 

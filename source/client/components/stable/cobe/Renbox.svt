@@ -8,9 +8,10 @@
     the `editor` context object necessary for operation.
 
     Expected `editor` context interface:
- *  - `renbox` *object*: nothing renders if not present
- *    - `allowCss` *boolean*: Should the `.renbox` CSS class be removed?
- *  - `display` *HTMLElenent*: Rendering mount point (bound).
+ *  - `renbox` *object*:
+ *    - `render` *boolean*: should this component render?
+ *    - `allowCss` *boolean*: should the `.renbox` CSS class be removed?
+ *  - `display` *HTMLElenent*: bound to the rendering mount point
 
     @tags cobe
     
@@ -19,8 +20,10 @@
 -->
 
 <When test={render} {use}>
-  <div class:renbox={!allowCss}>
-    <div bind:this={editor.display}></div>
+  <div class="cobe-renbox" style="background-color:{color}">
+    <div class:renbox={!allowCss}>
+      <div bind:this={editor.display}></div>
+    </div>
   </div>
 </When>
 
@@ -35,11 +38,17 @@ import When from '../common/When'
 let { use } = $props();
 let { editor } = context;
 let { allowCss, render } = $derived(editor.renbox);
+let { color } = $derived(editor);
 </script>
 
 <style>
-.renbox
+.cobe-renbox
 {
-    all: initial !important;
+    padding: var(--acid-padding-renbox, 16px);
+
+    .renbox
+    {
+        all: initial !important;
+    }
 }
 </style>

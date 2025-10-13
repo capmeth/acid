@@ -149,9 +149,10 @@ export default function(config)
         if (mcid) record.mcid = mcid;
         if (is.nonao(matter))
         {
-            let { cobeMode } = matter;
+            let { cobeColor, cobeMode } = matter;
             
             if (cobeMode) record.cobeMode = cobeMode;
+            if (cobeColor) record.cobeColor = cobeColor;
         }
 
         return record;
@@ -269,9 +270,10 @@ export default function(config)
             if (mcid) record.mcid = mcid;
             if (is.nonao(matter))
             {
-                let { cobeMode, deprecated, title, tags, tocDepth } = matter;
+                let { cobeColor, cobeMode, deprecated, title, tags, tocDepth } = matter;
 
                 if (cobeMode) record.cobeMode = cobeMode;
+                if (cobeColor) record.cobeColor = cobeColor;
 
                 if (deprecated) 
                 {

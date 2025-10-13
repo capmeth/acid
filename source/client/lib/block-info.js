@@ -34,11 +34,12 @@ let makeFilter = data =>
     }
 }
 
-let makeBlock = ({ code, lang, mode, ...block }) =>
+let makeBlock = ({ code, color, lang, mode, ...block }) =>
 {
     let iface = { ...binfo.cobe(lang), ...block };
 
     iface.code = code.trim();
+    iface.color = color || iface.color;
     iface.mode = iface.use && (mode || iface.mode) || 'static';
 
     iface[iface.mode] = true;
@@ -50,7 +51,9 @@ let getBlock = cacher(id =>
 {
     let { uid, ...base } = blocks.find(block => block.id === id);
 
-    base.mode ||= getOwner(uid).cobeMode;
+    let owner = getOwner(uid);
+    base.color ||= owner.cobeColor;
+    base.mode ||= owner.cobeMode;
 
     return { ...makeBlock(base), id, owner: uid };
 });

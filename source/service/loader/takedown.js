@@ -43,9 +43,9 @@ export default async function (config)
                 let { file, mode = dome, ...rest } = attrsToObject(attrs);
                 
                 let code = file ? fs.readFileSync(path.resolve(root, file), 'utf8') : e.value;
-                let data = { ...rest, lang, mode, code, uid: v.uid }
+                let main = { lang, mode, code, uid: v.uid };
+                let data = { id: uid.hex(main), ...rest, ...main };
                 
-                data.id ||= uid.hex(data);
                 v.blocks.push(data);
 
                 return `<CoBEditor id="${data.id}" />`;

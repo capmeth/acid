@@ -53,28 +53,39 @@
   {#if mode !== 'render'}
     <div class="controls">
       <Action name="copy">
-        {#snippet children({ action, disabled })}
-          <Button action={copied ? 'copied' : 'copy'} {disabled} onclick={action} />
+        {#snippet children({ action, disabled, on, state = on ? 'copied' : 'copy' })}
+          <Button action="editor_{state}" {disabled} onclick={action}>
+            {@html t(`action_editor_${state}`)}
+          </Button>
         {/snippet}
       </Action>
       <Action name="toggle">
-        {#snippet children({ action, disabled })}
-          <Button action={showing ? 'hide' : 'show'} {disabled} onclick={action} />
+        {#snippet children({ action, disabled, on, state = on ? 'hide' : 'show' })}
+          <Button action="editor_{state}" {disabled} onclick={action}>
+            {@html t(`action_editor_${state}`)}
+          </Button>
         {/snippet}
       </Action>
       <Action name="update">
         {#snippet children({ action, disabled })}
-          <Button action="update" {disabled} onclick={action} />
+          <Button action="editor_update" {disabled} onclick={action}>
+            {@html t.action_editor_update}
+          </Button>
         {/snippet}
       </Action>
       <Action name="reset">
         {#snippet children({ action, disabled })}
-          <Button action="reset" {disabled} onclick={action} />
+          <Button action="editor_reset" {disabled} onclick={action}>
+            {@html t.action_editor_reset}
+          </Button>
         {/snippet}
       </Action>
+      <Picker />
       <Action name="isolate">
-        {#snippet children({ action, disabled })}
-          <Button action={isolated ? 'shutter' : 'isolate'} {disabled} onclick={action} />
+        {#snippet children({ action, disabled, on, state = on ? 'close' : 'open' })}
+          <Button action="editor_{state}" {disabled} onclick={action}>
+            {@html t(`action_editor_${state}`)}
+          </Button>
         {/snippet}
       </Action>
     </div>
@@ -93,6 +104,7 @@
 import Button from '#stable/helper/Button'
 import Action from '#stable/cobe/Action'
 import Code from '#stable/cobe/Code'
+import Picker from '#stable/cobe/Picker'
 import Renbox from '#stable/cobe/Renbox'
 </script>
 

@@ -42,6 +42,10 @@ cobe:
         */
         use: string | [ string, ...any ], 
         /*
+            Set background color for CoBE blocks.
+        */
+        color: string | true | false,
+        /*
             Import declarations to generate for CoBE blocks.
         */
         imports:
@@ -90,6 +94,10 @@ A "fallback" record can be set by specifying `types: '*'`. If set, it is shallow
 ****`*.use`****
 
 Use `use` to specify the module that will render the code from the block (see [renderer docs](document/integration-renderers)).
+
+****`*.color`****
+
+You can use a CSS color value here to set a background color for blocks of the specified language-type(s).  If the `mode` of a block ends up being "edit" or "live" a picker will also be available for changing the background color.  Omit or set to `false` to turn this off (forces a transparent background).  Setting `true` sets the default color to "#FFFFFF".
 
 ****`*.imports`****
 

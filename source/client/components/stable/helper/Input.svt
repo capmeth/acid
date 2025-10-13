@@ -6,7 +6,7 @@
     @property { string } [kind="default"]
       Variant classname as `type-{kind}`.
     @property { any } [value]
-      Data in the input field (`$bindable`).
+      Current value of the input control (`$bindable`).
 -->
 
 <input class="helper-input type-{kind}" {value} {...attrs} {oninput} />

@@ -16,7 +16,7 @@ export default
     output: "web",
     cobe: 
     [
-        { types: [ "svelte", "svt" ], use: "svelte-render", mode: "edit" }
+        { types: [ "svelte", "svt" ], use: "svelte-render", mode: "edit" },
     ],
     cobeSvelte: true,
     hljs: 

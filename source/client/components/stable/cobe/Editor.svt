@@ -62,6 +62,7 @@
 import { onMount } from 'svelte'
 import { noticeTimeout } from '#config'
 import { binfo, compose, context, dom, toUrl } from '#frend/lib'
+import { is } from '#utils'
 
 import Editor from '#custom/main/Editor'
 
@@ -143,11 +144,16 @@ let editor = $state(
         onkeydown, 
         readonly: cbe.static || cbe.demo 
     }, 
+    picker:
+    {
+        render: cbe.color && (cbe.edit || cbe.live),
+    },
     renbox: 
     {
         render: !cbe.static,
         allowCss 
     }, 
+    color: is.string(cbe.color) ? cbe.color : cbe.color ? '#FFFFFF' : 'transparent',
     value: cbe.code 
 });
 
@@ -166,23 +172,28 @@ let shifted = $derived(cbe.code !== editor.value);
 // update children via context
 $effect(() => 
 {
-    editor.renbox.render = !cbe.static;
-
     editor.code.render = showing;
     editor.code.disabled = copied;
 
     let { actions } = editor;
 
     actions.copy.render = canCopy && editor.value;
-    actions.copy.disabled = copied;    
+    actions.copy.disabled = copied;
+    actions.copy.on = copied;
+
     actions.reset.render = cbe.edit || cbe.live;
     actions.reset.disabled = !shifted;    
+    
     actions.toggle.render = !(cbe.render || cbe.static);
     actions.toggle.disabled = false;    
+    actions.toggle.on = showing;
+    
     actions.update.render = cbe.edit;
     actions.update.disabled = !edited;    
+    
     actions.isolate.render = id && cbe.edit || cbe.live;
     actions.isolate.disabled = false;
+    actions.isolate.on = isolated;
 });
 // auto update display for LIVE state
 $effect(() => edited && cbe.live && update());
