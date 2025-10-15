@@ -7,14 +7,21 @@
 
 
 ---
-## v0.0.5
+## v0.1.0
 
+- add `config.configs` option to specify plugins inline 
+- fix issues with closing server/sockets
+- update file watching to hot-reload entire app including config
 - add background color-picker for CoBE render-box
 - fix regex serialization bug with `cobe.*.imports` option 
 - add `toAssetAccessLine` option for generating access statements for assets
 - allow components to be embedded in markdown files via `config.components`
 - add Action component for Editor interaction/toggles
 - add deprecation messages to documents, sections 
+
+BREAKING CHANGES!
+- remove `watch.files` options
+- remove `app.use()` API
 
 
 ## v0.0.4

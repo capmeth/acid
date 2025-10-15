@@ -22,7 +22,14 @@ export default function socketer(config)
 
         let wss = new WebSocketServer({ port });
         let send = msg => wss.clients.forEach(cli => cli.send(msg));
-        let close = async () => (sock = voidSock, new Promise(accept => wss.close(accept)))
+        let close = () => new Promise(accept =>
+        {
+            sock = voidSock;
+            wss.on('close', () => (log.info('the socket server has stopped'), accept()))
+            // ws docs seem to be lacking on how to gracefully terminate socket server
+            wss.clients.forEach(client => client.close());
+            wss.close(); 
+        });
 
         wss.on('listening', () => log.info(`{:emph:hot-reload} is enabled ({:emph:using port #${port}})`));
         wss.on('error', err => log.warn(`websocket error: {:emph:${err}}`));

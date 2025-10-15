@@ -68,12 +68,8 @@ export default
     socket: { port: 3035 },
     watch: 
     { 
-        files: 
-        [
-            path.join("source", "client", "components", "**", "*.svt"),
-            path.join("source", "client", "**", "*.js"),
-            path.join("docsite", "docs", "**", "*.md")
-        ] 
+        paths: [ 'source', 'docsite'],
+        options: (p, s) => s?.isFile() && !/\.(css|js|md|svt|svelte)$/.test(p)
     },
 
     style: 

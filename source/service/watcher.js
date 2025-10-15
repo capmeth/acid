@@ -1,50 +1,59 @@
-import path from 'node:path'
 import chokidar from 'chokidar'
-import globit from '#lib/globit.js'
 import { debounce } from '#utils'
 
 
 export default function(config)
 {
-    let { output, root, watch: { delay, enabled, files } } = config;
-    // always exclude output directory from watch
-    (files.exclude ??= []).push(path.join(output.dir, '**'));
+    let { output, root, watch: { delay, enabled, paths, options } } = config;
+    // use `root` if there is not at least one path set
+    if (!paths.filter(x => x).length) paths = root;
+    
+    options.cwd ||= root;
+    options.ignoreInitial = true;
 
-    let watchers = [];
+    let watcher;
+    let fileReporter = (tally, [ path, names ]) => 
+    {
+        names.forEach(name => log.test(`watching file {:emph:${name}} from {:emph:${path}}...`));
+        return tally + names.length;
+    }
 
     let start = async callback =>
-    {
+    {   
+        if (watcher) await close();
         if (!enabled) return;
-        
-        return globit(files, root).then(files => 
+
+        let bounce = debounce(callback, delay);
+        watcher = chokidar.watch(paths, options);
+        // make sure output directory is not watched
+        watcher.unwatch(output.dir);
+
+        watcher.on('ready', () => 
         {
-            let bounce = debounce(callback, delay);
-            
-            files.forEach(file => 
-            {
-                let watcher = chokidar.watch(file);
-
-                watcher.on('change', bounce);
-                watchers.push(watcher);
-
-                log.test(`watching file {:emph:${file}}`);
-            });
-
-            log.info(`watching {:emph:${files.length} file(s)} for changes...`);
+            let count = Object.entries(watcher.getWatched()).reduce(fileReporter, 0);
+            log.info(`watching {:emph:${count} file(s)} for changes...`);
         });
+
+        watcher.on('all', (event, path) => 
+        {
+            log.info(`watch event {:emph:${event}} fired for {:emph:${path}}`);
+            bounce();
+        });
+
+        watcher.on('error', error => 
+        {
+            log.warn(`watch event error occurred: ${error}`);
+        });        
     }
 
     let close = async () => 
     {
-        if (watchers.length)
+        return watcher?.close().then(() => 
         {
-            log.info('closing all file watchers...');
-            await Promise.all(watchers.map(w => w.close())); 
-            watchers = [];
-        }
+            log.info('the file watcher has stopped');
+            watcher = void 0;
+        });
     }
 
-    let watching = () => watchers.length > 0
-
-    return { close, enabled, start, watching };
+    return { close, start };
 }

@@ -6,6 +6,13 @@ There's some truly awesome stuff out there in the Javascript world, and I am esp
 Here are some details about the tech used in the ACID application.
 
 
+## [chokidar](https://www.npmjs.com/package/chokidar)
+
+Chokidar can watch files and folders for changes.
+
+ACID's hot-reload features are largely thanks to this awesome tool.
+
+
 ## [commander](https://www.npmjs.com/package/commander)
 
 Commander is a command-line interface (CLI) generator.

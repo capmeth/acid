@@ -1,5 +1,6 @@
 import rollup from '#lib/rollup.js'
 import rollConfig from './rollup.config.js'
+import parseFile from './parse-file.js'
 
 
 /**
@@ -21,10 +22,8 @@ export default function (root)
     return async spec => 
     {
         if (!mahjools[spec])
-        {
-            log.test(`importing extension {:emph:${spec}}...`);
-            mahjools[spec] = await rollup.gen(rollConfig(root, spec)).then(mod => import(mod.default));
-        }
+            mahjools[spec] = await rollup.gen(rollConfig(root, spec)).then(mod => parseFile(mod.default));
+
         return mahjools[spec];
     }
 }

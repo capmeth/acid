@@ -30,7 +30,7 @@ cobe: []
 ```
 
 ```js label="spec"
-cobe:
+cobe: object |
 [
     { 
         /*
@@ -83,56 +83,54 @@ cobe:
 ]
 ```
 
-****`*.types`****
+Use an array for multiple records.  A single record can be specified by setting an object.
 
-Specify language marker(s) ("js", "jsx", "vue", etc.) in `types`.  Markers appearing more than once in the list are shallowly merged to form a single record for a given marker.
+Below is a discussion of the settings for individual `cobe` records.
 
-A `default` type exists, and it is applied to any block that does not specify a language type.
+- ****`*.types`**** \
+  Specify language type(s) ("js", "jsx", "vue", etc.) in `types`.  Types appearing more than once in the list are shallowly merged to form a single record for a given type.
 
-A "fallback" record can be set by specifying `types: '*'`. If set, it is shallowly merged with the record corresponding to the code block's effective type.
+  A "fallback" record can be set by specifying `types: '*'`. It is shallowly merged with the record corresponding to the code block's effective type - (i.e., global type settings).
 
-****`*.use`****
+  Note that a `default` type exists which gets applied to any block that does not specify a language type.
 
-Use `use` to specify the module that will render the code from the block (see [renderer docs](document/integration-renderers)).
+- ****`*.use`**** \
+  Use `use` to specify the module that will render the code from the block (see [renderer docs](document/integration-renderers)).
 
-****`*.color`****
+- ****`*.color`**** \
+  You can use a CSS color value here to set a background color for the CoBE render-box (for any non-static `mode`).  If the `mode` is "edit" or "live" a picker will also be available in the UI for changing the background color.  
 
-You can use a CSS color value here to set a background color for blocks of the specified language-type(s).  If the `mode` of a block ends up being "edit" or "live" a picker will also be available for changing the background color.  Omit or set to `false` to turn this off (forces a transparent background).  Setting `true` sets the default color to "#FFFFFF".
+  If set to `true` the color used is "#FFFFFF".  Omitting or setting to `false` forces a transparent background.
 
-****`*.imports`****
+- ****`*.imports`**** \
+  The `imports` setting generates import declarations from browser-accessible module `specifier`s with the exports desired.  These declarations are then added to code blocks provided the renderer in `use` supports inserting them.
 
-The `imports` setting generates import declarations from browser-accessible module `specifier`s with the exports desired.  These declarations are then added to code blocks provided the renderer in `use` supports inserting them.
+  Use `imports.*.default` to specify the name of the default import, or to specify a namespace import.
 
-Use `imports.*.default` to specify the name of the default import, or to specify a namespace import.
+  For `imports.*.names`,
+  - use a `*` to import **all** of the named exports
+  - use a string to import specific named exports
+  - use a function to filter the export names desired (return the name or null to omit)
+  - use a regular expression to match the export names desired
 
-For `imports.*.names`,
-- use a `*` to import **all** of the named exports
-- use a string to import specific named exports
-- use a function to filter the export names desired (return the name or null to omit)
-- use a regular expression to match the export names desired
+  The above also applies when `imports.*` is set to a non-object value.
 
-The above also applies when `imports.*` is set to a non-object value.
+  Setting `imports.*` to `null` results in a side-effect import declaration.
 
-Setting `imports.*` to `null` results in a side-effect import declaration.
+  > Beware of potential naming conflicts as renderers may also apply their own imports to code blocks.
 
-> Beware of potential naming conflicts as renderers may also apply their own imports to code blocks.
+- ****`*.mode`**** \
+  Values available for `mode` are:
+  - "static": just show the code
+  - "render": only show rendered results
+  - "demo": show code and rendered results (no editing)
+  - "edit": code editing with on-demand render
+  - "live": code editing with immediate render
 
-****`*.mode`****
+  A code block's `mode` will be forced to "static" if no `use` exists for its language marker (no way to render anything).
 
-Values available for `mode` are:
-- "static": just show the code
-- "render": only show rendered results
-- "demo": show code and rendered results (no editing)
-- "edit": code editing with on-demand render
-- "live": code editing with immediate render
-
-Note that "render" and "static" modes will always hide or show the code block, respectively, regardless of `noHide` setting.
-
-A code block's `mode` will be forced to "static" if no `use` exists for its language marker (no way to render anything).
-
-****`*.noHighlight`****
-
-Set `noHighlight` to `true` to turn off code highlighting.  This has no effect if highlighting for the block's language-type is not supported or not loaded (see `hljs` option).
+- ****`*.noHighlight`**** \
+  Set `noHighlight` to `true` to turn off code highlighting.  This has no effect if highlighting for the block's language-type is not supported or not loaded (see `hljs` option).
 
 
 ## cobeSvelte
@@ -196,6 +194,46 @@ The docsite build can resolve *.svelte* and *.svt* extensions automatically, so 
 Setting a value to `null` or an empty string has the same effect as omitting it - the default internal component will be used.  This obviously only works for components that have defaults.
 
 Visit [Customizing Components](document/integration-components) for more details on how all this works.
+
+
+## configs
+
+Array of additional configuration objects, functions, or module specifiers.
+
+This has no default value.
+
+```js label="spec"
+configs: string | function | object
+[
+    string | [ string, any ] | function | object,
+    ...
+]
+```
+
+Use this to merge in plugin configurations or additional configuration objects.
+
+- A string is a module specifier that `export default`s a function that returns a configuration function or object.
+  
+  You can use an array if you need to pass a parameter to a module, but you must enclose it in an array even if it is the only item specified.
+
+  ```js
+  configs: [ [ 'module_specifier', { /* parameter */ } ] ]
+  ```
+
+- A function is passed the configuration object to add/change configuration as needed.  The return value is ignored.
+
+- An object can include any config option defined in this document and will be merged into current configuration.
+
+Here's how the final set of configuration options (*master*) is determined:
+1. Set master to default config options.
+2. Get options from the config file (*acid.config.js*).
+3. Merge (object) or apply (function) options with master.
+4. Get and remove `configs` from master.
+5. For each item in `configs` get options and go to step #3 (recursive).
+
+Step #5 repeats until all specified `configs` are merged.  
+
+> Take care to not create circular references here, there is no protection against this.
 
 
 ## copy
@@ -539,11 +577,9 @@ File output includes:
 
 - `{dir}/{name}.html`: docsite html
 - `{dir}/{name}-docsite.js`: docsite javascript
-- `{dir}/{name}-examples.js`: docsite example code
 - `{dir}/{name}-svelte-render.js`: docsite component compiler
 
 If `name` includes path segments, subfolders will be created under `dir`.
-
 
 
 ## parsers
@@ -1066,11 +1102,7 @@ watch:
 {
     enabled: false,
     delay: 1000,
-    files:
-    {
-        include: '**/*.{js,jsx,md}',
-        exclude: 'node_modules/*'
-    }
+    options: [ '.git', 'node_modules' ]
 }
 ```
 
@@ -1086,24 +1118,46 @@ watch: true | false | // merges
     */
     delay: number,
     /*
-        Files to include on watchlist.
+        File and directory paths to be watched (not globs).
     */
-    files: @globfiles
+    paths: string | [ ... string ],
+    /*
+        Chokidar options.
+    */
+    options: object | any
 }
 ```
 
 Specifying a boolean is the same as setting `watch.enabled`.
 
-Some important notes on watch files:
-- `output.dir` is __always__ excluded, regardless of settings
-- files selected in `sections` __are not__ automatically watched
+The settings `paths` and `options` are passed directly to `chokidar.watch()` (with some caveats below).  Please refer to the [chokidar docs](https://www.npmjs.com/package/chokidar) for more information on these settings.
 
-Also note that changes in a watched config file __will not__ be reflected in a hot-rebuild (for now).
+The aforementioned caveats:
+- if no `paths` are given, `root` is assumed
+- seting `options` as a non plain-object value actually sets `options.ignored`
+- if `options.cwd` is not set, `root` is assumed
+- `options.ignoreInitial` is always set to `true`
+
+The default settings effectively watch the whole project directory for changes, excluding *.git* and *node_modules* folders.
+
+Note that the `output.dir` path is always immediately unwatched if included in `paths`.
+
+It is highly recommended to set `paths` to something(s) other than the project root directory, especially if you don't need to watch things like dependencies and git metadata.  Too many files will overwhelm Chokidar.
+
+```js label="Example Setup"
+watch:
+{
+    // watch source/documentation folders, acid config, etc.
+    paths: [ 'src', 'docs', 'acid.config.js', 'readme.md' ],
+    // watch certain types of files - .js, .jsx, .md, etc.
+    options: (path, stats) => stats?.isFile() && /\.(jsx?|md|yaml)&/.test(path)
+}
+```
 
 
 # Custom Datatypes
 
-Custom types (`@` prefixed type names) are detailed below.
+Custom types (`@` prefixed type names) are detailed below. 
 
 
 ## `@globfiles`

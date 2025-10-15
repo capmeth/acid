@@ -46,6 +46,13 @@ config.cobeSvelte = false;
 */
 config.components = {};
 
+/** 
+    Additional configuration elements.
+
+    @type { array }
+*/
+// config.configs = [];
+
 /**
     Build fle copy.
 
@@ -362,11 +369,7 @@ config.watch =
 {
     enabled: false,
     delay: 1000,
-    files:
-    {
-        include: path.join('**', '*.{js,jsx,md}'),
-        exclude: path.join('node_modules', '**')
-    }
+    options: [ '.git', 'node_modules' ]
 }
 
 export default config;

@@ -6,8 +6,7 @@ import socketer from './socketer.js'
 import styler from './styler/index.js'
 import watcher from './watcher.js'
 
-import { is } from '#utils'
-import { assign, defaults, make, required } from '../config/index.js'
+import { configure, defaults, required } from '../config/index.js'
 
 
 /**
@@ -15,41 +14,32 @@ import { assign, defaults, make, required } from '../config/index.js'
 
     The interface returned has:
     - `run`: executes a docsite build
-    - `use`: adds a function used to extend configuration
 
-    @param { ...object } options
-      Configuration options objects.
+    @param { array } options
+      Configuration options elements.
     @return { object }
       Services object.
 */
-export default function(...options)
+export default function(options, root)
 {
-    let users = [];
-    let importExt = importer(make().root);
+    let make = configure(importer(root));
 
     let run = async bool =>
     {
-        let data = await assign(defaults, ...options, ...users, required);
+        let data = await make({ ...defaults, configs: [ ...options, required ] });
 
         if (bool) data.config = { server: true, watch: true };
 
         let svc = createServices(data.config);
 
-        let exec = () => Promise.all([ svc.bundle(), svc.watch.start(svc.update) ]).then(svc.serve.start)
+        let exec = () => Promise.all([ svc.bundle(), svc.watch.start(restart) ]).then(svc.serve.start)
         let stop = () => Promise.all([ svc.serve.stop(), svc.watch.close(), svc.socket.close() ])
+        let restart = () => stop().then(() => (log.info('restarting application...'), run(bool)))
     
         return exec().then(svc.notify).then(() => stop);
     }
 
-    let use = async (update, param) =>
-    {
-        if (is.string(update)) return importExt(update).then(mod => use(mod.default, param));
-        if (is.func(update)) return (users.push(config => update(config, param)), void 0);
-        
-        throw new Error('extension parameter must be a module specifier or a function');
-    }
-
-    return { run, use };
+    return { run };
 }
 
 function createServices(config)
