@@ -24,15 +24,15 @@ let lane = root => str =>
 */
 lane.info = (str, root) =>
 {
-    str = path.normalize(str);
     root ||= ''
+    str = root ? path.resolve(root, str) : path.normalize(str);
 
     return proxet(path.parse(str), key =>
     {
         if (key === 'hex') return uid.hex(str);
         if (key === 'path') return str;
         if (key === 'sep') return path.sep;
-        if (key === 'sub') return path.relative(root, str);
+        if (key === 'sub') return root ? path.relative(root, str) : str;
     });
 }
 

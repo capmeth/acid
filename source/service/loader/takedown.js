@@ -9,18 +9,18 @@ import references from './references.js'
 
 let langRe = /^([^\s:]*)(?::(\w+))?(?:\s+(.+)$)?/;
 let braceRe = /[{}]+/g;
-let pageRe = /^catalog|component|document|home|section/;
+let pageRe = /^catalog|component|document|home|isolate|section/;
 
 export default async function (config)
 {
-    let { components, root } = config;
+    let { components, root, routing } = config;
 
     let embeds = articleEmbeds(components);
     let refs = await references(config);
 
     let link = e => 
     {
-        if (pageRe.test(e.href)) e.href = `#/${e.href}`;
+        if (pageRe.test(e.href) && routing === 'hash') e.href = '#' + e.href;
         return '<a href="{href??}"{? title="{title}"?}>{value}</a>';
     }
 

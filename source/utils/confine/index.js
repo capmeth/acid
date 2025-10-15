@@ -117,9 +117,7 @@ export default function (prints, assign)
                 {
                     let spec = propSpec(target, prop);
 
-                    if (spec.immutable === true) 
-                        target[prop] = spec.default;
-                    else if (!is.undef(spec.default)) 
+                    if (!is.undef(spec.default)) 
                         target[prop] = verify(spec, spec.default);
                 }
 
@@ -141,7 +139,7 @@ export default function (prints, assign)
     {
         let result = null;
 
-        if (immutable === true)
+        if (immutable === true && !is.undef(target[prop]))
             result = new AcidValidateError('value cannot be changed', at.name);
         else if (is.func(test))
             result = test(helpers(at.name, value));

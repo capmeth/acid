@@ -88,6 +88,6 @@ let toScripts = (list, lines) =>
         // assume an inline script if src has whitespace
         if (spaceRe.test(src)) (content = src, src = null);
         
-        lines.push(`  <script ${objectToAttrs({ ...rest, src })}>${content ?? ''}</script>`);
+        lines.push(`  <script${objectToAttrs({ ...rest, src })}>${content ?? ''}</script>`);
     });
 }

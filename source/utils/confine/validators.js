@@ -64,6 +64,8 @@ export default
         h.err('must be a regular expression or a string or an array or a function or null'),
     reflags: h => h.or(h.re(/^[dgimsuvy]*$/), h.in(true)) || 
         h.err('must be `true` or contain only regular expression flags'),
+    routing: h => h.in('hash', 'slash') || 
+        h.err('must be a valid enumerated value'),
     serial: h => h.serial || 
         h.err('must be of serializable type'),
     storage: h => h.in('local', 'session', 'none') || 

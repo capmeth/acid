@@ -641,9 +641,7 @@ Absolute path to the project targeted for documentation.
 root: process.cwd()
 ```
 
-This is the base path for 
-- relative file or glob paths specified in config (`sections`, `watch`, etc.)
-- relative `@example` file paths in JsDoc comments
+Serves as the root path for just about every file-related activity in a docsite build.
 
 This value is immutable.  It exists on the config for reference only.
 
@@ -1135,12 +1133,12 @@ The settings `paths` and `options` are passed directly to `chokidar.watch()` (wi
 The aforementioned caveats:
 - if no `paths` are given, `root` is assumed
 - seting `options` as a non plain-object value actually sets `options.ignored`
-- if `options.cwd` is not set, `root` is assumed
+- `options.cwd` is always set to `root`
 - `options.ignoreInitial` is always set to `true`
 
 The default settings effectively watch the whole project directory for changes, excluding *.git* and *node_modules* folders.
 
-Note that the `output.dir` path is always immediately unwatched if included in `paths`.
+Changes within `output.dir` (if included in watch) do not cause rebuilds. They will simply cause a page reload (if server is also running) instead.
 
 It is highly recommended to set `paths` to something(s) other than the project root directory, especially if you don't need to watch things like dependencies and git metadata.  Too many files will overwhelm Chokidar.
 

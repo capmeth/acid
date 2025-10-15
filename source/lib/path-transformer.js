@@ -1,4 +1,5 @@
 import { inter, is, sarf } from '#utils'
+import pathy from './pathy.js'
 
 
 /**
@@ -23,9 +24,11 @@ import { inter, is, sarf } from '#utils'
     @return { function }
       Filepath transformer or `undefined` if `spec` is invalid.
 */
-export default function (spec)
+export default function (spec, root)
 {
-    if (is.func(spec)) return spec;
-    if (is.string(spec)) return obj => inter(spec, obj)
-    if (is.object(spec)) return (fn => obj => fn(obj.sub))(sarf(spec));
+    let res = val => is.plain(val) ? val : pathy.info(val, root)
+
+    if (is.func(spec)) return obj => spec(res(obj));
+    if (is.string(spec)) return obj => inter(spec, res(obj))
+    if (is.object(spec)) return (fn => obj => fn(res(obj).sub))(sarf(spec));
 }

@@ -188,7 +188,7 @@ let string = "[mode] is demo, edit, live, render, or static";
 ```
 ````
 
-Alternatively, this setting can just be appended to the `lang-type` via a colon (`:`).
+Alternatively, this setting can be appended to the `lang-type` via a colon (attribute takes precedence).
 
 ````md
 ```svelte:[mode]
@@ -199,7 +199,7 @@ let string = "[mode] is demo, edit, live, render, or static";
 
 The values available for `[mode]` are **demo**, **edit**, **live**, **render**, and **static**.
 
-Using the example block above here are examples of each mode.
+Copying the example block above here are examples of each mode.
 
 ```svelte:demo label="demo - displays the code and the render with no update capability"
 let string = "[mode] is demo, edit, live, render, or static";

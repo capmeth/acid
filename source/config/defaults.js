@@ -199,6 +199,13 @@ config.refLinks = [];
 config.rootSection = 'root';
 
 /**
+    Routing type: "hash" or "slash"
+
+    @type { string }
+*/
+config.routing = 'hash';
+
+/**
     Array of HTML script strings or objects for the docsite.
 
     A string is assumed to be a url will be added as `src` attribute.

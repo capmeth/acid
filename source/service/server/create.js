@@ -6,16 +6,17 @@ import mtype from './mime-types.js'
 
 export default function({ output })
 {
+    let homefile = path.join(output.dir, `${output.name}.html`);
+    let mimetype = file => mtype[path.extname(file).slice(1).toLowerCase()]
+
     let presponse = url => 
     {
-        if (url.endsWith('/')) url += `${output.name}.html`;
+        if (url === '/') url += `${output.name}.html`;
+        
         let file = path.join(output.dir, url);
+        if (!fs.existsSync(file)) file = homefile;
 
-        let exists = fs.existsSync(file)
-        let ext = path.extname(file).slice(1).toLowerCase();
-        let stream = exists ? fs.createReadStream(file) : null;
-
-        return [ exists ? 200 : 404, stream, mtype[ext] ];
+        return [ 200, fs.createReadStream(file), mimetype(file) ];
     };
 
 
