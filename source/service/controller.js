@@ -1,6 +1,6 @@
-import builder from './builder/index.js'
+import moduleImporter from '#lib/module-importer.js'
+import builder from './builder.js'
 import loader from './loader/index.js'
-import importer from './importer/index.js'
 import server from './server/index.js'
 import socketer from './socketer.js'
 import styler from './styler/index.js'
@@ -22,7 +22,7 @@ import { configure, defaults, required } from '../config/index.js'
 */
 export default function(options, root)
 {
-    let make = configure(importer(root));
+    let make = configure(moduleImporter(root));
 
     let run = async bool =>
     {

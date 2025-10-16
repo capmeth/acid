@@ -1,6 +1,4 @@
 #!/usr/bin/env node
-import { existsSync } from 'node:fs'
-import path from 'node:path'
 import service from '../service/index.js'
 import commander from './commander.js'
 import generateConfig from './generate-config.js'

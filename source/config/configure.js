@@ -30,8 +30,8 @@ export default function (emport)
 
         if (is.array(spec))
         {
-            spec = await emport(spec[0]).then(mod => mod.default);
             param = spec[1];
+            spec = await emport(spec[0]).then(mod => mod.default);
         }
 
         if (is.func(spec))

@@ -19,10 +19,10 @@ Creates a docsite application instance.
 ```js
 import acid from '@capmeth/acid'
 
-let app = acid(/* config options */);
+let app = acid(/* config options */, ...);
 ```
 
-Pass configuration to this function as an object or a path to a config file (string).
+Pass configuration elements to the function as objects, strings (module specifiers), or functions.
 
 Note that this API **does not** automatically look for *acid.config.js* if no config is specified.  That is a feature of the command-line interface only.
 

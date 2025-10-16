@@ -1,5 +1,5 @@
 import { ident, mapExtensions } from '#utils'
-import importer from '../importer/index.js'
+import moduleImporter from '#lib/module-importer.js'
 import assemblers from './assemblers/index.js'
 import parentize from './parentization.js'
 import takedown from './takedown.js'
@@ -28,7 +28,7 @@ export default function(config)
         return (md, config) => td.parse(replace(md), config)
     }
     
-    let promises = Promise.all([ takedown(config), mapExtensions(parsers, importer(root)) ]);
+    let promises = Promise.all([ takedown(config), mapExtensions(parsers, moduleImporter(root)) ]);
 
     return async () => 
     {

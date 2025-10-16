@@ -1,9 +1,9 @@
 import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import { hackson } from '#lib/hosted.js'
+import moduleImporter from '#lib/module-importer.js'
 import { is, jss } from '#utils'
 import { configure, defaults } from '../config/index.js'
-import importer from '../service/importer/index.js'
 
 
 /**
@@ -24,7 +24,7 @@ export default async function (dest, options)
         return void 0;
     }
 
-    let make = configure(importer(process.cwd()));
+    let make = configure(moduleImporter(process.cwd()));
     let { config } = await make({ ...defaults, configs: options });
 
     return fs.writeFile(dest, content(config), { encoding: 'utf8' });

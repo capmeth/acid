@@ -220,6 +220,22 @@ Use this to merge in plugin configurations or additional configuration objects.
   configs: [ [ 'module_specifier', { /* parameter */ } ] ]
   ```
 
+  Configuration modules are loaded via Rollup. This means that ESM's `import.meta` will not be available on import.  As a convenience, any appearance of the string `__plugin_dirname` (with word boundaries) will be replaced by the absolute directory path to the imported file.
+
+  So you would use,
+
+  ```js
+  let file = path.resolve('__plugin_dirname', './local-file.js');
+  ```
+
+  in place of
+
+  ```js
+  let file = import.meta.resolve('./local-file.js');
+  ```
+
+  Remember that it is a literal value replacement, so quote it if you want it to be a string.
+
 - A function is passed the configuration object to add/change configuration as needed.  The return value is ignored.
 
 - An object can include any config option defined in this document and will be merged into current configuration.

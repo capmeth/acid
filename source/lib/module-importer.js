@@ -1,6 +1,7 @@
-import rollup from '#lib/rollup.js'
-import rollConfig from './rollup.config.js'
-import parseFile from './parse-file.js'
+import path from 'node:path'
+import rollup from '../build/rollup.js'
+import rollPather from '../build/pather.config.js'
+import rollImport from '../build/import.config.js'
 
 
 /**
@@ -17,13 +18,11 @@ import parseFile from './parse-file.js'
 */
 export default function (root)
 {
-    let mahjools = {};
-
     return async spec => 
     {
-        if (!mahjools[spec])
-            mahjools[spec] = await rollup.gen(rollConfig(root, spec)).then(mod => parseFile(mod.default));
-
-        return mahjools[spec];
+        // get file name for import
+        let { default: file } = await rollup.gen(rollPather(root, spec));
+        // import the data
+        return rollup.gen(rollImport(path.dirname(file), file));
     }
 }
