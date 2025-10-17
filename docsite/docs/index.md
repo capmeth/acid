@@ -5,7 +5,7 @@ tocDepth: 0
 
 "A Component Interface Documenter" (ACID) is a highly configurable platform for generating UI component documentation sites (docsites).  Docsite generation is not tied to any component framework and does not require your project to be on any specific build system. With extensions, any type of component can be documented.
 
-&nbsp;&nbsp; ******[Get Started >](section/start)******
+&nbsp;&nbsp; ******[Get Started >](/section/start)******
 
 Some features of ACID include:
 

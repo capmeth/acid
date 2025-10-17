@@ -52,8 +52,8 @@ With no changes, the results will be about the same as not using a config file a
 
 Remember to specify file location with the `-c` parameter in the command above if you placed your config file elsewhere.
 
-- See the [CLI docs](document/configuration-acid-cli) for more details on command-line functionality.
-- See the [config options docs](document/configuration-options) for config file options and their defaults.
+- See [CLI options](/document/reference-acid-cli) for more details on command-line functionality.
+- See [config options](/document/reference-options) for config file options and their defaults.
 
 
 # Programmatic Access
@@ -73,4 +73,4 @@ let stop = await docsite.run(true);
 
 In the above, the returned `stop` function is async and resolves to `undefined` once the server has stopped.
 
-See the [API docs](document/docsite-api) for more details on programmatic functionality.
+See the [API docs](/document/docsite-api) for more details on programmatic functionality.

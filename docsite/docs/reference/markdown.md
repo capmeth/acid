@@ -60,7 +60,7 @@ tags: string | array
 
 Unlike source comment `@tags`, an array can be used here.  Same rules apply.
 
-Please see [tagging docs](document/docsite-tagging) for more details on this.
+Please see [tagging docs](/document/docsite-tagging) for more details on this.
 
 
 ## title

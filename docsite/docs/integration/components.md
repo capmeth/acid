@@ -29,7 +29,7 @@ Property names in the `config.components` option are the "Component IDs" (CIDs) 
 
 The default custom components will generally have an expected interface (props) that should be supported, as other internal components make use of them.  Your custom component should at least handle the required props for the component being replaced to be sure you are implementing what's necessary for a functioning docsite.
 
-Check out the [Custom Components](section/comps_custom) section for all the replaceable components.
+Check out the [Custom Components](/section/comps_custom) section for all the replaceable components.
 
 
 # Developing Components
@@ -72,25 +72,25 @@ Just prefix a component's ID with `#stable/` or `#custom/` to import it.  The bu
 Below is the list of CIDs for replaceable components (what you would use in `config.components`).
 
 - page components
-  - [**page/Home**](component/custom-page-home) - Docsite Homepage
-  - [**page/Section**](component/custom-page-section) - Section Display Page
-  - [**page/Document**](component/custom-page-document) - Document Asset Page
-  - [**page/Component**](component/custom-page-component) - Component Asset Page
-  - [**page/Catalog**](component/custom-page-catalog) - Asset Search Page
-  - [**page/Isolate**](component/custom-page-isolate) - CoBE Isolation Page
-  - [**page/Error**](component/custom-page-error) - Navigation Error Page
+  - [**page/Home**](/component/custom-page-home) - Docsite Homepage
+  - [**page/Section**](/component/custom-page-section) - Section Display Page
+  - [**page/Document**](/component/custom-page-document) - Document Asset Page
+  - [**page/Component**](/component/custom-page-component) - Component Asset Page
+  - [**page/Catalog**](/component/custom-page-catalog) - Asset Search Page
+  - [**page/Isolate**](/component/custom-page-isolate) - CoBE Isolation Page
+  - [**page/Error**](/component/custom-page-error) - Navigation Error Page
 - main components
-  - [**main/Branch**](component/custom-main-branch) - Tree Navigation Branch
-  - [**main/Editor**](component/custom-main-editor) - CoBE Editor
-  - [**main/Leaf**](component/custom-main-leaf) - Tree Navigation Leaf
-  - [**main/List**](component/custom-main-list) - Item Listing
-  - [**main/Markup**](component/custom-main-markup) - Markdown HTML Content
-  - [**main/Node**](component/custom-main-node) - Toc Navigation Node
-  - [**main/Tag**](component/custom-main-tag) - Asset Tag
+  - [**main/Branch**](/component/custom-main-branch) - Tree Navigation Branch
+  - [**main/Editor**](/component/custom-main-editor) - CoBE Editor
+  - [**main/Leaf**](/component/custom-main-leaf) - Tree Navigation Leaf
+  - [**main/List**](/component/custom-main-list) - Item Listing
+  - [**main/Markup**](/component/custom-main-markup) - Markdown HTML Content
+  - [**main/Node**](/component/custom-main-node) - Toc Navigation Node
+  - [**main/Tag**](/component/custom-main-tag) - Asset Tag
 
 If you are writing a plugin that uses custom components, importing them using `#custom/` (as oppose to internal project paths) and mapping them in `config.components` will allow users to customize those components as well.
 
-Note that any custom component can also use CSS injection (see [docsite styling](section/styling)).
+Note that any custom component can also use CSS injection (see [docsite styling](/section/styling)).
 
 
 ## APIs
@@ -107,7 +107,7 @@ The `ainfo`, `sinfo`, and `tinfo` functions are used to get asset, section, and 
 
 Use `site` to access available configuration info as well as generate docsite URLs.  The `page` import includes a function to set html `<title>` for the page.
 
-See the [Component API Reference](document/reference-component-api) page for more details.
+See the [Component API Reference](/document/reference-component-api) page for more details.
 
 
 ## Markdown Embedded Components

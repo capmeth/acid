@@ -86,7 +86,7 @@ Each object in `props` can contain:
 - `type` *string*: data type for the property
 - `values` *array:any*: legal enumerated values for the property
 
-The `parse` function parses a string as a single JsDoc comment with or without the standard comment markings, and can provide much of the above information depending on how detailed the comment is.  It looks only for [JsDoc tags that ACID understands](document/reference-jsdoc) and returns a populated object for the comment passed in.
+The `parse` function parses a string as a single JsDoc comment with or without the standard comment markings, and can provide much of the above information depending on how detailed the comment is.  It looks only for [JsDoc tags that ACID understands](/document/reference-jsdoc) and returns a populated object for the comment passed in.
 
 
 # The Default Parser
@@ -165,4 +165,4 @@ Each JsDoc comment should have at least `@name` and `@kind` or equivalent tags s
 
 Once the identifying comment has been identified, all other comments without `@name` and `@kind` will be skipped.
 
-Please see [JsDoc Tags](document/reference-jsdoc) for all the supported JsDoc tags and their equivalents.
+Please see [JsDoc Tags](/document/reference-jsdoc) for all the supported JsDoc tags and their equivalents.

@@ -95,7 +95,7 @@ Below is a discussion of the settings for individual `cobe` records.
   Note that a `default` type exists which gets applied to any block that does not specify a language type.
 
 - ****`*.use`**** \
-  Use `use` to specify the module that will render the code from the block (see [renderer docs](document/integration-renderers)).
+  Use `use` to specify the module that will render the code from the block (see [renderer docs](/document/integration-renderers)).
 
 - ****`*.color`**** \
   You can use a CSS color value here to set a background color for the CoBE render-box (for any non-static `mode`).  If the `mode` is "edit" or "live" a picker will also be available in the UI for changing the background color.  
@@ -193,7 +193,7 @@ The docsite build can resolve *.svelte* and *.svt* extensions automatically, so 
 
 Setting a value to `null` or an empty string has the same effect as omitting it - the default internal component will be used.  This obviously only works for components that have defaults.
 
-Visit [Customizing Components](document/integration-components) for more details on how all this works.
+Visit [Customizing Components](/document/integration-components) for more details on how all this works.
 
 
 ## configs
@@ -783,7 +783,7 @@ Specifying a string for `[name]` is the same as specifying the object form with 
 
 Note that `overview` can alternatively be a path to a markdown file.  Simply prefix the path with `file:/`.
 
-See [Site Structure](section/structure) for more details on how all this works.
+See [Site Structure](/section/structure) for more details on how all this works.
 
 
 ## server
@@ -902,7 +902,7 @@ When specifying relative file paths, `root` is assumed to be the root path.
 
 All `sheets` are converted to JSON and deep merged from left to right to form the final stylesheet.  The final styles are then injected into the internal components based on top-level scope definitions. Any styling not within a scope definition is assumed to be global.
 
-Please see the [styling documentation](document/docsite-styling) for a more extensive explanation.
+Please see the [styling documentation](/document/docsite-styling) for a more extensive explanation.
 
 
 ## tagLegend
