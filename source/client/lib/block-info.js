@@ -55,7 +55,7 @@ let getBlock = cacher(id =>
     base.color ||= owner.cobeColor;
     base.mode ||= owner.cobeMode;
 
-    return { ...makeBlock(base), id, owner: uid };
+    return proxet({ ...makeBlock(base), id, owner: uid });
 });
 
 let block = ref => getBlock(ref.id || ref)

@@ -366,7 +366,7 @@ The highlightjs code is pulled using
 https://unpkg.com/@highlightjs/cdn-assets@{version}/highlight.min.js
 ```
 
-Where `{version}` s replace with `hljs.version`.
+Where `{version}` is replaced with `hljs.version`.
 
 Likewise, URL interpolation is used to pull the CSS.
 
@@ -675,6 +675,23 @@ rootSection: string
 ```
 
 See `sections` setting for more info on how this is used.
+
+
+## routing
+
+Sets the routing type.
+
+```js label="default value"
+routing: "hash"
+```
+
+```js label="spec"
+routing: "hash" | "slash"
+```
+
+Use *hash* to have the app generate URL paths using hashmarks (`#`).  This prevents the browser from trying to make a server request as the URL changes.
+
+Use *slash* to have the app generate URL paths normally.  A change in URL will force the browser to make a server request, but the internal http server is setup to return the root HTML page for any request that doesn't match a file in `output.dir` (SPA style).  So with the server running, it will work just like the hash option.
 
 
 ## scripts

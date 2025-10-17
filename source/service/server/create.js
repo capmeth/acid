@@ -4,8 +4,9 @@ import path from "node:path"
 import mtype from './mime-types.js'
 
 
-export default function({ output })
+export default function({ output, routing })
 {
+    let hash = routing === 'hash';
     let homefile = path.join(output.dir, `${output.name}.html`);
     let mimetype = file => mtype[path.extname(file).slice(1).toLowerCase()]
 
@@ -14,15 +15,18 @@ export default function({ output })
         if (url === '/') url += `${output.name}.html`;
         
         let file = path.join(output.dir, url);
-        if (!fs.existsSync(file)) file = homefile;
+        let exists = fs.existsSync(file);
 
-        return [ 200, fs.createReadStream(file), mimetype(file) ];
+        if (hash && !exists) return [ 404, 'html' ];
+
+        if (!exists) file = homefile;
+        return [ 200, mimetype(file), fs.createReadStream(file) ];
     };
 
 
     return createServer((req, res) => 
     {
-        let [ statusCode, stream, mimeType ] = presponse(req.url);
+        let [ statusCode, mimeType, stream ] = presponse(req.url);
 
         res.writeHead(statusCode, 
         {

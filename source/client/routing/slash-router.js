@@ -46,7 +46,7 @@ export default function(routes)
     
         navTo: (name, params) => location.href = slash.toNavLink(name, params),
     
-        toNavLink: router.toNavLink
+        toNavLink: base.toNavLink
     };
 
     return slash;

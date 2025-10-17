@@ -41,11 +41,7 @@ export default function(config)
 
     if (scripts.length) toScripts(scripts, lines);
 
-    lines.push(`  <script type="module">`);
-    lines.push(`  let url = new URL("${output.name}-docsite.js", new URL(import.meta.url));`);
-    lines.push(`  import(url).then(site => site.default());`)
-    lines.push(`  </script>`);
-
+    lines.push(`  <script>import('docsite')</script>`);
     lines.push(`</head>`);
     lines.push(`<body></body>`);
     lines.push(`</html>`);
