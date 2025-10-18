@@ -44,7 +44,7 @@ export default function(options, root)
         svc.prepare = () => Promise.all([ svc.load(), svc.style() ])
         svc.bundle = () => svc.prepare().then(items => svc.build(...items))
         svc.restart = () => svc.stop().then(() => run(bool))
-        svc.run = () => svc.bundle().then(svc.start)
+        svc.run = () => svc.bundle().then(svc.start).then(svc.notify)
         svc.start = () => svc.watch.start(svc).then(() => Promise.all([svc.serve.start(), svc.socket.start()]))
         svc.stop = () => Promise.all([ svc.serve.stop(), svc.watch.close(), svc.socket.close() ])
         svc.update = () => svc.bundle().then(svc.notify)
@@ -52,7 +52,7 @@ export default function(options, root)
         // post initialization ops
         svc.serve.onError(err => log.fail(err));
     
-        return svc.run().then(svc.notify).then(() => svc.stop);
+        return svc.run().then(() => svc.stop);
     }
 
     return { run };

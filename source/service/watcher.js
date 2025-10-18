@@ -43,12 +43,12 @@ export default function(config)
 
             if (newpath.startsWith(outpath))
             {
-                log.info(`watch event {:emph:${event}} on {:emph:${fspath}}: refreshing...`);
+                log.test(`watch event {:emph:${event}} on {:emph:${fspath}}: refreshing...`);
                 bounceNotify();
             }
             else
             {
-                log.info(`watch event {:emph:${event}} on {:emph:${fspath}}: restarting...`);
+                log.test(`watch event {:emph:${event}} on {:emph:${fspath}}: restarting...`);
                 bounceRestart();
             }
         });

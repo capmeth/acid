@@ -30,6 +30,7 @@ export default function (emport)
 
         if (is.array(spec))
         {
+            log.test(`importing config from {:emph:${spec[0]}}...`);
             param = spec[1];
             spec = await emport(spec[0]).then(mod => mod.default);
         }

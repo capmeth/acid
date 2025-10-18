@@ -1,4 +1,5 @@
 import { WebSocketServer } from 'ws'
+import { jss, uid } from '#utils';
 
 
 /*
@@ -10,21 +11,45 @@ export default function socketer(config)
 
     // no web socket needed if http server and watch disabled
     let enabled = server.enabled && watch.enabled;
+    // used to identify the current app build
+    let buildId = uid.hex(performance.now());
+
     let wss;
 
     let start = async () =>
     {
         if (enabled && wss?.options.port !== port)
         {
-            close();
+            await close();
 
-            wss = new WebSocketServer({ port });
-            wss.on('listening', () => log.info(`{:emph:hot-reload} is enabled via port {:emph:${port}}`));
-            wss.on('error', err => log.warn(`websocket error: {:emph:${err}}`));            
+            return new Promise(accept => 
+            {
+                wss = new WebSocketServer({ port });
+                wss.on('connection', client => 
+                {
+                    log.test('ws: client connection established');
+                    client.send(jss({ buildId }));
+                });
+                wss.on('listening', () => 
+                {
+                    log.info(`{:emph:hot-reload} is enabled via port {:emph:${port}}`);
+                    accept();
+                });
+                wss.on('error', err => log.warn(`ws: {:emph:${err}}`));
+            });
         } 
     }
 
-    let send = msg => wss?.clients.forEach(cli => cli.send(msg))
+    let send = msg => 
+    {
+        if (wss?.clients.size)
+        {
+            let { clients } = wss;
+
+            log.test(`ws: sending {:emph:${msg}} message to {:emph:${clients.size}} connected clients`);
+            clients.forEach(cli => cli.send(jss({ message: msg, buildId })));
+        }
+    }
 
     let close = async () =>
     {

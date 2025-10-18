@@ -221,6 +221,13 @@
         margin-right: 4px;
     }
 
+    & span::after
+    {
+        display: inline-block;
+        font-family: var(--acid-font-family-icon);
+        margin-left: 4px;
+    }
+
     &.current { font-weight: 700; }
 
     &.deprecated span::before { text-decoration: none; }
@@ -247,6 +254,11 @@
         color: var(--acid-color-document);
 
         &::before { content: '\E73A' }
+    }
+
+    &.to-external span
+    {
+        &::after { content: '\E773' }
     }
 
     &.type-annex

@@ -13,6 +13,7 @@ import doxie from '../doxie/index.js'
 
 let commaRe = /\s*,\s*/;
 let fileRe = /^file:\//;
+let httpRe = /^https?:\/\//;
 
 export default function(config)
 {
@@ -255,7 +256,9 @@ export default function(config)
 
             data.uid = name;
 
-            if (fileRe.test(overview))
+            if (httpRe.test(overview)) // external link
+                record.external = overview;
+            else if (fileRe.test(overview)) // markdown file
                 data.path = overview.replace(fileRe, '');
             else
                 data.content = overview;

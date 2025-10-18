@@ -9,6 +9,7 @@
 ---
 ## v0.1.0
 
+- allow sections to be external links
 - add `config.configs` option to specify plugins inline 
 - fix issues with closing server/sockets
 - update file watching to hot-reload entire app including config

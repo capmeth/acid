@@ -38,6 +38,7 @@ page_isolate_title: CoBE Isolation
 # messages/alerts
 msg_asset_count: Showing {count} of {total} assets in docsite.
 msg_copied: Copied to Clipboard!
+msg_external_link: Head to another website
 msg_filter_name: filter by name
 msg_goto_page: Go to {title} page.
 msg_no_component_description: No comments were found for this component.
