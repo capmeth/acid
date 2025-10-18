@@ -1,5 +1,4 @@
 import { capitalCase, kebabCase, pascalCase } from 'change-case'
-import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import np from 'node:path'
 import globit from '#lib/globit.js'

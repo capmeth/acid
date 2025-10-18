@@ -1,7 +1,7 @@
 import pluginCommonjs from '@rollup/plugin-commonjs'
 import pluginNodeResolve from '@rollup/plugin-node-resolve'
 import paths from '#paths'
-import rollup from '#source/lib/rollup.js'
+import rollup from '#source/build/rollup.js'
 
 
 /**

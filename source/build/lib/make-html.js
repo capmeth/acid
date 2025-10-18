@@ -17,7 +17,7 @@ let spaceRe = /\s+/;
 */
 export default function(config)
 {
-    let { importMap, links, metas, output, scripts, title } = config;
+    let { importMap, links, metas, scripts, title } = config;
     let lines = [];
 
     lines.push(`<!DOCTYPE html>`);

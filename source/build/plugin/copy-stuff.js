@@ -25,6 +25,8 @@ export default function ({ specs, rootpath, outpath })
             {
                 let from = path.resolve(rootpath, file)
                 let to = path.resolve(outpath, toDest?.(file) || file);
+                let frel = path.relative(rootpath, from);
+                let trel = path.relative(outpath, to);
                 // do not copy if file is out of bounds
                 if (to.startsWith(outpath))
                 {
@@ -32,11 +34,7 @@ export default function ({ specs, rootpath, outpath })
                     {
                         copies ++;
                         
-                        log.test(() => 
-                        {
-                            let frel = path.relative(rootpath, from), trel = path.relative(outpath, to);
-                            return `copied {:emph:${frel}} to output directory as {:emph:${trel}}`
-                        });
+                        log.test(`copied {:emph:${frel}} to output directory as {:emph:${trel}}`);
                     });
                 }
 
