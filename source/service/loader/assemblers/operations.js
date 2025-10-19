@@ -6,21 +6,24 @@ import pathTransformer from '#lib/path-transformer.js'
 import pathy from '#lib/pathy.js'
 import paths from '#paths'
 import { ident, is, nil } from '#utils'
+import articleImports from '../article-imports.js'
 import docson from '../docson.js'
 import doxie from '../doxie/index.js'
 
 
+let braceRe = /[{}]+/g;
 let commaRe = /\s*,\s*/;
 let fileRe = /^file:\//;
 let httpRe = /^https?:\/\//;
 
 export default function(config)
 {
-    let { assetTypes, root, tagLegend, useFilenameOnly } = config;  
+    let { assetTypes, components, root, tagLegend, useFilenameOnly } = config;  
 
     let toPathObj = pathy(root);
     let types = Object.entries(assetTypes);
     let tagmap = new Map();
+    let embeds = articleImports(components);
 
     let toAssetAccessLine = pathTransformer(config.toAssetAccessLine) || nil;
     let toAssetId = pathTransformer(config.toAssetId) || ident;
@@ -216,11 +219,15 @@ export default function(config)
             {
                 let mcid = pascalCase(`Article_${uid}`);
                 let { doc, matter } = md.content(content, { vars: { uid } });
+                let { escapeBraces, moduleScript = '', ...other } = matter || {};
+
+                if (escapeBraces) doc = doc.replace(braceRe, '{"$&"}');
+                doc += `\n\n<script module>\n${embeds}\n${moduleScript}</script>`;
 
                 files[np.join(paths.components, 'articles', `${mcid}.svt`)] = doc;
 
                 record.mcid = mcid;
-                record.matter = matter;
+                record.matter = other;
 
                 return record;
             }
@@ -270,6 +277,7 @@ export default function(config)
             let { mcid, matter } = await exec.markdown(data);
 
             if (mcid) record.mcid = mcid;
+            
             if (is.nonao(matter))
             {
                 let { cobeColor, cobeMode, deprecated, title, tags, tocDepth } = matter;

@@ -4,6 +4,11 @@ cobeMode: static
 ---
 
 
+Here you will find information about how to add document-specific configuration options in the front-matter of a markdown file, as well as block-specific options that can be added to the info-strings of fenced code within.
+
+Keep in mind that the HTML from parsed markdown documents are compiled as Svelte component templates.
+
+
 # Document Level Options
 
 ACID will look for configuration options in a markdown document's front-matter.
@@ -48,6 +53,46 @@ Example: Set the default CoBE mode to "render" for all code blocks in the docume
 ```yaml
 cobeMode: render
 ```
+
+
+## escapeBraces
+
+Escapes all brace (`{'{}'}`) characters in the document.
+
+```yaml label="spec"
+escapeBraces: true | false
+```
+
+Brace-enclosed content in markdown will normally be interpreted as Svelte directives or javascript expressions.  
+
+Setting this option to `true` will svelte-escape **all** braces in the document, preventing them from being interpreted by the Svelte compiler.  Svelte components can still be embedded in the document, however, but their use will effectively be limited to HTML-conformant syntax only.
+
+Leaving this unset or `false` means you must svelte-escape literal braces manually or compiling errors may occur.  Use single-quotes for this, as double-quotes will be converted to HTML entities and tick-quotes to `<code>` tags by the markdown parser.
+
+For example
+
+````md
+Escape the {'{'} braces {'}'}.
+````
+
+gives you, "Escape the {'{'} braces {'}'}."
+
+In general, remember that unless you are coding within an opening or closing HTML or component tag, you are "out in the wild" and subject to CommonMark's markdown transformation rules.
+
+> Fenced code blocks are unaffected by this setting, as they are extracted from the markdown before compilation.
+
+
+## moduleScript
+
+Add additional code to `<script module>` of the document component.
+
+```yaml label="spec"
+moduleScript: string
+```
+
+Every document component will have a `<script module>` element (for CoBE support and imports coming from `config.components`), and Svelte allows for only one of these to exist in a component definition.  If you need to put code at this level you must do so here to get it appended within the existing element.
+
+Remember that you can still append a plain `<script>` element to the markdown content if needed.
 
 
 ## tags

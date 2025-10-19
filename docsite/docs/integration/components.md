@@ -1,6 +1,7 @@
 ---
 title: Custom Components
 cobeMode: static
+escapeBraces: true
 ---
 
 
@@ -41,7 +42,17 @@ A general overview of custom component development, is described in this section
 
 Your custom components, as well as anything they depend on, will be pulled into the docsite build when generating the site.  
 
-The build process compiles components in *runes* mode and will make all of the typical Svelte libraries available.  
+The build process compiles components in *runes* mode and makes the following Svelte 5 libraries available:
+- svelte
+- svelte/animate
+- svelte/attachments
+- svelte/compiler
+- svelte/easing
+- svelte/events
+- svelte/motion
+- svelte/reactivity
+- svelte/store
+- svelte/transition
 
 It can handle file extensions
 - *.js* - for JavaScript, of course
@@ -49,7 +60,7 @@ It can handle file extensions
 - *.css* - for Cascading StyleSheets
 - *.svelte*, *.svt* - for svelte components/files
 
-The build can process CommonJs modules, but the output format is ESM.
+The build can process CommonJs modules as well, but the output format is ESM.
 
 If your custom component requires anything fancier than the above you may need to generate a separate dependency bundle first before integrating your components into the docsite.
 
@@ -58,7 +69,7 @@ The build also provides components via the `#stable` and `#custom` module specif
 
 ## Importing Components
 
-The docsite build maps stable and custom components via special module specifier prefixes.
+The docsite build maps fixed and custom components via special module specifier prefixes.
 
 ```svelte
 <script module>
@@ -67,7 +78,7 @@ import Markup from '#custom/main/Markup'
 </script>
 ```
 
-Just prefix a component's ID with `#stable/` or `#custom/` to import it.  The build can resolve supported file extensions for you so it is not necessary to include them.
+Just prefix a CID with `#stable/` or `#custom/` to import it.  The build can resolve supported file extensions for you so it is not necessary to include them.
 
 Below is the list of CIDs for replaceable components (what you would use in `config.components`).
 
@@ -88,7 +99,7 @@ Below is the list of CIDs for replaceable components (what you would use in `con
   - [**main/Node**](/component/custom-main-node) - Toc Navigation Node
   - [**main/Tag**](/component/custom-main-tag) - Asset Tag
 
-If you are writing a plugin that uses custom components, importing them using `#custom/` (as oppose to internal project paths) and mapping them in `config.components` will allow users to customize those components as well.
+If you are writing a plugin that uses custom components, importing them using `#custom/` (as oppose to internal project paths) and mapping them in `config.components` will allow users to replace those components as well.
 
 Note that any custom component can also use CSS injection (see [docsite styling](/section/styling)).
 
@@ -125,7 +136,7 @@ Imagine you have a component that allows the user to copy child content to the c
 }
 ```
 
-Using the above configuration, we can now use `<Clip>` in markdown.
+Using the above configuration, we can now use `<Clip>` in a markdown document.
 
 ```md
 You can click <Clip>this string of text</Clip> to copy it to the clipboard.
@@ -134,9 +145,6 @@ You can click <Clip>this string of text</Clip> to copy it to the clipboard.
 Now, clicking "this string of text" in the browser will add it to the clipboard, assuming the implementation of **Clip** is indeed as described above.
 
 Remember that these custom components can only be used in **markdown document content** - not in places like component descriptions or deprecation messages.
-
-> **IMPORTANT**: \
-> Brace (`{}`) characters in the content are svelte-escaped as literals after HTML conversion.  This means that JS expressions and special svelte-syntax cannot be used in markdown files.
 
 > Be sure to understand how HTML [block](https://spec.commonmark.org/0.31.2/#html-blocks) and [inline](https://spec.commonmark.org/0.31.2/#raw-html) content is handled in CommonMark to avoid any gotchas when embedding components.
 

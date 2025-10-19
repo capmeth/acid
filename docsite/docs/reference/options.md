@@ -2,6 +2,7 @@
 title: Config File Options
 tocDepth: 2
 cobeMode: static
+escapeBraces: true
 ---
 
 

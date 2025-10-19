@@ -1,6 +1,7 @@
 ---
 title: Parsing Extensions
 cobeMode: static
+escapeBraces: true
 ---
 
 

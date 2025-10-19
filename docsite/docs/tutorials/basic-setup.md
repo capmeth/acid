@@ -1,6 +1,7 @@
 ---
 title: Basic Setup
 cobeMode: static
+escapeBraces: true
 ---
 
 Here we'll walk through a setup for a basic component application.

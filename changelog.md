@@ -9,6 +9,8 @@
 ---
 ## v0.1.0
 
+- add front-matter option `escapeBraces` for svelte-escaping braces in document
+- add front-matter option `moduleScript` for adding top level script to document
 - allow sections to be external links
 - add `config.configs` option to specify plugins inline 
 - fix issues with closing server/sockets

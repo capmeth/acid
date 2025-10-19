@@ -1,4 +1,3 @@
-import { pascalCase } from 'change-case'
 import fs from 'node:fs'
 import path from 'node:path'
 import jsyaml from 'js-yaml'
@@ -8,14 +7,11 @@ import references from './references.js'
 
 
 let langRe = /^([^\s:]*)(?::(\w+))?(?:\s+(.+)$)?/;
-let braceRe = /[{}]+/g;
 let pageRe = /^catalog|component|document|home|isolate|section/;
 
 export default async function (config)
 {
-    let { components, root, routing } = config;
-
-    let embeds = articleEmbeds(components);
+    let { root, routing } = config;
     let refs = await references(config);
 
     let link = e => 
@@ -54,19 +50,7 @@ export default async function (config)
             header: '<h{level} id="{id}" class="hx">{value}</h{level}>\n',
             setext: '<h{level} id="{id}" class="hx">{value}</h{level}>\n',
 
-            link,
-
-            root: e => 
-            {
-                let file = 
-                `
-                    ${e.value.replace(braceRe, '{"$&"}')}
-            
-                    <script module>${embeds}</script>
-                `;
-                
-                return file;
-            }
+            link
         },
 
         fm:
@@ -105,21 +89,4 @@ export default async function (config)
     });
 
     return { content, comment };
-}
-
-let embedRe = /^embed\//;
-
-let articleEmbeds = map =>
-{
-    let imports = `import CoBEditor from '#stable/cobe/Editor'\n`;
-
-    let reducer = (str, cid) => 
-    {
-        if (embedRe.test(cid) && map[cid]) 
-            return str + `import ${pascalCase(cid.replace(embedRe, ''))} from '#custom/${cid}'\n`;
-        
-        return str;
-    }
-
-    return '\n' + Object.keys(map).reduce(reducer, imports);
 }
