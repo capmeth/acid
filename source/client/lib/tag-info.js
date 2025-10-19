@@ -8,7 +8,7 @@ import { cacher, inter, is, proxet, sorter } from '#utils'
 
 
 let tagKeys = Object.keys(tagLegend);
-let tagSort = proxet({}, prop => sorter((a, b, t) => t(tinfo(a)[prop], tinfo(b)[prop])));
+let tagSort = proxet({}, prop => sorter(x => tinfo(x)[prop]));
 
 let getTag = cacher(id =>
 {

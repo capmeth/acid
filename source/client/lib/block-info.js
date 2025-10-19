@@ -12,7 +12,7 @@ import sinfo from './section-info'
 
 
 let blockKeys = blocks.map(block => block.id);
-let blockSort = proxet({}, prop => sorter((a, b, t) => t(binfo(a)[prop], binfo(b)[prop])));
+let blockSort = proxet({}, prop => sorter(x => binfo(x)[prop]));
 
 let getOwner = uid => (ainfo.assets.includes(uid) ? ainfo : sinfo)(uid)
 

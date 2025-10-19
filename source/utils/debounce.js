@@ -2,29 +2,29 @@
 /**
     Debouncer.
 
-    If `wait` is negative, `action` will be called immediately instead
-    of being queded.
+    Function `action` is always queued via `setTimeout`.  If `wait` is not a 
+    number or less than zero, it is set to `0` (queued for immediate 
+    execution).
     
     @param { function } action
       Function to execute.
     @param { number } wait
       Milliseconds to timeout.
 */
-export default function(action, wait = 0)
+export default function(action, wait)
 {
-    let id = void 0, time = wait;
+    let id, time;
   
     let timer = function(...args)
     {
         timer.stop();
-
-        let func = () => action.call(this, ...args);
-
-        id = time >= 0 ? setTimeout(func, time) : (func(), id);        
+        id = setTimeout(() => action.call(this, ...args), time);        
     }
     
-    timer.wait = (wait = 0) => (time = wait, timer);
+    timer.wait = wait => (time = wait >= 0 ? wait : 0, timer);
     timer.stop = () => (clearTimeout(id), timer)
+
+    timer.wait(wait);
     
     return timer;
 }

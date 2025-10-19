@@ -10,7 +10,7 @@ import tinfo from './tag-info'
 
 
 let assetKeys = Object.keys(assets);
-let assetSort = proxet({}, prop => sorter((a, b, t) => t(ainfo(a)[prop], ainfo(b)[prop])));
+let assetSort = proxet({}, prop => sorter(x => ainfo(x)[prop]));
 
 let makeFilter = data => 
 {
