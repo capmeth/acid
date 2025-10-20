@@ -1,6 +1,7 @@
 ---
 title: Basic Setup
 cobeMode: static
+escapeBraces: true
 ---
 
 Here we'll walk through a setup for a basic component application.
@@ -117,7 +118,7 @@ As the "Layouts" folder has no readme file, we have provided a short description
 
 In `components` we use glob patterns to select all the files that should be included in the section. For each category, we have selected every *index.jsx* file found as a descendant of the category's folder, as they are all component source files.
 
-*As this is a basic tutorial, we won't go into how to setup a source parser here.  We will assume that all of the component source files in this fake project are well documented using [JsDoc tags that are understood by ACID](document/reference-jsdoc), and thus can be parsed for documentation using the default internal parser.*
+*As this is a basic tutorial, we won't go into how to setup a source parser here.  We will assume that all of the component source files in this fake project are well documented using [JsDoc tags that are understood by ACID](/document/reference-jsdoc), and thus can be parsed for documentation using the default internal parser.*
 
 At this point your app will be more organized, but notice that the names of all the components are "index".  Of course, this might not be true if a component specifies a name in its JsDoc comment, but our project structure dictates that a component name should come from the immediate parent folder of the component source file.
 

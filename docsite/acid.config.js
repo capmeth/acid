@@ -16,7 +16,7 @@ export default
     output: "web",
     cobe: 
     [
-        { types: [ "svelte", "svt" ], use: "svelte-render", mode: "edit" }
+        { types: [ "svelte", "svt" ], use: "svelte-render", mode: "edit" },
     ],
     cobeSvelte: true,
     hljs: 
@@ -49,6 +49,11 @@ export default
         "uses": "Uses replaceable UI component ({info})"
     },
 
+    toAssetAccessLine: ({ sub, name, sep }) =>
+    {
+        if (sub.startsWith('source/')) 
+            return `import ${name} from "#${sub.split(sep).slice(3, -1).join('/')}/${name}"`;
+    },
     toAssetId: [ [ "^(?:source[/]client[/]components|docsite[/]docs)[/](.+?)[.][^./]+$" ], "$1" ],
     toExampleFile: [ [ "^source[/]client[/](.+?)[.][^./]+$" ], "docsite/docs/$1.md" ],
 
@@ -63,12 +68,8 @@ export default
     socket: { port: 3035 },
     watch: 
     { 
-        files: 
-        [
-            path.join("source", "client", "components", "**", "*.svt"),
-            path.join("source", "client", "**", "*.js"),
-            path.join("docsite", "docs", "**", "*.md")
-        ] 
+        paths: [ 'source', 'docsite'],
+        options: (p, s) => s?.isFile() && !/\.(css|js|md|svt|svelte)$/.test(p)
     },
 
     style: 

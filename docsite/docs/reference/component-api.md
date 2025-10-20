@@ -1,6 +1,7 @@
 ---
 title: Component API
 cobeMode: static
+escapeBraces: true
 ---
 
 

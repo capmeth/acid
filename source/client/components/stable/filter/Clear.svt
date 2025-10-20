@@ -1,15 +1,15 @@
 <!--*
     Renders a button to clear asset filtering criteria.
 
-    @property { string } [action="clear_filters"]
-      Action name for the internal **Button** component.
     @property { string } [kind="filters-clear"]
       Variant name for the internal **Button** component.
     @property { object } [store]
       Name of the filter store to clear.
 -->
 
-<Button {action} {kind} onclick={clear} />
+<Button action="clear_filters" {kind} onclick={clear}>
+  {@html t.action_clear_filters}
+</Button>
 
 
 <script module>
@@ -19,7 +19,7 @@ import Button from '../helper/Button'
 </script>
 
 <script>
-let { action = 'clear_filters', kind = 'filters-clear', store } = $props();
+let { kind = 'filters-clear', store } = $props();
 
 let filters = stateFilters(store);
 let clear = () => Object.keys(filters).forEach(key => delete filters[key])

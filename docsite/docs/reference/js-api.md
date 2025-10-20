@@ -19,10 +19,10 @@ Creates a docsite application instance.
 ```js
 import acid from '@capmeth/acid'
 
-let app = acid(/* config options */);
+let app = acid(/* config options */, ...);
 ```
 
-Pass configuration to this function as an object or a path to a config file (string).
+Pass configuration elements to the function as objects, strings (module specifiers), or functions.
 
 Note that this API **does not** automatically look for *acid.config.js* if no config is specified.  That is a feature of the command-line interface only.
 
@@ -166,46 +166,3 @@ let stop = await app.run(true);
 This activates both the server and watch mode, regardless of config settings.
 
 Note that the `stop` function is always returned regardless of server and watch mode settings.  Calling it will either stop the server if it is running, or do nothing if not.
-
-
-## `app.use()`
-
-Accepts a function that can update or modify configuration settings.  This is the basis for an ACID extension or "plugin".
-
-Here's how it works...
-
-```js
-import acid from '@capmeth/acid'
-import acidReactExt from 'acid-react-extension'
-import acidVueExt from 'acid-vue-extension'
-
-let app = acid();
-
-app.use(acidReactExt, { /* extension config */ });
-app.use(acidVueExt, { /* extension config */ });
-
-app.run();
-```
-
-In the above, `acidReactExt` and `acidVueExt` are functions that accept the current config object, which will have defaults and config file settings (and also any previously applied extension settings) already loaded.  The config object itself is a self-managing proxy, so the extension does not need to return anything.
-
-A second parameter can also be passed, ostensibly as configuration for the extension itself.
-
-Alternatively, a module specifier can be used directly as long as the *default* export is the expected function.
-
-So, the above example could also be written as
-
-```js
-import acid from '@capmeth/acid'
-
-let app = acid();
-
-app.use('acid-react-extension', { /* extension config */ });
-app.use('acid-vue-extension', { /* extension config */ });
-
-app.run();
-```
-
-Although ACID configuration is not terribly complicated (right?), the idea is that 3rd-party extensions can apply their needs to configuration directly without having to instruct the user how to configure a renderer, which URLs to add to scripts, what needs be in the importmaps, etc.  
-
-...of course, the extension itself may require configuration, so... mileage may vary.

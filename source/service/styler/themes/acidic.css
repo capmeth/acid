@@ -14,7 +14,7 @@
 
     --acid-background-site: #444444;
     --acid-color-component: #98AAFF;
-    --acid-color-deprecated: #BA243CCC;
+    --acid-color-deprecated: #BA243C;
     --acid-color-break: #ddd;
     --acid-color-document: #94E1FF;
     --acid-color-link: #E2B3C2; /* pinkie */
@@ -39,7 +39,7 @@
 
     body { line-height: 1.5em; }
 
-    button
+    :where(button)
     {
         background: none;
         color: currentColor;
@@ -99,6 +99,28 @@
     padding: 0;
 }
 
+#-cobe-picker
+{
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    width: 40px;
+    padding: 7px 10px;
+
+    &:focus
+    {
+        outline: 2px dotted var(--acid-color-break);
+    }
+
+    &:hover:not(:disabled)
+    {
+        background: var(--acid-color-textie);
+        color: #333;
+    }
+}
+
 #-helper-active
 {
     .content 
@@ -133,6 +155,7 @@
     &.type-sector
     {
         display: inline-block;
+        border-block: 1px solid transparent;
 
         .content { padding-inline: 32px; }
 
@@ -146,16 +169,14 @@
 {
     background: transparent;
     color: var(--acid-color-textie);
+    font-family: var(--acid-font-family-text), var(--acid-font-family-icon);
+    font-size: 135%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
     cursor: pointer;
-    font-size: 16px;
-    display: block;
-    padding: 4px 10px;
-
-    &::before
-    {
-        font-family: var(--acid-font-family-icon);
-        padding-right: 4px;
-    }
+    padding-inline: 10px;
 
     &:focus
     {
@@ -173,16 +194,6 @@
         border-radius: 6px;
         margin: 2px;
     }
-
-    &.action-copied::before { content: '\E718'; }
-    &.action-clear-filters::before { content: '\E796'; }
-    &.action-copy::before { content: '\E78A'; }
-    &.action-hide::before { content: '\E734'; }
-    &.action-isolate::before { content: '\E748'; }
-    &.action-reset::before { content: '\E796'; }
-    &.action-show::before { content: '\E733'; }
-    &.action-shutter::before { content: '\E747'; }
-    &.action-update::before { content: '\E73B'; }
 }
 
 #-helper-input
@@ -208,6 +219,13 @@
         display: inline-block;
         font-family: var(--acid-font-family-icon);
         margin-right: 4px;
+    }
+
+    & span::after
+    {
+        display: inline-block;
+        font-family: var(--acid-font-family-icon);
+        margin-left: 4px;
     }
 
     &.current { font-weight: 700; }
@@ -236,6 +254,11 @@
         color: var(--acid-color-document);
 
         &::before { content: '\E73A' }
+    }
+
+    &.to-external span
+    {
+        &::after { content: '\E773' }
     }
 
     &.type-annex
@@ -359,11 +382,12 @@
     {
         display: flex;
         flex-wrap: wrap;
+        gap: 1px;
         font-size: 14px;
 
         :global
         {
-            .helper-button:last-child
+            .action-editor-close, .action-editor-open
             {
                 margin-left: auto;
             }
@@ -393,7 +417,6 @@
     .stage
     {
         background: #eee;
-        padding: 16px;
         overflow-x: auto;
         width: 100%;
 
@@ -474,6 +497,11 @@
         display: flex;
         flex-wrap: wrap;
         gap: 6px;
+    }
+
+    &.type-tags
+    {
+        padding: 4px;
     }
 
     &.type-filter-groups, &.type-filter-options, &.type-filter-tags
@@ -585,12 +613,34 @@
             margin: 12px 4px 12px 24px;
             padding: 8px;
 
-            ol, ul { margin: 0 0 0 12px; }
+            ol, ul { margin: 0 0 0 24px; }
         }
 
         ul { list-style-type: disc; }
 
-        *:first-child { margin-top: 0; }
+        .hx, blockquote, pre, p, ol, ul
+        {
+            &:not(.type-description *):first-child { margin-top: 0; }
+        }
+
+        &.type-deprecation
+        {
+            padding: 0 8px;
+
+            p { margin: 0; }
+        }
+        
+        &.type-description
+        {
+            padding: 0 8px;
+            
+            p { padding: 0; }
+        }
+    }
+
+    &.type-deprecation
+    {
+        background-color: var(--acid-color-deprecated);
     }
 }
 
@@ -724,12 +774,13 @@
         overflow-y: auto;
         padding: 1vw 2vw 4vw 1vw;
         display: flex;
+        font-size: 16px;
         flex-direction: column;
         gap: 12px;
 
         .nav-title
         {
-            font-size: 125%;
+            font-size: 150%;
             font-weight: bold;
         }
     }
@@ -759,13 +810,15 @@
 
         .title { color: var(--acid-color-component); }
 
-        .deprecation
-        {
-            background-color: var(--acid-color-deprecated);
-            padding: 4px 8px;
-        }
-
         .empty { font-style: italic; }
+
+        .access-line
+        {
+            color: var(--acid-color-code);
+            font-family: var(--acid-font-family-code);
+            font-weight: 700;
+            padding: 8px;
+        }
 
         .prop
         {
@@ -787,6 +840,7 @@
             .default
             {
                 background: #ffffff11;
+                font-size: 75%;
                 display: flex;
                 align-items: center;
                 column-gap: 8px;
@@ -798,21 +852,18 @@
                 &::before 
                 { 
                     content: 'default:';
-                    font-size: 70%;
                     line-height: 1em;
                 }
             }
 
-            .deprecation
-            {
-                background-color: var(--acid-color-deprecated);
-                grid-column: 1 / -1;
-                padding: 4px 8px;
+            .depre
+            { 
+                grid-column: 1 / -1; 
             }
 
             .desc
             {
-                background: #ffffff11;
+                background-color: #ffffff11;
                 grid-column: 1 / -1;
                 padding: 4px 8px;
 
@@ -845,6 +896,7 @@
             .values
             {
                 background: #ffffff11;
+                font-size: 75%;
                 display: flex;
                 align-items: center;
                 column-gap: 8px;
@@ -856,7 +908,6 @@
                 &::before 
                 { 
                     content: 'accepts:';
-                    font-size: 70%;
                     line-height: 1em;
                 }
             }

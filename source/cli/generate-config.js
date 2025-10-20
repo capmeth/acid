@@ -1,8 +1,9 @@
 import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import { hackson } from '#lib/hosted.js'
+import moduleImporter from '#lib/module-importer.js'
 import { is, jss } from '#utils'
-import { assign, defaults } from '../config/index.js'
+import { configure, defaults } from '../config/index.js'
 
 
 /**
@@ -15,7 +16,7 @@ import { assign, defaults } from '../config/index.js'
 */
 export default async function (dest, options)
 {
-    if (!dest) dest = 'acid.config.js';
+    dest ||= 'acid.config.js';
  
     if (existsSync(dest))
     {
@@ -23,10 +24,10 @@ export default async function (dest, options)
         return void 0;
     }
 
-    let { config } = await assign(defaults, options);
-    let code = content(config)
+    let make = configure(moduleImporter(process.cwd()));
+    let { config } = await make({ ...defaults, configs: options });
 
-    return fs.writeFile(dest, code, { encoding: 'utf8' });
+    return fs.writeFile(dest, content(config), { encoding: 'utf8' });
 }
 
 let content = config =>

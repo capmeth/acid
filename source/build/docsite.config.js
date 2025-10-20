@@ -1,5 +1,5 @@
 /**
-    Dependent Project Build (Rollup)
+    Docsite Build (Rollup)
     ---------------------------------------------------------------------------
     This build is for the project using ACID as a dependency.
 */

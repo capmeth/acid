@@ -28,8 +28,7 @@ import Error from '#custom/page/Error'
 
 let onerror = error => console.error(error)
 
-router.start();
-let [ payload ] = router.last('change');
+let [ payload ] = router.start().last('change');
 </script>
 
 <script>

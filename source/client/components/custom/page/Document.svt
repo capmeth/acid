@@ -27,7 +27,16 @@
   </header>
   <main>
     <div class="leader">
-      <div class="title">{ title }</div>
+      <div class="title" class:deprecated>{ title }</div>
+      {#if deprecated}
+        <Markup type="deprecation">
+          {#if deprecated === true}
+            <p>{ t.label_deprecated }</p>    
+          {:else}
+            {@html deprecated}
+          {/if}            
+        </Markup>
+      {/if}
       <Crumbs {section} />
       <List items={tags} pred={tinfo} type="tags">
         {#snippet children(data)}
@@ -78,6 +87,7 @@ import Article from '#stable/common/Article'
 import Crumbs from '#stable/common/Crumbs'
 import Link from '#stable/helper/Link'
 import List from '#stable/common/List'
+import Markup from '#custom/main/Markup'
 import Static from '#stable/common/Static'
 import Tag from '#custom/main/Tag'
 import Toc from '#stable/common/Toc'
@@ -86,7 +96,7 @@ import Tree from '#stable/common/Tree'
 
 <script>
 let { uid } = $props();
-let { mcid, section, tags, title, tocDepth } = ainfo(uid);
+let { deprecated, mcid, section, tags, title, tocDepth } = ainfo(uid);
 
 page.setTitle(title);
 </script>

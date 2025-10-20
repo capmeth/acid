@@ -1,28 +1,65 @@
 import { capitalCase, kebabCase, pascalCase } from 'change-case'
-import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import np from 'node:path'
 import globit from '#lib/globit.js'
+import pathTransformer from '#lib/path-transformer.js'
+import pathy from '#lib/pathy.js'
 import paths from '#paths'
-import { is } from '#utils'
+import { ident, is, nil } from '#utils'
+import articleImports from '../article-imports.js'
 import docson from '../docson.js'
 import doxie from '../doxie/index.js'
 
 
+let braceRe = /[{}]+/g;
 let commaRe = /\s*,\s*/;
 let fileRe = /^file:\//;
+let httpRe = /^https?:\/\//;
 
 export default function(config)
 {
-    let { assetTypes, root, tagLegend, toAssetId, toAssetName, toExampleFile, useFilenameOnly } = config;  
+    let { assetTypes, components, root, tagLegend, useFilenameOnly } = config;  
 
+    let toPathObj = pathy(root);
     let types = Object.entries(assetTypes);
     let tagmap = new Map();
+    let embeds = articleImports(components);
+
+    let toAssetAccessLine = pathTransformer(config.toAssetAccessLine) || nil;
+    let toAssetId = pathTransformer(config.toAssetId) || ident;
+    let toAssetName = pathTransformer(config.toAssetName) || ident;
+    let toExampleFile = pathTransformer(config.toExampleFile) || nil;
 
     Object.entries(tagLegend).forEach(([ key, val ]) => val.assign && tagmap.set(val.assign, key));
 
-
     let op = {};
+
+
+    /**
+        Sets a an access line for an asset (if not already present).
+
+        @param { object } record
+          - `path`: a path object
+        @return { object }
+          - `accessLine`: an string access line for the record
+    */
+    op.access = async (record, exec) =>
+    {
+        if (!record.accessLine)
+        {
+            record = await exec.pather(record);
+
+            let { path } = record;
+
+            if (is.nonao(path)) 
+            {
+                let line = toAssetAccessLine(path);
+                if (line) record.accessLine = line;
+            }
+        }
+
+        return record;
+    }
 
 
     /**
@@ -88,7 +125,7 @@ export default function(config)
 
 
     /**
-        Parse `example` markdown content into `record`.
+        Parse `example` markdown content into asset `record`.
 
         Uses `config.toExampleFile` option to determine example file path if 
         `example` not set.
@@ -98,25 +135,27 @@ export default function(config)
           - `path`: a path object
           - `uid`: indetifier for the record
         @return { object }
-          - `matter`: front-matter attributes
           - `mcid`: markdown content id
+          - relevant front-matter data (if available)
     */
     op.example = async (record, exec) =>
     {
-        record = await exec.identify(record);
         record = await exec.pather(record);
 
         let { example, path, uid } = record;        
-        let data = { path: example || toExampleFile(path.path), uid };
+        let data = { path: example || toExampleFile(path), uid };
 
         delete record.example;
 
-        let results = await exec.markdown(data);
+        let { mcid, matter } = await exec.markdown(data);
 
-        if (results.mcid)
+        if (mcid) record.mcid = mcid;
+        if (is.nonao(matter))
         {
-            record.mcid = results.mcid;
-            record.matter = results.matter;
+            let { cobeColor, cobeMode } = matter;
+            
+            if (cobeMode) record.cobeMode = cobeMode;
+            if (cobeColor) record.cobeColor = cobeColor;
         }
 
         return record;
@@ -130,23 +169,25 @@ export default function(config)
 
         @param { object } record
           - `path`: a path object
-          - `tid`: asset type id
         @return { object }
           - `uid`: an identifier for the record
     */
     op.identify = async (record, exec) =>
     {
-        if (record.tid && !record.uid)
+        if (!record.uid)
         {
             record = await exec.pather(record);
 
             let { path } = record;
 
             if (is.nonao(path)) 
-                record.uid = kebabCase(toAssetId(path.path));
+            {
+                let uid = toAssetId(path);
+                if (uid) record.uid = kebabCase(uid);
+            }
         }
 
-        return record;
+        return record.uid ? record : null;
     }
 
 
@@ -156,21 +197,19 @@ export default function(config)
         @param { object } record
           - `content`: markdown string content (consumed)
           - `path`: a path object
-          - `name`: an identifier for `record` (sections)
-          - `uid`: an identifier for `record` (assets)
+          - `uid`: an identifier for `record`
         @return { object}
           - `matter`: front-matter attributes
           - `mcid`: markdown content id
     */
     op.markdown = async (record, exec) =>
     {
-        record = await exec.identify(record);
         record = await exec.pather(record);
 
-        let { content, name, path, uid = name } = record;
+        let { content, path, uid } = record;
 
         if (!content && is.nonao(path))
-            content = await fs.readFile(path.abs, 'utf8');
+            content = await fs.readFile(path.path, 'utf8');
 
         delete record.content;
 
@@ -180,11 +219,15 @@ export default function(config)
             {
                 let mcid = pascalCase(`Article_${uid}`);
                 let { doc, matter } = md.content(content, { vars: { uid } });
+                let { escapeBraces, moduleScript = '', ...other } = matter || {};
+
+                if (escapeBraces) doc = doc.replace(braceRe, '{"$&"}');
+                doc += `\n\n<script module>\n${embeds}\n${moduleScript}</script>`;
 
                 files[np.join(paths.components, 'articles', `${mcid}.svt`)] = doc;
 
                 record.mcid = mcid;
-                record.matter = matter;
+                record.matter = other;
 
                 return record;
             }
@@ -195,82 +238,72 @@ export default function(config)
 
 
     /**
-        Aplies `matter` options to `record`.
-
-        @param { object } record
-          - `matter`: markdown front-matter (consumed)
-          - `tid`: asset type identifier
-        @return { object}
-          - `cobeMode`: default cobe display mode
-          - `tags`: info-stamps
-          - `title`: title for the record
-          - `tocDepth`: ToC header level
-    */
-    op.options = record =>
-    {
-        let { matter, tid } = record;
-
-        if (is.nonao(matter))
-        {
-            let { cobeMode, tags, title, tocDepth } = matter;
-
-            if (tid === 'doc')
-            {
-                if (cobeMode) record.cobeMode = cobeMode;
-                if (tags)
-                {
-                    record.tags ||= [];
-                    record.tags.push(...(is.array(tags) ? tags : tags.split(commaRe)));
-                }
-                if (title) record.title = title;
-                if (tocDepth || tocDepth === 0) record.tocDepth = tocDepth;
-            }
-            else if (!tid)
-            {
-                if (cobeMode) record.cobeMode = cobeMode;
-                if (title) record.title ||= title;
-                if (tocDepth || tocDepth === 0) record.tocDepth = tocDepth;
-            }
-        }
-
-        delete record.matter;
-
-        return record;
-    }
-    
-    
-    /**
-        Parse `overview` markdown content into `record`.
+        Parse markdown content into document `record`.
 
         @param { object } record
           - `name`: a name for the record
           - `overview`: string content or filepath (consumed)
         @return { object }
-          - `matter`: front-matter attributes
           - `mcid`: markdown content id
+          - relevant front-matter data (if available)
     */
-    op.overview = async (record, exec) =>
+    op.options = (record, exec) =>
     {
-        let { name, overview } = record;
+        let data = {};
 
-        let data = { name };
-
-        if (fileRe.test(overview))
-            data.path = overview.replace(fileRe, '');
-        else
-            data.content = overview;
-        
-        delete record.overview;
-
-        let results = await exec.markdown(data);
-
-        if (results.mcid)
+        if (record.tid)
         {
-            record.mcid = results.mcid;
-            record.matter = results.matter;
+            let { path, uid } = record;
+            data = { path, uid };
+        }
+        else // section
+        {
+            let { name, overview } = record;
+
+            data.uid = name;
+
+            if (httpRe.test(overview)) // external link
+                record.external = overview;
+            else if (fileRe.test(overview)) // markdown file
+                data.path = overview.replace(fileRe, '');
+            else
+                data.content = overview;
+            
+            delete record.overview;
         }
 
-        return record;
+        return async ({ md }) =>
+        {
+            let { mcid, matter } = await exec.markdown(data);
+
+            if (mcid) record.mcid = mcid;
+            
+            if (is.nonao(matter))
+            {
+                let { cobeColor, cobeMode, deprecated, title, tags, tocDepth } = matter;
+
+                if (cobeMode) record.cobeMode = cobeMode;
+                if (cobeColor) record.cobeColor = cobeColor;
+
+                if (deprecated) 
+                {
+                    record.deprecated = deprecated;
+                    if (is.string(deprecated)) 
+                        record.deprecated = md.comment(deprecated).doc;
+                }
+                
+                if (title) record.title = title;
+                if (tocDepth || tocDepth === 0) record.tocDepth = tocDepth;
+
+                if (record.tid)
+                {
+                    if (is.string(tags)) tags = tags.split(commaRe);
+                    if (is.array(tags)) (record.tags ||= []).push(...tags);
+                }
+            }
+
+            return record;
+        }
     }
 
 
@@ -291,14 +324,7 @@ export default function(config)
         let { path } = record;
 
         if (is.string(path))
-        {
-            delete record.path;
-            
-            let abs = np.resolve(root, path);
-
-            if (existsSync(abs))
-                record.path = { ...np.parse(abs), path, abs };
-        }
+            record.path = toPathObj(record.path);
 
         return record;
     }   
@@ -330,9 +356,9 @@ export default function(config)
 
                 if (parser.use)
                 {
-                    let doxer = doxie[tid](path.path, md.comment);
+                    let doxer = doxie[tid](path.sub, md.comment);
                     // doxer validates all data from parser
-                    doxer.asset = await parser.use(path.abs, docson);
+                    doxer.asset = await parser.use(path.path, docson);
 
                     let { ignore, name, ...rest } = doxer.asset;
 
@@ -361,7 +387,6 @@ export default function(config)
     */
     op.tag = async (record, exec) =>
     {
-        record = await exec.identify(record);
         record = await exec.pather(record);
 
         if (tagmap.size)
@@ -377,7 +402,7 @@ export default function(config)
                 {
                     if (info)
                     {
-                        let tag = info === `true` ? name : `${name}:${info}`;
+                        let tag = info === true ? name : `${name}:${info}`;
 
                         record.tags ||= [];
                         record.tags.push(tag);
@@ -409,11 +434,7 @@ export default function(config)
     */
     op.title = async (record, exec) =>
     {
-        if (!record.tid) // section fallback
-        {
-            record.title ||= capitalCase(record.name);
-        }
-        else
+        if (record.tid) // section fallback
         {
             record = await exec.pather(record);
 
@@ -422,12 +443,16 @@ export default function(config)
             if (is.nonao(path))
             {
                 if (record.tid === 'doc') // doc asset fallback
-                    record.title ||= capitalCase(toAssetName(path.path));
+                    record.title ||= capitalCase(toAssetName(path));
                 else if (useFilenameOnly) // non-doc asset force filename
-                    record.title = toAssetName(path.path);
+                    record.title = toAssetName(path);
                 else // non-doc asset fallback
-                    record.title ||= toAssetName(path.path);
+                    record.title ||= toAssetName(path);
             }
+        }
+        else
+        {
+            record.title ||= capitalCase(record.name);
         }
 
         return record;

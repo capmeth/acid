@@ -6,5 +6,5 @@ test('escapes regular expression special characters', t =>
     let chars = '.*+-?^${}()|[]\\';
     let regex = new RegExp(rescape(chars));
 
-	t.true(regex.test(chars));
+    t.true(regex.test(chars));
 });

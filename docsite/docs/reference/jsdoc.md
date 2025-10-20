@@ -1,6 +1,7 @@
 ---
 title: JsDoc Tags
 cobeMode: static
+escapeBraces: true
 ---
 
 

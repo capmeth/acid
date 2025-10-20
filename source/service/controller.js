@@ -1,13 +1,12 @@
-import builder from './builder/index.js'
+import moduleImporter from '#lib/module-importer.js'
+import builder from './builder.js'
 import loader from './loader/index.js'
-import importer from './importer/index.js'
 import server from './server/index.js'
 import socketer from './socketer.js'
 import styler from './styler/index.js'
 import watcher from './watcher.js'
 
-import { is } from '#utils'
-import { assign, defaults, make, required } from '../config/index.js'
+import { configure, defaults, required } from '../config/index.js'
 
 
 /**
@@ -15,62 +14,46 @@ import { assign, defaults, make, required } from '../config/index.js'
 
     The interface returned has:
     - `run`: executes a docsite build
-    - `use`: adds a function used to extend configuration
 
-    @param { ...object } options
-      Configuration options objects.
+    @param { array } options
+      Configuration options elements.
     @return { object }
       Services object.
 */
-export default function(...options)
+export default function(options, root)
 {
-    let users = [];
-    let importExt = importer(make().root);
+    let make = configure(moduleImporter(root));
 
     let run = async bool =>
     {
-        let data = await assign(defaults, ...options, ...users, required);
+        let data = await make({ ...defaults, root, configs: [ ...options, required ] });
 
         if (bool) data.config = { server: true, watch: true };
 
-        let svc = createServices(data.config);
+        let svc = {}, { config } = data;
 
-        let exec = () => Promise.all([ svc.bundle(), svc.watch.start(svc.update) ]).then(svc.serve.start)
-        let stop = () => Promise.all([ svc.serve.stop(), svc.watch.close(), svc.socket.close() ])
+        svc.build = builder(config);
+        svc.load = loader(config);
+        svc.serve = server(config);
+        svc.socket = socketer(config);    
+        svc.style = styler(config);
+        svc.watch = watcher(config);
+
+        // derived services
+        svc.notify = () => svc.socket.send('reload')
+        svc.prepare = () => Promise.all([ svc.load(), svc.style() ])
+        svc.bundle = () => svc.prepare().then(items => svc.build(...items))
+        svc.restart = () => svc.stop().then(() => run(bool))
+        svc.run = () => svc.bundle().then(svc.start).then(svc.notify)
+        svc.start = () => svc.watch.start(svc).then(() => Promise.all([svc.serve.start(), svc.socket.start()]))
+        svc.stop = () => Promise.all([ svc.serve.stop(), svc.watch.close(), svc.socket.close() ])
+        svc.update = () => svc.bundle().then(svc.notify)
+
+        // post initialization ops
+        svc.serve.onError(err => log.fail(err));
     
-        return exec().then(svc.notify).then(() => stop);
+        return svc.run().then(() => svc.stop);
     }
 
-    let use = async (update, param) =>
-    {
-        if (is.string(update)) return importExt(update).then(mod => use(mod.default, param));
-        if (is.func(update)) return (users.push(config => update(config, param)), void 0);
-        
-        throw new Error('extension parameter must be a module specifier or a function');
-    }
-
-    return { run, use };
-}
-
-function createServices(config)
-{
-    let service = {};
-
-    service.build = builder(config);
-    service.load = loader(config);
-    service.serve = server(config);
-    service.socket = socketer(config);    
-    service.style = styler(config);
-    service.watch = watcher(config);
-
-    // derived services
-    service.notify = () => service.socket.send('reload')
-    service.prepare = () => Promise.all([ service.load(), service.style() ])
-    service.bundle = () => service.prepare().then(items => service.build(...items))
-    service.update = () => service.bundle().then(service.notify)
-
-    // post initialization ops
-    service.serve.onError(err => log.fail(err));
-
-    return service;
+    return { run };
 }

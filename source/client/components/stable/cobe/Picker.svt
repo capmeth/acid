@@ -1,0 +1,37 @@
+<!--*
+    Uses the browsers color picker to allow color selection for **Renbox**.
+
+    Works as a descendant of the **Editor** component, which provides
+    the `editor` context object necessary for operation.
+
+    Expected `editor` context interface:
+ *  - `picker` *object*:
+ *    - `render` *boolean*: should this component render?
+ *  - `color` *string*: bound to selected color value
+
+    @tags cobe, inject:#cobe-picker
+
+    @property { snippet } [use]
+      Receives a snippet that renders the content of this component.
+-->
+
+<When test={render} {use}>
+  <input class="cobe-picker" type="color" bind:value={editor.color} {disabled} title={t.title_editor_picker} />
+</When>
+
+
+<script module>
+import { context } from '#frend/lib'
+
+import When from '../common/When'
+</script>
+
+<script>
+let { use } = $props();
+let { editor } = context;
+let { disabled, render } = $derived(editor.picker);
+</script>
+
+<style>
+/* @inject #cobe-picker */
+</style>

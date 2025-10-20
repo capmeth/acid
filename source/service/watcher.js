@@ -1,50 +1,72 @@
-import path from 'node:path'
 import chokidar from 'chokidar'
-import globit from '#lib/globit.js'
+import path from 'node:path'
 import { debounce } from '#utils'
 
 
 export default function(config)
 {
-    let { output, root, watch: { delay, enabled, files } } = config;
-    // always exclude output directory from watch
-    (files.exclude ??= []).push(path.join(output.dir, '**'));
+    let { output, root, watch: { delay, enabled, paths, options } } = config;
+    let outpath = path.join(root, output.dir);
+    // use `root` if there is not at least one path set
+    if (!paths.filter(x => x).length) paths = root;
+    
+    options.cwd = root;
+    options.ignoreInitial = true;
 
-    let watchers = [];
-
-    let start = async callback =>
+    let watcher;
+    let fileReporter = (tally, [ path, names ]) => 
     {
-        if (!enabled) return;
-        
-        return globit(files, root).then(files => 
-        {
-            let bounce = debounce(callback, delay);
-            
-            files.forEach(file => 
-            {
-                let watcher = chokidar.watch(file);
-
-                watcher.on('change', bounce);
-                watchers.push(watcher);
-
-                log.test(`watching file {:emph:${file}}`);
-            });
-
-            log.info(`watching {:emph:${files.length} file(s)} for changes...`);
-        });
+        names.forEach(name => log.test(`watching file {:emph:${path}/${name}}...`));
+        return tally + names.length;
     }
+
+    let start = ({ notify, restart }) => new Promise(async accept => 
+    {   
+        if (watcher) await close();
+        if (!enabled) return;
+
+        let bounceNotify = debounce(notify, delay);
+        let bounceRestart = debounce(restart, delay);
+
+        watcher = chokidar.watch(paths, options);
+
+        watcher.on('ready', () => 
+        {
+            let count = Object.entries(watcher.getWatched()).reduce(fileReporter, 0);
+            log.info(`watching {:emph:${count} file(s)} for changes...`);
+            accept();
+        });
+
+        watcher.on('all', (event, fspath) => 
+        {
+            let newpath = path.join(root, fspath);
+
+            if (newpath.startsWith(outpath))
+            {
+                log.test(`watch event {:emph:${event}} on {:emph:${fspath}}: refreshing...`);
+                bounceNotify();
+            }
+            else
+            {
+                log.test(`watch event {:emph:${event}} on {:emph:${fspath}}: restarting...`);
+                bounceRestart();
+            }
+        });
+
+        watcher.on('error', error => 
+        {
+            log.warn(`watch event error occurred: ${error}`);
+        });        
+    });
 
     let close = async () => 
     {
-        if (watchers.length)
+        return watcher?.close().then(() => 
         {
-            log.info('closing all file watchers...');
-            await Promise.all(watchers.map(w => w.close())); 
-            watchers = [];
-        }
+            log.info('the file watcher has stopped');
+            watcher = void 0;
+        });
     }
 
-    let watching = () => watchers.length > 0
-
-    return { close, enabled, start, watching };
+    return { close, start };
 }

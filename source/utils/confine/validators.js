@@ -13,7 +13,9 @@ export default
         h.or(h.string, h.of(RegExp), h.plain, h.array) ? h.to.array() : h.or(h.func, h.null) ||
         h.err('must be an array or an object or a regular expression or a string or a function or null'),
     arrayOrObjectOrString: h => h.or(h.string, h.plain, h.array) ? h.to.array() : 
-        h.err('must be an array, object, or a string'),
+        h.err('must be an array or an object or a string'),
+    arrayOrObjectOrStringOrFunction: h => h.or(h.func, h.string, h.plain, h.array) ? h.to.array() : 
+        h.err('must be an array or an object or a string or a function'),
     arrayOrString: h => h.or(h.string, h.array) ? h.to.array() : 
         h.err('must be an array or a string'),
     arrayOrStringOrNull: h => h.or(h.null, h.string, h.array) ? h.to.array() : 
@@ -32,8 +34,6 @@ export default
         h.err('must be a function or an array or null'),
     functionOrArrayOrStringOrNull: h => h.or(h.null, h.func, h.string, h.array) || 
         h.err('must be a function or an array or a string or null'),
-    functionOrString: h => h.or(h.string, h.func) || 
-        h.err('must be a function or a string'),
     logLevel: h => h.in('fail', 'info', 'off', 'warn', 'test') || 
         h.err('must be a valid enumerated value'),
     object: h => h.plain || 
@@ -64,6 +64,8 @@ export default
         h.err('must be a regular expression or a string or an array or a function or null'),
     reflags: h => h.or(h.re(/^[dgimsuvy]*$/), h.in(true)) || 
         h.err('must be `true` or contain only regular expression flags'),
+    routing: h => h.in('hash', 'slash') || 
+        h.err('must be a valid enumerated value'),
     serial: h => h.serial || 
         h.err('must be of serializable type'),
     storage: h => h.in('local', 'session', 'none') || 
@@ -74,6 +76,8 @@ export default
         h.err('must be a string or a boolean'),
     stringOrFunction: h => h.or(h.string, h.func) || 
         h.err('must be a string or a function'),
+    stringOrFunctionOrObject: h => h.or(h.string, h.func, h.plain) || 
+        h.err('must be a string or a function or an object'),
     stringOrNull: h => h.or(h.string, h.null) || 
         h.err('must be a string or null'),
     stringOrNullish: h => h.or(h.string, h.nullish) || 

@@ -47,12 +47,15 @@ let classes = [];
 if (x.name) // link to a section page
 {
     let section = sinfo(x.name);
-    classes.push(`to-section`);
-    if (context.section === section.name) classes.push({ current: true });
-    href = toUrl(section);
 
-    if (section.name === sinfo.root.name)
-        title ||= t('msg_goto_page', { title: 'home' })
+    classes.push(section.external ? `to-external` : `to-section`);
+    if (context.section === section.name) classes.push({ current: true });
+    href = section.external || toUrl(section);
+
+    if (section.external)
+        title ||= t.msg_external_link;
+    else if (section.name === sinfo.root.name)
+        title ||= t('msg_goto_page', { title: 'home' });
     else
         title ||= `section: ${section.lineage.title.slice(1).join('/')}`;
 

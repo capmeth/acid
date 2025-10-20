@@ -1,17 +1,18 @@
 
 # action labels
-action_clear_filters: Clear Filters
-action_copied: Copied!
-action_copy: Copy
-action_hide: Code
-action_isolate: Isolate
-action_reset: Reset
-action_show: Code
-action_shutter: Close
-action_update: Render
+action_clear_filters: '&#xE796; Clear Filters'
+action_editor_close: '&#xE747;'
+action_editor_copied: '&#xE79A;'
+action_editor_copy: '&#xE78A;'
+action_editor_hide: '&#xE734;'
+action_editor_open: '&#xE748;'
+action_editor_reset: '&#xE796;'
+action_editor_show: '&#xE733;'
+action_editor_update: '&#xE73B;'
 
 # general labels
 label_accept_values: "Accepts:"
+label_access: Access
 label_components: Components
 label_content: Content
 label_default_value: "Default:"
@@ -37,8 +38,21 @@ page_isolate_title: CoBE Isolation
 # messages/alerts
 msg_asset_count: Showing {count} of {total} assets in docsite.
 msg_copied: Copied to Clipboard!
+msg_external_link: Head to another website
 msg_filter_name: filter by name
 msg_goto_page: Go to {title} page.
 msg_no_component_description: No comments were found for this component.
 msg_no_prop_description: No comments were found for this component property.
 msg_scrollto: Scroll to {name}.
+
+# element titles
+title_clear_filters: Clear all filter criteria
+title_editor_close: Close this window
+title_editor_copied: Code copied to clipboard!
+title_editor_copy: Copy code to clipboard
+title_editor_hide: Hide the code
+title_editor_open: Isolate this example
+title_editor_picker: Choose background color
+title_editor_reset: Reset this example
+title_editor_show: Show the code
+title_editor_update: Update the render

@@ -1,8 +1,6 @@
 import { WebSocketServer } from 'ws'
+import { jss, uid } from '#utils';
 
-
-let voidSock = { close: () => void 0, send: () => void 0 };
-let sock = voidSock;
 
 /*
     Creates a WebSocketServer using configured port.
@@ -11,24 +9,64 @@ export default function socketer(config)
 {
     let { server, socket: { port }, watch } = config;
 
-    let enabled = server.enabled && watch.enabled;
-
     // no web socket needed if http server and watch disabled
-    if (!enabled) return (sock.close(), sock);
+    let enabled = server.enabled && watch.enabled;
+    // used to identify the current app build
+    let buildId = uid.hex(performance.now());
 
-    if (sock.port !== port)
+    let wss;
+
+    let start = async () =>
     {
-        sock.close();
+        if (enabled && wss?.options.port !== port)
+        {
+            await close();
 
-        let wss = new WebSocketServer({ port });
-        let send = msg => wss.clients.forEach(cli => cli.send(msg));
-        let close = async () => (sock = voidSock, new Promise(accept => wss.close(accept)))
-
-        wss.on('listening', () => log.info(`{:emph:hot-reload} is enabled ({:emph:using port #${port}})`));
-        wss.on('error', err => log.warn(`websocket error: {:emph:${err}}`));
-    
-        return sock = { close, send, port };
+            return new Promise(accept => 
+            {
+                wss = new WebSocketServer({ port });
+                wss.on('connection', client => 
+                {
+                    log.test('ws: client connection established');
+                    client.send(jss({ buildId }));
+                });
+                wss.on('listening', () => 
+                {
+                    log.info(`{:emph:hot-reload} is enabled via port {:emph:${port}}`);
+                    accept();
+                });
+                wss.on('error', err => log.warn(`ws: {:emph:${err}}`));
+            });
+        } 
     }
 
-    return sock;
+    let send = msg => 
+    {
+        if (wss?.clients.size)
+        {
+            let { clients } = wss;
+
+            log.test(`ws: sending {:emph:${msg}} message to {:emph:${clients.size}} connected clients`);
+            clients.forEach(cli => cli.send(jss({ message: msg, buildId })));
+        }
+    }
+
+    let close = async () =>
+    {
+        if (wss)
+        {
+            return new Promise(accept => 
+            {
+                wss.on('close', () => (log.info('the socket server has stopped'), accept()))
+                // ws docs seem to be lacking on how to gracefully terminate socket 
+                // server, but I think this is it
+                wss.clients.forEach(client => client.close());
+                wss.close(); 
+
+                wss = void 0;
+            });
+        }
+    };
+
+    return { close, send, start };
 }

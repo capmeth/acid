@@ -53,7 +53,7 @@ export default function(logger)
         if (levels.includes(level) && logger[level])
         {
             msg = toms(msg);
-            msg = `{:main:${name}:${level} - ${msg}}`;
+            msg = `{:main:${name}:${level} ⁃ ${msg}}`;
             return logger[level](inter(msg, level));
         }
 

@@ -2,7 +2,6 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import globit from '#lib/globit.js'
 import pathTransformer from '#lib/path-transformer.js'
-import { ident } from '#utils'
 
 
 export default function ({ specs, rootpath, outpath })
@@ -20,25 +19,26 @@ export default function ({ specs, rootpath, outpath })
         await Promise.all(specs.map(async spec => 
         {
             let files = await globit(spec.files, rootpath);
-            let toDest = pathTransformer(spec.to) ?? ident;
+            let toDest = pathTransformer(spec.to, rootpath);
 
             await Promise.all(files.map(async file => 
             {
                 let from = path.resolve(rootpath, file)
-                let to = path.resolve(outpath, toDest(file) || file);
+                let to = path.resolve(outpath, toDest?.(file) || file);
+                let frel = path.relative(rootpath, from);
+                let trel = path.relative(outpath, to);
                 // do not copy if file is out of bounds
                 if (to.startsWith(outpath))
                 {
                     return fs.cp(from, to, { recursive: true }).then(() => 
                     {
-                        log.test(`copied {:emph:${file}} to {:emph:${to}}`);
                         copies ++;
+                        
+                        log.test(`copied {:emph:${frel}} to output directory as {:emph:${trel}}`);
                     });
                 }
-                else
-                {
-                    log.warn(`{:emph:${file}} was not copied as destination is outside output directory`);
-                }
+
+                log.warn(`{:emph:${frel}} was not copied as destination is outside output directory`);
             }));
         }));
 

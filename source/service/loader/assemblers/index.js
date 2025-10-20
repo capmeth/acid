@@ -25,9 +25,9 @@ export default function (config, other)
         
         if (record.tid && finalizeAsset)
         {
-            let { tid, uid } = record;
+            let { section, tid, uid } = record;
             record = finalizeAsset(record);
-            if (record) record = { ...record, tid, uid };
+            if (record) record = { ...record, section, tid, uid };
         }
 
         return record;
@@ -35,8 +35,8 @@ export default function (config, other)
 
     return other.assemble = 
     {
-        section: toProc(exec.overview, exec.options, exec.title, exec.assets, exec.cleanup),
-        document: toProc(exec.markdown, exec.options, exec.tag, exec.title, exec.cleanup),
-        component: toProc(exec.source, exec.example, exec.tag, exec.title, exec.cleanup)
+        section: toProc(exec.options, exec.assets, exec.title, exec.cleanup),
+        document: toProc(exec.identify, exec.options, exec.tag, exec.title, exec.access, exec.cleanup),
+        component: toProc(exec.identify, exec.source, exec.example, exec.tag, exec.title, exec.access, exec.cleanup)
     };
 }

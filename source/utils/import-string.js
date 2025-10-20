@@ -23,6 +23,9 @@ export default async function (spec, declares)
         let named = filter;
         let names = Object.keys(mod).filter(n => n !== 'default');
 
+        if (is.array(filter)) 
+            filter = new RegExp(...filter);
+
         if (filter === '*')
             named = names;
         else if (filter instanceof RegExp)

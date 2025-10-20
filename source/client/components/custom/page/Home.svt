@@ -24,11 +24,20 @@
   </header>
   <main>
     <div class="leader">
-      <div class="title">{ section.title }</div>
+      <div class="title" class:deprecated>{ title }</div>
+      {#if deprecated}
+        <Markup type="deprecation">
+          {#if deprecated === true}
+            <p>{ t.label_deprecated }</p>    
+          {:else}
+            {@html deprecated}
+          {/if}            
+        </Markup>
+      {/if}
     </div>
     <div class="content">
-      <Article mcid={section.mcid} />
-      <Assets sections={section.name} type="columns">
+      <Article {mcid} />
+      <Assets sections={name} type="columns">
         {#snippet children(asset)}
           <Link kind="annex" to={asset} />
         {/snippet}
@@ -46,7 +55,7 @@
         </Active>
       {/snippet}
     </Tree>
-    <Toc sel="#{section.mcid}" tocDepth={section.tocDepth}>
+    <Toc sel="#{mcid}" {tocDepth}>
       {#snippet use(render)}
         <Active kind="nav" store="toc">
           {#snippet header()}
@@ -73,13 +82,14 @@ import Active from '#stable/helper/Active'
 import Article from '#stable/common/Article'
 import Assets from '#stable/common/Assets'
 import Link from '#stable/helper/Link'
+import Markup from '#custom/main/Markup'
 import Static from '#stable/common/Static'
 import Toc from '#stable/common/Toc'
 import Tree from '#stable/common/Tree'
 </script>
 
 <script>
-let section = sinfo.root;
+let { deprecated, mcid, name, title, tocDepth } = sinfo.root;
 page.setTitle(t.page_home_title);
 </script>
 

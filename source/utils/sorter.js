@@ -2,20 +2,23 @@
 /**
     Returns an ascending and descending sort functions.
 
-    @param { function } fn
-      Resolves the values under comparison.
+    @param { function } [fn]
+      Resolves a value under comparison.
+    @returns { object }
+      - `asc`: ascending sort function using `fn` for item resolution
+      - `desc`: descending sort function using `fn` for item resolution
 */
 export default function (fn)
 {
-    fn ||= (a, b, dir) => dir(a, b)
+    fn ||= x => x
 
     let asc = (a, b) => a < b ? -1 : a > b ? 1 : 0
     let desc = (a, b) => a < b ? 1 : a > b ? -1 : 0
 
     let sorts = 
     {
-        asc: (a, b) => fn(a, b, asc),
-        desc: (a, b) => fn(a, b, desc)
+        asc: (a, b) => asc(fn(a), fn(b)),
+        desc: (a, b) => desc(fn(a), fn(b))
     }
 
     return sorts;

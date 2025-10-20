@@ -17,7 +17,7 @@ let spaceRe = /\s+/;
 */
 export default function(config)
 {
-    let { importMap, links, metas, output, scripts, title } = config;
+    let { importMap, links, metas, scripts, title } = config;
     let lines = [];
 
     lines.push(`<!DOCTYPE html>`);
@@ -41,11 +41,7 @@ export default function(config)
 
     if (scripts.length) toScripts(scripts, lines);
 
-    lines.push(`  <script type="module">`);
-    lines.push(`  let url = new URL("${output.name}-docsite.js", new URL(import.meta.url));`);
-    lines.push(`  import(url).then(site => site.default());`)
-    lines.push(`  </script>`);
-
+    lines.push(`  <script>import('docsite')</script>`);
     lines.push(`</head>`);
     lines.push(`<body></body>`);
     lines.push(`</html>`);
@@ -88,6 +84,6 @@ let toScripts = (list, lines) =>
         // assume an inline script if src has whitespace
         if (spaceRe.test(src)) (content = src, src = null);
         
-        lines.push(`  <script ${objectToAttrs({ ...rest, src })}>${content ?? ''}</script>`);
+        lines.push(`  <script${objectToAttrs({ ...rest, src })}>${content ?? ''}</script>`);
     });
 }

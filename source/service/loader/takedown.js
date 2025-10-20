@@ -1,24 +1,22 @@
-import fs from 'node:fs/promises'
+import fs from 'node:fs'
 import path from 'node:path'
 import jsyaml from 'js-yaml'
 import takedown from 'takedown'
-import { attrsToObject } from '#utils'
+import { attrsToObject, uid } from '#utils'
 import references from './references.js'
 
 
 let langRe = /^([^\s:]*)(?::(\w+))?(?:\s+(.+)$)?/;
-let braceRe = /[{}]+/g;
-let pageRe = /^catalog|component|document|home|section/;
+let pageRe = /^catalog|component|document|home|isolate|section/;
 
 export default async function (config)
 {
-    let { root } = config;
-
+    let { root, routing } = config;
     let refs = await references(config);
 
     let link = e => 
     {
-        if (pageRe.test(e.href)) e.href = `#/${e.href}`;
+        if (pageRe.test(e.href) && routing === 'hash') e.href = '#' + e.href;
         return '<a href="{href??}"{? title="{title}"?}>{value}</a>';
     }
 
@@ -35,35 +33,24 @@ export default async function (config)
     {
         convert:
         {
-            fenceblock: (e, { blocks, uid }) =>
+            fenceblock: (e, v) =>
             {
                 let [ lang, dome, attrs ] = e.info?.match(langRe)?.slice(1) || [];
                 let { file, mode = dome, ...rest } = attrsToObject(attrs);
+                
+                let code = file ? fs.readFileSync(path.resolve(root, file), 'utf8') : e.value;
+                let main = { lang, mode, code, uid: v.uid };
+                let data = { id: uid.hex(main), ...rest, ...main };
+                
+                v.blocks.push(data);
 
-                let block = Promise.resolve(file ? fs.readFile(path.resolve(root, file), 'utf8') : e.value);
-                blocks.push(block.then(code => ({ id: e.id, lang, mode, code, uid, ...rest })));
-
-                return '<Editor id="{id}" />';
+                return `<CoBEditor id="${data.id}" />`;
             },
 
             header: '<h{level} id="{id}" class="hx">{value}</h{level}>\n',
             setext: '<h{level} id="{id}" class="hx">{value}</h{level}>\n',
 
-            link,
-
-            root: e =>
-            {
-                let file = 
-                `
-                    ${e.value.replace(braceRe, '{"$&"}')}
-            
-                    <script module>
-                    import Editor from '../stable/common/Editor'
-                    </script>
-                `;
-                
-                return file;
-            }
+            link
         },
 
         fm:

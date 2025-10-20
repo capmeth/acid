@@ -1,5 +1,7 @@
-import rollup from '#lib/rollup.js'
-import rollConfig from './rollup.config.js'
+import path from 'node:path'
+import rollup from '../build/rollup.js'
+import rollPather from '../build/pather.config.js'
+import rollImport from '../build/import.config.js'
 
 
 /**
@@ -16,15 +18,11 @@ import rollConfig from './rollup.config.js'
 */
 export default function (root)
 {
-    let mahjools = {};
-
     return async spec => 
     {
-        if (!mahjools[spec])
-        {
-            log.test(`importing extension {:emph:${spec}}...`);
-            mahjools[spec] = await rollup.gen(rollConfig(root, spec)).then(mod => import(mod.default));
-        }
-        return mahjools[spec];
+        // get file name for import
+        let { default: file } = await rollup.gen(rollPather(root, spec));
+        // import the data
+        return rollup.gen(rollImport(path.dirname(file), file));
     }
 }

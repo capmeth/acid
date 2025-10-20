@@ -61,7 +61,7 @@ Here we'll cover a bit more detail about the various parts of a section.
 
 The visual identification (display name) for the section in the UI.  Generally, this is the value displayed as the title of or a link to a section page.
 
-If not present, the `title` entry from the `overview` file's front-matter will be used.  If `overview` is not present or has no front-matter or there is no `title` to be found therein, the **Capital Cased** name of the section itself is used as the display title.
+If not present, the `title` entry from the `overview` file's front-matter will be used.  If `overview` is not present or has no front-matter or there is no `title` to be found therein, the **Capital Cased** name of the section itself is used as the display name.
 
 
 ## overview
@@ -74,13 +74,17 @@ overview: 'Components that allow for user interaction.'
 
 The content will be parsed as markdown.
 
-Alternatively, this can be the path to a single markdown file.
+Alternatively, use the prefix `file:/` to use a markdown file.
 
 ```js
 overview: 'file:/docs/components/actions.md'
 ```
 
-A filepath must be prefixed with `file:/` or it is assumed to be raw content.
+Or prefix with `http://` or `https://` to make it an external link.
+
+```js
+overview: 'https://www.yahoo.com/news'
+```
 
 This is the "default" property for a section, which means that you can specify it directly as the value of the section itself.
 

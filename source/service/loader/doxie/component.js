@@ -1,5 +1,5 @@
 import { AcidValidateError } from '#source/errors.js'
-import { confine, test } from '#utils'
+import { confine, is, test } from '#utils'
 
 
 /*
@@ -58,6 +58,12 @@ export default function (id, mdparse)
             case 'asset.description':
             case 'asset.props.*.description':
                 value = mdparse(value).doc;
+                break;
+
+            // deprecations parsed as markdown
+            case 'asset.deprecated':
+            case 'asset.props.*.deprecated':
+                if (is.string(value)) value = mdparse(value).doc;
                 break;
 
             // filter out ignored props

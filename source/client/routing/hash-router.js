@@ -1,5 +1,5 @@
 import { on } from 'svelte/events'
-import eventer from '../lib/eventer'
+import router from './router-base'
 
 
 /**
@@ -11,78 +11,39 @@ import eventer from '../lib/eventer'
     Each element of `routes` should contain:
     - `name` (string): route name
     - `path` (string): path to route (starting with '/')
-    - `Component` (type): component to render for route.
+    - `component` (string): component to render for route.
 
-    @param { array<object> } routes
-      Routes for the router
-    @return { class }
+    @param { array } routes
+      Routes for the router.
+    @return { object }
       - `start` (func): starts the router
       - `stop` (func): stops the router
 */
 export default function(routes) 
 {
-    let running = false;
-    let { fire, ...regs } = eventer(); 
-
-    let findByName = sname => routes.find(({ name }) => name === sname)
-
-    let findByPath = spath =>
-    {
-        let segments = spath.split('/');
-
-        return routes.find(({ path }) => 
-        {
-            if (spath === path) return true;
-
-            let segs = path.split('/');
-            if (segments.length !== segs.length) return false;
-
-            return segs.findIndex((s, i) => !(s === segments[i] || s[0] === ':')) < 0;
-        });
-    }
+    let base = router(routes);
 
     let handler = ({ newURL }) =>
     {
-        let [ path ] = newURL.split('#').slice(1);
+        let hash = new URL(newURL).hash.slice(1);
 
-        if (!path || path === '/') path = '/home';
+        if (!hash || hash === '/') hash = '/home';
 
-        fire('change', toNavData(path));
-    }
-
-    let toNavData = spath =>
-    {
-        let route = findByPath(spath);
-
-        if (route)
-        {
-            let { name, component, path } = route;
-            let segments = spath.split('/');
-
-            let reducer = (o, s, i) => s[0] === ':' ? { ...o, [s.slice(1)]: segments[i] } : o
-            let params = path.split('/').reduce(reducer, {});
-
-            return { route: name, component, ...params };
-        }
+        base.fire('change', base.toNavData(hash));
     }
 
     let toNavLink = (name, params) =>
     {
-        let route = findByName(name);
-
-        if (route)
-        {
-            let inject = seg => seg[0] === ':' ? params[seg.slice(1)] : seg
-            let segs = route.path.split('/').map(inject);
-
-            return `#${segs.join('/')}`;
-        }
+        let path = base.toNavLink(name, params);
+        return path ? `#${path}` : path;
     }
 
-    let router = 
+    let running = false;
+
+    let hash =
     {
-        ...regs,
-        
+        ...base.regs,
+
         start: () => 
         {
             if (!running)
@@ -92,7 +53,7 @@ export default function(routes)
                 handler({ newURL: location.href });
             }
 
-            return router;
+            return hash;
         },
         
         stop: () => 
@@ -103,16 +64,13 @@ export default function(routes)
                 window.removeEventListener("hashchange", handler);
             }
 
-            return router;
+            return hash;
         },
-        
+                
         navTo: (name, params) => location.href = toNavLink(name, params),
-        
-        // error route data
-        toErrorData: errorObj => ({ ...toNavData('/error'), ...errorObj }),
-
+    
         toNavLink
     };
 
-    return router;
+    return hash;
 }

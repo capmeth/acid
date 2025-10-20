@@ -12,7 +12,7 @@ import sinfo from './section-info'
 
 
 let blockKeys = blocks.map(block => block.id);
-let blockSort = proxet({}, prop => sorter((a, b, t) => t(binfo(a)[prop], binfo(b)[prop])));
+let blockSort = proxet({}, prop => sorter(x => binfo(x)[prop]));
 
 let getOwner = uid => (ainfo.assets.includes(uid) ? ainfo : sinfo)(uid)
 
@@ -34,11 +34,12 @@ let makeFilter = data =>
     }
 }
 
-let makeBlock = ({ code, lang, mode, ...block }) =>
+let makeBlock = ({ code, color, lang, mode, ...block }) =>
 {
     let iface = { ...binfo.cobe(lang), ...block };
 
     iface.code = code.trim();
+    iface.color = color || iface.color;
     iface.mode = iface.use && (mode || iface.mode) || 'static';
 
     iface[iface.mode] = true;
@@ -50,9 +51,11 @@ let getBlock = cacher(id =>
 {
     let { uid, ...base } = blocks.find(block => block.id === id);
 
-    base.mode ||= getOwner(uid).cobeMode;
+    let owner = getOwner(uid);
+    base.color ||= owner.cobeColor;
+    base.mode ||= owner.cobeMode;
 
-    return { ...makeBlock(base), id, owner: uid };
+    return proxet({ ...makeBlock(base), id, owner: uid });
 });
 
 let block = ref => getBlock(ref.id || ref)

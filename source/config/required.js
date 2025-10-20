@@ -1,6 +1,5 @@
 import getPort from 'get-port'
-import pathTransformer from '#lib/path-transformer.js'
-import { ident, is, sarf } from '#utils'
+import { is, sarf } from '#utils'
 
 
 let repRe = /\{([a-z]+)\}/gi;
@@ -34,10 +33,6 @@ export default async config =>
     
     metas.push({ name: 'generator', content: 'ACID' });
 
-    config.toAssetId = pathTransformer(config.toAssetId) || ident;
-    config.toAssetName = pathTransformer(config.toAssetName) || ident;
-    config.toExampleFile = pathTransformer(config.toExampleFile) || (() => null);
-
     if (is.array(config.updateMarkdown)) 
     {
         let specs = config.updateMarkdown.map(sarf);
@@ -59,10 +54,12 @@ export default async config =>
 
         "svelte/internal/client": "https://esm.sh/svelte@5.34.7/internal/client",
         "svelte/internal/disclose-version": "https://esm.sh/svelte@5.34.7/internal/disclose-version",
-        "svelte/internal/flags/legacy": "https://esm.sh/svelte@5.34.7/internal/flags/legacy"
+        "svelte/internal/flags/legacy": "https://esm.sh/svelte@5.34.7/internal/flags/legacy",
+
+        "docsite": `/${output.name}-docsite.js`
     }
 
-    if (cobeSvelte) config.importMap = { "svelte-render": `./${output.name}-svelte-render.js` };
+    if (cobeSvelte) config.importMap = { "svelte-render": `/${output.name}-svelte-render.js` };
 
     if (!is.number(server.port)) server.port = await getPort(server.port ?? void 0);
     if (!is.number(socket.port)) socket.port = await getPort(socket.port ?? void 0);

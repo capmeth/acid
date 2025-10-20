@@ -37,7 +37,7 @@ let def =
     'test.food<array>.*': string,
     'test.content': { test: array, default: [] },
     'test.content.*': 'test.data',
-    'test.fixed': { default: 'set in stone', immutable: true }
+    'test.fixed': { immutable: true }
 }
 
 
@@ -181,12 +181,13 @@ test('allows for data path reusablity', t =>
 });
 
 
-test('prevents immutable value from being changed', t => 
+test('allows immutable value to be set once', t => 
 {
     let { test } = confine(def);
 
     let actual = () => test.fixed = 'overwrite'
     let expect = { instanceOf: AcidValidateError };
 
+    t.notThrows(actual);
     t.throws(actual, expect);
 });

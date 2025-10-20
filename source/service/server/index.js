@@ -23,7 +23,18 @@ export default function(config)
         });
     }
 
-    let stop = async () => new Promise(accept => server.listening && server.close(accept))
+    let close = callback =>
+    {
+        if (server.listening)
+        {
+            server.close(callback)
+            server.closeAllConnections(); // ensure server close
+        }
+
+        callback();
+    }
+
+    let stop = async () => new Promise(close).then(() => log.info('the http server has stopped'))
 
     let serving = () => server.listening
         

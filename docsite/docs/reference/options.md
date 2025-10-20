@@ -2,6 +2,7 @@
 title: Config File Options
 tocDepth: 2
 cobeMode: static
+escapeBraces: true
 ---
 
 
@@ -30,7 +31,7 @@ cobe: []
 ```
 
 ```js label="spec"
-cobe:
+cobe: object |
 [
     { 
         /*
@@ -41,6 +42,10 @@ cobe:
             Compiler extension to use.
         */
         use: string | [ string, ...any ], 
+        /*
+            Set background color for CoBE blocks.
+        */
+        color: string | true | false,
         /*
             Import declarations to generate for CoBE blocks.
         */
@@ -79,52 +84,54 @@ cobe:
 ]
 ```
 
-****`*.types`****
+Use an array for multiple records.  A single record can be specified by setting an object.
 
-Specify language marker(s) ("js", "jsx", "vue", etc.) in `types`.  Markers appearing more than once in the list are shallowly merged to form a single record for a given marker.
+Below is a discussion of the settings for individual `cobe` records.
 
-A `default` type exists, and it is applied to any block that does not specify a language type.
+- ****`*.types`**** \
+  Specify language type(s) ("js", "jsx", "vue", etc.) in `types`.  Types appearing more than once in the list are shallowly merged to form a single record for a given type.
 
-A "fallback" record can be set by specifying `types: '*'`. If set, it is shallowly merged with the record corresponding to the code block's effective type.
+  A "fallback" record can be set by specifying `types: '*'`. It is shallowly merged with the record corresponding to the code block's effective type - (i.e., global type settings).
 
-****`*.use`****
+  Note that a `default` type exists which gets applied to any block that does not specify a language type.
 
-Use `use` to specify the module that will render the code from the block (see [renderer docs](document/integration-renderers)).
+- ****`*.use`**** \
+  Use `use` to specify the module that will render the code from the block (see [renderer docs](/document/integration-renderers)).
 
-****`*.imports`****
+- ****`*.color`**** \
+  You can use a CSS color value here to set a background color for the CoBE render-box (for any non-static `mode`).  If the `mode` is "edit" or "live" a picker will also be available in the UI for changing the background color.  
 
-The `imports` setting generates import declarations from browser-accessible module `specifier`s with the exports desired.  These declarations are then added to code blocks provided the renderer in `use` supports inserting them.
+  If set to `true` the color used is "#FFFFFF".  Omitting or setting to `false` forces a transparent background.
 
-Use `imports.*.default` to specify the name of the default import, or to specify a namespace import.
+- ****`*.imports`**** \
+  The `imports` setting generates import declarations from browser-accessible module `specifier`s with the exports desired.  These declarations are then added to code blocks provided the renderer in `use` supports inserting them.
 
-For `imports.*.names`,
-- use a `*` to import **all** of the named exports
-- use a string to import specific named exports
-- use a function to filter the export names desired (return the name or null to omit)
-- use a regular expression to match the export names desired
+  Use `imports.*.default` to specify the name of the default import, or to specify a namespace import.
 
-The above also applies when `imports.*` is set to a non-object value.
+  For `imports.*.names`,
+  - use a `*` to import **all** of the named exports
+  - use a string to import specific named exports
+  - use a function to filter the export names desired (return the name or null to omit)
+  - use a regular expression to match the export names desired
 
-Setting `imports.*` to `null` results in a side-effect import declaration.
+  The above also applies when `imports.*` is set to a non-object value.
 
-> Beware of potential naming conflicts as renderers may also apply their own imports to code blocks.
+  Setting `imports.*` to `null` results in a side-effect import declaration.
 
-****`*.mode`****
+  > Beware of potential naming conflicts as renderers may also apply their own imports to code blocks.
 
-Values available for `mode` are:
-- "static": just show the code
-- "render": only show rendered results
-- "demo": show code and rendered results (no editing)
-- "edit": code editing with on-demand render
-- "live": code editing with immediate render
+- ****`*.mode`**** \
+  Values available for `mode` are:
+  - "static": just show the code
+  - "render": only show rendered results
+  - "demo": show code and rendered results (no editing)
+  - "edit": code editing with on-demand render
+  - "live": code editing with immediate render
 
-Note that "render" and "static" modes will always hide or show the code block, respectively, regardless of `noHide` setting.
+  A code block's `mode` will be forced to "static" if no `use` exists for its language marker (no way to render anything).
 
-A code block's `mode` will be forced to "static" if no `use` exists for its language marker (no way to render anything).
-
-****`*.noHighlight`****
-
-Set `noHighlight` to `true` to turn off code highlighting.  This has no effect if highlighting for the block's language-type is not supported or not loaded (see `hljs` option).
+- ****`*.noHighlight`**** \
+  Set `noHighlight` to `true` to turn off code highlighting.  This has no effect if highlighting for the block's language-type is not supported or not loaded (see `hljs` option).
 
 
 ## cobeSvelte
@@ -139,12 +146,12 @@ cobeSvelte: false
 cobeSvelte: true | false
 ```
 
-Remember that this only tells ACID to generate the renderer with a docsite build.  To use it, you will still need to set it up in `config.cobe` with the specifier "svelte-render".
+Remember that this only tells ACID to generate the renderer with a docsite build.  To use it, you will still need to set it up in `cobe` with the specifier "svelte-render".
 
 
 ## components
 
-Replace internal docsite components.
+Add custom components or replace internal docsite components.
 
 ```js label="default value"
 components: {}
@@ -161,24 +168,89 @@ components: // merges
 }
 ```
 
-The `[name]` should take the form `group/Component` where `Component` is the proper name of the component and `group` must be one of the custom component groups (currently only "main" or "page").
+The `[name]` should take the form `group/Component` where `Component` is the proper name of the component and `group` is one of the following custom component groups:
 
-Relative filepaths are based on `root` config option.
+- *page* - page-level internal components
+- *main* - all other internal components
+- *embed* - user-defined markdown-available components
+- *user* - all other user-defined components
 
-For example, if you have a custom component at *src/components/Docsite.svelte* that you want to use in place of the internal root **Docsite** component, do
+While things can be mapped as desired here, it is recommended to use only *page* and *main* groups for replacing internal components, and *embed* or *user* groups for any other user-defined components.
+
+Components mapped in the *embed* group will be available for use in markdown documents.  The component's name within a markdown document is the **PascalCased** name of everything that follows *embed/*.
+
+Relative filename values are subject to `root` config option.
+
+For example, if you have a custom component at *src/components/Homepage.svelte* that you want to use in place of the internal **Home** component, do
 
 ```js
 components:
 {
-    'main/Docsite': 'src/components/Docsite'
+    'page/Home': 'src/components/Homepage'
 }
 ```
 
 The docsite build can resolve *.svelte* and *.svt* extensions automatically, so the extension is not required.
 
-Setting a value to `null` or an empty string has the same effect as omitting it - the default internal component will be used.
+Setting a value to `null` or an empty string has the same effect as omitting it - the default internal component will be used.  This obviously only works for components that have defaults.
 
-Visit [Customizing Components](document/integration-components) for more details on how this works.
+Visit [Customizing Components](/document/integration-components) for more details on how all this works.
+
+
+## configs
+
+Array of additional configuration objects, functions, or module specifiers.
+
+This has no default value.
+
+```js label="spec"
+configs: string | function | object
+[
+    string | [ string, any ] | function | object,
+    ...
+]
+```
+
+Use this to merge in plugin configurations or additional configuration objects.
+
+- A string is a module specifier that `export default`s a function that returns a configuration function or object.
+  
+  You can use an array if you need to pass a parameter to a module, but you must enclose it in an array even if it is the only item specified.
+
+  ```js
+  configs: [ [ 'module_specifier', { /* parameter */ } ] ]
+  ```
+
+  Configuration modules are loaded via Rollup. This means that ESM's `import.meta` will not be available on import.  As a convenience, any appearance of the string `__plugin_dirname` (with word boundaries) will be replaced by the absolute directory path to the imported file.
+
+  So you would use,
+
+  ```js
+  let file = path.resolve('__plugin_dirname', './local-file.js');
+  ```
+
+  in place of
+
+  ```js
+  let file = import.meta.resolve('./local-file.js');
+  ```
+
+  Remember that it is a literal value replacement, so quote it if you want it to be a string.
+
+- A function is passed the configuration object to add/change configuration as needed.  The return value is ignored.
+
+- An object can include any config option defined in this document and will be merged into current configuration.
+
+Here's how the final set of configuration options (*master*) is determined:
+1. Set master to default config options.
+2. Get options from the config file (*acid.config.js*).
+3. Merge (object) or apply (function) options with master.
+4. Get and remove `configs` from master.
+5. For each item in `configs` get options and go to step #3 (recursive).
+
+Step #5 repeats until all specified `configs` are merged.  
+
+> Take care to not create circular references here, there is no protection against this.
 
 
 ## copy
@@ -223,7 +295,9 @@ finalizeAsset: null
 finalizeAsset: function | null
 ```
 
-The function receives each asset data object in the form that will be serialized into the build, and it must return the final form of the asset, as a nullish value will cause the asset to be skipped.
+The function receives each asset data object in the form that will be serialized into the build, and it must return the final form of the asset.  
+
+Changing `tid`, `uid`, or `section` will have no effect here.  A nullish return value will cause the asset to be skipped.
 
 You can use this, for example, to omit component assets without example files.
 
@@ -293,7 +367,7 @@ The highlightjs code is pulled using
 https://unpkg.com/@highlightjs/cdn-assets@{version}/highlight.min.js
 ```
 
-Where `{version}` s replace with `hljs.version`.
+Where `{version}` is replaced with `hljs.version`.
 
 Likewise, URL interpolation is used to pull the CSS.
 
@@ -520,11 +594,9 @@ File output includes:
 
 - `{dir}/{name}.html`: docsite html
 - `{dir}/{name}-docsite.js`: docsite javascript
-- `{dir}/{name}-examples.js`: docsite example code
 - `{dir}/{name}-svelte-render.js`: docsite component compiler
 
 If `name` includes path segments, subfolders will be created under `dir`.
-
 
 
 ## parsers
@@ -586,9 +658,7 @@ Absolute path to the project targeted for documentation.
 root: process.cwd()
 ```
 
-This is the base path for 
-- relative file or glob paths specified in config (`sections`, `watch`, etc.)
-- relative `@example` file paths in JsDoc comments
+Serves as the root path for just about every file-related activity in a docsite build.
 
 This value is immutable.  It exists on the config for reference only.
 
@@ -606,6 +676,23 @@ rootSection: string
 ```
 
 See `sections` setting for more info on how this is used.
+
+
+## routing
+
+Sets the routing type.
+
+```js label="default value"
+routing: "hash"
+```
+
+```js label="spec"
+routing: "hash" | "slash"
+```
+
+Use *hash* to have the app generate URL paths using hashmarks (`#`).  This prevents the browser from trying to make a server request as the URL changes.
+
+Use *slash* to have the app generate URL paths normally.  A change in URL will force the browser to make a server request, but the internal http server is setup to return the root HTML page for any request that doesn't match a file in `output.dir` (SPA style).  So with the server running, it will work just like the hash option.
 
 
 ## scripts
@@ -697,7 +784,7 @@ Specifying a string for `[name]` is the same as specifying the object form with 
 
 Note that `overview` can alternatively be a path to a markdown file.  Simply prefix the path with `file:/`.
 
-See [Site Structure](section/structure) for more details on how all this works.
+See [Site Structure](/section/structure) for more details on how all this works.
 
 
 ## server
@@ -816,7 +903,7 @@ When specifying relative file paths, `root` is assumed to be the root path.
 
 All `sheets` are converted to JSON and deep merged from left to right to form the final stylesheet.  The final styles are then injected into the internal components based on top-level scope definitions. Any styling not within a scope definition is assumed to be global.
 
-Please see the [styling documentation](document/docsite-styling) for a more extensive explanation.
+Please see the [styling documentation](/document/docsite-styling) for a more extensive explanation.
 
 
 ## tagLegend
@@ -884,9 +971,26 @@ This must be an integer between 0 and 6.  Specifying 0 turns off the TOC complet
 By default, this is not available for component example files.
 
 
+## toAssetAccessLine
+
+Generates an access line (generally, an import statement) for an asset.
+
+```js label="default value"
+toAssetAccessLine: null
+```
+
+```js label="spec"
+toAssetAccessLine: @repath
+```
+
+No access lines will be generated if set to `null`.
+
+This becomes the `accessLine` property of the asset.
+
+
 ## toAssetId
 
-Generates an asset id from a file path.
+Generates an asset UID from a file path.
 
 ```js label="default value"
 toAssetId: '{hex}'
@@ -898,9 +1002,9 @@ toAssetId: @repath
 
 This can be used to make prettier ids (used in URLs) for asset pages.
 
-Resulting filepaths are **kebab-cased** for id generation.
+The resulting value is **kebab-cased** for id generation.  If it falsey, the asset will be omitted from the docsite.
 
-> Care should be taken to ensure that each asset id will be unique across the docsite as page/content/links might not get rendered or resolved properly otherwise.
+> Care should be taken to ensure that each UID is unique across the docsite as page/content/links might not get rendered or resolved properly otherwise.
 
 
 ## toAssetName
@@ -915,7 +1019,7 @@ toAssetName: '{name}'
 toAssetName: @repath
 ```
 
-Used when an asset is needs to derive its name from its filepath.
+Called when an asset is needs to derive its name from its filepath.
 
 Resulting values will be **Capital Cased** for document asset name generation.
 
@@ -1030,11 +1134,7 @@ watch:
 {
     enabled: false,
     delay: 1000,
-    files:
-    {
-        include: '**/*.{js,jsx,md}',
-        exclude: 'node_modules/*'
-    }
+    options: [ '.git', 'node_modules' ]
 }
 ```
 
@@ -1050,24 +1150,46 @@ watch: true | false | // merges
     */
     delay: number,
     /*
-        Files to include on watchlist.
+        File and directory paths to be watched (not globs).
     */
-    files: @globfiles
+    paths: string | [ ... string ],
+    /*
+        Chokidar options.
+    */
+    options: object | any
 }
 ```
 
 Specifying a boolean is the same as setting `watch.enabled`.
 
-Some important notes on watch files:
-- `output.dir` is __always__ excluded, regardless of settings
-- files selected in `sections` __are not__ automatically watched
+The settings `paths` and `options` are passed directly to `chokidar.watch()` (with some caveats below).  Please refer to the [chokidar docs](https://www.npmjs.com/package/chokidar) for more information on these settings.
 
-Also note that changes in a watched config file __will not__ be reflected in a hot-rebuild (for now).
+The aforementioned caveats:
+- if no `paths` are given, `root` is assumed
+- seting `options` as a non plain-object value actually sets `options.ignored`
+- `options.cwd` is always set to `root`
+- `options.ignoreInitial` is always set to `true`
+
+The default settings effectively watch the whole project directory for changes, excluding *.git* and *node_modules* folders.
+
+Changes within `output.dir` (if included in watch) do not cause rebuilds. They will simply cause a page reload (if server is also running) instead.
+
+It is highly recommended to set `paths` to something(s) other than the project root directory, especially if you don't need to watch things like dependencies and git metadata.  Too many files will overwhelm Chokidar.
+
+```js label="Example Setup"
+watch:
+{
+    // watch source/documentation folders, acid config, etc.
+    paths: [ 'src', 'docs', 'acid.config.js', 'readme.md' ],
+    // watch certain types of files - .js, .jsx, .md, etc.
+    options: (path, stats) => stats?.isFile() && /\.(jsx?|md|yaml)&/.test(path)
+}
+```
 
 
 # Custom Datatypes
 
-Custom types (`@` prefixed type names) are detailed below.
+Custom types (`@` prefixed type names) are detailed below. 
 
 
 ## `@globfiles`
@@ -1108,16 +1230,17 @@ Converts filepaths from one form to another.
 The `root` option is used to resolve relative source paths.
 
 - A function value receives a source path info object with the following and should return a string.
-  - `path` - the source filepath
-  - `dir` - directory path of `path`
-  - `base` - filename in `path` with extension
-  - `name` - filename in `path` w/o extension
-  - `ext` - file extension of `base`
+  - `path` - the source filepath (absolute)
+  - `sub` - the source filepath (relative)
+  - `dir` - directory path
+  - `base` - filename with extension
+  - `name` - filename w/o extension
+  - `ext` - filename extension
   - `hex` - hexadecimal value of hash of `path`
-  - `segs` - array of `path` segments
+  - `sep` - path separator character
 - A string value can be interpolated with information from the source filepath using brace-enclosed 
   keys from those above (e.g. `{name}` for filename).
-- An array value is used as parameters for `String.prototype.replace` against the source path. \
+- An array value is used as parameters for `String.prototype.replace` against the source subpath. \
   Optionally, **RegExp** constructor parameters can be provided in an array as the first argument. \
   For example, the following value
   ```js

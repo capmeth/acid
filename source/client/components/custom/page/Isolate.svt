@@ -20,7 +20,7 @@
 <script module>
 import { page } from '#public'
 
-import Editor from '#stable/common/Editor'
+import Editor from '#stable/cobe/Editor'
 </script>
 
 <script>

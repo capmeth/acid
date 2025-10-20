@@ -1,7 +1,7 @@
 import pluginCommonjs from '@rollup/plugin-commonjs'
 import pluginNodeResolve from '@rollup/plugin-node-resolve'
-import logHandler from '../builder/lib/log-handler.js'
-import pluginVirtualFile from '../builder/plugin/virtual-file.js'
+import logHandler from './lib/log-handler.js'
+import pluginVirtualFile from './plugin/virtual-file.js'
 
 
 /**

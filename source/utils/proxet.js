@@ -22,7 +22,7 @@ export default function proxet(on, func)
             // simply return value if `target` already has `prop` defined
             if (Object.hasOwn(target, prop)) return target[prop];
 
-            let value = func(prop, target);
+            let value = func?.(prop, target);
             // return and assign resulting value (cache)
             if (typeof value !== 'undefined') return target[prop] = value;   
         },

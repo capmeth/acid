@@ -8,9 +8,6 @@
 
     @property { boolean } copied
       Has code been copied to clipboard?
-    @property { function } [copy]
-      Copies current code to clipboard.
-      This function will not exist if copy operation not supported by browser.
     @property { boolean } edited
       Is current code different from current render?
     @property { object } [error]
@@ -23,19 +20,10 @@
       Language type of the code block.
     @property { string } mode
       Rendering mode for the editor.
-    @property { function } [reset]
-      Resets current code to original and renders.
-      This function will not exist for some editor modes.
     @property { boolean } shifted
       Is current code different from original code?
     @property { boolean } showing
       Is code entry currently being shown?
-    @property { function } [toggle]
-      Toggles hide/show of **Code** component.
-      This function will not exist for some editor modes.
-    @property { function } [update]
-      Renders current code.
-      This function will not exist for some editor modes.
 -->
 
 <div 
@@ -64,21 +52,42 @@
   </Renbox>
   {#if mode !== 'render'}
     <div class="controls">
-      {#if copy}
-        <Button action={copied ? 'copied' : 'copy'} disabled={copied} onclick={copy} />
-      {/if}
-      {#if toggle}
-        <Button action={showing ? 'hide' : 'show'} onclick={toggle} />        
-      {/if}
-      {#if update}
-        <Button action="update" disabled={!edited} onclick={update} />
-      {/if}
-      {#if reset}
-        <Button action="reset" disabled={!shifted} onclick={reset} />
-      {/if}
-      {#if isolate}
-        <Button action={isolated ? 'shutter' : 'isolate'} onclick={isolate} />
-      {/if}
+      <Action name="copy">
+        {#snippet children({ action, disabled, on, state = on ? 'copied' : 'copy' })}
+          <Button action="editor_{state}" {disabled} onclick={action}>
+            {@html t(`action_editor_${state}`)}
+          </Button>
+        {/snippet}
+      </Action>
+      <Action name="toggle">
+        {#snippet children({ action, disabled, on, state = on ? 'hide' : 'show' })}
+          <Button action="editor_{state}" {disabled} onclick={action}>
+            {@html t(`action_editor_${state}`)}
+          </Button>
+        {/snippet}
+      </Action>
+      <Action name="update">
+        {#snippet children({ action, disabled })}
+          <Button action="editor_update" {disabled} onclick={action}>
+            {@html t.action_editor_update}
+          </Button>
+        {/snippet}
+      </Action>
+      <Action name="reset">
+        {#snippet children({ action, disabled })}
+          <Button action="editor_reset" {disabled} onclick={action}>
+            {@html t.action_editor_reset}
+          </Button>
+        {/snippet}
+      </Action>
+      <Picker />
+      <Action name="isolate">
+        {#snippet children({ action, disabled, on, state = on ? 'close' : 'open' })}
+          <Button action="editor_{state}" {disabled} onclick={action}>
+            {@html t(`action_editor_${state}`)}
+          </Button>
+        {/snippet}
+      </Action>
     </div>
   {/if}
   <Code>
@@ -93,16 +102,17 @@
 
 <script module>
 import Button from '#stable/helper/Button'
-import Code from '#stable/common/Code'
-import Renbox from '#stable/common/Renbox'
+import Action from '#stable/cobe/Action'
+import Code from '#stable/cobe/Code'
+import Picker from '#stable/cobe/Picker'
+import Renbox from '#stable/cobe/Renbox'
 </script>
 
 <script>
 let 
 { 
-    copied, copy, edited, error, id, 
-    isolate, isolated, label, lang, mode, 
-    reset, shifted, showing, toggle, update 
+    copied, edited, error, id, isolated, 
+    label, lang, mode, shifted, showing,
 } 
 = $props();
 </script>

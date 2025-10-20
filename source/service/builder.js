@@ -1,5 +1,5 @@
-import rollup from '#lib/rollup.js'
-import rollConfig from './rollup.config.js'
+import rollup from '../build/rollup.js'
+import rollConfig from '../build/docsite.config.js'
 
 
 export default function(config)

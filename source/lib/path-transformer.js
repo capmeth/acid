@@ -1,5 +1,5 @@
-import path from 'node:path'
-import { inter, is, proxet, sarf, uid } from '#utils'
+import { inter, is, sarf } from '#utils'
+import pathy from './pathy.js'
 
 
 /**
@@ -24,16 +24,11 @@ import { inter, is, proxet, sarf, uid } from '#utils'
     @return { function }
       Filepath transformer or `undefined` if `spec` is invalid.
 */
-export default function (spec)
+export default function (spec, root)
 {
-    if (is.func(spec)) return str => spec(chop(str))    
-    if (is.string(spec)) return str => inter(spec, chop(str))
-    if (is.object(spec)) return sarf(spec);
-}
+    let res = val => is.plain(val) ? val : pathy.info(val, root)
 
-let chop = str => proxet(path.parse(str), key =>
-{
-    if (key === 'hex') return uid.hex(str);
-    if (key === 'path') return str;
-    if (key === 'segs') return str.split(path.sep);
-})
+    if (is.func(spec)) return obj => spec(res(obj));
+    if (is.string(spec)) return obj => inter(spec, res(obj))
+    if (is.object(spec)) return (fn => obj => fn(res(obj).sub))(sarf(spec));
+}

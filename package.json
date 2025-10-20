@@ -1,6 +1,6 @@
 {
     "name": "@captison/acid",
-    "version": "0.0.4",
+    "version": "0.1.0",
     "description": "A Component Interface Documenter",
     "title": "ACID",
     "author": "Ben Captison",
@@ -35,6 +35,7 @@
         "@rollup/plugin-inject": "^5.0.5",
         "@rollup/plugin-json": "^6.1.0",
         "@rollup/plugin-node-resolve": "^16.0.0",
+        "@rollup/plugin-replace": "^6.0.2",
         "@rollup/plugin-terser": "^0.4.4",
         "chalk": "^5.4.1",
         "change-case": "^5.4.4",

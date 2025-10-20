@@ -1,17 +1,7 @@
 import debounce from "#source/utils/debounce.js";
 
 
-test('calls target function immediately if timeout is negative', t => 
-{
-    let fake = sinon.fake();
-    let timer = debounce(fake, -1);
-
-    timer();
-
-    t.true(fake.called);
-});
-
-test('queues target function if timeout is undefined', async t => 
+test('queues target function if timeout is not a positive number', async t => 
 {
     let fake = sinon.fake();
     let timer = debounce(fake);
@@ -53,15 +43,16 @@ test('allows change to timeout after creation', async t =>
     t.is(fake.callCount, 4);
 });
 
-test('calls target function with proper `this` context', t => 
+test('calls target function with proper `this` context', async t => 
 {
     let object =
     {
-        double: debounce(function() { return this.value *= 2; }, -1),
+        double: debounce(function() { return this.value *= 2; }),
         value: 10
     }
 
     object.double();
+    await new Promise(accept => setTimeout(accept, 0));
 
     t.is(object.value, 20);
 });

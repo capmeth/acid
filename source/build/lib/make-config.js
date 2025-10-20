@@ -25,6 +25,7 @@ export default function(config, sections, assets)
     lines.push(`export let noticeTimeout = ${cfg.noticeTimeout}`);    
     lines.push(`export let noWatermark = ${cfg.noRecognition}`);    
     lines.push(`export let rootSection = ${cfg.rootSection}`);
+    lines.push(`export let routing = ${cfg.routing}`);
     lines.push(`export let socket = ${cfg.socket}`);
     lines.push(`export let storage = ${cfg.storage}`);
     lines.push(`export let hrMode = ${server.enabled && watch.enabled}`);
@@ -36,7 +37,7 @@ export default function(config, sections, assets)
     lines.push(`export let sections = ${jss(sections)}`);
     lines.push(`export let assets = ${jss(assets)}`);
 
-    lines.push(`export let cobe = await mapExtensions(${jss(cobe)})`);
+    lines.push(`export let cobe = await mapExtensions(${jss(cobe, [ 're' ])})`);
 
     lines.push(`let mapFn = async k => sections[k].cobe &&= await mapExtensions(sections[k].cobe)`);
     lines.push(`await Promise.all(Object.keys(sections).map(mapFn));`);
