@@ -1,7 +1,7 @@
 import pluginAlias from '@rollup/plugin-alias'
 import pluginNodeResolve from '@rollup/plugin-node-resolve'
 import paths from '#paths'
-import pluginYaml from '../source/service/builder/plugin/yaml.js'
+import pluginYaml from '../source/build/plugin/yaml.js'
 
 
 export default 
