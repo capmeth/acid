@@ -56,10 +56,10 @@ export default async config =>
         "svelte/internal/disclose-version": "https://esm.sh/svelte@5.34.7/internal/disclose-version",
         "svelte/internal/flags/legacy": "https://esm.sh/svelte@5.34.7/internal/flags/legacy",
 
-        "docsite": `/${output.name}-docsite.js`
+        "docsite": `./${output.name}-docsite.js`
     }
 
-    if (cobeSvelte) config.importMap = { "svelte-render": `/${output.name}-svelte-render.js` };
+    if (cobeSvelte) config.importMap = { "svelte-render": `./${output.name}-svelte-render.js` };
 
     if (!is.number(server.port)) server.port = await getPort(server.port ?? void 0);
     if (!is.number(socket.port)) socket.port = await getPort(socket.port ?? void 0);
