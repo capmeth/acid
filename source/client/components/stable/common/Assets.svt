@@ -1,14 +1,25 @@
 <!--*
-    Processes and filters docsite assets.
+    Filters docsite assets.
 
-    Unused props are assumed to be filter values.
-
-    > TODO: Link to filtering props!
-
+    A `groups`, `sections`, or `tags` filter value can be
+    - a comma delimited string, or
+    - an array of string values, or
+    - an object with values set as `true`.
+ 
     @property { snippet } children
       Receives each included (unfiltered) asset object.
+    @property { boolean | null } [deprecated]
+      Deprecation filter (filter assets by deprecation status).
+    @property { string | array | object } [groups]
+      Groups filter (filter assets by asset group).
+    @property { string | array | object } [sections]
+      Sections filter (filter assets by section owner).
     @property { boolean } [sort]
       Sort assets alphabetically by title?
+    @property { string | array | object } [tags]
+      Tag names filter (filter assets by included tags).
+    @property { string | array | object } [text]
+      Asset name filter (filter assets by name).
     @property { string } [type]
       Styling hint for the list.
     @property { snippet } [use]
