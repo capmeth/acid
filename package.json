@@ -11,7 +11,7 @@
     "logo": "https://capmeth.github.io/acid/acid.png",
     "private": true,
     "scripts": {
-        "build-docsite": "source/cli/main.js -c docsite/acid.config.js",
+        "build-docsite": "source/cli/main.js -c ./docsite/acid.config.js -l info",
         "bundle": "rollup -c docsite/rollup.config.js",
         "lint": "eslint -c lint/eslint.config.js",
         "test": "c8 -c test/c8.config.json ava --config test/ava.config.js"
