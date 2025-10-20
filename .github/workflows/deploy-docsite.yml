@@ -1,0 +1,58 @@
+
+name: Deploy Docsite
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v4
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 23
+          registry-url: https://registry.npmjs.org/
+      - name: install deps
+        run: npm ci
+      - name: unit test
+        run: npm test
+      - name: generate bundle
+        run: npm run bundle
+      - name: generate docs
+        run: npm run build-docsite
+      - name: setup pages
+        uses: actions/configure-pages@v5
+      - name: jekyll build
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./web
+          destination: ./_site
+      - name: upload artifact
+        uses: actions/upload-pages-artifact@v3
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: github deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
