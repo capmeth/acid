@@ -7,6 +7,16 @@
 
 
 ---
+## v0.1.2
+
+- add `launchBrowser` option for launch of default browser on server start (config & cli)
+
+
+## v0.1.1
+
+- fix browser dependency path issue
+
+
 ## v0.1.0
 
 - add front-matter option `escapeBraces` for svelte-escaping braces in document

@@ -93,6 +93,13 @@ config.importMap = {};
 config.labels = jsyaml.load(fs.readFileSync(path.join(paths.config, 'labels.yaml'), 'utf8'));
 
 /**
+    Launch the default browser on build?
+
+    @type { boolean }
+*/
+config.launchBrowser = false;
+
+/**
     Array of HTML link strings or objects for the docsite.
 
     These are transformed into <link> tags for the html header.
@@ -246,7 +253,7 @@ config.sections =
 config.server =
 {
     enabled: false,
-    port: { port: [ 3000, 3010, 3020 ] }
+    port: 3010
 }
 
 /**
@@ -256,7 +263,7 @@ config.server =
 */
 config.socket = 
 {
-    port: { port: [ 3005, 3015, 3025 ] },
+    port: 3015,
     recoAttempts: 30,
     recoAttemptDelay: 1000
 };

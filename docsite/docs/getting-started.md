@@ -74,3 +74,14 @@ let stop = await docsite.run(true);
 In the above, the returned `stop` function is async and resolves to `undefined` once the server has stopped.
 
 See the [API docs](/document/docsite-api) for more details on programmatic functionality.
+
+
+# Next Steps
+
+You can structure your docsite and specify exactly which components and other documentation you wish to include.
+
+&nbsp;&nbsp; ******[Basic Setup >](/document/tutorials-basic-setup)******
+
+If you are documenting only Svelte components, then you do not necessarily need a framework plugin.  You can use the built-in JsDoc parser (configured automatically), and the built-in Svelte renderer for rendering component examples.
+
+&nbsp;&nbsp; ******[Cobe Code Injection >](/document/tutorials-cobe-code-injection)******

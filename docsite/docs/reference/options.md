@@ -429,6 +429,21 @@ The defaults represent the full set of strings used in a docsite and they can be
 Labels display as-is and are neither HTML nor markdown enabled.
 
 
+## launchBrowser
+
+Load the docsite in the default browser on startup.
+
+```js label="default value"
+launchBrowser: false
+```
+
+```js label="spec"
+launchBrowser: true | false
+```
+
+This does nothing if `server` is not enabled.
+
+
 ## links
 
 Configures `<link>` tags for the `<head>` tag.
@@ -795,7 +810,7 @@ Configures the HTTP server.
 server:
 {
     enabled: false,
-    port: { port: [ 3000, 3010, 3020 ] }
+    port: 3010
 }
 ```
 
@@ -827,7 +842,7 @@ Websocket (server/browser) communication control.
 ```js label="default value"
 socket:
 {
-    port: { port: [ 3005, 3015, 3025 ] },
+    port: 3015,
     recoAttempts: 30,
     recoAttemptDelay: 1000
 }

@@ -58,6 +58,7 @@ export default
     'config.importMap.scopes': { test: test.object, merge: true }, 
     'config.labels': { test: test.object, default: {}, merge: true },
     'config.labels.*': test.string,
+    'config.launchBrowser': test.boolean,
     'config.links': { test: test.arrayOrObjectOrString, default: [] },
     'config.links.*': test.objectOrString('href', { rel: 'stylesheet' }),
     'config.logo': test.stringOrNull,

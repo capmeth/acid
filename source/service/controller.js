@@ -1,5 +1,6 @@
 import moduleImporter from '#lib/module-importer.js'
 import builder from './builder.js'
+import launcher from './launcher.js'
 import loader from './loader/index.js'
 import server from './server/index.js'
 import socketer from './socketer.js'
@@ -34,6 +35,7 @@ export default function(options, root)
 
         svc.build = builder(config);
         svc.load = loader(config);
+        svc.launch = launcher(config);
         svc.serve = server(config);
         svc.socket = socketer(config);    
         svc.style = styler(config);
@@ -44,7 +46,7 @@ export default function(options, root)
         svc.prepare = () => Promise.all([ svc.load(), svc.style() ])
         svc.bundle = () => svc.prepare().then(items => svc.build(...items))
         svc.restart = () => svc.stop().then(() => run(bool))
-        svc.run = () => svc.bundle().then(svc.start).then(svc.notify)
+        svc.run = () => svc.bundle().then(svc.start).then(svc.launch).then(svc.notify)
         svc.start = () => svc.watch.start(svc).then(() => Promise.all([svc.serve.start(), svc.socket.start()]))
         svc.stop = () => Promise.all([ svc.serve.stop(), svc.watch.close(), svc.socket.close() ])
         svc.update = () => svc.bundle().then(svc.notify)

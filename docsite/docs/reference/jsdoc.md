@@ -11,6 +11,8 @@ Below are the JsDoc tags recognized by ACID...
 
 A tag with a `*` after it denotes either a non-standard tag or a deviation from the specified use of a standard tag.  For the rest, please refer to the [JsDoc documentation](https://jsdoc.app) for proper use and formatting.
 
+> Note that this documentation only applies when using the built-in JsDoc component parser, or if a configured parser uses it to complement its own source file data-extraction functionality.
+
 
 ## @author
 

@@ -133,6 +133,20 @@ acid -h
 ```
 
 
+### `--launch-browser`
+
+Load the docsite in the default browser on startup.
+
+```shell
+acid --launch-browser
+```
+```shell
+acid -b
+```
+
+You must also use `--server` (or have it enabled in config) for this to work.
+
+
 ### `--output-dir`
 
 Specifies the location to put the generated docsite.
@@ -161,6 +175,9 @@ Identifies the top-level section for the docsite.
 
 ```shell
 acid --root-section <name>
+```
+```shell
+acid -r <name>
 ```
 
 
