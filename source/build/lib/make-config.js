@@ -14,7 +14,7 @@ export default function(config, sections, assets)
     let lines = [];
     let cfg = proxet({}, name => jss(config[name]));
 
-    lines.push(`import { mapExtensions } from '#utils'`);
+    lines.push(`import mapExtensions from '#frend/lib/map-extensions'`);
 
     lines.push(`export let assetTypes = ${cfg.assetTypes}`);
     lines.push(`export let bundle = ${jss(output.name)}`);
@@ -38,9 +38,6 @@ export default function(config, sections, assets)
     lines.push(`export let assets = ${jss(assets)}`);
 
     lines.push(`export let cobe = await mapExtensions(${jss(cobe, [ 're' ])})`);
-
-    lines.push(`let mapFn = async k => sections[k].cobe &&= await mapExtensions(sections[k].cobe)`);
-    lines.push(`await Promise.all(Object.keys(sections).map(mapFn));`);
 
     return lines.join('\n');
 }

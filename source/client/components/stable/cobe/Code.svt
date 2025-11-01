@@ -36,28 +36,33 @@ import { cacher } from '#utils'
 
 import When from '../common/When'
 
-// extra space at end makes sure <pre> captures final newline
 let escape = source => source.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + ' '
+/*
+    Generates function to highlight code or properly escape it if no 
+    highlighting is available.
 
-let highlighter = cacher((language, suppress) => 
+    A quirk here is that highlighter function must always return content with a 
+    trailing space to ensure `<pre>` recognizes final newline.
+*/
+let highlighter = cacher(language => 
 {
-    if (suppress || !window.hljs || !language || language === 'default') return escape;
-
-    if (!hljs.getLanguage(language))
+    if (window.hljs && language && language !== 'default')
     {
+        if (hljs.getLanguage(language))
+            return source => hljs.highlight(source, { language, ignoreIllegals: true }).value + ' '
+            
         console.warn(`Syntax highlighting for ${language} is not available.`);
-        return escape;
     }
-    // extra space at end makes sure <pre> captures final newline
-    return source => hljs.highlight(source, { language, ignoreIllegals: true }).value + ' '
+
+    return escape;
 });
 </script>
 
 <script>
 let { use } = $props();
 let { editor } = context;
-let { disabled, lang, noHighlight, onkeydown, readonly, render } = $derived(editor.code);
-let highlight = $derived(highlighter(lang, noHighlight));
+let { disabled, lang, onkeydown, readonly, render } = $derived(editor.code);
+let highlight = $derived(highlighter(lang));
 </script>
 
 

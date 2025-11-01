@@ -424,16 +424,18 @@
         {
             background: red;
             color: white;
-            font-family: Monaco, monospace;
+            font-family: var(--acid-font-family-code);
             font-size: 16px;
-            display: inline-block;
+            display: block;
             overflow-x: auto;
             padding: 8px;
             white-space: pre-wrap;
 
             &::before 
             { 
-                content: 'ERROR!\0020';
+                font-family: var(--acid-font-family-icon);
+                content: '\E75C';
+                padding-right: 8px;
             }
         }
     }

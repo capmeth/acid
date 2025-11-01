@@ -21,11 +21,11 @@ export default async function (config)
     }
 
     /*
-        Example file markdown parser.
+        Document content markdown parser.
 
         - allow YAML-based front-matter
         - fencedblock converter produces Editor tags (for CoBEs)
-        - root converter creates "Article" component
+        - headers add id and "hx" class
         - turn off delousing for fence block content
         - relative links adjusted
     */

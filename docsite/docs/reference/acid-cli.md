@@ -11,6 +11,8 @@ ACID provides `acid`, a CLI (Command Line Interface) for running or generating a
 
 Below are the details of the sub-commands (and their options) understood by `acid`.
 
+> Remember that for a local install, you will need to prefix commands with `npx`.
+
 
 ## `run`
 
@@ -112,11 +114,13 @@ These cli options will override defaults or anything set in a config file.
 Specifies the location of the acid config file.
 
 ```shell
-acid --config path/to/acid.config.js
+acid --config ./path/to/acid.config.js
 ```
 ```shell
-acid -c path/to/acid.config.js
+acid -c ./path/to/acid.config.js
 ```
+
+Prefix relative paths with `./`.
 
 The default for this option is *acid.config.js*.
 

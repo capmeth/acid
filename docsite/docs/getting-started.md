@@ -11,49 +11,56 @@ Install as dev dependency.
 npm install @capmeth/acid --save-dev
 ```
 
-# Quick Start
-
-A site can be generated without any configuration.
-
-From your project root, do
+Alternatively, you can install globally.
 
 ```shell
-acid -s
+npm install @capmeth/acid -g
 ```
 
-and then point your browser to <https://localhost:3010> to see the docsite.
 
-Content will be generated if there is a *readme.md* file or JsDoc-commented *.jsx* component files in the project.
+# Quick Start
 
-Pretty basic, but hey, you're only a couple minutes in and you have a docsite already!
+While a docsite build can be run without a configuration file, it will be based entirely on defaults which will likely not capture much of your project's content.  
 
+You can create an *acid.config.js* in your project's root folder as that is where ACID will look for configuration by default.
 
-# Quick Start with Config
-
-To generate a default config file, do
+Or, to generate a default config file execute this (from project root folder):
 
 ```shell
 acid make-config
 ```
 
-It is created as *acid.config.js* in the current directory by default, or you can specify where you want the file.
+> Remember that for a local install, you will need to prefix commands with `npx`.
+
+The file is created as *acid.config.js*.  Or you can specify the path of the file.
 
 ```shell
-acid make-config -c path/to/config-files/acid.config.js
+acid make-config -c ./path/to/config-files/acid.config.js
 ```
 
-And then build and serve the site
+Remember to prefix a relative path with `./`.
+
+And then build and serve the site (also include `-c` option here if you placed your config elsewhere).
 
 ```shell
 acid -s
 ```
 
-With no changes, the results will be about the same as not using a config file at all.
+Now, point your browser to <https://localhost:3010> to see the site.
 
-Remember to specify file location with the `-c` parameter in the command above if you placed your config file elsewhere.
+As discussed earlier, the site is pretty empty when using only the default configuration.  But now you have a working config file and a running docsite... and you're just 3 minutes in!
 
-- See [CLI options](/document/reference-acid-cli) for more details on command-line functionality.
-- See [config options](/document/reference-options) for config file options and their defaults.
+See *Next Steps* section below to get you on your way to adding content into the docsite.
+
+For ease of use, you might want to add this to your *package.json* scripts.
+
+```json
+{
+    "docsite-dev": "acid -ws -l info -c ./path/to/acid.config.js"
+}
+```
+
+And now, `npm run docsite-dev` starts you a "hot-reload" server with the proper config file at the `info` logging level.  Check out the [CLI Docs](/document/reference-acid-cli) page for details on all the command-line options.
 
 
 # Programmatic Access

@@ -139,8 +139,7 @@ let editor = $state(
     }, 
     code: 
     { 
-        lang, 
-        noHighlight, 
+        lang: noHighlight ? null : lang, 
         onkeydown, 
         readonly: cbe.static || cbe.demo 
     }, 

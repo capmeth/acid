@@ -9,6 +9,7 @@
 ---
 ## v0.1.2
 
+- remove `noHighlight` editor option from Code component (unset `lang` works just as fine)
 - add `launchBrowser` option for launch of default browser on server start (config & cli)
 
 
